@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<postion>
+	<role>
+		<RB>
+			<Stand x="16" y="47" />
+			<Walk x="21" y="49" />
+			<Run x="21" y="49" />
+			<Jump x="36" y="45" />
+			<Attack1 x="57" y="46" effectFrame="7" />
+			<Attack2 x="19" y="42" effectFrame="7" />
+			<Attack3 x="39" y="61" effectFrame="7" />
+			<Attack4 x="50" y="75" />
+			<Hit x="13" y="54" />
+			<Die x="35" y="47" />
+		</RB>
+
+		<LB>
+			<Stand x="42" y="46" />
+			<Walk x="48" y="48" />
+			<Run x="54" y="47" />
+			<Jump x="53" y="44" />
+			<Attack1 x="74" y="56" effectFrame="7" />
+			<Attack2 x="56" y="47" effectFrame="7" />
+			<Attack3 x="33" y="75" effectFrame="7" />
+			<Attack4 x="67" y="78" />
+			<Hit x="13" y="42" />
+			<Die x="25" y="47" />
+		</LB>
+
+		<LU>
+			<Stand x="35" y="45" />
+			<Walk x="37" y="46" />
+			<Run x="38" y="49" />
+			<Jump x="35" y="45" />
+			<Attack1 x="33" y="50" effectFrame="7" />
+			<Attack2 x="56" y="55" effectFrame="7" />
+			<Attack3 x="51" y="71" effectFrame="7" />
+			<Attack4 x="60" y="68" />
+			<Hit x="37" y="45" />
+			<Die x="19" y="36" />
+		</LU>
+
+		<RU>
+			<Stand x="19" y="46" />
+			<Walk x="25" y="48" />
+			<Run x="22" y="63" />
+			<Jump x="31" y="56" />
+			<Attack1 x="51" y="46" effectFrame="7" />
+			<Attack2 x="22" y="64" effectFrame="7" />
+			<Attack3 x="34" y="59" effectFrame="7" />
+			<Attack4 x="58" y="74" />
+			<Hit x="30" y="58" />
+			<Die x="29" y="36" />
+		</RU>
+	</role>
+
+	<effect>
+		<LU>
+			<Attack1 x="65" y="44" />
+			<Attack2 x="49" y="43" />
+			<Attack3 x="45" y="74" />
+		</LU>
+		<LB>
+			<Attack1 x="54" y="39" />
+			<Attack2 x="58" y="46" />
+			<Attack3 x="40" y="74" />
+		</LB>
+		<RU>
+			<Attack1 x="49" y="46" />
+			<Attack2 x="24" y="45" />
+			<Attack3 x="12" y="83" />
+		</RU>
+		<RB>
+			<Attack1 x="38" y="49" />
+			<Attack2 x="20" y="43" />
+			<Attack3 x="40" y="67" />
+		</RB>
+
+
+		<e30001 x="106" y="48" />
+		<e30002 x="78" y="70" />
+		<e30003 x="98" y="95" />
+		<e30004 x="30" y="18" />
+		<e30005 x="16" y="31" />
+		<e30006 x="34" y="93" />
+	</effect>
+
+	<monster20001>
+		<RB>
+			<Stand x="44" y="44" />
+			<Walk x="44" y="44" />
+			<Attack x="45" y="50" />
+			<Hit x="38" y="45" />
+			<Die x="43" y="47" />
+		</RB>
+		<RU>
+			<Stand x="23" y="49" />
+			<Walk x="26" y="50" />
+			<Attack x="24" y="52" />
+			<Hit x="26" y="51" />
+			<Die x="30" y="53" />
+		</RU>
+		<LB>
+			<Stand x="44" y="44" />
+			<Walk x="44" y="44" />
+			<Attack x="45" y="50" />
+			<Hit x="38" y="45" />
+			<Die x="43" y="47" />
+		</LB>
+		<LU>
+			<Stand x="23" y="49" />
+			<Walk x="26" y="50" />
+			<Attack x="24" y="52" />
+			<Hit x="26" y="51" />
+			<Die x="30" y="53" />
+		</LU>
+
+	</monster20001>
+
+
+	<monster20002>
+		<RB>
+			<Stand x="15" y="19" />
+			<Walk x="15" y="19" />
+			<Attack x="17" y="20" effectFrame="10" />
+			<Hit x="19" y="21" />
+			<Die x="35" y="41" />
+		</RB>
+		<RU>
+			<Stand x="15" y="19" />
+			<Walk x="15" y="19" />
+			<Attack x="15" y="20" effectFrame="10" />
+			<Hit x="17" y="20" />
+			<Die x="35" y="41" />
+		</RU>
+		<LB>
+			<Stand x="15" y="19" />
+			<Walk x="15" y="19" />
+			<Attack x="17" y="20" effectFrame="10" />
+			<Hit x="19" y="21" />
+			<Die x="35" y="41" />
+		</LB>
+		<LU>
+			<Stand x="15" y="19" />
+			<Walk x="15" y="19" />
+			<Attack x="15" y="20" effectFrame="10" />
+			<Hit x="17" y="20" />
+			<Die x="35" y="41" />
+		</LU>
+
+	</monster20002>
+
+	<npc60001>
+		<RB>
+			<Stand x="12" y="44" />
+		</RB>
+		<RU>
+			<Stand x="12" y="44" />
+		</RU>
+		<LB>
+			<Stand x="12" y="44" />
+		</LB>
+		<LU>
+			<Stand x="12" y="44" />
+		</LU>
+	</npc60001>
+	<npc60002>
+		<RB>
+			<Stand x="14" y="48" />
+		</RB>
+		<RU>
+			<Stand x="14" y="48" />
+		</RU>
+		<LB>
+			<Stand x="14" y="48" />
+		</LB>
+		<LU>
+			<Stand x="14" y="48" />
+		</LU>
+	</npc60002>
+	<npc60003>
+		<RB>
+			<Stand x="12" y="46" />
+		</RB>
+		<RU>
+			<Stand x="12" y="46" />
+		</RU>
+		<LB>
+			<Stand x="12" y="46" />
+		</LB>
+		<LU>
+			<Stand x="12" y="46" />
+		</LU>
+	</npc60003>
+	<npc60004>
+		<RB>
+			<Stand x="12" y="46" />
+		</RB>
+		<RU>
+			<Stand x="12" y="46" />
+		</RU>
+		<LB>
+			<Stand x="12" y="46" />
+		</LB>
+		<LU>
+			<Stand x="12" y="46" />
+		</LU>
+	</npc60004>
+	<npc60005>
+		<RB>
+			<Stand x="14" y="45" />
+		</RB>
+		<RU>
+			<Stand x="14" y="45" />
+		</RU>
+		<LB>
+			<Stand x="14" y="45" />
+		</LB>
+		<LU>
+			<Stand x="14" y="45" />
+		</LU>
+	</npc60005>
+	<npc60006>
+		<RB>
+			<Stand x="12" y="37" />
+		</RB>
+		<RU>
+			<Stand x="12" y="37" />
+		</RU>
+		<LB>
+			<Stand x="12" y="37" />
+		</LB>
+		<LU>
+			<Stand x="12" y="37" />
+		</LU>
+	</npc60006>
+	<npc60007>
+		<RB>
+			<Stand x="12" y="43" />
+		</RB>
+		<RU>
+			<Stand x="12" y="43" />
+		</RU>
+		<LB>
+			<Stand x="12" y="43" />
+		</LB>
+		<LU>
+			<Stand x="12" y="43" />
+		</LU>
+	</npc60007>
+
+	<ui>
+		<ui50001 x="53" y="103" width="30" height="20" />
+		<ui50002 x="46" y="97" width="30" height="20" />
+		<ui50003 x="51" y="97" width="30" height="20" />
+		<ui50004 x="54" y="104" width="30" height="20" />
+		<ui50005 x="15" y="8" />
+		<ui50006 x="20" y="6" />
+		<ui50007 x="25" y="7" />
+		<ui50008 x="16" y="0" />
+		<ui50009 x="8" y="11" />
+		<ui50010 x="15" y="16" />
+		<ui50011 x="21" y="28" />
+		<ui50012 x="20" y="25" width="50" height="30" />
+		<ui50013 x="20" y="25" width="40" height="35" />
+		<ui50014 x="27" y="33" width="53" height="53" />
+		<ui50015 x="61" y="87" width="161" height="154" />
+		<ui50016 x="55" y="55" width="102" height="95" />
+		<ui50017 x="40" y="39" width="91" height="62" />
+		<ui50018 x="44" y="39" width="122" height="115" />
+		<ui50019 x="36" y="28" />
+	</ui>
+</postion>
