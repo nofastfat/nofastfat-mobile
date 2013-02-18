@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 怪物战斗属性 -->
+<monsters>
+	<!-- 
+		atcode：				属性编号
+		gdcode：				资源编号
+		level:				等级
+		worthExp：			经验值
+		name：				名字
+		moveSpeed：			移动速度
+		attackRadius：		攻击半径
+		bodyRadius：			身体半径
+		maxHp：				最大血量
+		atk：				攻击力
+		defense：			防御力
+		attackLimitTime：	攻击间隔CD，单位：ms
+		gainTime：			被击僵直时间，单位：ms
+		roamRadius：			巡逻半径
+		roamSpeed：			巡逻速度
+		warnAttackRadius：	警戒攻击范围，玩家进入该范围，则进入战斗状态
+		pursueAttackRadius：	怪物追击范围，怪物离开该范围，则脱离战斗状态
+		friendWarnRadius：	群落警戒范围，该范围内的友军被攻击，则进入战斗状态 
+	 -->
+	<monster atcode="70001" gdcode="20001" name="人马战士" level="2" worthExp="30"
+		moveSpeed="6" attackRadius="48" bodyRadius="40" maxHp="150" atk="8"
+		defense="0" attackLimitTime="1500" gainTime="500" roamRadius="100"
+		warnAttackRadius="80" pursueAttackRadius="140" friendWarnRadius="220"
+		roamSpeed="2" />
+	<monster atcode="70002" gdcode="20002" name="史莱姆" level="1" worthExp="20"
+		moveSpeed="6" attackRadius="56" bodyRadius="40" maxHp="80" atk="6"
+		defense="0" attackLimitTime="1500" gainTime="700" roamRadius="100"
+		warnAttackRadius="90" pursueAttackRadius="150" friendWarnRadius="0"
+		roamSpeed="2" />
+</monsters>

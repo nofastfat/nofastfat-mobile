@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<npcs>
+	<npc gdcode="60001" name="村长 克里文" defaultWord="小伙子，欢迎来到多克村，这里有很多漂亮妹子呢" />
+	<npc gdcode="60002" name="铁匠 沙克" defaultWord="我是村子里最famous的铁匠，想锻造，找我准没错" />
+	<npc gdcode="60003" name="药剂师  夏丽" defaultWord="年轻人多注意身体，我这里有很多补药" />
+	<npc gdcode="60004" name="杂货商  奎多" defaultWord="杂货专卖，应有尽有" />
+	<npc gdcode="60005" name="武器大师  贾克斯" defaultWord="来，战个痛快。 前提是有称手的武器！" />
+	<npc gdcode="60006" name="妹子  安妮" defaultWord="你也要来玩吗?" />
+	<npc gdcode="60007" name="防具商 亚多" defaultWord="我这里有最好的盾牌，什么武器都刺不穿" />
+</npcs>
