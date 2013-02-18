@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<maps>
+	<map gdcode="70001" bgSound="mapSound1" />
+	<map gdcode="70002" bgSound="mapSound2">
+		<monsters atcodes="70002, 70001" counts="3, 1" />
+		<rewards>
+			<reward gdcode="10001" count="30" />
+			<reward gdcode="10002" count="200" />
+		</rewards>
+	</map>
+
+	<map gdcode="70003" bgSound="mapSound2">
+		<monsters atcodes="70002,70001" counts="4,4" />
+		<rewards>
+			<reward gdcode="10001" count="50" />
+			<reward gdcode="10002" count="400" />
+		</rewards>
+	</map>
+
+	<map gdcode="70004" bgSound="mapSound2">
+		<monsters atcodes="70002,70001" counts="5,10" />
+		<rewards>
+			<reward gdcode="10001" count="70" />
+			<reward gdcode="10002" count="800" />
+		</rewards>
+	</map>
+</maps>
