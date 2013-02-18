@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.xy.model.enum.DataConfig"/>
+    <classEntry path="com.xy.model.vo.BaseVo"/>
+    <classEntry path="com.xy.model.vo.HeroVo"/>
+    <classEntry path="com.xy.model.vo.ItemVo"/>
+    <classEntry path="com.xy.model.vo.MapVo"/>
+    <classEntry path="com.xy.model.vo.MonsterVo"/>
+    <classEntry path="com.xy.model.vo.NpcVo"/>
+    <classEntry path="com.xy.model.vo.RewardVo"/>
+    <classEntry path="com.xy.util.EnterFrameCall"/>
+    <classEntry path="com.xy.util.EnterFrameExecuter"/>
+    <classEntry path="com.xy.util.Map"/>
+    <classEntry path="com.xy.util.MapUtil"/>
+    <classEntry path="com.xy.util.SilzAstar"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
