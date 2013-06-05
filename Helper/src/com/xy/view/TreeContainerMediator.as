@@ -6,6 +6,8 @@ import com.xy.view.layer.DetailContainer;
 import com.xy.view.layer.TreeContainer;
 import com.xy.view.ui.SInfoCard;
 
+import flash.events.Event;
+
 public class TreeContainerMediator extends AbsMediator {
     public static const NAME : String = "TreeContainerMediator";
 
@@ -23,6 +25,7 @@ public class TreeContainerMediator extends AbsMediator {
     override public function makeNoticeMap() : Map {
         var map : Map = new Map();
         map.put(INIT_SHOW, initShow);
+        map.put(Event.RESIZE, resize);
         return map;
     }
 
@@ -39,8 +42,15 @@ public class TreeContainerMediator extends AbsMediator {
         }
 
         ui.addChild(_treeRoot);
-		_treeRoot.x = (ui.sWidth - _treeRoot.width)/2;
-		_treeRoot.y = (ui.sHeight - _treeRoot.height)/2;
+        _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
+        _treeRoot.y = (ui.sHeight - _treeRoot.height) / 2;
+    }
+
+    private function resize(...rest) : void {
+        if (_treeRoot != null) {
+            _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
+            _treeRoot.y = (ui.sHeight - _treeRoot.height) / 2;
+        }
     }
 }
 }
