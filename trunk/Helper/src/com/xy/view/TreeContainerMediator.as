@@ -44,6 +44,7 @@ public class TreeContainerMediator extends AbsMediator {
         ui.addChild(_treeRoot);
         _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
         _treeRoot.y = (ui.sHeight - _treeRoot.height) / 2;
+		_treeRoot.setData(dataProxy.selfData);
     }
 
     private function resize(...rest) : void {
