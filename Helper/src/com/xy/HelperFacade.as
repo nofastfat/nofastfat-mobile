@@ -1,5 +1,7 @@
 package com.xy {
 import com.xy.cmd.RegistCmd;
+import com.xy.model.HelperDataProxy;
+import com.xy.view.TreeContainerMediator;
 
 import org.puremvc.as3.patterns.facade.Facade;
 
@@ -14,8 +16,17 @@ public class HelperFacade extends Facade {
         registerCommand(RegistCmd.NAME, RegistCmd);
     }
 
-    public function startUp(root : Helper) : void {
-		sendNotification(RegistCmd.NAME, root);
+    public function startUp(root : Helper, initData : String) : void {
+        sendNotification(RegistCmd.NAME, root);
+		
+		dataProxy.initData(initData);
+		
+		sendNotification(TreeContainerMediator.INIT_SHOW);
+    }
+
+
+    public function get dataProxy() : HelperDataProxy {
+        return retrieveProxy(HelperDataProxy.NAME) as HelperDataProxy;
     }
 }
 }

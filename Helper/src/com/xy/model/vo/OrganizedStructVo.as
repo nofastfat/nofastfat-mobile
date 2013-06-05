@@ -1,4 +1,5 @@
 package com.xy.model.vo {
+import com.adobe.serialization.json.JSON;
 
 /**
  * 组织机构
@@ -73,6 +74,47 @@ public class OrganizedStructVo {
      * [OrganizedStructVo, OrganizedStructVo, ...]
      */
     public var subStuctList : Array;
+
+    public static function fromJsonStr(jsonStr : String) : OrganizedStructVo {
+        return fromJson(JSON.decode(jsonStr));
+    }
+
+    public static function fromJson(obj : *) : OrganizedStructVo {
+        var vo : OrganizedStructVo = new OrganizedStructVo;
+        for (var key : String in obj) {
+            var type : String = typeof obj[key];
+            switch (type) {
+                case "number":
+                    vo[key] = int(obj[key]);
+                    break;
+                case "object":
+                    var arr : Array = obj[key];
+                    if (arr != null) {
+                        var fun : Function;
+                        if (key == "subStuctList") {
+                            fun = OrganizedStructVo.fromJson;
+                        } else if (key == "simpleSubordinateList") {
+                            fun = SimpleSubordinateVo.fromJson;
+                        }
+
+                        if (fun != null) {
+                            var rs : Array = [];
+                            for each (var subObj : * in arr) {
+                                rs.push(fun(subObj));
+                            }
+
+                            vo[key] = rs;
+                        }
+                    }
+
+
+                    break;
+                default:
+                    vo[key] = String(obj[key]);
+            }
+        }
+        return vo;
+    }
 
 }
 }
