@@ -6,6 +6,8 @@ import com.xy.ui.InfoCard;
 import com.xy.util.STool;
 
 import flash.display.Loader;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.net.URLRequest;
 
 /**
@@ -36,6 +38,7 @@ public class SInfoCard extends InfoCard {
         }
         _loader = new Loader();
         _loader.load(new URLRequest(vo.imgUrl));
+        _loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void{});
         iconContainer.addChild(_loader);
 
         sexMc.gotoAndStop(vo.sex + 1);
