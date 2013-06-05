@@ -1,6 +1,5 @@
 package com.xy.animation {
 
-import com.lieon.animationparser.bitmap.AnimaionActs;
 import com.xy.animation.Juggler;
 
 import flash.events.Event;
