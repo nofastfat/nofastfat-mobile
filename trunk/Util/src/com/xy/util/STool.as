@@ -51,7 +51,8 @@ public class STool {
 	 * @param parent
 	 * @param child
 	 */
-	public static function center(parent : DisplayObjectContainer, child : DisplayObject) : void {
+	public static function center(child : DisplayObject) : void {
+		var parent : DisplayObjectContainer = child.parent as DisplayObjectContainer;
 		if (child == null || parent == null) {
 			return;
 		}
