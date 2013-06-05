@@ -26,7 +26,7 @@ public class Http {
 	 * @param params 允许带的参数
 	 * @param method GET | POST
 	 */	
-	public function Http(url : String, call : Function, dataFormat : String = URLLoaderDataFormat.TEXT, params : URLVariables = null, method : String = URLRequestMethod.GET) {
+	public function Http(url : String, call : Function, dataFormat : String = "text", params : URLVariables = null, method : String = "GET") {
 		_loader = new URLLoader();
 		_loader.dataFormat = dataFormat;
 		_call = call;

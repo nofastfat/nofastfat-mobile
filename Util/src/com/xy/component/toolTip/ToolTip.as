@@ -9,7 +9,6 @@ import flash.display.InteractiveObject;
 import flash.display.Stage;
 import flash.events.MouseEvent;
 import flash.geom.Point;
-import flash.utils.Dictionary;
 
 /**
  * Tip
@@ -43,7 +42,7 @@ public class ToolTip {
 	 * @see ToolTipMode
 	 *
 	 */
-	public static function setSimpleTip(source : InteractiveObject, htmlText : String, toolTipMode : int = ToolTipMode.FREE) : void {
+	public static function setSimpleTip(source : InteractiveObject, htmlText : String, toolTipMode : int = 0) : void {
 		setTip(source, _simpleTip, htmlText, toolTipMode);
 	}
 
@@ -56,7 +55,7 @@ public class ToolTip {
 	 * @see ITipViewContent
 	 * @see ToolTipMode
 	 */
-	public static function setTip(source : InteractiveObject, tipViewContent : ITipViewContent, tipValue : * = null, toolTipMode : int = ToolTipMode.FREE) : void {
+	public static function setTip(source : InteractiveObject, tipViewContent : ITipViewContent, tipValue : * = null, toolTipMode : int = 0) : void {
 		if (_stage == null) {
 			throw new Error("必须先调用initStage设置Stage");
 		}
