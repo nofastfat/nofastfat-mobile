@@ -43,16 +43,9 @@ var requiredRevision = ${version_revision};
 </script>
 </head>
 
-<body scroll="no"onresize="resizeHandler()">
+<body scroll="no">
 <script language="JavaScript" type="text/javascript">
 <!--
-
-
-	var windowWidth  = document.documentElement.clientWidth;
-	var windowHeight =  document.documentElement.clientHeight;
-	var gameWidth = 1366;
-	var gameHieght = 620;
-
 // Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
 var hasProductInstall = DetectFlashVer(6, 0, 65);
 
@@ -84,21 +77,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 } else if (hasRequestedVersion) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
-	
-	var action0 = "http://192.168.1.175/action0.php";//请求“组织机构”的地址
-	var action1 = "http://192.168.1.175/action1.php";//请求“人员信息”的地址
-	var action2 = "http://192.168.1.175/action2.php";//请求“目标卡片”的地址
-	var initData = '{"id":0,"sex":1,"name":"刀妹","imgUrl":"http://192.168.1.175/heads/per_01.png","powerMatrix":8,"status":0,"subStuctList":null,"simpleSubordinateList":[],"company":"诺克萨斯公司","jobScore":500,"jobType":"营销类","levelUpLastScore":100,"joinTime":"2001-03-10"}';//初始化的自己数据
-
-	var vars = ""
-	vars += "action0=" + encodeURIComponent(action0);
-	vars += "&action1=" + encodeURIComponent(action1);
-	vars += "&action2=" + encodeURIComponent(action2);
-	vars += "&initData=" + encodeURIComponent(initData)
-	
 	AC_FL_RunContent(
 			"src", "${swf}",
-			"FlashVars", vars,
 			"width", "${width}",
 			"height", "${height}",
 			"align", "middle",
@@ -116,36 +96,6 @@ if ( hasProductInstall && !hasRequestedVersion ) {
    	+ '<a href=http://www.adobe.com/go/getflash/>Get Flash</a>';
     document.write(alternateContent);  // insert non-flash content
   }
-  
-  
-   function resizeHandler(){
-        var w = getWebWidth();
-        var h = getWebHeight();
-        
-        if( $("${application}") == null){
-        	return ;
-        }
-        
-        //$("${application}").width = w;
-       // $("${application}").height = h;
-
-        if($("${application}").resizeHandler != null){
-               $("${application}").resizeHandler(w, h);
-        }               
-    }
-    
-    function $(id){
-        return document.getElementById(id);
-    }
-    
-    function getWebWidth(){
-        windowWidth  = document.documentElement.clientWidth;
-        return windowWidth;
-    }
-    function getWebHeight(){
-        windowHeight =  document.documentElement.clientHeight;
-        return windowHeight;
-    }
 // -->
 </script>
 <noscript>
