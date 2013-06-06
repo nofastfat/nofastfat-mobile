@@ -22,7 +22,7 @@ public class ToggleButton extends EventDispatcher {
 	 * 设置被控制的UI
 	 * @param mc 状态按钮一般是2个状态，所以MC不能少于2帧
 	 */
-	public function setCtrlUI(mc : MovieClip) : void {
+	public function setCtrlUI(mc : MovieClip, banChildEvent : Boolean = true) : void {
 		if (mc == null || mc.totalFrames < 2) {
 			throw new Error("ToggleButton 控制的对象至少应该有2帧");
 			return;
@@ -35,8 +35,10 @@ public class ToggleButton extends EventDispatcher {
 		_selected = false;
 		_target = mc;
 		_target.gotoAndStop(1);
-		_target.mouseChildren = false;
-		_target.buttonMode = true;
+		if(banChildEvent){
+			_target.mouseChildren = false;
+			_target.buttonMode = true;
+		}
 
 		_target.addEventListener(MouseEvent.CLICK, __clickHandler);
 	}
