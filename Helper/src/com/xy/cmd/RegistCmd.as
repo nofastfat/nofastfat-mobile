@@ -20,6 +20,8 @@ public class RegistCmd extends AbsCommand {
 
         facade.registerMediator(new DetailContainerMediator(root.detailContainer));
         facade.registerMediator(new TreeContainerMediator(root.treeContainer));
+		
+		facade.registerCommand(GetOrganizedStructCmd.NAME, GetOrganizedStructCmd);
     }
 }
 }

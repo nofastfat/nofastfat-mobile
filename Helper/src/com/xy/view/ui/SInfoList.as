@@ -1,6 +1,11 @@
-package com.xy.model.vo {
+package com.xy.view.ui {
+import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.ui.InfoList;
 
+/**
+ * 直属下属
+ * @author xy
+ */
 public class SInfoList extends InfoList {
     private var _vo : SimpleSubordinateVo;
 
