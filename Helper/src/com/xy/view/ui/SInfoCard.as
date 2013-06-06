@@ -1,15 +1,18 @@
 package com.xy.view.ui {
 import com.greensock.TweenLite;
-import com.greensock.easing.Back;
 import com.xy.component.buttons.ToggleButton;
 import com.xy.component.buttons.event.ToggleButtonEvent;
+import com.xy.interfaces.Map;
 import com.xy.model.vo.OrganizedStructVo;
 import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.ui.InfoCard;
 import com.xy.util.STool;
+import com.xy.util.Tools;
 import com.xy.view.event.SInfoCardEvent;
 
 import flash.display.Loader;
+import flash.display.Shape;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
@@ -34,6 +37,9 @@ public class SInfoCard extends InfoCard {
     private var _startY : int;
     private var _endHeight : int;
 
+    private var _childContainer : Sprite;
+    private var _cards : Map = new Map();
+
     public function SInfoCard() {
         super();
 
@@ -50,7 +56,7 @@ public class SInfoCard extends InfoCard {
 
     public function setChildBtnEnable(enable : Boolean) : void {
         STool.setMovieClipEnable(childBtn, enable);
-		childBtn.mouseChildren = true;
+        childBtn.mouseChildren = true;
     }
 
     public function dispose() : void {
@@ -66,6 +72,7 @@ public class SInfoCard extends InfoCard {
 
     public function setData(vo : OrganizedStructVo) : void {
         _vo = vo;
+        _vo.view = this;
         STool.clear(iconContainer, [iconContainer.bg]);
 
         if (_loader != null) {
@@ -146,6 +153,7 @@ public class SInfoCard extends InfoCard {
                             STool.remove(line);
                         }
                     }
+                    resetChildContainerLocation();
                 },
                 onCompleteParams: [this],
                 onComplete: function(self : SInfoCard) : void {
@@ -162,6 +170,8 @@ public class SInfoCard extends InfoCard {
                     } else {
                         self.moreBtn.gotoAndStop(1);
                     }
+
+                    resetChildContainerLocation();
                 }
             });
     }
@@ -192,7 +202,61 @@ public class SInfoCard extends InfoCard {
      * @return
      */
     public function get bottomCenterLoaction() : Point {
-        return new Point(this.x + this.width / 2, this.y + this.height);
+        var moreBtnHeight : int = moreBtn.visible ? moreBtn.height : 0;
+        return new Point(bg.x + bg.width / 2, bg.y + bg.height + moreBtnHeight + 3);
+    }
+
+    public function showChilds(vo : OrganizedStructVo) : void {
+        var bottomCenter : Point = bottomCenterLoaction;
+        var len : int = vo.subStuctList.length;
+        var bgWidth : int = bg.width;
+        var lineStart : Point = new Point((len * (bgWidth + 10) - 10) / 2, 0);
+        for (var i : int = 0; i < len; i++) {
+            var subVo : OrganizedStructVo = vo.subStuctList[i];
+            var card : SInfoCard = _cards.get(subVo.id);
+            if (card == null) {
+                card = new SInfoCard();
+                card.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __childShowMoreChildHandler);
+                _cards.put(subVo.id, card);
+            }
+            card.setData(subVo);
+            childContainer.addChild(card);
+            card.x = (bgWidth + 10) * i;
+            card.y = 100;
+
+            var concatLine : Shape = Tools.makeConactLine(lineStart, new Point(card.x + bgWidth / 2, card.y));
+            childContainer.addChild(concatLine);
+        }
+        resetChildContainerLocation();
+    }
+
+    private function __childShowMoreChildHandler(e : SInfoCardEvent) : void {
+        dispatchEvent(new SInfoCardEvent(e.type, e.vo, e.isShow));
+    }
+
+    /**
+     * 子节点容器
+     * @return
+     */
+    public function get childContainer() : Sprite {
+        if (_childContainer == null) {
+            _childContainer = new Sprite();
+            addChild(_childContainer);
+        }
+        return _childContainer;
+    }
+
+    /**
+     * 重置 子节点容器的位置
+     */
+    public function resetChildContainerLocation() : void {
+        if (_childContainer == null) {
+            return;
+        }
+
+        var bottomCenter : Point = bottomCenterLoaction;
+        _childContainer.x = bottomCenter.x - _childContainer.width / 2;
+        _childContainer.y = bottomCenter.y;
     }
 }
 }

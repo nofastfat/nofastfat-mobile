@@ -36,8 +36,6 @@ public class TreeContainerMediator extends AbsMediator {
 
     private var _rsScale : Number = 0;
 
-    private var _cards : Map = new Map();
-
     public function TreeContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
@@ -70,8 +68,6 @@ public class TreeContainerMediator extends AbsMediator {
             _treeRoot = new SInfoCard();
             _treeRoot.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __showMoreChildHandler);
         }
-
-        _cards.put(dataProxy.selfData.id, _treeRoot);
 
         uiContainer.addChild(_treeRoot);
         _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
@@ -106,30 +102,31 @@ public class TreeContainerMediator extends AbsMediator {
      * @param vo
      */
     private function getOrganizedStructOk(vo : OrganizedStructVo) : void {
-        var parentCard : SInfoCard = _cards.get(vo.id);
+        var parentCard : SInfoCard = vo.view;
         parentCard.setChildBtnEnable(true);
         if (vo.subStuctList == null) {
             //TODO 请求组织机构数据失败了	
         } else {
-            var len : int = vo.subStuctList.length;
-            var totalWidth : int = len * (parentCard.width + 10) - 10;
-            var bottomCenterPoint : Point = parentCard.bottomCenterLoaction;
-            var startX : int = bottomCenterPoint.x - totalWidth / 2;
-            var startY : int = bottomCenterPoint.y + 100;
-
-            for (var i : int = 0; i < len; i++) {
-                var subVo : OrganizedStructVo = vo.subStuctList[i];
-                var card : SInfoCard = _cards.get(subVo.id);
-                if (card == null) {
-                    card = new SInfoCard();
-                    card.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __showMoreChildHandler);
-                    _cards.put(subVo.id, card);
-                }
-                card.setData(subVo);
-                uiContainer.addChild(card);
-                card.x = startX + (parentCard.width + 10) * i;
-                card.y = startY;
-            }
+            parentCard.showChilds(vo);
+//            var len : int = vo.subStuctList.length;
+//            var totalWidth : int = len * (parentCard.width + 10) - 10;
+//            var bottomCenterPoint : Point = parentCard.bottomCenterLoaction;
+//            var startX : int = bottomCenterPoint.x - totalWidth / 2;
+//            var startY : int = bottomCenterPoint.y + 100;
+//
+//            for (var i : int = 0; i < len; i++) {
+//                var subVo : OrganizedStructVo = vo.subStuctList[i];
+//                var card : SInfoCard = _cards.get(subVo.id);
+//                if (card == null) {
+//                    card = new SInfoCard();
+//                    card.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __showMoreChildHandler);
+//                    _cards.put(subVo.id, card);
+//                }
+//                card.setData(subVo);
+//                uiContainer.addChild(card);
+//                card.x = startX + (parentCard.width + 10) * i;
+//                card.y = startY;
+//            }
         }
     }
 
@@ -169,15 +166,15 @@ public class TreeContainerMediator extends AbsMediator {
                 _rsScale = 0;
             }
 
-			
-			var p : Point = new Point(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
-			
-			var ix : Number = EnterFrameCall.getStage().mouseX * (uiContainer.scaleX - value);
-			var iy : Number = EnterFrameCall.getStage().mouseY * (uiContainer.scaleX - value);
-			
-			uiContainer.scaleX = uiContainer.scaleY = value;
-			uiContainer.x += ix;
-			uiContainer.y += iy;
+
+            var p : Point = new Point(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+
+            var ix : Number = EnterFrameCall.getStage().mouseX * (uiContainer.scaleX - value);
+            var iy : Number = EnterFrameCall.getStage().mouseY * (uiContainer.scaleX - value);
+
+            uiContainer.scaleX = uiContainer.scaleY = value;
+            uiContainer.x += ix;
+            uiContainer.y += iy;
         }
 
 
@@ -228,13 +225,13 @@ public class TreeContainerMediator extends AbsMediator {
         e.stopImmediatePropagation();
         e.stopPropagation();
 
-        if (!e.ctrlKey) {
+        if (e.ctrlKey) {
 
-			var vl : Number = 0.1;
+            var vl : Number = 0.1;
             if (e.delta < 0) {
-				vl = -0.1;
+                vl = -0.1;
             }
-			_rsScale += vl;
+            _rsScale += vl;
 
             if (_rsScale != 0) {
                 EnterFrameCall.add(scale);
@@ -247,7 +244,7 @@ public class TreeContainerMediator extends AbsMediator {
                 _rsY -= 100;
             }
         }
-		
+
         if (_rsX != 0 || _rsY != 0) {
             EnterFrameCall.add(move);
         }

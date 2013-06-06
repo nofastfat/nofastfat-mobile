@@ -1,5 +1,6 @@
 package com.xy.model.vo {
 import com.adobe.serialization.json.JSON;
+import com.xy.view.ui.SInfoCard;
 
 /**
  * 组织机构
@@ -74,6 +75,8 @@ public class OrganizedStructVo {
      * [OrganizedStructVo, OrganizedStructVo, ...]
      */
     public var subStuctList : Array;
+
+	public var view : SInfoCard;
 
     public static function fromJsonStr(jsonStr : String) : OrganizedStructVo {
         return fromJson(JSON.decode(jsonStr));
