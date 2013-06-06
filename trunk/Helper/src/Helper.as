@@ -1,13 +1,9 @@
 package {
-import com.adobe.serialization.json.JSON;
 import com.xy.HelperFacade;
 import com.xy.model.Config;
-import com.xy.model.vo.OrganizedStructVo;
-import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.ui.Loading;
 import com.xy.util.EnterFrameCall;
-import com.xy.util.RandomName;
-import com.xy.util.STool;
+import com.xy.util.Tools;
 import com.xy.view.layer.DetailContainer;
 import com.xy.view.layer.TreeContainer;
 
@@ -15,6 +11,7 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.geom.Point;
 
 [SWF(witdh = "1024", height = "768", backgroundColor = "#666666")]
 public class Helper extends Sprite {
