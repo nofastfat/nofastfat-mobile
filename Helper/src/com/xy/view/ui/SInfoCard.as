@@ -17,10 +17,12 @@ import flash.net.URLRequest;
 public class SInfoCard extends InfoCard {
     private var _vo : OrganizedStructVo;
 
-    private var _uiList : Array = [];
+    private var _lineList : Array = [];
 
     private var _loader : Loader;
 
+	private var _childList : Array = [];
+	
     public function SInfoCard() {
         super();
     }
@@ -54,7 +56,7 @@ public class SInfoCard extends InfoCard {
         for each (var subVo : SimpleSubordinateVo in vo.simpleSubordinateList) {
             var line : SInfoList = new SInfoList();
             line.setData(subVo);
-            _uiList.push(line);
+            _lineList.push(line);
         }
 
 
