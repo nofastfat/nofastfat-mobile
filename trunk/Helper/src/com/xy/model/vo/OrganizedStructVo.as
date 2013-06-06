@@ -116,5 +116,29 @@ public class OrganizedStructVo {
         return vo;
     }
 
+    public function getChild(childId : int) : OrganizedStructVo {
+        if (id == childId) {
+            return this;
+        }
+		
+        if (subStuctList == null) {
+            return null;
+        }
+
+        for each (var vo : OrganizedStructVo in subStuctList) {
+            if (vo.id == childId) {
+                return vo;
+            }
+        }
+
+        for each (vo in subStuctList) {
+            if (vo.getChild(childId) != null) {
+                return vo;
+            }
+        }
+
+        return null;
+    }
+
 }
 }
