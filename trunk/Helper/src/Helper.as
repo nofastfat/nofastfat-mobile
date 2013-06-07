@@ -1,9 +1,9 @@
 package {
 import com.xy.HelperFacade;
+import com.xy.component.toolTip.ToolTip;
 import com.xy.model.Config;
 import com.xy.ui.Loading;
 import com.xy.util.EnterFrameCall;
-import com.xy.util.Tools;
 import com.xy.view.layer.DetailContainer;
 import com.xy.view.layer.TreeContainer;
 
@@ -11,7 +11,8 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.events.Event;
-import flash.geom.Point;
+
+import net.hires.debug.Stats;
 
 [SWF(witdh = "1024", height = "768", backgroundColor = "#666666")]
 public class Helper extends Sprite {
@@ -65,6 +66,7 @@ public class Helper extends Sprite {
     }
 
     private function __addToStageHandler(e : Event) : void {
+    	ToolTip.initStage(stage);
         removeEventListener(Event.ADDED_TO_STAGE, __addToStageHandler);
         stage.addEventListener(Event.RESIZE, __resizeHandler);
         stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -88,6 +90,8 @@ public class Helper extends Sprite {
 
         _facade = new HelperFacade();
         _facade.startUp(this, _initData);
+        
+    	addChild(new Stats());
     }
 
     private function __resizeHandler(e : Event = null) : void {

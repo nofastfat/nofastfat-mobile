@@ -1,4 +1,5 @@
 package com.xy.model {
+import com.xy.interfaces.Map;
 import com.xy.model.vo.OrganizedStructVo;
 
 import org.puremvc.as3.patterns.proxy.Proxy;
@@ -11,8 +12,21 @@ public class HelperDataProxy extends Proxy {
 	 */	
     public var selfData : OrganizedStructVo;
 
+	/**
+	 * 人员信息数据 
+	 */
+	public var personDatas : Map;
+	
+	/**
+	 * 任务数据 
+	 */	
+	public var taskDatas : Map;
+
     public function HelperDataProxy() {
         super(NAME);
+        
+        personDatas = new Map();
+        taskDatas = new Map();
     }
 
     /**

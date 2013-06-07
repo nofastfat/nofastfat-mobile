@@ -1,22 +1,17 @@
 package com.xy.model.vo.uiStatus {
-import com.xy.view.ui.SInfoCard;
+import com.xy.view.ui.STaskCard;
 
 
-public class SInfoCardStatus {
+public class STaskStatus {
     /**
-     * 是否显示
-     */
+   * 是否显示
+         */
     private var _visible : Boolean = false;
 
     /**
      * 是否是父节点隐藏的
      */
     public var hideById : int = -1;
-
-    /**
-     * 直属下属显示的数量
-     */
-    public var showCount : int = 3;
 
     /**
      * X坐标
@@ -31,7 +26,7 @@ public class SInfoCardStatus {
     /**
      * 父节点UI
      */
-    public var parentCard : SInfoCard;
+    public var parentCard : STaskCard;
 
     public function get visible() : Boolean {
         return _visible;
@@ -41,9 +36,10 @@ public class SInfoCardStatus {
         _visible = visible;
         if (!_visible) {
             this.hideById = hideById;
-        }else{
-        	this.hideById = -1;
+        } else {
+            this.hideById = -1;
         }
     }
+
 }
 }

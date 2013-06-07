@@ -1,4 +1,6 @@
 package com.xy.model.vo {
+import com.adobe.serialization.json.JSON;
+
 
 /**
  * 人员信息
@@ -42,5 +44,41 @@ public class PersonInfoVo {
      * 目标列表
      */
     public var taskList : Array;
+
+    public static function fromJsonStr(jsonStr : String) : PersonInfoVo {
+        return fromJson(JSON.decode(jsonStr));
+    }
+
+    public static function fromJson(obj : *) : PersonInfoVo {
+        var vo : PersonInfoVo = new PersonInfoVo;
+        for (var key : String in obj) {
+            var type : String = typeof obj[key];
+            switch (type) {
+                case "number":
+                    vo[key] = int(obj[key]);
+                    break;
+                case "object":
+                    var arr : Array = obj[key] as Array;
+                    if (arr != null) {
+                        var fun : Function = SimpleTaskVo.fromJson;
+
+                        if (fun != null) {
+                            var rs : Array = [];
+                            for each (var subObj : * in arr) {
+                                rs.push(fun(subObj));
+                            }
+
+                            vo[key] = rs;
+                        }
+                    }
+
+
+                    break;
+                default:
+                    vo[key] = String(obj[key]);
+            }
+        }
+        return vo;
+    }
 }
 }

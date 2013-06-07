@@ -1,13 +1,12 @@
 package com.xy.cmd {
 import com.adobe.serialization.json.JSON;
 import com.xy.interfaces.AbsCommand;
-import com.xy.model.Config;
 import com.xy.model.vo.OrganizedStructVo;
 import com.xy.model.vo.SimpleSubordinateVo;
-import com.xy.util.Http;
 import com.xy.util.RandomName;
 import com.xy.util.STool;
-import com.xy.view.TreeContainerMediator;
+import com.xy.util.Tools;
+import com.xy.view.InfoTreeContainerMediator;
 
 import flash.utils.setTimeout;
 
@@ -55,7 +54,7 @@ public class GetOrganizedStructCmd extends AbsCommand {
             for (var i : int = 0; i < len; i++) {
                 var svo1 : SimpleSubordinateVo = new SimpleSubordinateVo();
                 svo1.department = STool.randomFromArray(departs);
-                svo1.id = vo.id * 100 + ids[i];
+                svo1.id = Tools.makeId();
                 svo1.name = RandomName.makeName();
                 svo1.status = STool.random(0, 2);
                 tmp.simpleSubordinateList.push(svo1);
@@ -69,21 +68,22 @@ public class GetOrganizedStructCmd extends AbsCommand {
 
     private function callback(data : String) : void {
         if (data == null || data == "" || data == "null") {
-            sendNotification(TreeContainerMediator.GET_ORGANIZED_STRUCT_OK, _requestVo);
+            sendNotification(InfoTreeContainerMediator.GET_ORGANIZED_STRUCT_OK, _requestVo);
             return;
         }
 
         var arr : Array = JSON.decode(data);
-        var rs : Array = [];
+         _requestVo.subStuctList = [];
         for each (var obj : * in arr) {
-            rs.push(OrganizedStructVo.fromJson(obj));
+        	var child : OrganizedStructVo = OrganizedStructVo.fromJson(obj)
+             _requestVo.subStuctList.push(child);
+             child.parent = _requestVo;
         }
 
-        _requestVo.subStuctList = rs;
 
         LoadingController.stopLoading();
 
-        sendNotification(TreeContainerMediator.GET_ORGANIZED_STRUCT_OK, _requestVo);
+        sendNotification(InfoTreeContainerMediator.GET_ORGANIZED_STRUCT_OK, _requestVo);
         _requestVo = null;
     }
 }

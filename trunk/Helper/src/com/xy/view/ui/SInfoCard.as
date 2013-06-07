@@ -2,13 +2,19 @@ package com.xy.view.ui {
 import com.greensock.TweenLite;
 import com.xy.component.buttons.ToggleButton;
 import com.xy.component.buttons.event.ToggleButtonEvent;
+import com.xy.component.toolTip.ToolTip;
+import com.xy.component.toolTip.enum.ToolTipMode;
 import com.xy.model.vo.OrganizedStructVo;
 import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.ui.InfoCard;
+import com.xy.util.EnterFrameCall;
 import com.xy.util.STool;
 import com.xy.view.event.SInfoCardEvent;
+import com.xy.view.event.TreeContainerEvent;
 
+import flash.display.DisplayObject;
 import flash.display.Loader;
+import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
@@ -16,6 +22,8 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.net.URLRequest;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 
 /**
  * 组织机构
@@ -40,6 +48,7 @@ public class SInfoCard extends InfoCard {
     private var _lastHeight : Number = 0;
 
     private var _rect : Rectangle;
+    private var _lastLocation : Point = new Point();
 
     public function SInfoCard() {
         super();
@@ -47,13 +56,57 @@ public class SInfoCard extends InfoCard {
 
         _togChildBtn = new ToggleButton();
         _togChildBtn.setCtrlUI(childBtn, false);
+        setChildBtnSelect(false);
 
         _togChildBtn.addEventListener(ToggleButtonEvent.STATE_CHANGE, __stateChangeHandler);
         detailBtn.addEventListener(MouseEvent.CLICK, __detailHandler);
         moreBtn.addEventListener(MouseEvent.CLICK, __moreChildHandler);
+        statusMc.buttonMode = true;
+        ToolTip.setSimpleTip(statusMc, "查看 能力-态度矩阵", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        statusMc.addEventListener(MouseEvent.CLICK, __openPowerMatrixHandler);
+
+
+        ToolTip.setSimpleTip(detailBtn, "查看 任务目标", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        detailBtn.addEventListener(MouseEvent.CLICK, __showDetailHandler);
 
         _startY = bg.scale9Grid.top;
         _endHeight = bg.height - bg.scale9Grid.bottom;
+
+        statusBg.mouseChildren = false;
+        statusBg.mouseEnabled = false;
+        iconContainer.mouseChildren = false;
+        iconContainer.mouseEnabled = false;
+
+        bg.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+        EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
+
+        updateTogMoreBtnTip();
+    }
+
+    private function __downHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.HAND;
+        _lastLocation.x = EnterFrameCall.getStage().mouseX;
+        _lastLocation.y = EnterFrameCall.getStage().mouseY;
+        EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_MOVE, __moveHandler);
+    }
+
+    public function setChildBtnSelect(selected : Boolean) : void {
+        _togChildBtn.selected = selected;
+        updateTogChildBtnTip();
+    }
+
+    private function __upHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.AUTO;
+        EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_MOVE, __moveHandler);
+    }
+
+    private function __moveHandler(e : MouseEvent) : void {
+        var offsetX : Number = EnterFrameCall.getStage().mouseX - _lastLocation.x;
+        var offsetY : Number = EnterFrameCall.getStage().mouseY - _lastLocation.y;
+        dispatchEvent(new TreeContainerEvent(TreeContainerEvent.LOCATION_MOVE, offsetX, offsetY));
+
+        _lastLocation.x = EnterFrameCall.getStage().mouseX;
+        _lastLocation.y = EnterFrameCall.getStage().mouseY;
     }
 
     public function setChildBtnEnable(enable : Boolean) : void {
@@ -77,12 +130,12 @@ public class SInfoCard extends InfoCard {
         super.y = _vo.cardStatus.locationY;
 
         parent.addChild(this);
-        _vo.cardStatus.visible = true;
+        _vo.cardStatus.setVisible(true);
     }
 
-    public function hide() : void {
+    public function hide(hideById : int) : void {
         STool.remove(this);
-        _vo.cardStatus.visible = false;
+        _vo.cardStatus.setVisible(false, hideById);
     }
 
     public function setData(vo : OrganizedStructVo, locationCall : Function) : void {
@@ -96,7 +149,11 @@ public class SInfoCard extends InfoCard {
         _loader = new Loader();
         _loader.load(new URLRequest(vo.imgUrl));
         _loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e : Event) : void {});
-        _loader.x = _loader.y = 1;
+        _loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e : Event) : void {
+            _loader.width = iconContainer.bg.width - 4;
+            _loader.height = iconContainer.bg.height - 4;
+        });
+        _loader.x = _loader.y = 2;
         iconContainer.addChild(_loader);
 
         sexMc.gotoAndStop(vo.sex + 1);
@@ -109,6 +166,14 @@ public class SInfoCard extends InfoCard {
         myScoreTf.text = vo.jobScore + "";
         leftSorceTf.text = vo.levelUpLastScore + "";
         subordinateCountTf.text = "（" + vo.simpleSubordinateList.length + "）";
+
+        STool.minSizeTextfield(nameTf);
+        STool.minSizeTextfield(companyTf);
+        STool.minSizeTextfield(jobTypeTf);
+        STool.minSizeTextfield(joinTimeTf);
+        STool.minSizeTextfield(myScoreTf);
+        STool.minSizeTextfield(leftSorceTf);
+        STool.minSizeTextfield(subordinateCountTf);
 
         _showCount = _vo.cardStatus.showCount;
 
@@ -136,6 +201,8 @@ public class SInfoCard extends InfoCard {
             }
             if (line == null) {
                 line = new SInfoList();
+                ToolTip.setSimpleTip(line.detalBtn, "查看 任务目标", ToolTipMode.RIGHT_BOTTOM_CENTER);
+                line.detalBtn.addEventListener(MouseEvent.CLICK, __showDetailHandler);
                 _lineList[i] = line;
             }
             subHeight = line.height + 1;
@@ -146,6 +213,7 @@ public class SInfoCard extends InfoCard {
             line.y = _startY + i * subHeight + 5;
 
             line.setData(vo);
+
         }
 
         moreBtn.visible = _vo.simpleSubordinateList.length > 3;
@@ -173,7 +241,7 @@ public class SInfoCard extends InfoCard {
                             STool.remove(line);
                         }
                     }
-                    _locationCall(self._tempVisibleChildIds, bgHeight - self._lastHeight);
+                    self._locationCall(self._tempVisibleChildIds, bgHeight - self._lastHeight);
                     self._lastHeight = bgHeight;
                 },
                 onCompleteParams: [this],
@@ -197,6 +265,7 @@ public class SInfoCard extends InfoCard {
                     self._rect.y = self.y;
                     self._rect.width = self.width;
                     self._rect.height = self.height;
+                    self.updateTogMoreBtnTip();
                 }
             });
 
@@ -205,6 +274,27 @@ public class SInfoCard extends InfoCard {
 
     private function __stateChangeHandler(e : ToggleButtonEvent) : void {
         dispatchEvent(new SInfoCardEvent(SInfoCardEvent.DETAIL_CHANGE, _vo, _togChildBtn.selected));
+        updateTogChildBtnTip();
+    }
+
+    private function updateTogChildBtnTip() : void {
+
+        var tip : String = "展开 下属详情";
+        if (_togChildBtn.selected) {
+            tip = "收起 下属详情";
+        }
+
+        ToolTip.setSimpleTip(childBtn, tip, ToolTipMode.RIGHT_BOTTOM_CENTER);
+    }
+
+    private function updateTogMoreBtnTip() : void {
+
+        var tip : String = "展开 直属下属";
+        if (moreBtn.currentFrame == 2) {
+            tip = "收起 直属下属";
+        }
+
+        ToolTip.setSimpleTip(moreBtn, tip, ToolTipMode.RIGHT_BOTTOM_CENTER);
     }
 
     private function __detailHandler(e : MouseEvent) : void {
@@ -222,6 +312,32 @@ public class SInfoCard extends InfoCard {
         }
 
         updateShowChild();
+
+        if (this.parent != null) {
+            this.parent.setChildIndex(this, this.parent.numChildren - 1);
+        }
+    }
+
+    private function __openPowerMatrixHandler(e : MouseEvent) : void {
+        dispatchEvent(new SInfoCardEvent(SInfoCardEvent.SHOW_POWER_MATRIX, _vo));
+    }
+
+    private function __showDetailHandler(e : MouseEvent) : void {
+        var currentTarget : MovieClip = e.currentTarget.parent as MovieClip;
+
+        var id : int;
+        var name : String;
+
+        if (currentTarget is SInfoCard) {
+            id = _vo.id;
+            name = _vo.name;
+        } else {
+            var list : SInfoList = currentTarget as SInfoList;
+            id = list.vo.id;
+            name = list.vo.name;
+        }
+        dispatchEvent(new SInfoCardEvent(SInfoCardEvent.SHOW_PERSON_CARD, null, false, id, e.currentTarget as DisplayObject, name));
+
     }
 
     /**
@@ -245,6 +361,10 @@ public class SInfoCard extends InfoCard {
 
     public function get rect() : Rectangle {
         return _rect;
+    }
+
+    public function get togChildBtn() : ToggleButton {
+        return _togChildBtn;
     }
 }
 }

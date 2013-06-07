@@ -1,8 +1,11 @@
 package com.xy.view {
 import com.xy.cmd.GetOrganizedStructCmd;
+import com.xy.cmd.GetPersonInfoCmd;
+import com.xy.component.toolTip.ToolTip;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.vo.OrganizedStructVo;
+import com.xy.model.vo.PersonInfoVo;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.STool;
 import com.xy.util.Tools;
@@ -11,6 +14,7 @@ import com.xy.view.event.TreeContainerEvent;
 import com.xy.view.layer.TreeContainer;
 import com.xy.view.ui.SInfoCard;
 
+import flash.display.DisplayObject;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -18,7 +22,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-public class TreeContainerMediator extends AbsMediator {
+public class InfoTreeContainerMediator extends AbsMediator {
     public static const NAME : String = "TreeContainerMediator";
 
     /**
@@ -31,6 +35,11 @@ public class TreeContainerMediator extends AbsMediator {
      */
     public static const GET_ORGANIZED_STRUCT_OK : String = NAME + "GET_ORGANIZED_STRUCT_OK";
 
+    /**
+     * 获取人员信息数据完成
+     */
+    public static const GET_PERSON_INFO_OK : String = NAME + "GET_PERSON_INFO_OK";
+
     private var _treeRoot : SInfoCard;
     private var _rsX : Number = 0;
     private var _rsY : Number = 0;
@@ -41,10 +50,12 @@ public class TreeContainerMediator extends AbsMediator {
 
     private var _camaraRect : Rectangle;
 
-    public function TreeContainerMediator(viewComponent : Object = null) {
+    private var _lastSelectCard : SInfoCard;
+
+    public function InfoTreeContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
-        ui.addEventListener(TreeContainerEvent.LOCATION_MOVE, __moveHandler);
+        uiContainer.addEventListener(TreeContainerEvent.LOCATION_MOVE, __moveHandler);
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_WHEEL, __mouseWheelHandler);
 
@@ -56,6 +67,7 @@ public class TreeContainerMediator extends AbsMediator {
         map.put(INIT_SHOW, initShow);
         map.put(Event.RESIZE, resize);
         map.put(GET_ORGANIZED_STRUCT_OK, getOrganizedStructOk);
+        map.put(GET_PERSON_INFO_OK, getPersonInfoOk);
         return map;
     }
 
@@ -64,7 +76,7 @@ public class TreeContainerMediator extends AbsMediator {
     }
 
     public function get uiContainer() : Sprite {
-        return (viewComponent as TreeContainer).container;
+        return (viewComponent as TreeContainer).infoContainer;
     }
 
     /**
@@ -74,6 +86,10 @@ public class TreeContainerMediator extends AbsMediator {
         if (_treeRoot == null) {
             _treeRoot = new SInfoCard();
             _treeRoot.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __showMoreChildHandler);
+            _treeRoot.addEventListener(TreeContainerEvent.LOCATION_MOVE, __moveHandler);
+            _treeRoot.addEventListener(MouseEvent.CLICK, __selectCardHandler);
+            _treeRoot.addEventListener(SInfoCardEvent.SHOW_POWER_MATRIX, __showPowerMatrixHandler);
+            _treeRoot.addEventListener(SInfoCardEvent.SHOW_PERSON_CARD, __showPersonCardHandler);
         }
         _cards.put(dataProxy.selfData.id, _treeRoot);
 
@@ -98,18 +114,76 @@ public class TreeContainerMediator extends AbsMediator {
     }
 
     private function __showMoreChildHandler(e : SInfoCardEvent) : void {
+        var vo : OrganizedStructVo = e.vo;
+        var card : SInfoCard = _cards.get(vo.id);
         if (e.isShow) {
-            var vo : OrganizedStructVo = e.vo;
-
             if (vo.subStuctList == null) {
-                _treeRoot.setChildBtnEnable(false);
+                card.setChildBtnEnable(false);
                 sendNotification(GetOrganizedStructCmd.NAME, vo);
             } else {
-
+                getOrganizedStructOk(vo);
+                showCards(vo.getHideChildIdsBy(vo.id));
             }
+
         } else {
-            //TODO 隐藏组织机构
+            hideCards(vo, vo.getVisibleChildIds());
         }
+    }
+
+    /**
+     * 隐藏指定节点的兄弟节点数
+     * @param vo
+     */
+    private function hideSiblingCards(vo : OrganizedStructVo) : void {
+        var siblings : Array = vo.getSiblingVos();
+        for each (var siblingVo : OrganizedStructVo in siblings) {
+            var card : SInfoCard = _cards.get(siblingVo.id);
+            if (card.togChildBtn.selected) {
+                card.setChildBtnSelect(false);
+                var visibles : Array = siblingVo.getVisibleChildIds();
+                hideCards(siblingVo, visibles);
+            }
+        }
+    }
+
+    /**
+     * 隐藏组织机构
+     * @param vo
+     * @param ids
+     */
+    private function hideCards(vo : OrganizedStructVo, ids : Array) : void {
+        for each (var id : int in ids) {
+            var card : SInfoCard = _cards.get(id);
+            if (card != null) {
+                card.hide(vo.id);
+            }
+
+            var line : Shape = _lines.get(id);
+            STool.remove(line);
+        }
+    }
+
+    /**
+     * 显示组织机构
+     * @param ids
+     */
+    private function showCards(ids : Array) : void {
+        for each (var id : int in ids) {
+            var card : SInfoCard = _cards.get(id);
+            if (card != null) {
+                card.showTo(uiContainer);
+            }
+
+            var line : Shape = _lines.get(id);
+            if (line != null) {
+                uiContainer.addChild(line);
+                var location : Point = card.vo.cardStatus.parentCard.bottomCenterLoaction;
+                line.x = location.x;
+                line.y = location.y;
+            }
+        }
+
+        checkVisible();
     }
 
     private function resize(... rest) : void {
@@ -124,8 +198,10 @@ public class TreeContainerMediator extends AbsMediator {
      * @param vo
      */
     private function getOrganizedStructOk(vo : OrganizedStructVo) : void {
+        hideSiblingCards(vo);
         var parentCard : SInfoCard = _cards.get(vo.id);
         parentCard.setChildBtnEnable(true);
+        parentCard.setChildBtnSelect(true);
         if (vo.subStuctList == null) {
             //TODO 请求组织机构数据失败了	
         } else {
@@ -137,22 +213,59 @@ public class TreeContainerMediator extends AbsMediator {
 
             for (var i : int = 0; i < len; i++) {
                 var subVo : OrganizedStructVo = vo.subStuctList[i];
+                subVo.parent = vo;
                 var card : SInfoCard = _cards.get(subVo.id);
                 if (card == null) {
                     card = new SInfoCard();
                     card.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __showMoreChildHandler);
+                    card.addEventListener(TreeContainerEvent.LOCATION_MOVE, __moveHandler);
+                    card.addEventListener(MouseEvent.CLICK, __selectCardHandler);
+                    card.addEventListener(SInfoCardEvent.SHOW_POWER_MATRIX, __showPowerMatrixHandler);
+                    card.addEventListener(SInfoCardEvent.SHOW_PERSON_CARD, __showPersonCardHandler);
                     _cards.put(subVo.id, card);
                 }
+                subVo.cardStatus.parentCard = parentCard;
                 card.setData(subVo, locationCall);
                 card.showTo(uiContainer);
                 card.x = startX + (parentCard.width + 10) * i;
                 card.y = startY;
 
-                var line : Shape = Tools.makeConactLine(bottomCenterPoint, new Point(card.x + parentCard.width / 2, startY));
+                var line : Shape = _lines.get(subVo.id);
+                var secP : Point = new Point(card.x + parentCard.width / 2, startY);
+                secP = secP.subtract(bottomCenterPoint);
+                if (line == null) {
+                    line = Tools.makeConactLine(new Point(), secP);
+
+                    if (secP.x < 0) {
+                        line.name = "scaled";
+                    }
+                }
                 uiContainer.addChild(line);
+                line.x = bottomCenterPoint.x;
+                line.y = bottomCenterPoint.y;
                 _lines.put(subVo.id, line);
             }
         }
+
+        ToolTip.hideTip();
+        
+        /* 展开的东西剧中显示 */
+        var p : Point = new Point(parentCard.x + card.width / 2, parentCard.y + card.height + 50);
+        p = uiContainer.localToGlobal(p);
+        _rsX += ui.sWidth / 2 - p.x;
+        _rsY += ui.sHeight / 2 - p.y;
+        if (_rsX != 0 || _rsY != 0) {
+            EnterFrameCall.add(move);
+        }
+    }
+
+    private function getPersonInfoOk(id : int, mc : DisplayObject) : void {
+    	var vo : PersonInfoVo = dataProxy.personDatas.get(id);
+        if (vo == null) {
+            //请求人员信息失败
+            return;
+        }
+        sendNotification(DetailContainerMediator.SHOW_PEROSON_CARD, [vo, mc]);
     }
 
     private function __moveHandler(e : TreeContainerEvent) : void {
@@ -161,6 +274,33 @@ public class TreeContainerMediator extends AbsMediator {
 
         if (_rsX != 0 || _rsY != 0) {
             EnterFrameCall.add(move);
+        }
+    }
+
+    private function __selectCardHandler(e : MouseEvent) : void {
+        var card : SInfoCard = e.currentTarget as SInfoCard;
+        if (card != null) {
+            if (_lastSelectCard != null) {
+                _lastSelectCard.bg.gotoAndStop(1);
+            }
+            card.bg.gotoAndStop(2);
+            _lastSelectCard = card;
+        }
+    }
+
+    private function __showPowerMatrixHandler(e : SInfoCardEvent) : void {
+        var card : SInfoCard = _cards.get(e.vo.id);
+        var startLoaction : Point = new Point(card.statusMc.x, card.statusMc.y);
+        startLoaction = card.localToGlobal(startLoaction);
+        sendNotification(DetailContainerMediator.SHOW_POWER_MATRIX, [startLoaction, e.vo]);
+    }
+
+    private function __showPersonCardHandler(e : SInfoCardEvent) : void {
+        var personVo : PersonInfoVo = dataProxy.personDatas.get(e.id);
+        if (personVo == null) {
+            sendNotification(GetPersonInfoCmd.NAME, [e.id, e._target, e.name]);
+        } else {
+            getPersonInfoOk(e.id, e._target);
         }
     }
 
@@ -212,6 +352,9 @@ public class TreeContainerMediator extends AbsMediator {
         checkVisible();
     }
 
+    /**
+     * 优化显示，不在窗口内的东西，全部隐藏
+     */
     private function checkVisible() : void {
         for each (var card : SInfoCard in _cards.values) {
             var rect : Rectangle = card.rect;
@@ -225,7 +368,11 @@ public class TreeContainerMediator extends AbsMediator {
 
             var line : Shape = _lines.get(card.vo.id);
             if (line != null) {
-                rect = line.getBounds(line);
+                rect = new Rectangle(line.x, line.y, line.width, line.height);
+                if (line.name == "scaled") {
+                    rect.x = rect.x - rect.width;
+                }
+
                 visible = _camaraRect.intersects(rect) && card.vo.cardStatus.visible;
                 if (visible) {
                     uiContainer.addChild(line);
@@ -234,8 +381,6 @@ public class TreeContainerMediator extends AbsMediator {
                 }
             }
         }
-
-        trace(uiContainer.numChildren);
     }
 
     private function move() : void {
@@ -294,6 +439,10 @@ public class TreeContainerMediator extends AbsMediator {
     }
 
     private function __mouseWheelHandler(e : MouseEvent) : void {
+    	if(uiContainer.stage == null){
+    		return;
+    	}
+    	
         e.stopImmediatePropagation();
         e.stopPropagation();
 
