@@ -1,7 +1,7 @@
 package com.xy {
 import com.xy.cmd.RegistCmd;
 import com.xy.model.HelperDataProxy;
-import com.xy.view.TreeContainerMediator;
+import com.xy.view.InfoTreeContainerMediator;
 
 import org.puremvc.as3.patterns.facade.Facade;
 
@@ -21,7 +21,7 @@ public class HelperFacade extends Facade {
 		
 		dataProxy.initData(initData);
 		
-		sendNotification(TreeContainerMediator.INIT_SHOW);
+		sendNotification(InfoTreeContainerMediator.INIT_SHOW);
     }
 
 

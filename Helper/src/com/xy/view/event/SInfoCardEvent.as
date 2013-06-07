@@ -1,6 +1,8 @@
 package com.xy.view.event {
 import com.xy.model.vo.OrganizedStructVo;
 
+import flash.display.DisplayObject;
+import flash.display.MovieClip;
 import flash.events.Event;
 
 public class SInfoCardEvent extends Event {
@@ -14,14 +16,28 @@ public class SInfoCardEvent extends Event {
      */
     public static const SHOW_DETAIL : String = "SHOW_DETAIL";
 
+    /**
+     * 显示/隐藏 能力矩阵
+     */
+    public static const SHOW_POWER_MATRIX : String = "SHOW_POWER_MATRIX";
+
+    public static const SHOW_PERSON_CARD : String = "SHOW_PERSON_CARD";
+
     public var vo : OrganizedStructVo;
     public var isShow : Boolean;
 
-    public function SInfoCardEvent(type : String, vo : OrganizedStructVo, isShow : Boolean = false, bubbles : Boolean = false, cancelable : Boolean = false) {
+    public var id : int;
+    public var _target : DisplayObject;
+    public var name : String;
+
+    public function SInfoCardEvent(type : String, vo : OrganizedStructVo, isShow : Boolean = false, id : int = 0, _target : DisplayObject = null, name : String = null, bubbles : Boolean = false, cancelable : Boolean = false) {
         super(type, bubbles, cancelable);
 
         this.vo = vo;
         this.isShow = isShow;
+        this.id = id;
+        this._target = _target;
+        this.name = name;
 
     }
 }

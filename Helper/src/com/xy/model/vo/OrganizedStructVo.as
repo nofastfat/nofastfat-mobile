@@ -64,10 +64,16 @@ public class OrganizedStructVo {
     public var simpleSubordinateList : Array;
 
     /**
-     * 能力矩阵值
+     * 能力矩阵序号
      * 从高到低， 1-9
      */
     public var powerMatrix : int;
+    
+    /**
+     * 能力矩阵值
+     * 0-2:红，黄，绿
+     */    
+    public var powerMatrixValue : int;
 
     /**
      * 直属列表详情
@@ -76,11 +82,16 @@ public class OrganizedStructVo {
      */
     public var subStuctList : Array;
 
+
+
+
+	public var parent : OrganizedStructVo;
+
 	/**
 	 * ui显示的状态 
 	 */
 	public var cardStatus : SInfoCardStatus = new SInfoCardStatus();
-
+	
     public static function fromJsonStr(jsonStr : String) : OrganizedStructVo {
         return fromJson(JSON.decode(jsonStr));
     }
@@ -146,6 +157,52 @@ public class OrganizedStructVo {
         return null;
     }
     
+    public function isChild(id : int) : Boolean{
+    	for each(var subVo : OrganizedStructVo in subStuctList){
+    		if(subVo.id == id){
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
+    public function getHideChildIdsBy(hideId : int) : Array{
+    	var rs : Array = [];
+    	  for each (var vo : OrganizedStructVo in subStuctList) {
+            if (!vo.cardStatus.visible && vo.cardStatus.hideById == hideId) {
+                rs.push(vo.id);
+            }
+            
+            rs = rs.concat(vo.getHideChildIdsBy(hideId));
+        }
+        
+    	return rs;
+    }
+    
+    /**
+     * 获取兄弟节点 
+     * [OrganizedStructVo, OrganizedStructVo, ...]
+     * @return 
+     */    
+    public function getSiblingVos() : Array{
+    	var rs : Array = [];
+    	if(parent == null){
+			return rs;    	
+    	}
+    	
+    	for each(var siblingVo : OrganizedStructVo in parent.subStuctList){
+    		if(siblingVo.id != this.id){
+    			rs.push(siblingVo);
+    		}
+    	}
+    	return rs;
+    }
+    
+    /**
+     * 获取所有正在显示的子节点的id 
+     * @return 
+     */    
     public function getVisibleChildIds() : Array{
     	var rs : Array = [];
     	  for each (var vo : OrganizedStructVo in subStuctList) {

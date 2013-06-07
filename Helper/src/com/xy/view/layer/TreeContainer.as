@@ -1,5 +1,6 @@
 package com.xy.view.layer {
 import com.xy.util.EnterFrameCall;
+import com.xy.util.STool;
 import com.xy.view.event.TreeContainerEvent;
 
 import flash.display.Sprite;
@@ -12,7 +13,8 @@ public class TreeContainer extends Sprite {
     private var _sWidth : int;
     private var _sHeight : int;
 
-    private var _container : Sprite;
+    private var _infoContainer : Sprite;
+    private var _taskContainer : Sprite;
     private var _bg : Sprite;
 
     private var _lastLocation : Point = new Point();
@@ -28,12 +30,32 @@ public class TreeContainer extends Sprite {
         _bg.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
 
-        _container = new Sprite();
-        addChild(_container);
+        _infoContainer = new Sprite();
+        _taskContainer = new Sprite();
+        switchContainer(true);
     }
 
-    public function get container() : Sprite {
-        return _container;
+    /**
+     * 切换子容器
+     * @param toInfo
+     */
+    public function switchContainer(toInfo : Boolean) : void {
+        if (toInfo) {
+            addChild(_infoContainer);
+            STool.remove(_taskContainer);
+        } else {
+
+            addChild(_taskContainer);
+            STool.remove(_infoContainer);
+        }
+    }
+
+    public function get infoContainer() : Sprite {
+        return _infoContainer;
+    }
+
+    public function get taskContainer() : Sprite {
+        return _taskContainer;
     }
 
     private function __downHandler(e : MouseEvent) : void {
@@ -51,7 +73,12 @@ public class TreeContainer extends Sprite {
     private function __moveHandler(e : MouseEvent) : void {
         var offsetX : Number = EnterFrameCall.getStage().mouseX - _lastLocation.x;
         var offsetY : Number = EnterFrameCall.getStage().mouseY - _lastLocation.y;
-        dispatchEvent(new TreeContainerEvent(TreeContainerEvent.LOCATION_MOVE, offsetX, offsetY));
+
+        if (_infoContainer.stage != null) {
+            _infoContainer.dispatchEvent(new TreeContainerEvent(TreeContainerEvent.LOCATION_MOVE, offsetX, offsetY));
+        } else {
+            _taskContainer.dispatchEvent(new TreeContainerEvent(TreeContainerEvent.LOCATION_MOVE, offsetX, offsetY));
+        }
 
         _lastLocation.x = EnterFrameCall.getStage().mouseX;
         _lastLocation.y = EnterFrameCall.getStage().mouseY;
