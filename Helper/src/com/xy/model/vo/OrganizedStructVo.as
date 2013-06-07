@@ -1,6 +1,6 @@
 package com.xy.model.vo {
 import com.adobe.serialization.json.JSON;
-import com.xy.view.ui.SInfoCard;
+import com.xy.model.vo.uiStatus.SInfoCardStatus;
 
 /**
  * 组织机构
@@ -76,7 +76,10 @@ public class OrganizedStructVo {
      */
     public var subStuctList : Array;
 
-	public var view : SInfoCard;
+	/**
+	 * ui显示的状态 
+	 */
+	public var cardStatus : SInfoCardStatus = new SInfoCardStatus();
 
     public static function fromJsonStr(jsonStr : String) : OrganizedStructVo {
         return fromJson(JSON.decode(jsonStr));
@@ -91,7 +94,7 @@ public class OrganizedStructVo {
                     vo[key] = int(obj[key]);
                     break;
                 case "object":
-                    var arr : Array = obj[key];
+                    var arr : Array = obj[key] as Array;
                     if (arr != null) {
                         var fun : Function;
                         if (key == "subStuctList") {
@@ -142,6 +145,18 @@ public class OrganizedStructVo {
 
         return null;
     }
-
+    
+    public function getVisibleChildIds() : Array{
+    	var rs : Array = [];
+    	  for each (var vo : OrganizedStructVo in subStuctList) {
+            if (vo.cardStatus.visible) {
+                rs.push(vo.id);
+            }
+            
+            rs = rs.concat(vo.getVisibleChildIds());
+        }
+        
+    	return rs;
+    }
 }
 }

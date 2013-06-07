@@ -2,21 +2,19 @@ package com.xy.view.ui {
 import com.greensock.TweenLite;
 import com.xy.component.buttons.ToggleButton;
 import com.xy.component.buttons.event.ToggleButtonEvent;
-import com.xy.interfaces.Map;
 import com.xy.model.vo.OrganizedStructVo;
 import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.ui.InfoCard;
 import com.xy.util.STool;
-import com.xy.util.Tools;
 import com.xy.view.event.SInfoCardEvent;
 
 import flash.display.Loader;
-import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.net.URLRequest;
 
 /**
@@ -37,11 +35,15 @@ public class SInfoCard extends InfoCard {
     private var _startY : int;
     private var _endHeight : int;
 
-    private var _childContainer : Sprite;
-    private var _cards : Map = new Map();
+    private var _tempVisibleChildIds : Array = [];
+    private var _locationCall : Function;
+    private var _lastHeight : Number = 0;
+
+    private var _rect : Rectangle;
 
     public function SInfoCard() {
         super();
+        _rect = new Rectangle();
 
         _togChildBtn = new ToggleButton();
         _togChildBtn.setCtrlUI(childBtn, false);
@@ -70,9 +72,22 @@ public class SInfoCard extends InfoCard {
         return _vo;
     }
 
-    public function setData(vo : OrganizedStructVo) : void {
+    public function showTo(parent : Sprite) : void {
+        super.x = _vo.cardStatus.locationX;
+        super.y = _vo.cardStatus.locationY;
+
+        parent.addChild(this);
+        _vo.cardStatus.visible = true;
+    }
+
+    public function hide() : void {
+        STool.remove(this);
+        _vo.cardStatus.visible = false;
+    }
+
+    public function setData(vo : OrganizedStructVo, locationCall : Function) : void {
         _vo = vo;
-        _vo.view = this;
+        _locationCall = locationCall;
         STool.clear(iconContainer, [iconContainer.bg]);
 
         if (_loader != null) {
@@ -95,12 +110,17 @@ public class SInfoCard extends InfoCard {
         leftSorceTf.text = vo.levelUpLastScore + "";
         subordinateCountTf.text = "（" + vo.simpleSubordinateList.length + "）";
 
-        _showCount = 3;
+        _showCount = _vo.cardStatus.showCount;
 
         updateShowChild();
     }
 
     private function updateShowChild() : void {
+        _tempVisibleChildIds = _vo.getVisibleChildIds();
+
+        if (_lastHeight == 0) {
+            _lastHeight = bg.height;
+        }
 
         var subHeight : int;
 
@@ -138,7 +158,7 @@ public class SInfoCard extends InfoCard {
                 overwrite: true,
                 onUpdateParams: [this],
                 onUpdate: function(self : SInfoCard) : void {
-                    var bgHeight : int = self.bg.height;
+                    var bgHeight : Number = self.bg.height;
                     self.moreBtn.y = bgHeight;
                     for (var i : int = 0; i < self._showCount; i++) {
                         var line : SInfoList = self._lineList[i];
@@ -153,7 +173,8 @@ public class SInfoCard extends InfoCard {
                             STool.remove(line);
                         }
                     }
-                    resetChildContainerLocation();
+                    _locationCall(self._tempVisibleChildIds, bgHeight - self._lastHeight);
+                    self._lastHeight = bgHeight;
                 },
                 onCompleteParams: [this],
                 onComplete: function(self : SInfoCard) : void {
@@ -170,10 +191,16 @@ public class SInfoCard extends InfoCard {
                     } else {
                         self.moreBtn.gotoAndStop(1);
                     }
-
-                    resetChildContainerLocation();
+                    _locationCall(self._tempVisibleChildIds, self.bg.height - self._lastHeight);
+                    self._lastHeight = self.bg.height;
+                    self._rect.x = self.x;
+                    self._rect.y = self.y;
+                    self._rect.width = self.width;
+                    self._rect.height = self.height;
                 }
             });
+
+        _vo.cardStatus.showCount = _showCount;
     }
 
     private function __stateChangeHandler(e : ToggleButtonEvent) : void {
@@ -202,61 +229,22 @@ public class SInfoCard extends InfoCard {
      * @return
      */
     public function get bottomCenterLoaction() : Point {
-        var moreBtnHeight : int = moreBtn.visible ? moreBtn.height : 0;
-        return new Point(bg.x + bg.width / 2, bg.y + bg.height + moreBtnHeight + 3);
+        var moreBtnHeight : Number = moreBtn.visible ? moreBtn.height : 3;
+        return new Point(this.x + this.width / 2, this.y + bg.height + moreBtnHeight + 3);
     }
 
-    public function showChilds(vo : OrganizedStructVo) : void {
-        var bottomCenter : Point = bottomCenterLoaction;
-        var len : int = vo.subStuctList.length;
-        var bgWidth : int = bg.width;
-        var lineStart : Point = new Point((len * (bgWidth + 10) - 10) / 2, 0);
-        for (var i : int = 0; i < len; i++) {
-            var subVo : OrganizedStructVo = vo.subStuctList[i];
-            var card : SInfoCard = _cards.get(subVo.id);
-            if (card == null) {
-                card = new SInfoCard();
-                card.addEventListener(SInfoCardEvent.DETAIL_CHANGE, __childShowMoreChildHandler);
-                _cards.put(subVo.id, card);
-            }
-            card.setData(subVo);
-            childContainer.addChild(card);
-            card.x = (bgWidth + 10) * i;
-            card.y = 100;
-
-            var concatLine : Shape = Tools.makeConactLine(lineStart, new Point(card.x + bgWidth / 2, card.y));
-            childContainer.addChild(concatLine);
-        }
-        resetChildContainerLocation();
+    override public function set x(value : Number) : void {
+        super.x = value;
+        _vo.cardStatus.locationX = value;
     }
 
-    private function __childShowMoreChildHandler(e : SInfoCardEvent) : void {
-        dispatchEvent(new SInfoCardEvent(e.type, e.vo, e.isShow));
+    override public function set y(value : Number) : void {
+        super.y = value;
+        _vo.cardStatus.locationY = value;
     }
 
-    /**
-     * 子节点容器
-     * @return
-     */
-    public function get childContainer() : Sprite {
-        if (_childContainer == null) {
-            _childContainer = new Sprite();
-            addChild(_childContainer);
-        }
-        return _childContainer;
-    }
-
-    /**
-     * 重置 子节点容器的位置
-     */
-    public function resetChildContainerLocation() : void {
-        if (_childContainer == null) {
-            return;
-        }
-
-        var bottomCenter : Point = bottomCenterLoaction;
-        _childContainer.x = bottomCenter.x - _childContainer.width / 2;
-        _childContainer.y = bottomCenter.y;
+    public function get rect() : Rectangle {
+        return _rect;
     }
 }
 }
