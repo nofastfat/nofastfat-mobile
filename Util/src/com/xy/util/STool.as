@@ -7,6 +7,7 @@ import flash.display.MovieClip;
 import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.geom.Point;
+import flash.text.TextField;
 
 public class STool {
 
@@ -32,6 +33,19 @@ public class STool {
             }
         }
     }
+
+	/**
+	 * 让文本框最小 
+	 * @param tf
+	 */
+	public static function minSizeTextfield(tf : TextField) : void {
+		if(tf == null){
+			return;
+		}
+		
+		tf.width = tf.textWidth + 5;
+		tf.height = tf.textHeight + 5;
+	}
 
     /**
      * 安全移除显示对象
