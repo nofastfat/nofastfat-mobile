@@ -34,28 +34,29 @@ public class STool {
         }
     }
 
-	/**
-	 * 让文本框最小 
-	 * @param tf
-	 */
-	public static function minSizeTextfield(tf : TextField) : void {
-		if(tf == null){
-			return;
-		}
-		
-		tf.width = tf.textWidth + 5;
-		tf.height = tf.textHeight + 5;
-	}
-	
-	/**
-	 * 批量让文本框最小 
-	 * @param tfArray
-	 */	
-	public static function minSizeTextfields(tfArray : Array):void{
-		for each(var tf : TextField in tfArray){
-			minSizeTextfield(tf);
-		}
-	}
+    /**
+     * 让文本框最小
+     * @param tf
+     */
+    public static function minSizeTextfield(tf : TextField, bold : Boolean = false) : void {
+        if (tf == null) {
+            return;
+        }
+
+        var sw : int = bold ? 20 : 5;
+        tf.width = tf.textWidth + sw;
+        tf.height = tf.textHeight + 5;
+    }
+
+    /**
+     * 批量让文本框最小
+     * @param tfArray
+     */
+    public static function minSizeTextfields(tfArray : Array, bold : Boolean = false) : void {
+        for each (var tf : TextField in tfArray) {
+            minSizeTextfield(tf, bold);
+        }
+    }
 
     /**
      * 安全移除显示对象
