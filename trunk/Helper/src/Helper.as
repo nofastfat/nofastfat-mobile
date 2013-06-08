@@ -15,7 +15,7 @@ import flash.events.Event;
 
 import net.hires.debug.Stats;
 
-[SWF(witdh = "1024", height = "768", backgroundColor = "#666666")]
+[SWF(witdh = "100", height = "100", backgroundColor = "#666666")]
 public class Helper extends Sprite {
     private var _facade : HelperFacade;
 
@@ -86,8 +86,8 @@ public class Helper extends Sprite {
 
         addChild(_treeContainer);
         addChild(_detailContainer);
-        addChild(_loading);
         addChild(_ctrlUI);
+        addChild(_loading);
 
         __resizeHandler();
 
