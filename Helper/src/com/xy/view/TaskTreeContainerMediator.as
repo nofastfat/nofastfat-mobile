@@ -182,6 +182,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
 
         if (vo.subTaskList == null) {
             //TODO 请求组织机构数据失败了	
+            return;
         } else {
             var len : int = vo.subTaskList.length;
             var totalHeight : int = len * (parentCard.height + 20) - 20;

@@ -17,6 +17,11 @@ public class Config {
     public static var ACTION2_URL : String;
     
     /**
+     * 请求“目标卡片2”的地址
+     */
+    public static var ACTION3_URL : String;
+    
+    /**
      * 调试模式 
      */    
     public static var DEBUG_MODE : Boolean;
