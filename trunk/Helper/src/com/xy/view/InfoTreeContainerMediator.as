@@ -289,6 +289,10 @@ public class InfoTreeContainerMediator extends AbsMediator {
             }
             card.bg.gotoAndStop(2);
             _lastSelectCard = card;
+            
+            if(uiContainer.contains(card)){
+            	uiContainer.setChildIndex(card, uiContainer.numChildren -1);
+            }
         }
     }
 
