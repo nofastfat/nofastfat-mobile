@@ -34,6 +34,7 @@ public class Helper extends Sprite {
         Config.ACTION0_URL = decodeURIComponent(this.loaderInfo.parameters["action0"]);
         Config.ACTION1_URL = decodeURIComponent(this.loaderInfo.parameters["action1"]);
         Config.ACTION2_URL = decodeURIComponent(this.loaderInfo.parameters["action2"]);
+        Config.ACTION3_URL = decodeURIComponent(this.loaderInfo.parameters["action3"]);
         Config.DEBUG_MODE = decodeURIComponent(this.loaderInfo.parameters["debug"]).toLocaleLowerCase() == "true";
 
         /* 初始数据 */
@@ -125,7 +126,7 @@ public class Helper extends Sprite {
 
         if (_ctrlUI != null) {
             if (Config.DEBUG_MODE) {
-                _ctrlUI.x = Stats.WIDTH ;
+                _ctrlUI.x = Stats.WIDTH;
                 _ctrlUI.y = 0;
             } else {
                 _ctrlUI.x = 0;

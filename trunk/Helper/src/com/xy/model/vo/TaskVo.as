@@ -94,8 +94,6 @@ public class TaskVo {
      * @return
      */
     public function getSiblingVos() : Array {
-    	//TODO bug 第一级节点获取有问题
-    	
         var rs : Array = [];
         if (parent == null) {
             return rs;

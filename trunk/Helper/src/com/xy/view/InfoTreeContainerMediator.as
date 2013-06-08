@@ -207,6 +207,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
         parentCard.setChildBtnSelect(true);
         if (vo.subStuctList == null) {
             //TODO 请求组织机构数据失败了	
+            return;
         } else {
             var len : int = vo.subStuctList.length;
             var totalWidth : int = len * (parentCard.width + 10) - 10;
