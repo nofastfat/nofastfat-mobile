@@ -116,8 +116,14 @@ public class GetTaskCmd extends AbsCommand {
             return;
         }
 
+        var vitrulParent : TaskVo = new TaskVo();
+        vitrulParent.subTaskList = [];
+
         var json : * = JSON.decode(data);
         var vo : TaskVo = TaskVo.fromJson(json.current);
+        vitrulParent.subTaskList.push(vo);
+        vo.parent = vitrulParent;
+
         dataProxy.taskDatas.put(vo.id, vo);
         for each (var child : TaskVo in vo.subTaskList) {
             child.parent = vo;
@@ -128,6 +134,8 @@ public class GetTaskCmd extends AbsCommand {
             var sibVo : TaskVo = TaskVo.fromJson(obj);
             dataProxy.taskDatas.put(sibVo.id, sibVo);
             siblings.push(sibVo);
+            vitrulParent.subTaskList.push(sibVo);
+            sibVo.parent = vitrulParent;
         }
 
         LoadingController.stopLoading();

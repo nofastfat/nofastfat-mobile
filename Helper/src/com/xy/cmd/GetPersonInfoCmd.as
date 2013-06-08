@@ -12,6 +12,10 @@ import flash.utils.setTimeout;
 
 import org.puremvc.as3.interfaces.INotification;
 
+/**
+ * 请求人员信息
+ * @author xy
+ */
 public class GetPersonInfoCmd extends AbsCommand {
     /**
      * [id:int, target:mc]
