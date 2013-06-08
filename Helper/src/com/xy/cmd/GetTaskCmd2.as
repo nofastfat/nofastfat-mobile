@@ -6,6 +6,7 @@ import com.xy.model.vo.TaskVo;
 import com.xy.util.Http;
 import com.xy.util.RandomName;
 import com.xy.util.STool;
+import com.xy.util.SingleLogicThread;
 import com.xy.util.Tools;
 import com.xy.view.TaskTreeContainerMediator;
 
@@ -23,6 +24,7 @@ public class GetTaskCmd2 extends AbsCommand {
      * vo : TaskVo
      */
     public static const NAME : String = "GetTaskCmd2";
+    private static var _thread : SingleLogicThread = new SingleLogicThread();
 
     private var _vo : TaskVo;
 
@@ -31,6 +33,11 @@ public class GetTaskCmd2 extends AbsCommand {
     }
 
     override public function execute(notification : INotification) : void {
+        _thread.startSending(executeDone, notification);
+
+    }
+
+    private function executeDone(notification : INotification) : void {
         _vo = notification.getBody() as TaskVo;
         LoadingController.showLoading();
 
@@ -70,9 +77,10 @@ public class GetTaskCmd2 extends AbsCommand {
      * @param data
      */
     private function callback(data : String) : void {
+        _thread.clearSending();
         LoadingController.stopLoading();
         if (data == null || data == "" || data == "null") {
-        	LoadingController.showError();
+            LoadingController.showError();
             //sendNotification(TaskTreeContainerMediator.GET_TASK2_OK, _vo);
             return;
         }

@@ -7,6 +7,7 @@ import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.util.Http;
 import com.xy.util.RandomName;
 import com.xy.util.STool;
+import com.xy.util.SingleLogicThread;
 import com.xy.util.Tools;
 import com.xy.view.InfoTreeContainerMediator;
 
@@ -21,13 +22,21 @@ import org.puremvc.as3.interfaces.INotification;
 public class GetOrganizedStructCmd extends AbsCommand {
     public static const NAME : String = "GetOrganizedStructCmd";
 
+    private static var _thread : SingleLogicThread = new SingleLogicThread();
+
     private var _requestVo : OrganizedStructVo;
 
     public function GetOrganizedStructCmd() {
         super();
     }
 
+
     override public function execute(notification : INotification) : void {
+        _thread.startSending(executeDone, notification);
+
+    }
+
+    private function executeDone(notification : INotification) : void {
         var vo : OrganizedStructVo = notification.getBody() as OrganizedStructVo;
         _requestVo = vo;
         LoadingController.showLoading();
@@ -71,9 +80,10 @@ public class GetOrganizedStructCmd extends AbsCommand {
     }
 
     private function callback(data : String) : void {
+    	_thread.clearSending();
         LoadingController.stopLoading();
         if (data == null || data == "" || data == "null") {
-        	LoadingController.showError();
+            LoadingController.showError();
             //sendNotification(InfoTreeContainerMediator.GET_ORGANIZED_STRUCT_OK, _requestVo);
             return;
         }
