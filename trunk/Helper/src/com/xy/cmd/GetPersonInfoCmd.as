@@ -6,6 +6,7 @@ import com.xy.model.vo.PersonInfoVo;
 import com.xy.model.vo.SimpleTaskVo;
 import com.xy.util.Http;
 import com.xy.util.STool;
+import com.xy.util.SingleLogicThread;
 import com.xy.util.Tools;
 import com.xy.view.InfoTreeContainerMediator;
 
@@ -23,6 +24,7 @@ public class GetPersonInfoCmd extends AbsCommand {
      * [id:int, target:mc]
      */
     public static const NAME : String = "GetPersonInfoCmd";
+    private static var _thread : SingleLogicThread = new SingleLogicThread();
 
     private var _id : int;
     private var _mc : DisplayObject;
@@ -32,6 +34,11 @@ public class GetPersonInfoCmd extends AbsCommand {
     }
 
     override public function execute(notification : INotification) : void {
+        _thread.startSending(executeDone, notification);
+
+    }
+
+    private function executeDone(notification : INotification) : void {
         _id = notification.getBody()[0];
         _mc = notification.getBody()[1];
         var name : String = notification.getBody()[2];
@@ -69,6 +76,7 @@ public class GetPersonInfoCmd extends AbsCommand {
     }
 
     private function callback(data : String) : void {
+    	_thread.clearSending();
         LoadingController.stopLoading();
         if (data == null || data == "" || data == "null") {
         	LoadingController.showError();
