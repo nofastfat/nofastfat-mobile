@@ -464,7 +464,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
         e.stopImmediatePropagation();
         e.stopPropagation();
 
-        if (e.ctrlKey) {
+        if (false && e.ctrlKey) {
 
             var vl : Number = 0.1;
             if (e.delta < 0) {
