@@ -46,6 +46,16 @@ public class STool {
 		tf.width = tf.textWidth + 5;
 		tf.height = tf.textHeight + 5;
 	}
+	
+	/**
+	 * 批量让文本框最小 
+	 * @param tfArray
+	 */	
+	public static function minSizeTextfields(tfArray : Array):void{
+		for each(var tf : TextField in tfArray){
+			minSizeTextfield(tf);
+		}
+	}
 
     /**
      * 安全移除显示对象
