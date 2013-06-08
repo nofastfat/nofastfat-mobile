@@ -62,7 +62,7 @@ public class GetTaskCmd2 extends AbsCommand {
     }
 
     /**
-     * {current:TaskVo, siblings:Array}
+     * childs:Array
      * @param data
      */
     private function callback(data : String) : void {

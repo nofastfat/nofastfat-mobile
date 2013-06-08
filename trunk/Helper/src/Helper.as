@@ -5,6 +5,7 @@ import com.xy.model.Config;
 import com.xy.ui.Loading;
 import com.xy.util.EnterFrameCall;
 import com.xy.view.layer.DetailContainer;
+import com.xy.view.layer.SUIPanel;
 import com.xy.view.layer.TreeContainer;
 
 import flash.display.Sprite;
@@ -20,6 +21,7 @@ public class Helper extends Sprite {
 
     private var _treeContainer : TreeContainer;
     private var _detailContainer : DetailContainer;
+    private var _ctrlUI : SUIPanel;
 
     private var _loading : Loading;
 
@@ -32,6 +34,7 @@ public class Helper extends Sprite {
         Config.ACTION0_URL = decodeURIComponent(this.loaderInfo.parameters["action0"]);
         Config.ACTION1_URL = decodeURIComponent(this.loaderInfo.parameters["action1"]);
         Config.ACTION2_URL = decodeURIComponent(this.loaderInfo.parameters["action2"]);
+        Config.DEBUG_MODE = decodeURIComponent(this.loaderInfo.parameters["debug"]).toLocaleLowerCase() == "true";
 
         /* 初始数据 */
         _initData = decodeURIComponent(this.loaderInfo.parameters["initData"]);
@@ -66,7 +69,7 @@ public class Helper extends Sprite {
     }
 
     private function __addToStageHandler(e : Event) : void {
-    	ToolTip.initStage(stage);
+        ToolTip.initStage(stage);
         removeEventListener(Event.ADDED_TO_STAGE, __addToStageHandler);
         stage.addEventListener(Event.RESIZE, __resizeHandler);
         stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -78,9 +81,12 @@ public class Helper extends Sprite {
         _detailContainer = new DetailContainer();
         _loading = new Loading();
 
+        _ctrlUI = new SUIPanel();
+
         addChild(_treeContainer);
         addChild(_detailContainer);
         addChild(_loading);
+        addChild(_ctrlUI);
 
         __resizeHandler();
 
@@ -90,8 +96,10 @@ public class Helper extends Sprite {
 
         _facade = new HelperFacade();
         _facade.startUp(this, _initData);
-        
-    	addChild(new Stats());
+
+        if (Config.DEBUG_MODE) {
+            addChild(new Stats());
+        }
     }
 
     private function __resizeHandler(e : Event = null) : void {
@@ -102,13 +110,27 @@ public class Helper extends Sprite {
 
         if (_treeContainer != null) {
             _treeContainer.x = _treeContainer.y = 0;
-            _treeContainer.resize(EnterFrameCall.getStage().stageWidth - 250, EnterFrameCall.getStage().stageHeight);
+            var offsetWidth : int = 350;
+            if (_detailContainer == null || !_detailContainer.visible) {
+                offsetWidth = 0;
+            }
+            _treeContainer.resize(EnterFrameCall.getStage().stageWidth - offsetWidth, EnterFrameCall.getStage().stageHeight);
         }
 
         if (_detailContainer != null) {
             _detailContainer.x = EnterFrameCall.getStage().stageWidth - 350;
             _detailContainer.y = 0;
             _detailContainer.resize(350, EnterFrameCall.getStage().stageHeight);
+        }
+
+        if (_ctrlUI != null) {
+            if (Config.DEBUG_MODE) {
+                _ctrlUI.x = Stats.WIDTH ;
+                _ctrlUI.y = 0;
+            } else {
+                _ctrlUI.x = 0;
+                _ctrlUI.y = 0;
+            }
         }
 
         if (_facade != null) {
@@ -123,6 +145,10 @@ public class Helper extends Sprite {
 
     public function get treeContainer() : TreeContainer {
         return _treeContainer;
+    }
+
+    public function get ctrlUI() : SUIPanel {
+        return _ctrlUI;
     }
 }
 }

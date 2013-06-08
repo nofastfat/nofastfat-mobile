@@ -40,6 +40,12 @@ public class InfoTreeContainerMediator extends AbsMediator {
      */
     public static const GET_PERSON_INFO_OK : String = NAME + "GET_PERSON_INFO_OK";
 
+    /**
+     * 缩放变化
+     * offsetScale:Number
+     */
+    public static const SCALE_CHANGE : String = NAME + "SCALE_CHANGE";
+
     private var _treeRoot : SInfoCard;
     private var _rsX : Number = 0;
     private var _rsY : Number = 0;
@@ -68,6 +74,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
         map.put(Event.RESIZE, resize);
         map.put(GET_ORGANIZED_STRUCT_OK, getOrganizedStructOk);
         map.put(GET_PERSON_INFO_OK, getPersonInfoOk);
+        map.put(SCALE_CHANGE, scaleChange);
         return map;
     }
 
@@ -187,10 +194,6 @@ public class InfoTreeContainerMediator extends AbsMediator {
     }
 
     private function resize(... rest) : void {
-        if (_treeRoot != null) {
-            _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
-            _treeRoot.y = (ui.sHeight - _treeRoot.height) / 2;
-        }
     }
 
     /**
@@ -248,7 +251,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
         }
 
         ToolTip.hideTip();
-        
+
         /* 展开的东西剧中显示 */
         var p : Point = new Point(parentCard.x + card.width / 2, parentCard.y + card.height + 50);
         p = uiContainer.localToGlobal(p);
@@ -260,7 +263,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
     }
 
     private function getPersonInfoOk(id : int, mc : DisplayObject) : void {
-    	var vo : PersonInfoVo = dataProxy.personDatas.get(id);
+        var vo : PersonInfoVo = dataProxy.personDatas.get(id);
         if (vo == null) {
             //请求人员信息失败
             return;
@@ -332,10 +335,10 @@ public class InfoTreeContainerMediator extends AbsMediator {
             }
 
 
-            var p : Point = new Point(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+            var p : Point = new Point(EnterFrameCall.getStage().stageWidth/2, EnterFrameCall.getStage().stageHeight/2);
 
-            var ix : Number = EnterFrameCall.getStage().mouseX * (uiContainer.scaleX - value);
-            var iy : Number = EnterFrameCall.getStage().mouseY * (uiContainer.scaleX - value);
+            var ix : Number = p.x * (uiContainer.scaleX - value);
+            var iy : Number = p.y * (uiContainer.scaleX - value);
 
             uiContainer.scaleX = uiContainer.scaleY = value;
             uiContainer.x += ix;
@@ -438,11 +441,21 @@ public class InfoTreeContainerMediator extends AbsMediator {
         _camaraRect.height = ui.sHeight / uiContainer.scaleY;
     }
 
+    private function scaleChange(offset : Number) : void {
+        if (uiContainer.stage != null) {
+            _rsScale += offset;
+
+            if (_rsScale != 0) {
+                EnterFrameCall.add(scale);
+            }
+        }
+    }
+
     private function __mouseWheelHandler(e : MouseEvent) : void {
-    	if(uiContainer.stage == null){
-    		return;
-    	}
-    	
+        if (uiContainer.stage == null) {
+            return;
+        }
+
         e.stopImmediatePropagation();
         e.stopPropagation();
 

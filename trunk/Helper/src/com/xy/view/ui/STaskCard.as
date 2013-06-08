@@ -2,13 +2,22 @@ package com.xy.view.ui {
 import com.greensock.TweenLite;
 import com.xy.model.vo.TaskVo;
 import com.xy.ui.TaskCard;
+import com.xy.util.EnterFrameCall;
 import com.xy.util.STool;
 import com.xy.view.event.STaskCardEvent;
+import com.xy.view.event.TreeContainerEvent;
 
+import flash.display.Loader;
 import flash.display.Sprite;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.URLRequest;
+import flash.text.TextFormat;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 
 /**
  * 目标卡片
@@ -18,18 +27,49 @@ public class STaskCard extends TaskCard {
     private var _vo : TaskVo;
 
     private var _rect : Rectangle;
+    private var _lastLocation : Point = new Point();
 
     private var _selected : Boolean = false;
+    private var _loader : Loader;
+
+	private static var _BOLD : TextFormat = new TextFormat(null, null, null, "bold");
 
     public function STaskCard() {
         super();
         _rect = new Rectangle(0, 0, width, height);
         ctrlBtn.addEventListener(MouseEvent.CLICK, __showChildHandler);
 
+        iconContainer.mouseChildren = false;
+        iconContainer.mouseEnabled = false;
+        stateMc.mouseChildren = false;
+        stateMc.mouseEnabled = false;
+        statusBar.mouseChildren = false;
+        statusBar.mouseEnabled = false;
+        bg.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+        EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
+        
+        targetTf.defaultTextFormat = _BOLD;
+        bolder0.setTextFormat(_BOLD);
+        bolder1.setTextFormat(_BOLD);
+        taskValueTf.defaultTextFormat = _BOLD;
+        totalTaskTf.defaultTextFormat = _BOLD;
     }
 
     public function setData(vo : TaskVo) : void {
         _vo = vo;
+
+        if (_loader != null) {
+            _loader.unload();
+        }
+        _loader = new Loader();
+        _loader.load(new URLRequest(vo.imgUrl));
+        _loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function(e : Event) : void {});
+        _loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e : Event) : void {
+            _loader.width = iconContainer.bg.width - 3;
+            _loader.height = iconContainer.bg.height - 3;
+        });
+        _loader.x = _loader.y = 1;
+        iconContainer.addChild(_loader);
 
         targetTf.text = _vo.taskName;
         nameTf.text = _vo.name;
@@ -40,6 +80,8 @@ public class STaskCard extends TaskCard {
         stateMc.gotoAndStop(_vo.statusValue + 1);
         bg.gotoAndStop(_vo.statusValue + 1);
         ctrlBtn.gotoAndStop(_vo.statusValue + 1);
+
+        STool.minSizeTextfields([targetTf, nameTf, jobTf, companyTf, totalTaskTf, taskValueTf]);
 
 
         var per : Number = _vo.statusPercent / 100;
@@ -69,6 +111,28 @@ public class STaskCard extends TaskCard {
         _selected = !_selected;
         dispatchEvent(new STaskCardEvent(STaskCardEvent.SHOW_DETAIL, _vo, _selected));
     }
+    
+    private function __downHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.HAND;
+        _lastLocation.x = EnterFrameCall.getStage().mouseX;
+        _lastLocation.y = EnterFrameCall.getStage().mouseY;
+        EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_MOVE, __moveHandler);
+    }
+
+    private function __upHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.AUTO;
+        EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_MOVE, __moveHandler);
+    }
+
+    private function __moveHandler(e : MouseEvent) : void {
+        var offsetX : Number = EnterFrameCall.getStage().mouseX - _lastLocation.x;
+        var offsetY : Number = EnterFrameCall.getStage().mouseY - _lastLocation.y;
+        dispatchEvent(new TreeContainerEvent(TreeContainerEvent.LOCATION_MOVE, offsetX, offsetY));
+
+        _lastLocation.x = EnterFrameCall.getStage().mouseX;
+        _lastLocation.y = EnterFrameCall.getStage().mouseY;
+    }
+
 
     public function showTo(parent : Sprite) : void {
         super.x = _vo.cardStatus.locationX;
@@ -106,9 +170,9 @@ public class STaskCard extends TaskCard {
     public function get rect() : Rectangle {
         return _rect;
     }
-    
+
     public function get selected() : Boolean {
-    	return _selected;
+        return _selected;
     }
 }
 }

@@ -1,5 +1,6 @@
 package com.xy.view {
 import com.greensock.TweenLite;
+import com.xy.component.toolTip.ToolTip;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.vo.OrganizedStructVo;
@@ -35,6 +36,8 @@ public class DetailContainerMediator extends AbsMediator {
 
     public function DetailContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
+
+        checkContent();
     }
 
     override public function makeNoticeMap() : Map {
@@ -54,6 +57,7 @@ public class DetailContainerMediator extends AbsMediator {
             _matrix = new SPowerMatrix();
             _matrix.addEventListener(SPowerMatrixEvent.CLOSE, __closeMatrixHandler);
         }
+        ui.visible = true;
         STool.remove(_personCard);
         _matrix.setData(vo);
         _matrix.alpha = 1;
@@ -77,11 +81,16 @@ public class DetailContainerMediator extends AbsMediator {
 
     }
 
+    private function checkContent() : void {
+        ui.visible = ui.numChildren  > 1;
+    }
+
     private function showPerosonCard(vo : PersonInfoVo, mc : DisplayObject) : void {
         if (vo == null) {
             return;
         }
 
+        ui.visible = true;
         STool.remove(_matrix);
         if (_personCard == null) {
             _personCard = new SSimpleInfoCard();
@@ -125,22 +134,27 @@ public class DetailContainerMediator extends AbsMediator {
 
         TweenLite.to(_matrix, 0.3, {x: _matrix.x + 300, alpha: 0.3, overwrite: true, onComplete: function() : void {
             STool.remove(_matrix);
+            checkContent();
         }});
     }
 
-    private function __closePersonCardHandler(E : SSimpleInfoCardEvent) : void {
+    private function __closePersonCardHandler(e : SSimpleInfoCardEvent) : void {
         if (_personCard == null) {
             return;
         }
 
         TweenLite.to(_personCard, 0.3, {x: _personCard.x + 300, alpha: 0.3, overwrite: true, onComplete: function() : void {
             STool.remove(_personCard);
+
+            checkContent();
         }});
     }
 
-	private function __showTaskChildHandle(e : SSimpleInfoCardEvent):void{
-		sendNotification(TaskTreeContainerMediator.INIT_SHOW, [e.currentVo, e.siblingVos, e.index]);
-	}
+    private function __showTaskChildHandle(e : SSimpleInfoCardEvent) : void {
+        __closePersonCardHandler(null);
+        ToolTip.hideTip();
+        sendNotification(TaskTreeContainerMediator.INIT_SHOW, [e.currentVo, e.siblingVos, e.index]);
+    }
 
     public function get ui() : DetailContainer {
         return viewComponent as DetailContainer;

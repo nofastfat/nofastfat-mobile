@@ -1,6 +1,7 @@
 package com.xy.view {
 import com.xy.cmd.GetTaskCmd;
 import com.xy.cmd.GetTaskCmd2;
+import com.xy.component.toolTip.ToolTip;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.vo.SimpleTaskVo;
@@ -59,6 +60,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
         uiContainer.addEventListener(TreeContainerEvent.LOCATION_MOVE, __moveHandler);
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_WHEEL, __mouseWheelHandler);
         _camaraRect = new Rectangle(-uiContainer.x, -uiContainer.y, ui.sWidth, ui.sHeight);
+        ui.switchBtn.addEventListener(MouseEvent.CLICK, __switchToInfoHandler);
     }
 
     override public function makeNoticeMap() : Map {
@@ -67,7 +69,18 @@ public class TaskTreeContainerMediator extends AbsMediator {
         map.put(Event.RESIZE, resize);
         map.put(GET_TASK_OK, getTaskOk);
         map.put(GET_TASK2_OK, getTask2Ok);
+        map.put(InfoTreeContainerMediator.SCALE_CHANGE, scaleChange);
         return map;
+    }
+
+    private function scaleChange(offset : Number) : void {
+        if (uiContainer.stage != null) {
+            _rsScale += offset;
+
+            if (_rsScale != 0) {
+                EnterFrameCall.add(scale);
+            }
+        }
     }
 
     /**
@@ -75,6 +88,8 @@ public class TaskTreeContainerMediator extends AbsMediator {
      */
     private function initShow(curretntVo : SimpleTaskVo, siblingVos : Array, index : int) : void {
         ui.switchContainer(false);
+
+        sendNotification(SUIPanelMediator.REST_SCALE, ui.taskContainer.scaleX);
 
         var currentTask : TaskVo = dataProxy.taskDatas.get(curretntVo.id);
         var siblingTask : Array = [];
@@ -97,6 +112,21 @@ public class TaskTreeContainerMediator extends AbsMediator {
 //            _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
 //            _treeRoot.y = (ui.sHeight - _treeRoot.height) / 2;
 //        }
+    }
+
+    private function __switchToInfoHandler(e : MouseEvent) : void {
+        ui.switchContainer(true);
+        hideAll();
+        ToolTip.hideTip();
+
+        sendNotification(SUIPanelMediator.REST_SCALE, ui.infoContainer.scaleX);
+    }
+
+    public function hideAll() : void {
+        STool.clear(uiContainer);
+        for each (var card : STaskCard in _cards) {
+            card.hide(-1);
+        }
     }
 
     private function getTaskOk(vo : TaskVo, siblings : Array, index : int) : void {
@@ -190,6 +220,15 @@ public class TaskTreeContainerMediator extends AbsMediator {
                 line.y = rightCenterPoint.y;
                 _lines.put(subVo.id, line);
             }
+        }
+
+        /* 展开的东西剧中显示 */
+        var p : Point = new Point(parentCard.x + card.width + 50, parentCard.y + card.height / 2);
+        p = uiContainer.localToGlobal(p);
+        _rsX += ui.sWidth / 2 - p.x;
+        _rsY += ui.sHeight / 2 - p.y;
+        if (_rsX != 0 || _rsY != 0) {
+            EnterFrameCall.add(move);
         }
     }
 
@@ -334,10 +373,10 @@ public class TaskTreeContainerMediator extends AbsMediator {
             }
 
 
-            var p : Point = new Point(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+            var p : Point = new Point(EnterFrameCall.getStage().stageWidth/2, EnterFrameCall.getStage().stageHeight/2);
 
-            var ix : Number = EnterFrameCall.getStage().mouseX * (uiContainer.scaleX - value);
-            var iy : Number = EnterFrameCall.getStage().mouseY * (uiContainer.scaleX - value);
+            var ix : Number = p.x * (uiContainer.scaleX - value);
+            var iy : Number = p.y * (uiContainer.scaleX - value);
 
             uiContainer.scaleX = uiContainer.scaleY = value;
             uiContainer.x += ix;

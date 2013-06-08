@@ -42,6 +42,7 @@ public class PersonInfoVo {
 
     /**
      * 目标列表
+     * [SimpleTaskVo, SimpleTaskVo, ...]
      */
     public var taskList : Array;
 

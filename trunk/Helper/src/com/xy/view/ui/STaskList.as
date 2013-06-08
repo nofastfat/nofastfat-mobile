@@ -1,4 +1,6 @@
 package com.xy.view.ui {
+import com.xy.component.toolTip.ToolTip;
+import com.xy.component.toolTip.enum.ToolTipMode;
 import com.xy.model.vo.SimpleTaskVo;
 import com.xy.ui.TaskList;
 
@@ -11,6 +13,7 @@ public class STaskList extends TaskList {
 
     public function STaskList() {
         super();
+        ToolTip.setSimpleTip(detailBtn, "查看任务分配", ToolTipMode.RIGHT_BOTTOM_CENTER);
     }
 
     public function setData(vo : SimpleTaskVo) : void {

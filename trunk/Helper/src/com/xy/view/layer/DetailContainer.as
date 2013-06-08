@@ -1,14 +1,15 @@
 package com.xy.view.layer {
+import com.xy.util.EnterFrameCall;
+
 import flash.display.Sprite;
-import flash.events.MouseEvent;
-import flash.ui.Mouse;
-import flash.ui.MouseCursor;
+import flash.events.Event;
 
 public class DetailContainer extends Sprite {
     private var _sWidth : int;
     private var _sHeight : int;
 	
 	private var _bg : Sprite;
+	
     public function DetailContainer() {
         super();
 		
@@ -17,7 +18,6 @@ public class DetailContainer extends Sprite {
 		_bg.graphics.drawRect(0, 0, 1, 1);
 		_bg.graphics.endFill();
 		addChild(_bg);
-        
     }
 
     /**
@@ -42,6 +42,12 @@ public class DetailContainer extends Sprite {
 		
 		_bg.width = _sWidth;
 		_bg.height = _sHeight;
+    }
+    
+    override public function set visible(value:Boolean):void{
+    	super.visible = value;
+    	
+    	EnterFrameCall.getStage().dispatchEvent(new Event(Event.RESIZE));
     }
 }
 }
