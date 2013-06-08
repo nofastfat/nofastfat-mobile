@@ -81,7 +81,7 @@ public class STaskCard extends TaskCard {
         bg.gotoAndStop(_vo.statusValue + 1);
         ctrlBtn.gotoAndStop(_vo.statusValue + 1);
 
-        STool.minSizeTextfields([targetTf, nameTf, jobTf, companyTf, totalTaskTf, taskValueTf]);
+        STool.minSizeTextfields([targetTf, nameTf, jobTf, companyTf, totalTaskTf, taskValueTf], true);
 
 
         var per : Number = _vo.statusPercent / 100;

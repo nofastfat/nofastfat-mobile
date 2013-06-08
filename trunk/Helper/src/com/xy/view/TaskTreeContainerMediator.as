@@ -100,7 +100,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
             }
         }
 
-        if (currentTask == null || siblingTask.length != siblingVos.length) {
+        if (currentTask == null || siblingTask.length != siblingVos.length || currentTask.subTaskList == null) {
             sendNotification(GetTaskCmd.NAME, [curretntVo, siblingVos, index]);
         } else {
             getTaskOk(currentTask, siblingTask, index);

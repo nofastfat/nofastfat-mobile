@@ -79,7 +79,7 @@ public class SSimpleInfoCard extends SimpleInfoCard {
         var selfVo : SimpleTaskVo;
         var siblingVos : Array = [];
         var index : int = 0;
-        for(var i : int = 0; i < _tasks.length; i++){
+        for(var i : int = 0; i < _vo.taskList.length; i++){
         	var list : STaskList = _tasks[i];
             if (list.detailBtn == e.currentTarget) {
                 selfVo = list.vo;
