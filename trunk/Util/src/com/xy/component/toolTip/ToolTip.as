@@ -170,9 +170,10 @@ public class ToolTip {
         }
         if (view.x + view.width > _stage.stageWidth) {
             view.x = _stage.stageWidth - view.width - 10;
+            view.y += source.height;
         }
         if (view.y + view.height > _stage.stageHeight) {
-            view.y = _stage.stageHeight - view.height - 10;
+            view.y = _stage.stageHeight - view.height - 10 - source.height;
         }
     }
 
