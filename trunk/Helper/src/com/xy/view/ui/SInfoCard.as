@@ -166,6 +166,7 @@ public class SInfoCard extends InfoCard {
         myScoreTf.text = vo.jobScore + "";
         leftSorceTf.text = vo.levelUpLastScore + "";
         subordinateCountTf.text = "（" + vo.simpleSubordinateList.length + "）";
+        childBtn.visible = _vo.simpleSubordinateList.length > 0;
 
         STool.minSizeTextfield(nameTf);
         STool.minSizeTextfield(companyTf);

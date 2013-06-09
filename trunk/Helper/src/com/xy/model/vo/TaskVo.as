@@ -65,6 +65,10 @@ public class TaskVo {
      */
     public var subTaskList : Array;
 
+	/**
+	 * 子节点的数量 
+	 */
+	public var subLen : int;
 
 
 

@@ -80,6 +80,8 @@ public class STaskCard extends TaskCard {
         stateMc.gotoAndStop(_vo.statusValue + 1);
         bg.gotoAndStop(_vo.statusValue + 1);
         ctrlBtn.gotoAndStop(_vo.statusValue + 1);
+        
+        ctrlBtn.visible = _vo.subLen != 0;
 
         STool.minSizeTextfields([targetTf, nameTf, jobTf, companyTf, totalTaskTf, taskValueTf], true);
 

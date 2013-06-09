@@ -48,7 +48,7 @@ public class GetTaskCmd2 extends AbsCommand {
             var taskValues1 : Array = ["2000万", "1000万", "200"];
 
             var rs : Array = [];
-            var len : int = STool.random(2, 10);
+            var len : int = STool.random(0, 10);
             for (var i : int = 0; i < len; i++) {
                 var child : TaskVo = new TaskVo();
 
@@ -62,6 +62,7 @@ public class GetTaskCmd2 extends AbsCommand {
                 child.taskCurrentValue = STool.randomFromArray(taskValues);
                 child.taskName = STool.randomFromArray(taskNames);
                 child.taskValue = STool.randomFromArray(taskValues1);
+                child.subLen = STool.random(0, 10);
 
                 rs.push(child);
             }

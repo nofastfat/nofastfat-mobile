@@ -66,7 +66,8 @@ public class GetTaskCmd extends AbsCommand {
             currentTask.taskName = _currentVo.taskName;
             currentTask.taskValue = _currentVo.taskValue;
             currentTask.subTaskList = [];
-            var len : int = STool.random(2, 10);
+            var len : int = STool.random(0, 10);
+            currentTask.subLen = len;
             for (var i : int = 0; i < len; i++) {
                 var child : TaskVo = new TaskVo();
 
@@ -80,6 +81,7 @@ public class GetTaskCmd extends AbsCommand {
                 child.taskCurrentValue = STool.randomFromArray(taskValues);
                 child.taskName = STool.randomFromArray(taskNames);
                 child.taskValue = STool.randomFromArray(taskValues1);
+                child.subLen = STool.random(0, 10);
                 currentTask.subTaskList.push(child);
             }
 
@@ -97,6 +99,7 @@ public class GetTaskCmd extends AbsCommand {
                 sib.taskCurrentValue = STool.randomFromArray(taskValues);
                 sib.taskName = svo.taskName;
                 sib.taskValue = svo.taskValue;
+                sib.subLen = STool.random(0, 10);
 
                 sibs.push(sib);
             }
