@@ -60,7 +60,7 @@ public class GetOrganizedStructCmd extends AbsCommand {
                 tmp.sex = STool.random(0, 1);
                 tmp.simpleSubordinateList = [];
                 tmp.status = STool.random(0, 2);
-                var len : int = STool.random(2, 15);
+                var len : int = STool.random(0, 15);
 
                 var ids : Array = STool.makeUnionRandomArray(1, 99, len);
                 for (var i : int = 0; i < len; i++) {

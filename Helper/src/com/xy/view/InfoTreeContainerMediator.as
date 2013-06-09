@@ -130,6 +130,10 @@ public class InfoTreeContainerMediator extends AbsMediator {
 
     private function __showMoreChildHandler(e : SInfoCardEvent) : void {
         var vo : OrganizedStructVo = e.vo;
+        if(vo.simpleSubordinateList == null || vo.simpleSubordinateList.length == 0){
+        	return;
+        }
+        
         var card : SInfoCard = _cards.get(vo.id);
         if (e.isShow) {
             if (vo.subStuctList == null) {
