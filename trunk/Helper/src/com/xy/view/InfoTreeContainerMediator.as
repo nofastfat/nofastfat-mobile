@@ -19,6 +19,7 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.external.ExternalInterface;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
@@ -104,6 +105,13 @@ public class InfoTreeContainerMediator extends AbsMediator {
         _treeRoot.showTo(uiContainer);
         _treeRoot.x = (ui.sWidth - _treeRoot.width) / 2;
         _treeRoot.y = (ui.sHeight - _treeRoot.height) / 2;
+        
+        if(_treeRoot.x < 0){
+        	_treeRoot.x = 100;
+        }
+        if(_treeRoot.y < 0){
+        	_treeRoot.y = 100;
+        }
     }
 
     private function locationCall(childIds : Array, offsetY : Number) : void {

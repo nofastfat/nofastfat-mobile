@@ -89,12 +89,13 @@ public class Helper extends Sprite {
         addChild(_ctrlUI);
         addChild(_loading);
 
-        __resizeHandler();
 
         LoadingController.initLoading(_loading);
 
         LoadingController.showLoading();
 
+        __resizeHandler();
+        
         _facade = new HelperFacade();
         _facade.startUp(this, _initData);
 
