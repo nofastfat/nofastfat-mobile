@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
-	
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+                        addedToStage="windowedapplication1_addedToStageHandler(event)"
+                        layout="absolute">
+
+    <mx:Script>
+        <![CDATA[
+            protected function windowedapplication1_addedToStageHandler(event : Event) : void {
+				
+            }
+        ]]>
+    </mx:Script>
+
+    <mx:UIComponent id="rootContainer">
+    </mx:UIComponent>
 </mx:WindowedApplication>
