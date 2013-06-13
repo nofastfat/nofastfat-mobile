@@ -1,10 +1,10 @@
 [General]
 SyntaxVersion=2
-BeginHotkey=121
+BeginHotkey=0
 BeginHotkeyMod=0
 PauseHotkey=0
 PauseHotkeyMod=0
-StopHotkey=123
+StopHotkey=0
 StopHotkeyMod=0
 RunOnce=1
 EnableWindow=
@@ -27,7 +27,7 @@ UEsDBBQAAgAIAI4OzEIIjeLRvAAAAPYAAAAFABEAMC5ibXBVVA0AB1fUt1FX1LdRV9S3UWVOMQqDQBD0
 
 
 [UIPackage]
-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
+UEsDBBQAAgAIAOyQzULKkqeUvwUAAAhGAAAJABEAVUlQYWNrYWdlVVQNAAdqCrpRagq6UWoKulHtm0tsVUUYx/+nz1uEvl/SFtoib2hpLe93C4ViK9oWFyYuLnDVq32QPiKaGI2Je9fuFFeuoOhCg2kkuKCJ4kIkcSUbl6YrFkZa/3MevYemlfOdGTpU+zUfc7i9c/7nm5nzze/MnGbDs5/vlPz+2bW19zHPjiAbM7MFyAt95vjuWjGQ5f9/ZnZ2Nvh4dsWWlT2k5/h9mM8yl676PEFfRS+gP0NfQ19NL/S6HkX0EnoZvZReTq+kV9Cr6Gvp1fRn6TX0OnotfR29nr6e3uDrzqx0gzXrxTB/xtgnJzHEcgTvQmKVHDHBuZzHfPeTD7berXvzJyebxx+WeZ+dQxd2Ib4l4DiBftFjdIMy/LsO9KNb4wpWhfRzY+j3s70vIYUXkcQgS6mVMguH+zNqvRy/DO6/FZf5f8U6h0cGNW4/qPotGvUd6Jlufds2PT1t5DyvEcYexKgXN+9k8p88/zg+ZyhTs04S5zEQ8xoKkeUoPsn32TNKnaxQ/nsFaYzS415BMfVXI8O9Uepkh/R7qZrERZxlOwwI514//zt58Fgtqn5OSL+f+pc572v0vyPt//DzQgfpY4A+EvNKymOMv9xQ/Bn9dvbDBbwt13d5pkDQ/nnz+v+CZvsrNk8I9PPhMbyyVznyRjj+Uvw35v0nbv9EKP5utr281R+Nv9A/X1T9gpB+J/WH9NpfHL+6Vw/NjT/Fny0a+o6j8lkTvOewhezf+NO2PVi4zdxr7Omr70sOjdb3pUbSry9Svzt5PjWgoe/W1wCY5c4vBp4/xPlfzdfB/G+DP9R8HaxrmeAPtc5RLsg/a2CWP9QaS51AvxBm+UM9ylcJ9Itglz/U3Jfwjw3wh6tfK4i/BEb5w42nUqBfGtK/9/nE/amH30/ayj+6zz8T9MP0v+k9Merbzr+685+umeBPtdZbIRh/ZbDLn+Uwy581/j0dVb8CdvlT5YqAP/vZ7klewSgpIMnjlPBqqmPoV4XiP45x6g2jj3Pge0u0/lmNcP5V/N2q0f6Z9d+GRb7zhNd/Xf3tgvGneCFhKH90DV0aH2sfvqxbPy6CL3f+ft6yvg3+VvNFgX9sgr83s9wgGP81MMvfW1juEOjXwix/N7LcJNCvg13+Xhe670zx905B/Othlr/V+TYK9Othdv1vK8vnBPoNyPCXYMtwQZuhH6S3OCqXyC3bcv6zzd+2zQZ/N8Isf2/z76mo+htgl7/VvRrw93FmnzTe4DUMitk7yD9S/Y2h+F9i1hvlzztuDrwojj8Of28K6feQ/wcYdZojIc34U0sQ/2bM5//4FEb+d+czNwcu8p2n7f0PxSvB+mf7+NjY8FD8/OHVj7+Avtz5ffLLqRs29XXXz2zwv+KVfP/YBP/vhfccFVV/G8zy/z7I9v+3wyz/q9WLPYL4d8Au/+/EQvy9dPv/TTC7/9/Mcreg/Zthlv/3s2wT6O9Chv8/pX9B/5P+XQz9PNg1XX43M/+1Wotfd/6zwf8tMMv/B/wxHVW/FXb5X81Vj77/0aah760/n4b6m42F7Wnjz7ZQ3rDBHypXm+SPEyyPCcbfHpjlj5OQ8cdemOWPo+44jh7/Ptjlj/2wyx8HYJY/VC5pF7T/wZC+rv145ddvYNF0n3+KmQ2vsEw78fgnH3ZNl39M8Gcn1DpW9PF3CHb3/w/DLH+c8s8ZVf8I7PLHUcznj90a+s6c/guLfGcp9r8l8R+D3fcP1b1i8v3Dl+G9+xRVvz08/k28P6vx+LPc1/9amm7/df3217fuTn37w7UrX/3xy2+NVyfuXb01efNGs/qsuVEd3rn5pPR15z8T/Nnrnif6+OuAWf7shtrHiK5/Anb5U/H6lrm2MLP/fU4QfyfM7n93sTwr0D8Fs+tfffD2nqPqn4Zd/uiCWf7oZ3lGEP+ZkP7H9LfoHzGRvh9D39R7ZHHt/75/r2s2+FNxos33T7th9/3THph7/gYQ6+//A/sHUEsBAhcLFAACAAgA7JDNQsqSp5S/BQAACEYAAAkACQAAAAAAAAAAAACAAAAAAFVJUGFja2FnZVVUBQAHagq6UVBLBQYAAAAAAQABAEAAAAD3BQAAAAA=
 
 
 [Script]
@@ -44,10 +44,6 @@ c7 = Array(Array(1, 1, 1, 1, 1, 1, 1, 0, 0), Array(1, 1, 0, 0, 1, 1, 0, 0, 0), A
 c8 = Array(Array(0, 0, 1, 1, 1, 1, 0, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(0, 1, 1, 0, 0, 1, 0, 0, 0), Array(0, 1, 0, 0, 0, 1, 0, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(0, 0, 1, 1, 1, 1, 0, 0, 0))
 c9 = Array(Array(0, 0, 1, 1, 1, 1, 0, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(1, 1, 0, 0, 0, 1, 1, 0, 0), Array(0, 1, 1, 0, 0, 1, 1, 0, 0), Array(0, 0, 0, 0, 0, 1, 1, 0, 0), Array(0, 0, 0, 0, 0, 1, 1, 0, 0), Array(0, 0, 1, 0, 0, 1, 1, 0, 0), Array(0, 0, 1, 1, 1, 1, 0, 0, 0))
 
-Call Plugin.Msg.Tips("脚本启动....")
-
-Call Lib.系统.结束进程("WQM.exe")
-
 cs = Array(c0, c1,c2,c3,c4,c5,c6,c7,c8,c9)
 ScreenX = Plugin.Sys.GetScRX()
 ScreenY = Plugin.Sys.GetScRY()
@@ -58,50 +54,6 @@ offsetY = 9
 charW = 9
 charH = 9
 v2 = RevRGB("2f2f2f")
-
-If CInt(Month(Now)) > 6 Then 
-	//MsgBox "试用软件已经无法使用"
-	//ExitScript
-End If
-
-
-Call Plugin.Msg.Tips("开始打开网页...")
-
-//逻辑开始
-Hwnd = Plugin.Web.Bind("WQM.exe")
-Call Lib.API.激活窗口并置前(Hwnd)
-
-
-Call Plugin.Web.Go("http://55uc.com/Register.aspx")
-Call Plugin.Web.HtmlClick("id:picVerifyCode")
-Call Plugin.Msg.Tips("网页打开成功,开始匹配")
-
-FindPic 0, 0, ScreenX, ScreenY, "Attachment:\matchL.bmp", 0.9, intX, intY
-While intX <= 0 and intY <= 0
-	Delay 500
-	FindPic 0, 0, ScreenX, ScreenY, "Attachment:\matchL.bmp", 0.9, intX, intY
-Wend
-intX = intX + 347 -2
-intY = intY + 600 -2- 414
-
-X = intX
-Y = intY
-
-
-Call Plugin.Web.ScrollTo(0,414)
-
-userId = makeRandomId()
-userName = makeRandomId()
-password = makeRandomPass()
-
-Call autoInput(userId, userName, password, matchAll())
-Call submit()
-Call Plugin.Msg.Tips("")
-resultStr = "账户名:" + userId + ", 密码:" + password
-Call Plugin.Sys.SetCLB(resultStr)
-
-MsgBox resultStr + vbLf + "内容已经复制到剪切板中"
-
 
 //随机ID
 Function makeRandomId()
@@ -260,4 +212,73 @@ Function RevRGB(colors)
 	Call Plugin.Color.ColorToRGB(CStr(colors), red, green, blue) 
     RevRGB= CLng(blue + (green * 256) + (red * 65536))
 End Function
+
+Dim totalCount,currentCount
+
+Function runOnce()
+	Call Plugin.Web.Go("http://55uc.com/Register.aspx")
+	Call Plugin.Web.HtmlClick("id:picVerifyCode")
+	Call Plugin.Msg.Tips("网页打开成功,开始匹配")
+	
+	FindPic 0, 0, ScreenX, ScreenY, "Attachment:\matchL.bmp", 0.9, intX, intY
+	While intX <= 0 and intY <= 0
+		Delay 500
+		FindPic 0, 0, ScreenX, ScreenY, "Attachment:\matchL.bmp", 0.9, intX, intY
+	Wend
+	intX = intX + 347 -2
+	intY = intY + 600 -2- 414
+	
+	X = intX
+	Y = intY
+	
+	
+	Call Plugin.Web.ScrollTo(0,414)
+	
+	userId = makeRandomId()
+	userName = makeRandomId()
+	password = makeRandomPass()
+	
+	Call autoInput(userId, userName, password, matchAll())
+	Call submit()
+	Call Plugin.Msg.Tips("")
+	resultStr = "账户名:" + userId + ", 密码:" + password
+	Call Plugin.Sys.SetCLB(resultStr)
+	
+	MsgBox resultStr + vbLf + "内容已经复制到剪切板中"
+End Function
+
+Event Form1.Button1.Click
+	totalCount = CInt(Form1.InputBox1.Text)
+	currentCount = 0
+	Form1.InputBox1.Enabled = False
+	Form1.Button1.Enabled = False
+	Form1.Button2.Enabled = True
+
+	Call Plugin.Msg.Tips("脚本启动....")
+	
+	Call Lib.系统.结束进程("WQM.exe")
+	
+	
+	If CInt(Month(Now)) > 6 Then 
+		//MsgBox "试用软件已经无法使用"
+		//ExitScript
+	End If
+	
+	
+	Call Plugin.Msg.Tips("开始打开网页...")
+	
+	//逻辑开始
+	Hwnd = Plugin.Web.Bind("WQM.exe")
+	Call Lib.API.激活窗口并置前(Hwnd)
+	
+	call runOnce()
+	
+End Event
+
+Event Form1.Button2.Click
+	Form1.InputBox1.Enabled = true
+	Form1.Button1.Enabled = true
+	Form1.Button2.Enabled = False
+	ExitScript
+End Event
 
