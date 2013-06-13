@@ -227,6 +227,7 @@ Function runOnce()
 	Call Plugin.Msg.Tips("网页打开成功,开始匹配")
 	
 	
+	Hwnd=Plugin.Web.GetHwnd()
 	Rect = Plugin.Window.GetWindowRect(Hwnd)
 	MyArray = Split(Rect, "|")
 	
@@ -267,6 +268,7 @@ Function runOnce()
 	intX = Clng(MyArray1(0))
 	intY = Clng(MyArray1(1))
 
+	//MsgBox "ix,iy: " +  CStr( ix) + "," + CStr( iy)
 	/*
 	FindPic 0, 0, ScreenX, ScreenY, "Attachment:\Left.bmp", 0.5, intX, intY
 	While intX <= 0 and intY <= 0
