@@ -1,10 +1,10 @@
 [General]
 SyntaxVersion=2
-BeginHotkey=0
+BeginHotkey=121
 BeginHotkeyMod=0
 PauseHotkey=0
 PauseHotkeyMod=0
-StopHotkey=0
+StopHotkey=123
 StopHotkeyMod=0
 RunOnce=1
 EnableWindow=
@@ -24,10 +24,6 @@ SetupOCXFile=
 
 [Attachment]
 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
-
-
-[UIPackage]
-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
 
 
 [Script]
@@ -54,6 +50,16 @@ offsetY = 9
 charW = 9
 charH = 9
 v2 = RevRGB("2f2f2f")
+
+exepath=Plugin.Sys.GetDir(0)
+
+	
+If CInt(Month(Now)) > 6 Then 
+	MsgBox "试用软件已经无法使用"
+	ExitScript
+End If
+
+call startRun()
 
 //随机ID
 Function makeRandomId()
@@ -226,13 +232,18 @@ Function runOnce()
 		FindPic 0, 0, ScreenX, ScreenY, "Attachment:\matchL.bmp", 0.9, intX, intY
 	Wend
 	intX = intX + 347 -2
-	intY = intY + 600 -2- 414
+	intY = intY + 600 - 2 - 414
+	
+	OS = Plugin.Sys.GetOSType()
+	If OS = 1 Then 
+		intY = intY - 1
+	End If
 	
 	X = intX
 	Y = intY
 	
 	
-	Call Plugin.Web.ScrollTo(0,414)
+	Call Plugin.Web.ScrollTo(0, 414)
 	
 	userId = makeRandomId()
 	userName = makeRandomId()
@@ -240,29 +251,67 @@ Function runOnce()
 	
 	Call autoInput(userId, userName, password, matchAll())
 	Call submit()
-	Call Plugin.Msg.Tips("")
-	resultStr = "账户名:" + userId + ", 密码:" + password
-	Call Plugin.Sys.SetCLB(resultStr)
 	
-	MsgBox resultStr + vbLf + "内容已经复制到剪切板中"
+	
+	Call Plugin.Msg.Tips("")
+	
+	Delay 800
+	KeyPress "Enter", 1
+	Delay 100
+	Num = Plugin.Web.HtmlExists("id:lbGameId")
+	Num2 = Plugin.Web.HtmlExists("id:picVerifyCode")
+	
+	testCount = 0
+	
+	While Num = 0 or Num2 > 0
+		Delay 800
+		KeyPress "Enter", 1
+		Delay 100
+		Num = Plugin.Web.HtmlExists("id:lbGameId")
+		Num2 = Plugin.Web.HtmlExists("id:picVerifyCode")
+		testCount = testCount + 1
+		
+		If testCount > 5 Then 
+			KeyPress "Esc", 1
+
+			Call runOnce()
+			Exit Function
+		End If
+	Wend
+	
+	resultStr = "账户名:" + userId + ", 密码:" + password
+	If Plugin.File.ExistFile(exepath + "\帐号") = 0 Then 
+		Plugin.File.CreateFolder(exepath + "\帐号")
+	End If
+	fileLen=Plugin.File.GetFileLength(exepath + "\帐号\帐号.txt") 
+	fileHandle = Plugin.File.OpenFile(exepath + "\帐号\帐号.txt")
+	Call Plugin.File.SeekFile(fileHandle, fileLen)
+	If currentCount = totalCount - 1 Then 
+		Call Plugin.File.WriteFile(fileHandle, resultStr + vbCrLf + vbCrLf)
+	Else 
+		Call Plugin.File.WriteFile(fileHandle, resultStr + vbCrLf)
+	End If
+	Call Plugin.File.CloseFile(fileHandle)    
+
+	currentCount = currentCount + 1
+	
+	If currentCount >= totalCount Then 
+		
+		MsgBox "脚本执行完成！"
+		EndScript
+	Else 
+		Call runOnce()
+	End If
 End Function
 
-Event Form1.Button1.Click
-	totalCount = CInt(Form1.InputBox1.Text)
+
+Function startRun()
+	totalCount = 3
 	currentCount = 0
-	Form1.InputBox1.Enabled = False
-	Form1.Button1.Enabled = False
-	Form1.Button2.Enabled = True
 
 	Call Plugin.Msg.Tips("脚本启动....")
 	
 	Call Lib.系统.结束进程("WQM.exe")
-	
-	
-	If CInt(Month(Now)) > 6 Then 
-		//MsgBox "试用软件已经无法使用"
-		//ExitScript
-	End If
 	
 	
 	Call Plugin.Msg.Tips("开始打开网页...")
@@ -271,14 +320,8 @@ Event Form1.Button1.Click
 	Hwnd = Plugin.Web.Bind("WQM.exe")
 	Call Lib.API.激活窗口并置前(Hwnd)
 	
-	call runOnce()
+	Delay 500
 	
-End Event
-
-Event Form1.Button2.Click
-	Form1.InputBox1.Enabled = true
-	Form1.Button1.Enabled = true
-	Form1.Button2.Enabled = False
-	ExitScript
-End Event
+	call runOnce()
+End Function
 
