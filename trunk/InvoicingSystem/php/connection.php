@@ -5,8 +5,9 @@
 	$justCeate = false;
 
 	$initArray = array(
-		"CREATE TABLE 'UsersTb' ('id' VARCHAR(200)  UNIQUE NOT NULL PRIMARY KEY,'pwd' VARCHAR(200) NOT NULL);",
-		"insert into UsersTb (id, pwd) values ('admin', '21232f297a57a5a743894a0e4a801fc3');"
+		"CREATE TABLE 'UsersTb' ('id' VARCHAR(200)  UNIQUE NOT NULL PRIMARY KEY,'pwd' VARCHAR(200) NOT NULL, 'type' int, creator VARCHAR(200));",
+		//"insert into UsersTb (id, pwd, type, creator) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, '');"
+		"insert into UsersTb (id, pwd, type, creator) values ('admin', 'admin', 1, '');"
 	);
 
 	//检查数据是否存在
@@ -38,8 +39,8 @@
 		}
 	}
 
-	//执行SQL语句
-	function execute($db, $sql){
+	//查询SQL语句
+	function query($db, $sql){
 		$arr = array();
 		if(IS_SQLITE3){
 			$rs =$db->query($sql);
@@ -55,6 +56,25 @@
 			}
 		}
 		return $arr;
+	}
+
+	//修改或者删除
+	function execute($db, $sql){
+		if(IS_SQLITE3){
+			if ($db->query($sql)) {
+				return $db->changes();
+			 } else {
+				return false;
+			 }
+
+		}else{
+			if(sqlite_query($db,$sql, 0666, $error)){
+				echo "<font color='red'>".$error."</font>";
+				return sqlite_changes($db);
+			}else{
+				return false;
+			}
+		}
 	}
 
 	//关闭连接
