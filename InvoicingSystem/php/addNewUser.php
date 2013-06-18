@@ -2,16 +2,17 @@
 	header("Content-Type: text/html; charset=UTF-8");
 	require_once "connection.php";
 	$self = $_GET["self"];
+	$selfPwd = $_GET["selfPwd"];
 	$newId = $_GET["newId"];
 	$newPwd = $_GET["newPwd"];
 	$newType = $_GET["newType"];
 	
-	if(empty($self) || empty($newId) || empty($newPwd)|| empty($newType)){
+	if(empty($self) ||empty($selfPwd) || empty($newId) || empty($newPwd)|| empty($newType)){
 		echo "添加新用户失败，参数不正确";
 		exit;
 	}
 
-	$sql = "select type from UsersTb where id='".$self."';";
+	$sql = "select type from UsersTb where id='".$self."' and pwd='".$selfPwd."';";
 	$rs = query($db, $sql);
 
 	if(count($rs) == 0){
