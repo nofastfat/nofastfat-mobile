@@ -1,0 +1,49 @@
+"CREATE TABLE 'UsersTb' (						//账户表
+	'id' VARCHAR(200)  UNIQUE NOT NULL PRIMARY KEY,			//帐号ID
+	'pwd' VARCHAR(200) NOT NULL,					//密码，MD5以后的值
+	'type' int,							//账户类型，值越小，权限越高
+	creator VARCHAR(200)						//创建者
+	);",
+"CREATE TABLE [Commodity] (						//商品表
+	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,	
+	[name] VARCHAR(200)  NOT NULL,[description] VARCHAR(200)  NULL,	//商品名
+	[purchasePrice] FLOAT DEFAULT '0' NULL,				//进货价
+	[retailPrice] FLOAT DEFAULT '0' NULL,				//建议零售价
+	[weight] FLOAT DEFAULT '0' NULL,				//重量，单位:kg
+	[SBNId] VARCHAR(200)  UNIQUE NOT NULL				//商品SBN
+	)",
+"CREATE TABLE [purchaseLog] (						//进货记录表
+	[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,		
+	[logTime] NUMERIC  NULL,					//进货时间，毫秒数
+	[commonditySBN] VARCHAR(200)  NULL,				//商品SBN
+	[commondityName] VARCHAR(200)  NULL,				//商品名
+	[num] INTEGER  NULL,						//进货数量
+	[realRetailPrice] FLOAT  NULL,					//进货价格，进货价可能浮动，进货价以这个为准
+	[madeTime] NUMERIC  NULL,					//该批次商品的生产日期
+	[operator] VARCHAR(200)  NULL					//进货人
+	)",
+"CREATE TABLE [store] (							//库存表
+	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[SBN] VARCHAR(200)  NULL,					//商品SBN
+	[name] VARCHAR(200)  NULL,					//商品名
+	[num] INTEGER  NULL,						//货物当前数量
+	[madeTime] NUMERIC  NULL,					//该批次商品的生产日期,不同生成日期的货，在该表中会有不用的记录
+	[operator] VARCHAR(200)  NULL,					//操作人
+	[storeTime] NUMERIC  NULL,					//进货时间，毫秒数
+	[retailPrice] FLOAT  NULL					//进货时的价格，进货价可能浮动，进货价以这个为准
+	)",
+"CREATE TABLE [soldLog] (						//出货记录表
+	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[soldTime] NUMERIC  NULL,					//出货时间，毫秒数
+	[clientName] VARCHAR(200)  NULL,				//客户名称
+	[SBN] VARCHAR(400)  NULL,					//商品SBN, 一次出货可能包含多个商品，以英文的逗号分隔
+	[name] VARCHAR(400)  NULL,					//商品名, 一次出货可能包含多个商品，以英文的逗号分隔
+	[num] VARCHAR(200)  NULL,					//出货数量, 一次出货可能包含多个商品，以英文的逗号分隔
+	[totalWeight] VARCHAR(200)  NULL,				//总重量，指打包以后的重量,单位:kg
+	[soldAddress] VARCHAR(200)  NULL,				//发货地址
+	[senderCompany] VARCHAR(200)  NULL,				//快递公司
+	[sendId] VARCHAR(200)  NULL,					//快递单号
+	[sendPrice] FLOAT  NULL,					//实际运费
+	[clientPay] FLOAT  NULL,					//客户付款总额，包含运费
+	[profit] FLOAT  NULL						//利润 = 客户付款总额 - 实际运费 - 商品数量*进货价
+	)"
