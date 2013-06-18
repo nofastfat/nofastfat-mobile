@@ -1,5 +1,6 @@
 <?php
-	//?self=admin&selfPwd=admin
+	//queryUsers.php?self=admin&selfPwd=admin
+	//{"status":true,"data":[{"test3","3","admin"},{"test","2","admin"}]}
 	header("Content-Type: text/html; charset=UTF-8");
 	require_once "connection.php";
 	$self = getParam("self");
