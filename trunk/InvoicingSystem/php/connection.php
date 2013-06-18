@@ -1,5 +1,5 @@
 <?php
-	define("DB_NAME","jxc.db");
+	define("DB_NAME","../../jxc.db");
 	define("IS_SQLITE3", class_exists("SQLite3"));
 	//创建数据库文件,文件内容为空
 	$justCeate = false;
@@ -96,6 +96,7 @@
 		if(IS_SQLITE3){
 			$rs =$db->query($sql);
 			while ($row = $rs->fetchArray()) {
+				$tmpArr = array();
 				array_push($arr, $row);
 			}
 
