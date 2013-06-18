@@ -1,7 +1,7 @@
 <?php
-	//?self=admin&selfPwd=admin&delId=test
+	//deleteUser.php?self=admin&selfPwd=admin&delId=test
 	header("Content-Type: text/html; charset=UTF-8");
-	require_once "connection.php";
+	
 	$self = getParam("self");
 	$selfPwd = getParam("selfPwd");
 	$delId = getParam("delId");

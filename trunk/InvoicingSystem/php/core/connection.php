@@ -18,7 +18,7 @@
 			[name] VARCHAR(200)  NOT NULL,
 			[description] VARCHAR(200)  NULL,
 			[weight] FLOAT DEFAULT '''0''' NULL,
-			[SBNId] VARCHAR(200)  UNIQUE NOT NULL
+			[SBNId] VARCHAR(200)  NOT NULL
 			)",
 		"CREATE TABLE [PurchaseLog] (
 			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -154,22 +154,5 @@
 		);
 
 		return json_encode($json);
-	}
-
-	class Tools{
-		//是否允许添加用户
-		static public function canAddUser($type){
-			return $type <= 2;
-		}
-
-		//是否允许查询用户
-		static public function canQueryUser($type){
-			return $type <= 2;
-		}
-
-		//是否允许删除用户
-		static public function canDeleteUser($type){
-			return $type <= 2;
-		}
 	}
 ?>

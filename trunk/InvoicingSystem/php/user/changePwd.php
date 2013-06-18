@@ -1,7 +1,7 @@
 <?php
 	//?uid=admin&oldPwd=admin&newPwd=fff
 	header("Content-Type: text/html; charset=UTF-8");
-	require_once "connection.php";
+	
 	$uid = getParam("uid");
 	$oldPwd = getParam("oldPwd");
 	$newPwd = getParam("newPwd");
