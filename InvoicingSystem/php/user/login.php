@@ -1,7 +1,7 @@
 <?php
 	//?uid=admin&pwd=admin
 	header("Content-Type: text/html; charset=UTF-8");
-	require_once "connection.php";
+	
 	$uid = getParam("uid");
 	$pwd = getParam("pwd");
 	

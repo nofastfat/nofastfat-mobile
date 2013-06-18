@@ -1,7 +1,7 @@
 <?php
 	//addNewUser.php?self=admin&selfPwd=admin&newId=test3&newPwd=test3&newType=3
 	header("Content-Type: text/html; charset=UTF-8");
-	require_once "connection.php";
+	
 	$self = getParam("self");
 	$selfPwd = getParam("selfPwd");
 	$newId = getParam("newId");

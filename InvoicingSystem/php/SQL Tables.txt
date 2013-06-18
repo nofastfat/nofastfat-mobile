@@ -6,9 +6,10 @@
 	);",
 "CREATE TABLE [Commodity] (						//商品表
 	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,	
-	[name] VARCHAR(200)  NOT NULL,[description] VARCHAR(200)  NULL,	//商品名
+	[name] VARCHAR(200)  NOT NULL,
+	[description] VARCHAR(200)  NULL,	//商品名
 	[weight] FLOAT DEFAULT '0' NULL,				//重量，单位:kg
-	[SBNId] VARCHAR(200)  UNIQUE NOT NULL				//商品SBN
+	[SBNId] VARCHAR(200)  NOT NULL				//商品SBN
 	)",
 "CREATE TABLE [PurchaseLog] (						//进货记录表
 	[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,		
