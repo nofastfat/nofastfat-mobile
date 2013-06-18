@@ -14,14 +14,13 @@
 		//"insert into UsersTb (id, pwd, type, creator) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, '');"
 		"insert into UsersTb (id, pwd, type, creator) values ('admin', 'admin', 1, '');",
 		"CREATE TABLE [Commodity] (
-			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
-			[name] VARCHAR(200)  NOT NULL,[description] VARCHAR(200)  NULL,
-			[purchasePrice] FLOAT DEFAULT '0' NULL,
-			[retailPrice] FLOAT DEFAULT '0' NULL,
-			[weight] FLOAT DEFAULT '0' NULL,
+			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+			[name] VARCHAR(200)  NOT NULL,
+			[description] VARCHAR(200)  NULL,
+			[weight] FLOAT DEFAULT '''0''' NULL,
 			[SBNId] VARCHAR(200)  UNIQUE NOT NULL
 			)",
-		"CREATE TABLE [purchaseLog] (
+		"CREATE TABLE [PurchaseLog] (
 			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 			[logTime] NUMERIC  NULL,
 			[commonditySBN] VARCHAR(200)  NULL,
@@ -31,7 +30,7 @@
 			[madeTime] NUMERIC  NULL,
 			[operator] VARCHAR(200)  NULL
 			)",
-		"CREATE TABLE [store] (
+		"CREATE TABLE [Store] (
 			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 			[SBN] VARCHAR(200)  NULL,
 			[name] VARCHAR(200)  NULL,
@@ -41,7 +40,7 @@
 			[storeTime] NUMERIC  NULL,
 			[retailPrice] FLOAT  NULL
 			)",
-		"CREATE TABLE [soldLog] (
+		"CREATE TABLE [SoldLog] (
 			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 			[soldTime] NUMERIC  NULL,
 			[clientName] VARCHAR(200)  NULL,
@@ -55,6 +54,10 @@
 			[sendPrice] FLOAT  NULL,
 			[clientPay] FLOAT  NULL,
 			[profit] FLOAT  NULL
+			)",
+		"CREATE TABLE [SendCompany] (
+			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+			[name] VARCHAR(200)  NULL
 			)"
 	);
 
@@ -117,7 +120,7 @@
 
 		}else{
 			if(sqlite_query($db,$sql, 0666, $error)){
-				echo "<font color='red'>".$error."</font>";
+				//echo "<font color='red'>".$error."</font>";
 				return sqlite_changes($db);
 			}else{
 				return false;
@@ -132,6 +135,40 @@
 			$db->close();
 		}else{
 			sqlite_close($db);
+		}
+	}
+
+	function getParam($keyStr){
+		if(isset($_GET[$keyStr])){
+			return $_GET[$keyStr];
+		}
+
+		return null;
+	}
+
+	function makeJsonRs($isOk, $data){
+		$json = array(
+			"status" => $isOk,
+			"data" => $data
+		);
+
+		return json_encode($json);
+	}
+
+	class Tools{
+		//是否允许添加用户
+		static public function canAddUser($type){
+			return $type <= 2;
+		}
+
+		//是否允许查询用户
+		static public function canQueryUser($type){
+			return $type <= 2;
+		}
+
+		//是否允许删除用户
+		static public function canDeleteUser($type){
+			return $type <= 2;
 		}
 	}
 ?>

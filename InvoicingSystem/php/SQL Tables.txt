@@ -7,12 +7,10 @@
 "CREATE TABLE [Commodity] (						//商品表
 	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,	
 	[name] VARCHAR(200)  NOT NULL,[description] VARCHAR(200)  NULL,	//商品名
-	[purchasePrice] FLOAT DEFAULT '0' NULL,				//进货价
-	[retailPrice] FLOAT DEFAULT '0' NULL,				//建议零售价
 	[weight] FLOAT DEFAULT '0' NULL,				//重量，单位:kg
 	[SBNId] VARCHAR(200)  UNIQUE NOT NULL				//商品SBN
 	)",
-"CREATE TABLE [purchaseLog] (						//进货记录表
+"CREATE TABLE [PurchaseLog] (						//进货记录表
 	[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,		
 	[logTime] NUMERIC  NULL,					//进货时间，毫秒数
 	[commonditySBN] VARCHAR(200)  NULL,				//商品SBN
@@ -22,7 +20,7 @@
 	[madeTime] NUMERIC  NULL,					//该批次商品的生产日期
 	[operator] VARCHAR(200)  NULL					//进货人
 	)",
-"CREATE TABLE [store] (							//库存表
+"CREATE TABLE [Store] (							//库存表
 	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[SBN] VARCHAR(200)  NULL,					//商品SBN
 	[name] VARCHAR(200)  NULL,					//商品名
@@ -32,7 +30,7 @@
 	[storeTime] NUMERIC  NULL,					//进货时间，毫秒数
 	[retailPrice] FLOAT  NULL					//进货时的价格，进货价可能浮动，进货价以这个为准
 	)",
-"CREATE TABLE [soldLog] (						//出货记录表
+"CREATE TABLE [SoldLog] (						//出货记录表
 	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
 	[soldTime] NUMERIC  NULL,					//出货时间，毫秒数
 	[clientName] VARCHAR(200)  NULL,				//客户名称
@@ -46,4 +44,8 @@
 	[sendPrice] FLOAT  NULL,					//实际运费
 	[clientPay] FLOAT  NULL,					//客户付款总额，包含运费
 	[profit] FLOAT  NULL						//利润 = 客户付款总额 - 实际运费 - 商品数量*进货价
+	)",
+"CREATE TABLE [SendCompany] (						//快递表
+	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+	[name] VARCHAR(200)  NULL					//快递公司名
 	)"
