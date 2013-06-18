@@ -45,5 +45,10 @@
 		static public function canDelCourier($type){
 			return $type <= 2;
 		}
+
+		//是否可以入库
+		static public function canPurchase($type){
+			return $type <= 2;
+		}
 	}
 ?>

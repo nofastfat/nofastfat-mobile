@@ -1,5 +1,6 @@
 <?php
 	header("Content-Type: text/html; charset=UTF-8");
+	date_default_timezone_set('PRC');  
 	if(!isset($_GET["method"])){
 		echo "{status:false, data:'missing method!'}";
 		exit;
@@ -47,6 +48,7 @@
 		"queryCommodity"  => "commodity/queryCommodity.php",
 		
 
+
 		//添加快递
 		//?method=addCourier&self=admin&selfPwd=admin&name=韵达
 		"addCourier"	 => "courier/addCourier.php",
@@ -60,7 +62,23 @@
 		//{"status":true,"data":[{id, name}, {id, name}, ...]}
 		"queryCourier"   => "courier/queryCourier.php",
 
+		
 
+		//入库
+		//?method=purchase&self=admin&selfPwd=admin&commondityName=lala&num=10&realRetailPrice=10.2
+		"purchase"		=> "store/purchase.php",
+
+		//出库
+		//?method=sold&self=admin&selfPwd=admin&
+		"sold"			=> "store/sold.php",
+
+		//查询利润
+		//?method=queryProfit&self=admin&selfPwd=admin&
+		"queryProfit"   => "store/queryProfit.php",
+
+		//查询库存
+		//?method=queryStore&self=admin&selfPwd=admin&
+		"queryStore"    => "store/queryStore.php"
 	);
 
 	if(!isset($map[$method])){
