@@ -8,7 +8,7 @@ import com.adobe.serialization.json.JSON;
  */
 public class PersonInfoVo {
 
-    public var id : int;
+    public var id : String;
 
     /**
      * 头像图片地址

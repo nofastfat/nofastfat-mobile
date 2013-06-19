@@ -5,7 +5,7 @@ package com.xy.model.vo {
  * @author xy
  */
 public class SimpleTaskVo {
-    public var id : int;
+    public var id : String;
 
     /**
      * 目标名

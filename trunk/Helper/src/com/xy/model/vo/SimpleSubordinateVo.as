@@ -6,7 +6,7 @@ package com.xy.model.vo {
  */
 public class SimpleSubordinateVo {
 
-    public var id : int;
+    public var id : String;
 
     /**
      * 名字

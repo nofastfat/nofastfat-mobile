@@ -125,7 +125,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
     public function hideAll() : void {
         STool.clear(uiContainer);
         for each (var card : STaskCard in _cards) {
-            card.hide(-1);
+            card.hide("-1");
         }
     }
 
@@ -224,7 +224,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
         }
 
         /* 展开的东西剧中显示 */
-        var p : Point = new Point(parentCard.x + card.width + 50, parentCard.y + card.height / 2);
+        var p : Point = new Point(parentCard.x + parentCard.width + 50, parentCard.y + parentCard.height / 2);
         p = uiContainer.localToGlobal(p);
         _rsX += ui.sWidth / 2 - p.x;
         _rsY += ui.sHeight / 2 - p.y;
@@ -253,7 +253,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
     private function __showDetailHandler(e : STaskCardEvent) : void {
         var vo : TaskVo = e.vo;
         if (e.selected) {
-            if (vo.subTaskList == null) {
+            if (vo.subTaskList == null || vo.subTaskList.length != vo.subLen) {
                 sendNotification(GetTaskCmd2.NAME, vo);
             } else {
                 getTask2Ok(vo);
