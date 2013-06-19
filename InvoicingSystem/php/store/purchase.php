@@ -40,6 +40,7 @@
 		$commonditySBN = "";
 	}
 
+	execute($db, "BEGIN");
 	$sql = "insert into Store(SBN, name, num, madeTime, operator, storeTime, retailPrice)
 	values('$commonditySBN', '$commondityName', $num, $madeTime, '$self', $now, $realRetailPrice)";
 	$rs = execute($db, $sql);
@@ -48,12 +49,15 @@
 		values($now, '$commonditySBN', '$commondityName', $num, $realRetailPrice, $madeTime, '$self')";
 		$rs = execute($db, $sql);
 		if($rs == 1){
+			execute($db, "COMMIT");
 			echo makeJsonRs(true, "true");
 		}else{
-			echo makeJsonRs(false, "入库失败");
+			execute($db, "ROLLBACK");
+			echo makeJsonRs(false, "入库失败,无法生成日志");
 		}
 	}else{
-		echo makeJsonRs(false, "入库失败");
+		execute($db, "ROLLBACK");
+		echo makeJsonRs(false, "入库失败,请重试");
 	}
 
 	closeConn($db);

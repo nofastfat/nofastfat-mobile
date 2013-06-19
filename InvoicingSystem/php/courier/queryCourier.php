@@ -21,6 +21,9 @@
 
 	$sql = "select * from SendCompany";
 	$rs = query($db, $sql);
+	$rs = json_encode($rs);
+	$rs = gzcompress($rs, 9);
+	$rs = base64_encode($rs);
 	echo makeJsonRs(true, $rs);
 
 	closeConn($db);

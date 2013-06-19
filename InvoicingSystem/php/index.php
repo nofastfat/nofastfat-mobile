@@ -25,7 +25,8 @@
 
 		//账户查询
 		//?method=queryUsers&self=admin&selfPwd=admin
-		//{"status":true,"data":[{id, type, creator}, {id, type, creator}, ...]}
+		//结果中的data为字符串，需要先反转BASE64，再zlib解压缩，才能还原为json
+		//{"status":true,"data":[[id, type, creator], [id, type, creator], ...]}
 		"queryUsers" => "user/queryUsers.php",
 		
 
@@ -44,7 +45,8 @@
 
 		//查询商品列表
 		//?method=queryCommodity&self=admin&selfPwd=admin
-		//{"status":true,"data":[{id, name, description, weight, SBNId}, {id, name, description, weight, SBNId}, ...]}
+		//结果中的data为字符串，需要先反转BASE64，再zlib解压缩，才能还原为json
+		//{"status":true,"data":[[id, name, description, weight, SBNId], [id, name, description, weight, SBNId], ...]}
 		"queryCommodity"  => "commodity/queryCommodity.php",
 		
 
@@ -59,26 +61,39 @@
 
 		//查询快递
 		//?method=queryCourier&self=admin&selfPwd=admin
-		//{"status":true,"data":[{id, name}, {id, name}, ...]}
+		//结果中的data为字符串，需要先反转BASE64，再zlib解压缩，才能还原为json
+		//{"status":true,"data":[[id, name], [id, name], ...]}
 		"queryCourier"   => "courier/queryCourier.php",
 
 		
 
 		//入库
 		//?method=purchase&self=admin&selfPwd=admin&commondityName=lala&num=10&realRetailPrice=10.2
-		"purchase"		=> "store/purchase.php",
+		"purchase"			  => "store/purchase.php",
 
 		//出库
-		//?method=sold&self=admin&selfPwd=admin&
-		"sold"			=> "store/sold.php",
+		//?method=sold&self=admin&selfPwd=admin&storeId=1,2&clientName=gaga&num=2,3&totalWeight=20.2&clientPay=312&sendPrice=17
+		"sold"				  => "store/sold.php",
 
 		//查询利润
 		//?method=queryProfit&self=admin&selfPwd=admin&
-		"queryProfit"   => "store/queryProfit.php",
+		"queryProfit"		  => "store/queryProfit.php",
 
 		//查询库存
-		//?method=queryStore&self=admin&selfPwd=admin&
-		"queryStore"    => "store/queryStore.php"
+		//?method=queryStore&self=admin&selfPwd=admin
+		//结果中的data为字符串，需要先反转BASE64，再zlib解压缩，才能还原为json
+		//拥有查询进货价的权限：{"status":true,"data":[[id,SBN,name,num,madeTime,operator,storeTime, retailPrice], [id,SBN,name,num,madeTime,operator,storeTime, retailPrice], ...]}
+		//没有查询进货价的权限：{"status":true,"data":[[id,SBN,name,num,madeTime,operator,storeTime], [id,SBN,name,num,madeTime,operator,storeTime], ...]}
+		"queryStore"		  => "store/queryStore.php",
+
+		//查询入库日志
+		//?method=queryPurchaseLog&self=admin&selfPwd=admin
+		"queryPurchaseLog"    => "store/queryPurchaseLog.php",
+
+		//查询出货日志
+		//?method=querySoldLog&self=admin&selfPwd=admin
+		"querySoldLog"		  => "store/querySoldLog.php"
+
 	);
 
 	if(!isset($map[$method])){
