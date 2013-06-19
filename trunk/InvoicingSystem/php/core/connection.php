@@ -95,14 +95,18 @@
 		$arr = array();
 		if(IS_SQLITE3){
 			$rs =$db->query($sql);
+			$len = $rs->numColumns();
 			while ($row = $rs->fetchArray()) {
 				$tmpArr = array();
-				array_push($arr, $row);
+				for($i = 0; $i < $len; $i++){
+					$tmpArr[$i] = $row[$i];
+				}
+				array_push($arr, $tmpArr);
 			}
 
 		}else{
-			$rs =sqlite_query($db,$sql, 0666, $error);
-			echo "<font color='red'>".$error."</font>";
+			$rs =sqlite_query($db,$sql);
+			//echo "<font color='red'>".$error."</font>";
 			while ($row = sqlite_fetch_array($rs)) {
 				array_push($arr, $row);
 			}

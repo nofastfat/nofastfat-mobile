@@ -50,5 +50,15 @@
 		static public function canPurchase($type){
 			return $type <= 2;
 		}
+
+		//是否可以查看进货价
+		static public function canSeeRetailPrice($type){
+			return $type <= 2;
+		}
+
+		//是否可以查看出库日志
+		static public function canQuerySoldLog($type){
+			return $type <= 2;
+		}
 	}
 ?>
