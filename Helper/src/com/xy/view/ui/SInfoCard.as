@@ -133,7 +133,7 @@ public class SInfoCard extends InfoCard {
         _vo.cardStatus.setVisible(true);
     }
 
-    public function hide(hideById : int) : void {
+    public function hide(hideById : String) : void {
         STool.remove(this);
         _vo.cardStatus.setVisible(false, hideById);
     }
@@ -326,7 +326,7 @@ public class SInfoCard extends InfoCard {
     private function __showDetailHandler(e : MouseEvent) : void {
         var currentTarget : MovieClip = e.currentTarget.parent as MovieClip;
 
-        var id : int;
+        var id : String;
         var name : String;
 
         if (currentTarget is SInfoCard) {

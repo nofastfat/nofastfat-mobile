@@ -8,7 +8,7 @@ import com.xy.model.vo.uiStatus.STaskStatus;
  * @author xy
  */
 public class TaskVo {
-    public var id : int;
+    public var id : String;
 
     /**
      *  目标名
@@ -79,7 +79,7 @@ public class TaskVo {
      */
     public var cardStatus : STaskStatus = new STaskStatus();
 
-    public function getHideChildIdsBy(hideId : int) : Array {
+    public function getHideChildIdsBy(hideId : String) : Array {
         var rs : Array = [];
         for each (var vo : TaskVo in subTaskList) {
             if (!vo.cardStatus.visible && vo.cardStatus.hideById == hideId) {

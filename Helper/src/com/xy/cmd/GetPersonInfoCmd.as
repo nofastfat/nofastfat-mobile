@@ -26,7 +26,7 @@ public class GetPersonInfoCmd extends AbsCommand {
     public static const NAME : String = "GetPersonInfoCmd";
     private static var _thread : SingleLogicThread = new SingleLogicThread();
 
-    private var _id : int;
+    private var _id : String;
     private var _mc : DisplayObject;
 
     public function GetPersonInfoCmd() {

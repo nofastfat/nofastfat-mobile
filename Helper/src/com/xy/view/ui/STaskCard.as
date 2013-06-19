@@ -144,7 +144,7 @@ public class STaskCard extends TaskCard {
         _vo.cardStatus.setVisible(true);
     }
 
-    public function hide(hideById : int) : void {
+    public function hide(hideById : String) : void {
         STool.remove(this);
         _vo.cardStatus.setVisible(false, hideById);
     }

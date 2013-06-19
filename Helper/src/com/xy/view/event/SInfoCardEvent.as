@@ -26,11 +26,11 @@ public class SInfoCardEvent extends Event {
     public var vo : OrganizedStructVo;
     public var isShow : Boolean;
 
-    public var id : int;
+    public var id : String;
     public var _target : DisplayObject;
     public var name : String;
 
-    public function SInfoCardEvent(type : String, vo : OrganizedStructVo, isShow : Boolean = false, id : int = 0, _target : DisplayObject = null, name : String = null, bubbles : Boolean = false, cancelable : Boolean = false) {
+    public function SInfoCardEvent(type : String, vo : OrganizedStructVo, isShow : Boolean = false, id : String = "0", _target : DisplayObject = null, name : String = null, bubbles : Boolean = false, cancelable : Boolean = false) {
         super(type, bubbles, cancelable);
 
         this.vo = vo;

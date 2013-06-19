@@ -112,7 +112,7 @@ public class GetTaskCmd extends AbsCommand {
         } else {
 
 
-            var currentId : int = _currentVo.id;
+            var currentId : String = _currentVo.id;
             var siblingIds : Array = [];
             for each (var vo : SimpleTaskVo in _siblingVos) {
                 siblingIds.push(vo.id);

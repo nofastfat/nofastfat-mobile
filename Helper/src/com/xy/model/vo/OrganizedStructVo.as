@@ -7,7 +7,7 @@ import com.xy.model.vo.uiStatus.SInfoCardStatus;
  * @author xy
  */
 public class OrganizedStructVo {
-    public var id : int;
+    public var id : String;
 
     /**
      * 头像图片地址
@@ -133,7 +133,7 @@ public class OrganizedStructVo {
         return vo;
     }
 
-    public function getChild(childId : int) : OrganizedStructVo {
+    public function getChild(childId : String) : OrganizedStructVo {
         if (id == childId) {
             return this;
         }
@@ -157,7 +157,7 @@ public class OrganizedStructVo {
         return null;
     }
     
-    public function isChild(id : int) : Boolean{
+    public function isChild(id : String) : Boolean{
     	for each(var subVo : OrganizedStructVo in subStuctList){
     		if(subVo.id == id){
     			return true;
@@ -167,7 +167,7 @@ public class OrganizedStructVo {
     	return false;
     }
     
-    public function getHideChildIdsBy(hideId : int) : Array{
+    public function getHideChildIdsBy(hideId : String) : Array{
     	var rs : Array = [];
     	  for each (var vo : OrganizedStructVo in subStuctList) {
             if (!vo.cardStatus.visible && vo.cardStatus.hideById == hideId) {

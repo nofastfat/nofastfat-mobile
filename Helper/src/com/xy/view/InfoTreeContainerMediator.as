@@ -275,7 +275,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
         }
     }
 
-    private function getPersonInfoOk(id : int, mc : DisplayObject) : void {
+    private function getPersonInfoOk(id : String, mc : DisplayObject) : void {
         var vo : PersonInfoVo = dataProxy.personDatas.get(id);
         if (vo == null) {
             //请求人员信息失败
