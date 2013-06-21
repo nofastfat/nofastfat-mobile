@@ -15,7 +15,10 @@ public class ToggleButton extends EventDispatcher {
 	private var _target : MovieClip;
 	private var _selected : Boolean;
 
-	public function ToggleButton(mc : MovieClip, banChildEvent : Boolean = true) {
+	public function ToggleButton(mc : MovieClip = null, banChildEvent : Boolean = true) {
+		if(mc == null){
+			return;
+		}
 		setCtrlUI(mc, banChildEvent);
 	}
 
