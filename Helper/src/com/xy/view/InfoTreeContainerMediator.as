@@ -115,7 +115,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
     }
 
     private function locationCall(childIds : Array, offsetY : Number) : void {
-        for each (var id : int in childIds) {
+        for each (var id : String in childIds) {
             var card : SInfoCard = _cards.get(id);
             var line : Shape = _lines.get(id);
             if (card != null) {
@@ -171,7 +171,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
      * @param ids
      */
     private function hideCards(vo : OrganizedStructVo, ids : Array) : void {
-        for each (var id : int in ids) {
+        for each (var id : String in ids) {
             var card : SInfoCard = _cards.get(id);
             if (card != null) {
                 card.hide(vo.id);
@@ -187,7 +187,7 @@ public class InfoTreeContainerMediator extends AbsMediator {
      * @param ids
      */
     private function showCards(ids : Array) : void {
-        for each (var id : int in ids) {
+        for each (var id : String in ids) {
             var card : SInfoCard = _cards.get(id);
             if (card != null) {
                 card.showTo(uiContainer);
