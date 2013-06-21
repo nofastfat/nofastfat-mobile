@@ -1,13 +1,14 @@
 package com.xy.view.ui.ctrls {
 import flash.display.Sprite;
 
-public class FrameContainer extends Sprite {
+public class FrameContainer extends AbsContainer {
     public function FrameContainer() {
         super();
     }
-
-    public function resize() : void {
-
+	
+	override public function resize(height:int) : void {
+		
+		super.resize(height);
     }
 }
 }
