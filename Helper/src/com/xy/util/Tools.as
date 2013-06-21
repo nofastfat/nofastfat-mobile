@@ -31,14 +31,14 @@ public class Tools {
     }
     
     public static function makeId() : String{
-    	var id : int = STool.random(101, int.MAX_VALUE);
+    	var id : String = STool.random(101, int.MAX_VALUE) + RandomName.makeName();
     	while(_IDS.indexOf(id) != -1){
-    		id = STool.random(101, int.MAX_VALUE);
+    		id = STool.random(101, int.MAX_VALUE) + RandomName.makeName();
     	}
     	
     	_IDS.push(id);
     	
-    	return id+"";
+    	return id;
     }
 }
 }
