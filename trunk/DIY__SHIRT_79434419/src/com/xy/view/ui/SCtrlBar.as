@@ -2,6 +2,8 @@ package com.xy.view.ui {
 import com.xy.ui.CtrlBar;
 import com.xy.util.EnterFrameCall;
 
+import flash.filters.GlowFilter;
+
 public class SCtrlBar extends CtrlBar {
     public function SCtrlBar() {
         super();
