@@ -1,5 +1,6 @@
 package {
 import com.xy.DiyFacade;
+import com.xy.component.SButton;
 import com.xy.component.toolTip.ToolTip;
 import com.xy.util.EnterFrameCall;
 import com.xy.view.layer.LeftContainer;
@@ -41,6 +42,10 @@ public class DIY__SHIRT_79434419 extends Sprite {
         _facade = new DiyFacade();
         _facade.startUp(this);
 
+		var btn : SButton = new SButton("添加图片")
+		//addChild(btn);
+		btn.y = 100;
+		
         //addChild(new Stats());
         __resizeHandler();
     }
