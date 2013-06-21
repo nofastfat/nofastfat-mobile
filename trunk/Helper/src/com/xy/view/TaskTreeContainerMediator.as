@@ -270,7 +270,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
      * @param ids
      */
     private function hideCards(vo : TaskVo, ids : Array) : void {
-        for each (var id : int in ids) {
+        for each (var id : String in ids) {
             var card : STaskCard = _cards.get(id);
             if (card != null) {
                 card.hide(vo.id);
@@ -286,7 +286,7 @@ public class TaskTreeContainerMediator extends AbsMediator {
      * @param ids
      */
     private function showCards(ids : Array) : void {
-        for each (var id : int in ids) {
+        for each (var id : String in ids) {
             var card : STaskCard = _cards.get(id);
             if (card != null) {
                 card.showTo(uiContainer);
