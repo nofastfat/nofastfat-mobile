@@ -2,10 +2,13 @@ package {
 import com.xy.DiyFacade;
 import com.xy.component.SButton;
 import com.xy.component.toolTip.ToolTip;
+import com.xy.ui.BlackButton;
 import com.xy.util.EnterFrameCall;
+import com.xy.util.Tools;
 import com.xy.view.layer.LeftContainer;
 import com.xy.view.layer.RightContainer;
 
+import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
@@ -42,10 +45,6 @@ public class DIY__SHIRT_79434419 extends Sprite {
         _facade = new DiyFacade();
         _facade.startUp(this);
 
-		var btn : SButton = new SButton("添加图片")
-		//addChild(btn);
-		btn.y = 100;
-		
         //addChild(new Stats());
         __resizeHandler();
     }
