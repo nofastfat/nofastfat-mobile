@@ -9,7 +9,6 @@ import com.xy.util.STool;
 import com.xy.view.ui.events.SImageThumbUIEvent;
 
 import flash.display.Bitmap;
-import flash.display.BitmapData;
 import flash.display.Sprite;
 
 public class SImageThumbUI extends ImageThumbUI {
@@ -19,25 +18,18 @@ public class SImageThumbUI extends ImageThumbUI {
 
     private var _w : int = 100;
     private var _h : int = 100;
-	
-	public var vo : BitmapDataVo;
+
+    public var vo : BitmapDataVo;
 
     public function SImageThumbUI(w : int = 100, h : int = 100, type : int = 0) {
         super();
-
-        _w = w;
-        _h = h;
-
         _container = new Sprite();
         _toggleBtn = new ToggleButton(selectMc);
 
         addChildAt(_container, 1);
-
-        bg.width = _w;
-        bg.height = _h;
-        selectMc.y = _h - selectMc.height;
-        sizeTf.x = _w - sizeTf.width;
-        sizeTf.y = _h - sizeTf.height;
+        setSize(w, h);
+        
+        setChildIndex(selectMc, numChildren-1);
 
         if (type == 0) {
             selectMc.hitArea = this;
@@ -46,8 +38,19 @@ public class SImageThumbUI extends ImageThumbUI {
         _toggleBtn.addEventListener(ToggleButtonEvent.STATE_CHANGE, __changeHandler);
     }
 
+    public function setSize(w : int, h : int) : void {
+        _w = w;
+        _h = h;
+        
+        bg.width = _w;
+        bg.height = _h;
+        selectMc.y = _h - selectMc.height;
+        sizeTf.x = _w - sizeTf.width;
+        sizeTf.y = _h - sizeTf.height;
+    }
+
     public function setData(vo : BitmapDataVo) : void {
-		this.vo = vo;
+        this.vo = vo;
         STool.clear(_container);
         var bmp : Bitmap = new Bitmap(vo.bmd);
         _container.addChild(bmp);
@@ -71,6 +74,14 @@ public class SImageThumbUI extends ImageThumbUI {
 
         ToolTip.setTip(this, ImageTip.getInstance(), vo.bmd, ToolTipMode.RIGHT_BOTTOM_CENTER);
     }
+
+	override public function get width():Number{
+		return _w;
+	}
+	
+	override public function get height():Number{
+		return _h;
+	}
 
     private function __changeHandler(e : ToggleButtonEvent) : void {
         dispatchEvent(new SImageThumbUIEvent(SImageThumbUIEvent.STATUS_CHANGE, _toggleBtn.selected));
