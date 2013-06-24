@@ -3,7 +3,6 @@ import com.xy.component.buttons.event.ToggleButtonEvent;
 import com.xy.component.buttons.event.ToggleButtonGroupEvent;
 
 import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
 
 /**
  * 状态按钮组，控制组件 ，该组件只做控制，不做显示
@@ -43,7 +42,7 @@ public class ToggleButtonGroup extends EventDispatcher {
 		setSelected(defaultSelectedIndex);
 	}
 
-	public function setSelected(index : int) : void {
+	public function setSelected(index : int, dispatch : Boolean = false) : void {
 		if (index < 0 || index >= _btns.length) {
 			return;
 		}
@@ -54,6 +53,10 @@ public class ToggleButtonGroup extends EventDispatcher {
 
 		_lastSelectedButton = _btns[index];
 		_lastSelectedButton.selected = true;
+		
+		if(dispatch){
+			dispatchEvent(new ToggleButtonGroupEvent(ToggleButtonGroupEvent.STATE_CHANGE, index));
+		}
 	}
 
 	public function getSelectedIndex() : int {
