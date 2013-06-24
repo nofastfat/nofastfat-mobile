@@ -1,7 +1,9 @@
 package {
 import com.xy.DiyFacade;
 import com.xy.component.SButton;
+import com.xy.component.alert.Alert;
 import com.xy.component.toolTip.ToolTip;
+import com.xy.ui.AlertBg;
 import com.xy.ui.BlackButton;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.Tools;
@@ -34,6 +36,7 @@ public class DIY__SHIRT_79434419 extends Sprite {
         stage.align = StageAlign.TOP_LEFT;
 
         EnterFrameCall.initState(stage);
+		Alert.initParent(stage, new AlertBg(), true);
 
 
         _left = new LeftContainer();
