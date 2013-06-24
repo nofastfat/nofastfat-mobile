@@ -2,8 +2,8 @@ package com.xy.view.ui.ctrls {
 import com.xy.component.buttons.ToggleButton;
 import com.xy.component.buttons.ToggleButtonGroup;
 import com.xy.component.buttons.event.ToggleButtonGroupEvent;
-import com.xy.component.toolTip.ToolTip;
 import com.xy.ui.ImageSizeUI;
+import com.xy.view.ui.events.SImageSizeUIEvent;
 
 public class SImageSizeUI extends ImageSizeUI {
 	private var _togGroup : ToggleButtonGroup;
@@ -21,7 +21,7 @@ public class SImageSizeUI extends ImageSizeUI {
     }
     
     private function __changeHandler(e : ToggleButtonGroupEvent) : void {
-    	
+    	dispatchEvent(new SImageSizeUIEvent(SImageSizeUIEvent.STATUS_CHANGE, _togGroup.selectIndex));
     }
 }
 }
