@@ -12,8 +12,6 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
 
-import flashx.textLayout.operations.InsertInlineGraphicOperation;
-
 public class SImageThumbUI extends ImageThumbUI {
     private var _container : Sprite;
 
