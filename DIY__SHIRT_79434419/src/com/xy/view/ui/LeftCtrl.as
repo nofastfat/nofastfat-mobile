@@ -54,7 +54,7 @@ public class LeftCtrl extends Sprite {
         for (var i : int = 0; i < _containers.length; i++) {
             _offsets[i] = 0;
             addChild(_btns[i]);
-			_btns[i].y = -1;
+            _btns[i].y = -1;
             addChild(_containers[i]);
 
             togBtns.push(new ToggleButton(_btns[i]));
@@ -97,13 +97,13 @@ public class LeftCtrl extends Sprite {
 
             if (_offsets[i] != 0) {
                 if (Math.abs(_offsets[i]) < speedX) {
-					_btns[i].y += _offsets[i];
-					_containers[i].y = _btns[i].y + _btns[i].height;
+                    _btns[i].y += _offsets[i];
+                    _containers[i].y = _btns[i].y + _btns[i].height;
                     _offsets[i] = 0;
                 } else {
                     var cal : int = _offsets[i] < 0 ? -speedX : speedX;
-					_btns[i].y += cal;
-					_containers[i].y = _btns[i].y + _btns[i].height;
+                    _btns[i].y += cal;
+                    _containers[i].y = _btns[i].y + _btns[i].height;
                     _offsets[i] -= cal;
                 }
             }
@@ -125,6 +125,10 @@ public class LeftCtrl extends Sprite {
             container.resize(totalHeight - _eachHeight * _btns.length);
         }
         __stateChangeHandler();
+    }
+
+    public function getContainer(index : int) : AbsContainer {
+        return _containers[index];
     }
 }
 }
