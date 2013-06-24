@@ -8,11 +8,9 @@ import com.xy.ui.ScrollUI;
 import com.xy.util.Tools;
 import com.xy.view.ui.componet.SImageThumbUI;
 import com.xy.view.ui.events.ImageContainerEvent;
+import com.xy.view.ui.events.SImageSizeUIEvent;
 import com.xy.view.ui.events.SImageThumbUIEvent;
 
-import flash.display.BitmapData;
-import flash.display.MovieClip;
-import flash.display.Sprite;
 import flash.events.MouseEvent;
 
 public class ImageContainer extends AbsContainer {
@@ -28,6 +26,8 @@ public class ImageContainer extends AbsContainer {
     private var _currentPageSize : int;
 
     private var _images : Array = [];
+
+    private var _listType : int = 0;
 
     public function ImageContainer() {
         super();
@@ -50,6 +50,8 @@ public class ImageContainer extends AbsContainer {
 
         _addBtn.addEventListener(MouseEvent.CLICK, __uploadImageHandler);
         _slider.addEventListener(SliderEvent.DATA_UPDATE, __sliderHandler);
+
+        _sizeUI.addEventListener(SImageSizeUIEvent.STATUS_CHANGE, __imageStatusHandler);
     }
 
     public function setData(bmds : Array) : void {
@@ -59,36 +61,76 @@ public class ImageContainer extends AbsContainer {
     }
 
     private function updateShow() : void {
-		_slider.setData(0, _images.length - _currentPageSize, 1, _slider.getValue());
+        _currentPageSize = _itemMaxHeight / 130;
+
+        if (_listType == 1) {
+            _currentPageSize = _itemMaxHeight / 70;
+
+            _currentPageSize *= 2;
+        }
+
+        if (_currentPageSize <= 0) {
+            _currentPageSize = 1
+        }
+
+		var totalPage : int;
+        if (_listType == 0) {
+            totalPage =  _images.length - _currentPageSize;
+        } else {
+            totalPage = (_images.length - _currentPageSize)/2;
+            if((_images.length - _currentPageSize) % 2 != 0){
+            	totalPage++;
+            }
+        }
+        _slider.setData(0, totalPage, 1, _slider.getValue());
         _scrollUI.visible = _images.length > _currentPageSize;
 
 
         var sx : int = _scrollUI.visible ? _scrollUI.x : 200;
         var eachHeight : int = _itemMaxHeight / _currentPageSize;
 
+        if (_listType == 1) {
+            eachHeight *= 2;
+        }
+
         var maxer : int = Math.max(_currentPageSize, _imageThumbs.length);
 
         for (var i : int = 0; i < maxer; i++) {
             var thumb : SImageThumbUI = _imageThumbs[i];
             if (thumb == null) {
-                thumb = new SImageThumbUI(150, 150, 1);
+                thumb = new SImageThumbUI(130, 130, 1);
                 addChildAt(thumb, 1);
                 _imageThumbs[i] = thumb;
-				thumb.addEventListener(SImageThumbUIEvent.STATUS_CHANGE, __statusChangeHandler);
+                thumb.addEventListener(SImageThumbUIEvent.STATUS_CHANGE, __statusChangeHandler);
+            }
+            if (_listType == 0) {
+                thumb.setSize(130, 130);
+            } else {
+                thumb.setSize(70, 70);
             }
 
             if (i < _currentPageSize) {
-                thumb.x = (sx - thumb.width) / 2;
-                thumb.y = i * eachHeight + _scrollUI.y;
-				var vo : BitmapDataVo = _images[i + _slider.getValue()];
-				if(vo == null){
-					thumb.visible = false;
-				}else{
-					thumb.visible = true;
-					thumb.setData(vo);
-				}
+                if (_listType == 0) {
+                    thumb.x = (sx - thumb.width) / 2;
+                    thumb.y = i * eachHeight + _scrollUI.y;
+                } else {
+                    thumb.x = (i % 2 == 0) ?
+                        ((sx - thumb.width * 2 - 10) / 2) :
+                        ((sx - thumb.width * 2 - 10) / 2 + thumb.width + 10);
+
+                    thumb.y = int(i / 2) * eachHeight + _scrollUI.y;
+                }
+                
+                var index : int = _listType == 0 ? i + _slider.getValue() : i + _slider.getValue()*2;
+                var vo : BitmapDataVo = _images[index];
+                if (vo == null) {
+                    thumb.visible = false;
+                } else {
+                    thumb.visible = true;
+                    thumb.setData(vo);
+                }
             } else {
-				thumb.visible = false;
+                thumb.visible = false;
             }
         }
     }
@@ -101,14 +143,19 @@ public class ImageContainer extends AbsContainer {
         updateShow();
     }
 
-	private function __statusChangeHandler(e : SImageThumbUIEvent):void{
-		var thumb : SImageThumbUI = e.currentTarget as SImageThumbUI;
-		thumb.vo.show = e.selected;
-		if(!e.selected){
-			dispatchEvent(new ImageContainerEvent(ImageContainerEvent.UPDATE_SELECT));
-		}
-	}
-	
+    private function __imageStatusHandler(e : SImageSizeUIEvent) : void {
+        _listType = e.selected;
+        updateShow();
+    }
+
+    private function __statusChangeHandler(e : SImageThumbUIEvent) : void {
+        var thumb : SImageThumbUI = e.currentTarget as SImageThumbUI;
+        thumb.vo.show = e.selected;
+        if (!e.selected) {
+            dispatchEvent(new ImageContainerEvent(ImageContainerEvent.UPDATE_SELECT));
+        }
+    }
+
     override public function resize(height : int) : void {
         super.resize(height);
         if (_addBtn != null) {
@@ -123,11 +170,6 @@ public class ImageContainer extends AbsContainer {
 
         if (_scrollUI != null) {
             _itemMaxHeight = height - (_addBtn.y + _addBtn.height) - _sizeUI.height - 40;
-            _currentPageSize = _itemMaxHeight / 170;
-            if (_currentPageSize <= 0) {
-                _currentPageSize = 1
-            }
-
             _scrollUI.bg.height = _itemMaxHeight;
             _scrollUI.prevBtn.y = 0;
             _scrollUI.bg.y = _scrollUI.prevBtn.height;
