@@ -16,6 +16,7 @@ import flash.utils.getTimer;
  * 
  * @author xy
  */
+[Event(name = "select_color", type = "ColorPikerEvent")]
 public class ColorPicker extends Sprite {
 
 	/**
