@@ -83,6 +83,11 @@ public class LeftCtrl extends Sprite {
         }
 
         EnterFrameCall.add(offsetAdd);
+		
+		for(i = 0; i < _containers.length;i++){
+			var abs : AbsContainer = _containers[i];
+			abs.setChildVisible(true);
+		}
     }
 
     private function offsetAdd() : void {
@@ -115,6 +120,11 @@ public class LeftCtrl extends Sprite {
 
         if (needRemove) {
             EnterFrameCall.del(offsetAdd);
+			
+			for(i = 0; i < _containers.length;i++){
+				var abs : AbsContainer = _containers[i];
+				abs.setChildVisible(i==_togGroup.selectIndex);
+			}
         }
 
     }

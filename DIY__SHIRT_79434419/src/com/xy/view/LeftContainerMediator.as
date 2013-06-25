@@ -4,6 +4,7 @@ import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.view.layer.LeftContainer;
 import com.xy.view.ui.LeftCtrl;
+import com.xy.view.ui.ctrls.FontContainer;
 import com.xy.view.ui.ctrls.ImageContainer;
 import com.xy.view.ui.events.ImageContainerEvent;
 
@@ -21,16 +22,14 @@ public class LeftContainerMediator extends AbsMediator {
     override public function makeNoticeMap() : Map {
         var map : Map = new Map();
 		map.put(Event.RESIZE, resize);
-		map.put(DiyDataNotice.IMAGE_UPDATE, imageUpdate);
         return map;
     }
 
     override public function onRegister() : void {
         _leftCtrl = new LeftCtrl();
-		(_leftCtrl.getContainer(0) as ImageContainer).addEventListener(ImageContainerEvent.UPDATE_SELECT, __updateSelectHandler);
-		
         ui.addChild(_leftCtrl);
-		(_leftCtrl.getContainer(0) as ImageContainer).setData(dataProxy.getShowAbleBmds());
+		
+		(_leftCtrl.getContainer(1) as FontContainer).setData(dataProxy.userableFonts);
     }
 
 
@@ -40,16 +39,6 @@ public class LeftContainerMediator extends AbsMediator {
         }
     }
 	
-	private function imageUpdate():void{
-		if(_leftCtrl != null){
-			(_leftCtrl.getContainer(0) as ImageContainer).setData(dataProxy.getShowAbleBmds());
-		}
-	}
-	
-	private function __updateSelectHandler(e : ImageContainerEvent):void{
-		imageUpdate();
-	}
-
     public function get ui() : LeftContainer {
         return viewComponent as LeftContainer;
     }

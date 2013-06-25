@@ -5,6 +5,7 @@ import com.xy.component.Slider.event.SliderEvent;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.BlackButton;
 import com.xy.ui.ScrollUI;
+import com.xy.util.STool;
 import com.xy.util.Tools;
 import com.xy.view.ui.componet.SImageThumbUI;
 import com.xy.view.ui.events.ImageContainerEvent;
@@ -12,6 +13,9 @@ import com.xy.view.ui.events.SImageSizeUIEvent;
 import com.xy.view.ui.events.SImageThumbUIEvent;
 
 import flash.events.MouseEvent;
+import flash.text.Font;
+
+import mx.core.FontAsset;
 
 public class ImageContainer extends AbsContainer {
     private var _addBtn : BlackButton;
@@ -165,11 +169,11 @@ public class ImageContainer extends AbsContainer {
 
         if (_sizeUI != null) {
             _sizeUI.x = 200 - _sizeUI.width - 10;
-            _sizeUI.y = height - _sizeUI.height - 10;
+            _sizeUI.y = height - _sizeUI.height - 5;
         }
 
         if (_scrollUI != null) {
-            _itemMaxHeight = height - (_addBtn.y + _addBtn.height) - _sizeUI.height - 40;
+            _itemMaxHeight = height - (_addBtn.y + _addBtn.height) - _sizeUI.height - 20;
             _scrollUI.bg.height = _itemMaxHeight;
             _scrollUI.prevBtn.y = 0;
             _scrollUI.bg.y = _scrollUI.prevBtn.height;
@@ -180,6 +184,14 @@ public class ImageContainer extends AbsContainer {
         updateShow();
 
     }
+	
+	override public function setChildVisible(visible : Boolean):void{
+		if(visible){
+			addChild(_scrollUI);
+		}else{
+			STool.remove(_scrollUI);
+		}
+	}
 
 }
 }

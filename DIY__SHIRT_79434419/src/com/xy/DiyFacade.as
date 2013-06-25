@@ -15,8 +15,10 @@ public class DiyFacade extends Facade {
         registerCommand(RegistCmd.NAME, RegistCmd);
     }
 
-    public function startUp(root : DIY__SHIRT_79434419) : void {
+    public function startUp(root : DIY__SHIRT_79434419, config:XML) : void {
         sendNotification(RegistCmd.NAME, root);
+		
+		dataProxy.initConfigXML(config);
     }
 
     public function get dataProxy() : DiyDataProxy {

@@ -1,8 +1,13 @@
 package com.xy.model {
+import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
+import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.util.STool;
+import com.xy.util.Tools;
 
 import flash.display.BitmapData;
+import flash.text.Font;
 
 import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -10,9 +15,62 @@ public class DiyDataProxy extends Proxy {
     public static const NAME : String = "DiyDataProxy";
 
     private var _images : Array = [];
+    private var _backgrounds : Map = new Map();
+
+    public var userableFonts : Array = Font.enumerateFonts(true);
 
     public function DiyDataProxy() {
         super(NAME);
+
+        userableFonts.sort(function(a : Font, b : Font) : int {
+            var aHas : Boolean = STool.strHasChinese(a.fontName);
+            var bHas : Boolean = STool.strHasChinese(b.fontName);
+
+            if (aHas && bHas) {
+                return 0;
+            }
+            if (aHas) {
+                return -1;
+            }
+
+            if (bHas) {
+                return 1;
+            }
+
+            return 0;
+        });
+    }
+	
+	public function skipSource(sourceType:int, vo : BitmapDataVo):void{
+		switch(sourceType){
+			case SourceType.BACKGROUND:
+				var arr : Array = _backgrounds.get(vo.type);
+				var index : int = arr.indexOf(vo);
+				if(index != -1){
+					arr.splice(index, 1);
+				}
+				break;
+		}
+	}
+
+    public function get backgrounds() : Map {
+        return _backgrounds;
+    }
+
+    public function initConfigXML(xml : XML) : void {
+        for each (var xx : XML in xml..bg) {
+            var type : String = String(xx.@type);
+            var url : String = String(xx.@url);
+
+            if (!_backgrounds.containsKey(type)) {
+                _backgrounds.put(type, []);
+            }
+            var vo : BitmapDataVo = new BitmapDataVo();
+            vo.type = type;
+            vo.url = url;
+
+            _backgrounds.get(type).push(vo);
+        }
     }
 
     public function get images() : Array {
