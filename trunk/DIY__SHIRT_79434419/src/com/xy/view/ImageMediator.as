@@ -30,6 +30,8 @@ public class ImageMediator extends AbsMediator {
 
     override public function onRegister() : void {
         ui.addEventListener(ImageContainerEvent.UPLOAD_IMAGE, __showUploadPanelHandler);
+		ui.addEventListener(ImageContainerEvent.UPDATE_SELECT, __updateSelectHandler);
+		ui.setData(dataProxy.getShowAbleBmds());
     }
 
     private function __showUploadPanelHandler(e : ImageContainerEvent) : void {
@@ -43,6 +45,10 @@ public class ImageMediator extends AbsMediator {
         _panel.setData(dataProxy.images);
         PopUpManager.getInstance().showPanel(_panel);
     }
+	
+	private function __updateSelectHandler(e : Event):void{
+		imageUpdate();
+	}
 
     private function resize() : void {
         if (_panel != null && _panel.stage != null) {
@@ -54,6 +60,8 @@ public class ImageMediator extends AbsMediator {
         if (_panel != null) {
             _panel.setData(dataProxy.images);
         }
+		
+		ui.setData(dataProxy.getShowAbleBmds());
     }
 
     private function __uploadHandler(e : UploadImagePanelEvent) : void {

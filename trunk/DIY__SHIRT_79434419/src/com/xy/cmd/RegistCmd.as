@@ -1,9 +1,10 @@
 package com.xy.cmd {
 import com.xy.interfaces.AbsCommand;
 import com.xy.model.DiyDataProxy;
+import com.xy.view.BackgroundMediator;
+import com.xy.view.ImageMediator;
 import com.xy.view.LeftContainerMediator;
 import com.xy.view.RightContainerMediator;
-import com.xy.view.ImageMediator;
 
 import org.puremvc.as3.interfaces.INotification;
 
@@ -23,7 +24,8 @@ public class RegistCmd extends AbsCommand {
 
         facade.registerMediator(leftMediator);
         facade.registerMediator(new RightContainerMediator(root.right));
-        facade.registerMediator(new ImageMediator(leftMediator.leftCtrl.getContainer(0)));
+		facade.registerMediator(new ImageMediator(leftMediator.leftCtrl.getContainer(0)));
+		facade.registerMediator(new BackgroundMediator(leftMediator.leftCtrl.getContainer(2)));
 
     }
 }
