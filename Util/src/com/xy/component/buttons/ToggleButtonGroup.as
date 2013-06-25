@@ -3,6 +3,7 @@ import com.xy.component.buttons.event.ToggleButtonEvent;
 import com.xy.component.buttons.event.ToggleButtonGroupEvent;
 
 import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
 
 /**
  * 状态按钮组，控制组件 ，该组件只做控制，不做显示

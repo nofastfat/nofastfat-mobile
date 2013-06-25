@@ -12,6 +12,7 @@ import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.external.ExternalInterface;
 import flash.ui.Keyboard;
 
 /**
@@ -48,13 +49,15 @@ public class Alert {
      * 是否已经初始化,只能初始化一次
      */
     private static var _hasInit : Boolean;
+	
+	private static var _mask : Sprite;
 
 	/**
 	 * 初始化显示容器 
 	 * @param parent
 	 * @param bg
 	 */	
-    public static function initParent(parent : DisplayObjectContainer, bg : Sprite) : void {
+    public static function initParent(parent : DisplayObjectContainer, bg : Sprite, useMask : Boolean = false) : void {
         if (_hasInit) {
             return;
         }
@@ -77,6 +80,13 @@ public class Alert {
         _bg.y = (_parent.height - _bg.height) / 2;
 		
 		EnterFrameCall.getStage().addEventListener(KeyboardEvent.KEY_UP, __keyHandler);
+		
+		if(useMask){
+			_mask = new Sprite();
+			_mask.graphics.beginFill(0x000000, .2);
+			_mask.graphics.drawRect(0, 0, 1, 1);
+			_mask.graphics.endFill();
+		}
     }
 
     /**
@@ -98,8 +108,7 @@ public class Alert {
 
         _content = alertContent;
         _callBack = closeFun;
-
-        _parent.addChild(_bg);
+		
         _bg["bg"].addChild(alertContent as DisplayObject);
 		_bg.x = _bg.y = 0;
 
@@ -116,6 +125,14 @@ public class Alert {
 		
 		_bg.x = (ww - _bg.width)/2;
 		_bg.y = (hh - _bg.height)/2;
+		
+		if(_mask != null){
+			_parent.addChild(_mask);
+			_mask.width = ww;
+			_mask.height = hh;
+		}
+		
+		_parent.addChild(_bg);
     }
 
 	/**
@@ -123,6 +140,7 @@ public class Alert {
 	 * @param txt
 	 */	
 	public static function showText(txt : String) :void {
+		
 	}
 	
     /**
@@ -243,6 +261,7 @@ public class Alert {
         if (_parent != null && _bg != null && _parent.contains(_bg)) {
             _parent.removeChild(_bg);
         }
+		STool.remove(_mask);
     }
 
 }
