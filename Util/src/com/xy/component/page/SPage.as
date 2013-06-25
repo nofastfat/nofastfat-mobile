@@ -40,6 +40,10 @@ public class SPage extends EventDispatcher {
 
 	public function setPage(pageIndex : int, needDispatchEvent : Boolean = true) : void {
 		_pageVo.pageIndex = pageIndex;
+		
+		if (_pageTf != null) {
+			_pageTf.text = _pageVo.toString();
+		}
 		if (needDispatchEvent) {
 			dispatchEvent(new SPageEvent(SPageEvent.PAGE_CHANGE, _pageVo.pageIndex, _pageVo.getStartIndex()));
 		}
