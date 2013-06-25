@@ -4,9 +4,11 @@ import com.xy.component.Slider.SliderMode;
 import com.xy.component.Slider.event.SliderEvent;
 import com.xy.component.colorPicker.ColorPicker;
 import com.xy.component.colorPicker.enum.PreSwatches;
+import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.BlackButton;
 import com.xy.ui.ScrollUI;
+import com.xy.util.MulityLoad;
 import com.xy.util.STool;
 import com.xy.util.Tools;
 import com.xy.view.ui.componet.SImageThumbUI;
@@ -20,6 +22,7 @@ import com.xy.view.ui.events.SSimpleColorUIEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.text.Font;
+import flash.utils.setTimeout;
 
 import mx.core.FontAsset;
 
@@ -65,11 +68,8 @@ public class BackgroundContainer extends AbsContainer {
     }
 
     public function setData(bmds : Array) : void {
-        _images = [];
-		for each(var arr : Array in bmds){
-			_images = _images.concat(arr);
-		}
-		
+        _images = bmds;
+
         updateShow();
     }
 
@@ -92,31 +92,54 @@ public class BackgroundContainer extends AbsContainer {
 
         var maxer : int = Math.max(_currentPageSize, _imageThumbs.length);
 
-        for (var i : int = 0; i < maxer; i++) {
-            var thumb : SImageThumbUI = _imageThumbs[i];
-            if (thumb == null) {
-                thumb = new SImageThumbUI(130, 130, 1);
-                addChildAt(thumb, 1);
-                _imageThumbs[i] = thumb;
-                thumb.addEventListener(SImageThumbUIEvent.STATUS_CHANGE, __statusChangeHandler);
-            }
-            thumb.setSize(130, 130);
 
-            if (i < _currentPageSize) {
-                thumb.x = (sx - thumb.width) / 2;
-                thumb.y = i * eachHeight + _scrollUI.y;
-                var index : int = i + _slider.getValue();
-                var vo : BitmapDataVo = _images[index];
-                if (vo == null) {
-                    thumb.visible = false;
-                } else {
-                    thumb.visible = true;
-                    thumb.setData(vo);
+        var needLoad : Boolean = false;
+        var loads : Array = [];
+        for (var i : int = 0; i < maxer; i++) {
+            var index : int = i + _slider.getValue();
+            var vo : BitmapDataVo = _images[index];
+            if (vo != null) {
+                if (vo.bmd == null) {
+                    needLoad = true;
+                    loads.push(vo);
                 }
-            } else {
-                thumb.visible = false;
             }
         }
+
+        if (needLoad) {
+            MulityLoad.getInstance().load(loads, loadOk, SourceType.BACKGROUND);
+        } else {
+
+            for (i = 0; i < maxer; i++) {
+                var thumb : SImageThumbUI = _imageThumbs[i];
+                if (thumb == null) {
+                    thumb = new SImageThumbUI(130, 130, 1);
+                    addChildAt(thumb, 1);
+                    _imageThumbs[i] = thumb;
+                    thumb.addEventListener(SImageThumbUIEvent.STATUS_CHANGE, __statusChangeHandler);
+                }
+                thumb.setSize(130, 130);
+
+                if (i < _currentPageSize) {
+                    thumb.x = (sx - thumb.width) / 2;
+                    thumb.y = i * eachHeight + _scrollUI.y;
+                    index = i + _slider.getValue();
+                    vo = _images[index];
+                    if (vo == null) {
+                        thumb.visible = false;
+                    } else {
+                        thumb.visible = true;
+                        thumb.setData(vo);
+                    }
+                } else {
+                    thumb.visible = false;
+                }
+            }
+        }
+    }
+
+    private function loadOk() : void {
+        setTimeout(updateShow, 100);
     }
 
     private function __uploadImageHandler(e : MouseEvent) : void {
@@ -152,7 +175,7 @@ public class BackgroundContainer extends AbsContainer {
         }
 
         if (_scrollUI != null) {
-            _itemMaxHeight = height - (_addBtn.y + _addBtn.height) - _sizeUI.height - 20;
+            _itemMaxHeight = height - (_addBtn.y + _addBtn.height) - _sizeUI.height - 40;
             _scrollUI.bg.height = _itemMaxHeight;
             _scrollUI.prevBtn.y = 0;
             _scrollUI.bg.y = _scrollUI.prevBtn.height;

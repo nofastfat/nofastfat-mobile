@@ -108,6 +108,7 @@ public class SImageThumbUI extends ImageThumbUI {
     }
 
     private function __changeHandler(e : ToggleButtonEvent) : void {
+		vo.show = _toggleBtn.selected;
         dispatchEvent(new SImageThumbUIEvent(SImageThumbUIEvent.STATUS_CHANGE, _toggleBtn.selected));
     }
 
