@@ -13,6 +13,7 @@ import com.xy.ui.TabButton;
 import com.xy.util.MulityLoad;
 import com.xy.util.Tools;
 import com.xy.view.ui.componet.SImageThumbUI;
+import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
 import com.xy.view.ui.events.SImageThumbUIEvent;
 
 import flash.display.MovieClip;
@@ -195,7 +196,7 @@ public class ChooseBackgroundPanel extends AbsPanel {
     }
 
     private function __imageThumbHandler(e : SImageThumbUIEvent) : void {
-
+		dispatchEvent(new ChooseBackgroundPanelEvent(ChooseBackgroundPanelEvent.BACKGROUND_STATUS));
     }
 }
 }

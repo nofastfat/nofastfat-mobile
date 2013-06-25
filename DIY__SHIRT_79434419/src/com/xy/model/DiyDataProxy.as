@@ -3,11 +3,13 @@ import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.util.MulityLoad;
 import com.xy.util.STool;
 import com.xy.util.Tools;
 
 import flash.display.BitmapData;
 import flash.text.Font;
+import flash.utils.setTimeout;
 
 import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -40,24 +42,25 @@ public class DiyDataProxy extends Proxy {
             return 0;
         });
     }
-	
-	public function skipSource(sourceType:int, vo : BitmapDataVo):void{
-		switch(sourceType){
-			case SourceType.BACKGROUND:
-				var arr : Array = _backgrounds.get(vo.type);
-				var index : int = arr.indexOf(vo);
-				if(index != -1){
-					arr.splice(index, 1);
-				}
-				break;
-		}
-	}
+
+    public function skipSource(sourceType : int, vo : BitmapDataVo) : void {
+        switch (sourceType) {
+            case SourceType.BACKGROUND:
+                var arr : Array = _backgrounds.get(vo.type);
+                var index : int = arr.indexOf(vo);
+                if (index != -1) {
+                    arr.splice(index, 1);
+                }
+                break;
+        }
+    }
 
     public function get backgrounds() : Map {
         return _backgrounds;
     }
 
     public function initConfigXML(xml : XML) : void {
+        var randomShow : int = 10;
         for each (var xx : XML in xml..bg) {
             var type : String = String(xx.@type);
             var url : String = String(xx.@url);
@@ -68,9 +71,32 @@ public class DiyDataProxy extends Proxy {
             var vo : BitmapDataVo = new BitmapDataVo();
             vo.type = type;
             vo.url = url;
+            vo.show = false;
 
             _backgrounds.get(type).push(vo);
+
+            if (randomShow > 0 && STool.random(1, 2) == 1) {
+                vo.show = true;
+                randomShow--;
+            }
         }
+
+        MulityLoad.getInstance().load(getShowableBg(), function() : void {
+            setTimeout(sendNotification, 100, DiyDataNotice.BACKGROUND_UPDATE);
+        }, SourceType.BACKGROUND);
+
+    }
+
+    public function getShowableBg() : Array {
+        var rs : Array = [];
+        for each (var arr : Array in _backgrounds.values) {
+            for each (var vo : BitmapDataVo in arr) {
+                if (vo.show) {
+                    rs.push(vo);
+                }
+            }
+        }
+        return rs;
     }
 
     public function get images() : Array {
