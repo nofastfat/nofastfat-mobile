@@ -68,11 +68,11 @@ public class OrganizedStructVo {
      * 从高到低， 1-9
      */
     public var powerMatrix : int;
-    
+
     /**
      * 能力矩阵值
      * 0-2:红，黄，绿
-     */    
+     */
     public var powerMatrixValue : int;
 
     /**
@@ -85,13 +85,13 @@ public class OrganizedStructVo {
 
 
 
-	public var parent : OrganizedStructVo;
+    public var parent : OrganizedStructVo;
 
-	/**
-	 * ui显示的状态 
-	 */
-	public var cardStatus : SInfoCardStatus = new SInfoCardStatus();
-	
+    /**
+     * ui显示的状态
+     */
+    public var cardStatus : SInfoCardStatus = new SInfoCardStatus();
+
     public static function fromJsonStr(jsonStr : String) : OrganizedStructVo {
         return fromJson(JSON.decode(jsonStr));
     }
@@ -99,35 +99,39 @@ public class OrganizedStructVo {
     public static function fromJson(obj : *) : OrganizedStructVo {
         var vo : OrganizedStructVo = new OrganizedStructVo;
         for (var key : String in obj) {
-            var type : String = typeof obj[key];
-            switch (type) {
-                case "number":
-                    vo[key] = int(obj[key]);
-                    break;
-                case "object":
-                    var arr : Array = obj[key] as Array;
-                    if (arr != null) {
-                        var fun : Function;
-                        if (key == "subStuctList") {
-                            fun = OrganizedStructVo.fromJson;
-                        } else if (key == "simpleSubordinateList") {
-                            fun = SimpleSubordinateVo.fromJson;
-                        }
-
-                        if (fun != null) {
-                            var rs : Array = [];
-                            for each (var subObj : * in arr) {
-                                rs.push(fun(subObj));
+            if (key == "id") {
+                vo.id = obj["id"];
+            } else {
+                var type : String = typeof obj[key];
+                switch (type) {
+                    case "number":
+                        vo[key] = int(obj[key]);
+                        break;
+                    case "object":
+                        var arr : Array = obj[key] as Array;
+                        if (arr != null) {
+                            var fun : Function;
+                            if (key == "subStuctList") {
+                                fun = OrganizedStructVo.fromJson;
+                            } else if (key == "simpleSubordinateList") {
+                                fun = SimpleSubordinateVo.fromJson;
                             }
 
-                            vo[key] = rs;
+                            if (fun != null) {
+                                var rs : Array = [];
+                                for each (var subObj : * in arr) {
+                                    rs.push(fun(subObj));
+                                }
+
+                                vo[key] = rs;
+                            }
                         }
-                    }
 
 
-                    break;
-                default:
-                    vo[key] = String(obj[key]);
+                        break;
+                    default:
+                        vo[key] = String(obj[key]);
+                }
             }
         }
         return vo;
@@ -137,7 +141,7 @@ public class OrganizedStructVo {
         if (id == childId) {
             return this;
         }
-		
+
         if (subStuctList == null) {
             return null;
         }
@@ -156,64 +160,64 @@ public class OrganizedStructVo {
 
         return null;
     }
-    
-    public function isChild(id : String) : Boolean{
-    	for each(var subVo : OrganizedStructVo in subStuctList){
-    		if(subVo.id == id){
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+
+    public function isChild(id : String) : Boolean {
+        for each (var subVo : OrganizedStructVo in subStuctList) {
+            if (subVo.id == id) {
+                return true;
+            }
+        }
+
+        return false;
     }
-    
-    public function getHideChildIdsBy(hideId : String) : Array{
-    	var rs : Array = [];
-    	  for each (var vo : OrganizedStructVo in subStuctList) {
+
+    public function getHideChildIdsBy(hideId : String) : Array {
+        var rs : Array = [];
+        for each (var vo : OrganizedStructVo in subStuctList) {
             if (!vo.cardStatus.visible && vo.cardStatus.hideById == hideId) {
                 rs.push(vo.id);
             }
-            
+
             rs = rs.concat(vo.getHideChildIdsBy(hideId));
         }
-        
-    	return rs;
+
+        return rs;
     }
-    
+
     /**
-     * 获取兄弟节点 
+     * 获取兄弟节点
      * [OrganizedStructVo, OrganizedStructVo, ...]
-     * @return 
-     */    
-    public function getSiblingVos() : Array{
-    	var rs : Array = [];
-    	if(parent == null){
-			return rs;    	
-    	}
-    	
-    	for each(var siblingVo : OrganizedStructVo in parent.subStuctList){
-    		if(siblingVo.id != this.id){
-    			rs.push(siblingVo);
-    		}
-    	}
-    	return rs;
+     * @return
+     */
+    public function getSiblingVos() : Array {
+        var rs : Array = [];
+        if (parent == null) {
+            return rs;
+        }
+
+        for each (var siblingVo : OrganizedStructVo in parent.subStuctList) {
+            if (siblingVo.id != this.id) {
+                rs.push(siblingVo);
+            }
+        }
+        return rs;
     }
-    
+
     /**
-     * 获取所有正在显示的子节点的id 
-     * @return 
-     */    
-    public function getVisibleChildIds() : Array{
-    	var rs : Array = [];
-    	  for each (var vo : OrganizedStructVo in subStuctList) {
+     * 获取所有正在显示的子节点的id
+     * @return
+     */
+    public function getVisibleChildIds() : Array {
+        var rs : Array = [];
+        for each (var vo : OrganizedStructVo in subStuctList) {
             if (vo.cardStatus.visible) {
                 rs.push(vo.id);
             }
-            
+
             rs = rs.concat(vo.getVisibleChildIds());
         }
-        
-    	return rs;
+
+        return rs;
     }
 }
 }

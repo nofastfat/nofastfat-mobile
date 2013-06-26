@@ -65,10 +65,10 @@ public class TaskVo {
      */
     public var subTaskList : Array;
 
-	/**
-	 * 子节点的数量 
-	 */
-	public var subLen : int;
+    /**
+     * 子节点的数量
+     */
+    public var subLen : int;
 
 
 
@@ -136,32 +136,36 @@ public class TaskVo {
         var vo : TaskVo = new TaskVo;
         for (var key : String in obj) {
             var type : String = typeof obj[key];
-            switch (type) {
-                case "number":
-                    vo[key] = int(obj[key]);
-                    break;
-                case "object":
-                    var arr : Array = obj[key] as Array;
-                    if (arr != null) {
-                        var fun : Function;
-                        if (key == "subTaskList") {
-                            fun = TaskVo.fromJson;
-                        }
-
-                        if (fun != null) {
-                            var rs : Array = [];
-                            for each (var subObj : * in arr) {
-                                rs.push(fun(subObj));
+            if (key == "id") {
+				vo.id = obj["id"];
+            } else {
+                switch (type) {
+                    case "number":
+                        vo[key] = int(obj[key]);
+                        break;
+                    case "object":
+                        var arr : Array = obj[key] as Array;
+                        if (arr != null) {
+                            var fun : Function;
+                            if (key == "subTaskList") {
+                                fun = TaskVo.fromJson;
                             }
 
-                            vo[key] = rs;
+                            if (fun != null) {
+                                var rs : Array = [];
+                                for each (var subObj : * in arr) {
+                                    rs.push(fun(subObj));
+                                }
+
+                                vo[key] = rs;
+                            }
                         }
-                    }
 
 
-                    break;
-                default:
-                    vo[key] = String(obj[key]);
+                        break;
+                    default:
+                        vo[key] = String(obj[key]);
+                }
             }
         }
         return vo;
