@@ -1,9 +1,15 @@
 package {
+import com.adobe.serialization.json.JSON;
 import com.xy.HelperFacade;
 import com.xy.component.toolTip.ToolTip;
 import com.xy.model.Config;
+import com.xy.model.vo.OrganizedStructVo;
+import com.xy.model.vo.SimpleSubordinateVo;
 import com.xy.ui.Loading;
 import com.xy.util.EnterFrameCall;
+import com.xy.util.RandomName;
+import com.xy.util.STool;
+import com.xy.util.Tools;
 import com.xy.view.layer.DetailContainer;
 import com.xy.view.layer.SUIPanel;
 import com.xy.view.layer.TreeContainer;
@@ -40,33 +46,34 @@ public class Helper extends Sprite {
         /* 初始数据 */
         _initData = decodeURIComponent(this.loaderInfo.parameters["initData"]);
 
-//        var vo : OrganizedStructVo = new OrganizedStructVo();
-//        vo.company = "诺克萨斯公司";
-//        vo.imgUrl = "http://192.168.1.175/heads/per_01.png";
-//        vo.jobScore = 500;
-//        vo.jobType = "营销类";
-//        vo.joinTime = "2001-03-10";
-//        vo.levelUpLastScore = 100;
-//        vo.name = "刀妹";
-//        vo.powerMatrix = 8;
-//        vo.sex = 1;
-//        vo.id = 2;
-//
-//        vo.simpleSubordinateList = [];
-//        var ids : Array = STool.makeUnionRandomArray(1, 99, 12);
-//        var departs : Array = ["销售部", "生产部", "公关部"];
-//        for (var i : int = 0; i < 12; i++) {
-//            var svo : SimpleSubordinateVo = new SimpleSubordinateVo();
-//            svo.department = STool.randomFromArray(departs);
-//            svo.id = vo.id * 100 + ids[i];
-//            svo.name = RandomName.makeName();
-//            svo.status = STool.random(0, 2);
-//            ;
-//            vo.simpleSubordinateList.push(svo);
-//        }
-//        vo.status = 0;
-//
-//        trace(JSON.encode(vo));
+		return;
+        var vo : OrganizedStructVo = new OrganizedStructVo();
+        vo.company = "诺克萨斯公司";
+        vo.imgUrl = "http://192.168.1.175/heads/per_01.png";
+        vo.jobScore = 500;
+        vo.jobType = "营销类";
+        vo.joinTime = "2001-03-10";
+        vo.levelUpLastScore = 100;
+        vo.name = "刀妹";
+        vo.powerMatrix = 8;
+        vo.sex = 1;
+        vo.id = Tools.makeId();
+
+        vo.simpleSubordinateList = [];
+        var ids : Array = STool.makeUnionRandomArray(1, 99, 12);
+        var departs : Array = ["销售部", "生产部", "公关部"];
+        for (var i : int = 0; i < 12; i++) {
+            var svo : SimpleSubordinateVo = new SimpleSubordinateVo();
+            svo.department = STool.randomFromArray(departs);
+            svo.id = Tools.makeId();
+            svo.name = RandomName.makeName();
+            svo.status = STool.random(0, 2);
+            ;
+            vo.simpleSubordinateList.push(svo);
+        }
+        vo.status = 0;
+
+        trace(JSON.encode(vo));
     }
 
     private function __addToStageHandler(e : Event) : void {
