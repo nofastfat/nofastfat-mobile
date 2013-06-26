@@ -17,26 +17,30 @@ public class SimpleSubordinateVo {
      * 部门
      */
     public var department : String;
-	
+
     /**
      * 离职风险
      * 0==低， 1==中， 2==高
      */
     public var status : int;
-	
-	public static function fromJson(obj : *) : SimpleSubordinateVo{
-		var vo : SimpleSubordinateVo = new SimpleSubordinateVo;
-		for (var key : String in obj) {
-			var type : String = typeof obj[key];
-			switch (type) {
-				case "number":
-					vo[key] = int(obj[key]);
-					break;
-				default:
-					vo[key] = String(obj[key]);
-			}
-		}
-		return vo;
-	}
+
+    public static function fromJson(obj : *) : SimpleSubordinateVo {
+        var vo : SimpleSubordinateVo = new SimpleSubordinateVo;
+        for (var key : String in obj) {
+            var type : String = typeof obj[key];
+            if (key == "id") {
+                vo.id = obj["id"];
+            } else {
+                switch (type) {
+                    case "number":
+                        vo[key] = int(obj[key]);
+                        break;
+                    default:
+                        vo[key] = String(obj[key]);
+                }
+            }
+        }
+        return vo;
+    }
 }
 }

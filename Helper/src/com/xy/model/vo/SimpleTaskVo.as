@@ -21,12 +21,16 @@ public class SimpleTaskVo {
         var vo : SimpleTaskVo = new SimpleTaskVo;
         for (var key : String in obj) {
             var type : String = typeof obj[key];
-            switch (type) {
-                case "number":
-                    vo[key] = int(obj[key]);
-                    break;
-                default:
-                    vo[key] = String(obj[key]);
+            if (key == "id") {
+                vo.id = obj["id"];
+            } else {
+                switch (type) {
+                    case "number":
+                        vo[key] = int(obj[key]);
+                        break;
+                    default:
+                        vo[key] = String(obj[key]);
+                }
             }
         }
         return vo;
