@@ -15,6 +15,7 @@ import com.xy.view.ui.ctrls.DecorateContainer;
 import com.xy.view.ui.ctrls.FontContainer;
 import com.xy.view.ui.ctrls.FrameContainer;
 import com.xy.view.ui.ctrls.ImageContainer;
+import com.xy.view.ui.events.LeftCtrlEvent;
 
 import flash.debugger.enterDebugger;
 import flash.display.MovieClip;
@@ -27,6 +28,11 @@ public class LeftCtrl extends Sprite {
     private var _eachHeight : int;
 
     private var _offsets : Array = [];
+
+    private var _fontIsInit : Boolean = false;
+    private var _bgIsInit : Boolean = false;
+    private var _decorateIsInit : Boolean = false;
+    private var _frameIsInit : Boolean = false;
 
     public function LeftCtrl() {
         super();
@@ -68,6 +74,33 @@ public class LeftCtrl extends Sprite {
     }
 
     private function __stateChangeHandler(e : ToggleButtonGroupEvent = null) : void {
+        switch (_togGroup.selectIndex) {
+            case 1:
+                if (!_fontIsInit) {
+                    _fontIsInit = true;
+                    dispatchEvent(new LeftCtrlEvent(LeftCtrlEvent.INIT, _togGroup.selectIndex));
+                }
+                break;
+            case 2:
+                if (!_bgIsInit) {
+                    _bgIsInit = true;
+                    dispatchEvent(new LeftCtrlEvent(LeftCtrlEvent.INIT, _togGroup.selectIndex));
+                }
+                break;
+            case 3:
+                if (!_decorateIsInit) {
+                    _decorateIsInit = true;
+                    dispatchEvent(new LeftCtrlEvent(LeftCtrlEvent.INIT, _togGroup.selectIndex));
+                }
+                break;
+            case 4:
+                if (!_frameIsInit) {
+                    _frameIsInit = true;
+                    dispatchEvent(new LeftCtrlEvent(LeftCtrlEvent.INIT, _togGroup.selectIndex));
+                }
+                break;
+        }
+
         var totalHeight : int = EnterFrameCall.getStage().stageHeight;
 
         for (var i : int = 0; i < _btns.length; i++) {
@@ -83,11 +116,11 @@ public class LeftCtrl extends Sprite {
         }
 
         EnterFrameCall.add(offsetAdd);
-		
-		for(i = 0; i < _containers.length;i++){
-			var abs : AbsContainer = _containers[i];
-			abs.setChildVisible(true);
-		}
+
+        for (i = 0; i < _containers.length; i++) {
+            var abs : AbsContainer = _containers[i];
+            abs.setChildVisible(true);
+        }
     }
 
     private function offsetAdd() : void {
@@ -120,11 +153,11 @@ public class LeftCtrl extends Sprite {
 
         if (needRemove) {
             EnterFrameCall.del(offsetAdd);
-			
-			for(i = 0; i < _containers.length;i++){
-				var abs : AbsContainer = _containers[i];
-				abs.setChildVisible(i==_togGroup.selectIndex);
-			}
+
+            for (i = 0; i < _containers.length; i++) {
+                var abs : AbsContainer = _containers[i];
+                abs.setChildVisible(i == _togGroup.selectIndex);
+            }
         }
 
     }

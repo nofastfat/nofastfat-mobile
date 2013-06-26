@@ -7,6 +7,7 @@ import com.xy.ui.AlertBg;
 import com.xy.ui.BlackButton;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.Http;
+import com.xy.util.Purview;
 import com.xy.util.Tools;
 import com.xy.view.layer.LeftContainer;
 import com.xy.view.layer.RightContainer;
@@ -52,7 +53,6 @@ public class DIY__SHIRT_79434419 extends Sprite {
 		SLoading.getInstance().show();
 		
 		new Http("config/config.xml", loadOk);
-		
     }
 	
 	private function loadOk(data:*):void{
