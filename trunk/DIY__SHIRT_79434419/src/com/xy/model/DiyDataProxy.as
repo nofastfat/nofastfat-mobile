@@ -18,6 +18,8 @@ public class DiyDataProxy extends Proxy {
 
     private var _images : Array = [];
     private var _backgrounds : Map = new Map();
+    private var _decorates : Map = new Map();
+    private var _frames : Map = new Map();
 
     public var userableFonts : Array = Font.enumerateFonts(true);
 
@@ -43,6 +45,14 @@ public class DiyDataProxy extends Proxy {
         });
     }
 
+    public function get frames() : Map {
+        return _frames;
+    }
+
+    public function get decorates() : Map {
+        return _decorates;
+    }
+
     public function skipSource(sourceType : int, vo : BitmapDataVo) : void {
         switch (sourceType) {
             case SourceType.BACKGROUND:
@@ -60,7 +70,7 @@ public class DiyDataProxy extends Proxy {
     }
 
     public function initConfigXML(xml : XML) : void {
-        var randomShow : int = 10;
+        var randomShow : int = 5;
         for each (var xx : XML in xml..bg) {
             var type : String = String(xx.@type);
             var url : String = String(xx.@url);
@@ -81,15 +91,81 @@ public class DiyDataProxy extends Proxy {
             }
         }
 
-        MulityLoad.getInstance().load(getShowableBg(), function() : void {
-            setTimeout(sendNotification, 100, DiyDataNotice.BACKGROUND_UPDATE);
-        }, SourceType.BACKGROUND);
 
+        randomShow = 5;
+        for each (xx in xml..dc) {
+            type = String(xx.@type);
+            url = String(xx.@url);
+
+            if (!_decorates.containsKey(type)) {
+                _decorates.put(type, []);
+            }
+            vo = new BitmapDataVo();
+            vo.type = type;
+            vo.url = url;
+            vo.show = false;
+
+            _decorates.get(type).push(vo);
+
+            if (randomShow > 0 && STool.random(1, 2) == 1) {
+                vo.show = true;
+                randomShow--;
+            }
+        }
+
+        randomShow = 5;
+        for each (xx in xml..fm) {
+            type = String(xx.@type);
+            url = String(xx.@url);
+
+            if (!_frames.containsKey(type)) {
+                _frames.put(type, []);
+            }
+            vo = new BitmapDataVo();
+            vo.type = type;
+            vo.url = url;
+            vo.show = false;
+
+            _frames.get(type).push(vo);
+
+            if (randomShow > 0 && STool.random(1, 2) == 1) {
+                vo.show = true;
+                randomShow--;
+            }
+        }
+
+        var rs : Array = getShowableBg();
+        rs = rs.concat(getShowableDecorate());
+        rs = rs.concat(getShowableFrame());
     }
 
     public function getShowableBg() : Array {
         var rs : Array = [];
         for each (var arr : Array in _backgrounds.values) {
+            for each (var vo : BitmapDataVo in arr) {
+                if (vo.show) {
+                    rs.push(vo);
+                }
+            }
+        }
+        return rs;
+    }
+
+    public function getShowableDecorate() : Array {
+        var rs : Array = [];
+        for each (var arr : Array in _decorates.values) {
+            for each (var vo : BitmapDataVo in arr) {
+                if (vo.show) {
+                    rs.push(vo);
+                }
+            }
+        }
+        return rs;
+    }
+
+    public function getShowableFrame() : Array {
+        var rs : Array = [];
+        for each (var arr : Array in _frames.values) {
             for each (var vo : BitmapDataVo in arr) {
                 if (vo.show) {
                     rs.push(vo);
