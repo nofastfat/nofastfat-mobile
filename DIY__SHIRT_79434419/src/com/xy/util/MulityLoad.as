@@ -68,7 +68,10 @@ public class MulityLoad {
     private function next() : void {
         if (_vos.length == 0) {
 			SLoading.getInstance().hide();
-            _call();
+			
+			if(_call != null){
+            	_call();
+			}
 			_call = null;
 			return;
         }
