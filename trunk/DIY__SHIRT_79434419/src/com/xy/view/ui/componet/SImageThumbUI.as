@@ -5,6 +5,7 @@ import com.xy.component.toolTip.ToolTip;
 import com.xy.component.toolTip.enum.ToolTipMode;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.ImageThumbUI;
+import com.xy.util.SMouse;
 import com.xy.util.STool;
 import com.xy.view.ui.events.SImageThumbUIEvent;
 
@@ -56,6 +57,8 @@ public class SImageThumbUI extends ImageThumbUI {
 
         _toggleBtn.addEventListener(ToggleButtonEvent.STATE_CHANGE, __changeHandler);
         closeBtn.addEventListener(MouseEvent.CLICK, __closeHandler);
+		
+		addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
     }
 
     public function setSize(w : int, h : int) : void {
@@ -115,6 +118,10 @@ public class SImageThumbUI extends ImageThumbUI {
     private function __closeHandler(e : MouseEvent) : void {
         dispatchEvent(new SImageThumbUIEvent(SImageThumbUIEvent.STATUS_CHANGE, false));
     }
+	
+	private function __downHandler(e:MouseEvent):void{
+		SMouse.getInstance().setMouseBmd(vo, e.localX, e.localY);
+	}
 
     private function __overHandler(e : MouseEvent) : void {
         closeBtn.visible = bg2.visible = true;

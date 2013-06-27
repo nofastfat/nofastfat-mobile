@@ -8,6 +8,7 @@ import com.xy.util.STool;
 import com.xy.util.Tools;
 
 import flash.display.BitmapData;
+import flash.geom.Rectangle;
 import flash.text.Font;
 import flash.utils.setTimeout;
 
@@ -20,6 +21,9 @@ public class DiyDataProxy extends Proxy {
     private var _backgrounds : Map = new Map();
     private var _decorates : Map = new Map();
     private var _frames : Map = new Map();
+    private var _models : Map = new Map();
+
+    private var _currentSelectModel : BitmapDataVo;
 
     public var userableFonts : Array = Font.enumerateFonts(true);
 
@@ -43,6 +47,10 @@ public class DiyDataProxy extends Proxy {
 
             return 0;
         });
+    }
+
+    public function get currentSelectModel() : BitmapDataVo {
+        return _currentSelectModel;
     }
 
     public function get frames() : Map {
@@ -134,9 +142,36 @@ public class DiyDataProxy extends Proxy {
             }
         }
 
-        var rs : Array = getShowableBg();
-        rs = rs.concat(getShowableDecorate());
-        rs = rs.concat(getShowableFrame());
+        for each (xx in xml..model) {
+            type = String(xx.@type);
+            url = String(xx.@url);
+            var rectStr : String = String(xx.@rect);
+            var rectArr : Array = rectStr.split(",");
+            if (rectArr.length != 4) {
+                rectArr = [0, 0, 0, 0];
+            }
+
+            if (!_models.containsKey(type)) {
+                _models.put(type, []);
+            }
+            vo = new BitmapDataVo();
+            vo.type = type;
+            vo.url = url;
+            vo.show = false;
+            vo.rect = new Rectangle(rectArr[0], rectArr[1], rectArr[2], rectArr[3])
+
+            _models.get(type).push(vo);
+
+            if (_currentSelectModel == null) {
+                _currentSelectModel = vo;
+            }
+			
+			if(_currentSelectModel != null){
+				MulityLoad.getInstance().load([_currentSelectModel], function():void{
+					sendNotification(DiyDataNotice.MODEL_UPDATE);
+				}, -1)
+			}
+        }
     }
 
     public function getShowableBg() : Array {

@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configs>
-	<!-- 图片配置文件 -->
+
+	<!-- 
+		模特配置文件
+		type 类型
+		url  模特图片链接地址
+		rect 自定义的可编辑区域，英文逗号分隔，
+			 格式:"ix,iy,iw,ih"
+			 其中,ix表示可编辑区域相对于模特图片的x坐标
+			 	  ix表示可编辑区域相对于模特图片的y坐标
+			 	  iw表示可编辑区域的宽度
+			 	  ih表示可编辑区域的高度
+	 -->
+	<models>
+		<model type="黑色T恤" url="assets/models/1.png" rect="157,250,127,209" />
+		<model type="黑色T恤" url="assets/models/2.png" rect="157,250,127,209" />
+	</models>
+	
 	
 	<!-- 
 		背景配置文件
 		type 类型
-		url 链接地址
+		url  链接地址
 	 -->
 	<backgrounds>
 		<bg type="卡通背景" url="assets/backgrounds/1.jpg" />
