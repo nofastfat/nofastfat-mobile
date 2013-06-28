@@ -571,7 +571,7 @@ package deng.fzip
 					_content.position = 0;
 					_sizeUncompressed = _content.length;
 					if(HAS_INFLATE) {
-						_content.deflate();
+						_content["deflate"]();
 						_sizeCompressed = _content.length;
 					} else if(HAS_UNCOMPRESS) {
 						_content.compress.apply(_content, ["deflate"]);
@@ -596,7 +596,7 @@ package deng.fzip
 			if(isCompressed && _content.length > 0) {
 				_content.position = 0;
 				if(HAS_INFLATE) {
-					_content.inflate();
+					_content["inflate"]();
 				} else if(HAS_UNCOMPRESS) {
 					_content.uncompress.apply(_content, ["deflate"]);
 				} else {
