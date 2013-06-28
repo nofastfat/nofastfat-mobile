@@ -6,11 +6,12 @@ import flash.display.Loader;
 import flash.display.MovieClip;
 import flash.display.SimpleButton;
 import flash.display.Sprite;
+import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.text.TextField;
 
 public class STool {
-	private static const pattern : RegExp = /^[\u4E00-\u9FA5\uF900-\uFA2D]+$/; //验证中文
+    private static const pattern : RegExp = /^[\u4E00-\u9FA5\uF900-\uFA2D]+$/; //验证中文
 
     /**
      * 清空显示容器中的内容
@@ -348,21 +349,21 @@ public class STool {
         return str.substr(0, index + fixed + 1) + "%";
     }
 
-	/**
-	 * 判断字符中是否含有中文 
-	 * @param str
-	 * @return 
-	 */	
-	public static function strHasChinese(str : String) : Boolean{
-		var len : int = str.length;
-		for(var i : int = 0; i < len;i++){
-			if(pattern.test(str.charAt(i))){
-				return true;
-			}
-		}
-		return false;
-	}
-	
+    /**
+     * 判断字符中是否含有中文
+     * @param str
+     * @return
+     */
+    public static function strHasChinese(str : String) : Boolean {
+        var len : int = str.length;
+        for (var i : int = 0; i < len; i++) {
+            if (pattern.test(str.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * 格式化字符串
      * <pre>
