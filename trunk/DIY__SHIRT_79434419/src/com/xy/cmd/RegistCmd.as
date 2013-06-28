@@ -30,6 +30,9 @@ public class RegistCmd extends AbsCommand {
         facade.registerMediator(new BackgroundMediator(leftMediator.leftCtrl.getContainer(2)));
         facade.registerMediator(new DecorateMediator(leftMediator.leftCtrl.getContainer(3)));
         facade.registerMediator(new FrameMediator(leftMediator.leftCtrl.getContainer(4)));
+		
+		facade.registerCommand(AddImageCmd.NAME, AddImageCmd);
+		facade.registerCommand(AddFontCmd.NAME, AddFontCmd);
 
     }
 }
