@@ -168,30 +168,47 @@ public class ResizeBg extends Sprite {
         _lastAngle = angle;
     }
 
-    private function __down1Handler(e : MouseEvent) : void {
-        Mouse.hide();
-        EnterFrameCall.getStage().addChild(_resize1Icon);
-        _mouseIsDown = true;
 
-        EnterFrameCall.add(resizeWH);
-    }
 
     private function resizeWH() : void {
         var stageX : Number = EnterFrameCall.getStage().mouseX;
         var stageY : Number = EnterFrameCall.getStage().mouseY;
 
-	    scaleTo(stageX, stageY);
+        scaleTo(stageX, stageY);
     }
 
     private function scaleTo(stageX : Number, stageY : Number) : void {
-		_diy.scaleTo(stageX, stageY);
-        resize(_diy.realW, _diy.realH);
+        _diy.scaleTo(stageX, stageY);
+        resize();
+    }
+
+    private function __down1Handler(e : MouseEvent) : void {
+        if (e.currentTarget == _rightBottomMc) {
+            _diy.resetScaleRegisterTo(0);
+        } else {
+            _diy.resetScaleRegisterTo(3);
+        }
+
+        Mouse.hide();
+        EnterFrameCall.getStage().addChild(_resize1Icon);
+        _mouseIsDown = true;
+        _diy.recordStage(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+
+        EnterFrameCall.add(resizeWH);
     }
 
     private function __down2Handler(e : MouseEvent) : void {
+        if (e.currentTarget == _rightTopMc) {
+            _diy.resetScaleRegisterTo(2);
+        } else {
+            _diy.resetScaleRegisterTo(1);
+        }
         Mouse.hide();
         EnterFrameCall.getStage().addChild(_resize2Icon);
         _mouseIsDown = true;
+        _diy.recordStage(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+
+        EnterFrameCall.add(resizeWH);
     }
 
     private function __upHandler(e : MouseEvent) : void {
@@ -207,39 +224,44 @@ public class ResizeBg extends Sprite {
     }
 
     public function showTo(parent : Sprite) : void {
-        var p : Point = new Point(_diy.x, _diy.y);
-        p = _diy.parent.localToGlobal(p);
-        p = parent.globalToLocal(p);
         parent.addChild(this);
 
+
+        resize();
+    }
+
+    private function resize() : void {
+        var p1 : Point = new Point(_diy.childX, _diy.childY);
+        var mat : Matrix = new Matrix()
+        mat.rotate(rotation * Math.PI / 180);
+        p1 = mat.transformPoint(p1);
+
+        var p : Point = new Point(_diy.x + p1.x, _diy.y + p1.y);
+        p = _diy.parent.localToGlobal(p);
+        p = parent.globalToLocal(p);
         this.x = p.x;
         this.y = p.y;
 
-
-        resize(_diy.realW, _diy.realH);
-    }
-
-    private function resize(w : Number, h : Number) : void {
-        _w = w;
-        _h = h;
+        _w = _diy.realW;
+        _h = _diy.realH;
 
         graphics.clear();
 
         graphics.lineStyle(2, 0xE3A96C);
-        graphics.drawRect(-2, -2, w + 4, h + 4);
+        graphics.drawRect(-2, -2, _w + 4, _h + 4);
         graphics.endFill();
-        graphics.moveTo(w / 2, h / 2);
-        graphics.lineTo(w / 2, -50);
+        graphics.moveTo(_w / 2, _h / 2);
+        graphics.lineTo(_w / 2, -50);
 
-        _rotationMc.x = w / 2;
+        _rotationMc.x = _w / 2;
         _rotationMc.y = -50;
 
-        _leftBottomMc.y = h;
+        _leftBottomMc.y = _h;
 
-        _rightTopMc.x = w;
+        _rightTopMc.x = _w;
 
-        _rightBottomMc.x = w;
-        _rightBottomMc.y = h;
+        _rightBottomMc.x = _w;
+        _rightBottomMc.y = _h;
 
         resetRegister();
     }
