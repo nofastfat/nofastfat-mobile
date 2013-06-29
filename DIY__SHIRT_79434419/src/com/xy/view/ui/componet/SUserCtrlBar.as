@@ -43,7 +43,7 @@ public class SUserCtrlBar extends UserCtrlBar {
     }
 
     public function showByDiyBase(diy : DiyBase) : void {
-        var p : Point = new Point(diy.x, diy.y);
+        var p : Point = new Point(diy.x + diy.childX, diy.y + diy.childY);
         p = diy.parent.localToGlobal(p);
         p = _parent.globalToLocal(p);
         _parent.addChild(this);
@@ -55,7 +55,7 @@ public class SUserCtrlBar extends UserCtrlBar {
         }
 
         this.x = p.x;
-        this.y = p.y + diy.height + 10;
+        this.y = p.y + diy.height + 20;
     }
 
     public function hide() : void {
