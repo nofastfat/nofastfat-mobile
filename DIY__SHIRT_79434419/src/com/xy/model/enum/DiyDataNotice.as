@@ -13,6 +13,6 @@ public class DiyDataNotice {
     public static const FRAME_UPDATE : String = NAME + "FRAME_UPDATE";
 
     public static const MODEL_UPDATE : String = NAME + "MODEL_UPDATE";
-	
+
 }
 }

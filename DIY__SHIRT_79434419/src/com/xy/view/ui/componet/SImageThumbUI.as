@@ -53,12 +53,12 @@ public class SImageThumbUI extends ImageThumbUI {
             setChildIndex(bg2, 0);
             addEventListener(MouseEvent.ROLL_OVER, __overHandler);
             addEventListener(MouseEvent.ROLL_OUT, __outHandler);
+		addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
         }
 
         _toggleBtn.addEventListener(ToggleButtonEvent.STATE_CHANGE, __changeHandler);
         closeBtn.addEventListener(MouseEvent.CLICK, __closeHandler);
 		
-		addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
     }
 
     public function setSize(w : int, h : int) : void {

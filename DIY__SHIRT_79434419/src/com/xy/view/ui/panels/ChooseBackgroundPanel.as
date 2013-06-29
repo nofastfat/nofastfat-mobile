@@ -19,7 +19,6 @@ import com.xy.view.ui.events.SImageThumbUIEvent;
 import flash.display.MovieClip;
 import flash.display.Shape;
 import flash.display.Sprite;
-import flash.text.TextField;
 import flash.utils.setTimeout;
 
 public class ChooseBackgroundPanel extends AbsPanel {
@@ -196,7 +195,7 @@ public class ChooseBackgroundPanel extends AbsPanel {
     }
 
     private function __imageThumbHandler(e : SImageThumbUIEvent) : void {
-		dispatchEvent(new ChooseBackgroundPanelEvent(ChooseBackgroundPanelEvent.BACKGROUND_STATUS));
+		dispatchEvent(new ChooseBackgroundPanelEvent(ChooseBackgroundPanelEvent.BACKGROUND_STATUS,(e.currentTarget as SImageThumbUI).vo));
     }
 }
 }

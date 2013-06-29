@@ -4,6 +4,7 @@ import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.util.EnterFrameCall;
+import com.xy.util.PopUpManager;
 import com.xy.util.SMouse;
 import com.xy.view.layer.RightContainer;
 import com.xy.view.ui.SCtrlBar;
@@ -11,6 +12,9 @@ import com.xy.view.ui.componet.DiyBase;
 import com.xy.view.ui.componet.DiyFont;
 import com.xy.view.ui.componet.DiySystemImage;
 import com.xy.view.ui.componet.SUserCtrlBar;
+import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
+import com.xy.view.ui.events.SCtrlBarEvent;
+import com.xy.view.ui.panels.ChooseBackgroundPanel;
 
 import flash.display.Bitmap;
 import flash.display.Shape;
@@ -20,8 +24,6 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.Font;
-import flash.text.TextField;
-import flash.ui.Mouse;
 
 public class RightContainerMediator extends AbsMediator {
     public static const NAME : String = "RightContainerMediator";
@@ -59,9 +61,14 @@ public class RightContainerMediator extends AbsMediator {
 
     private var _lastX : Number;
     private var _lastY : Number;
+    
+    private var _chooseModelPanel : ChooseBackgroundPanel;
 
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
+        
+        _chooseModelPanel = new ChooseBackgroundPanel(720, 520, "选择模板");
+        _chooseModelPanel.addEventListener(ChooseBackgroundPanelEvent.BACKGROUND_STATUS, __modelChangeHandler);
     }
 
     override public function makeNoticeMap() : Map {
@@ -94,6 +101,7 @@ public class RightContainerMediator extends AbsMediator {
         _diyBar = new SUserCtrlBar(ui);
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
+        _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL,__changeModel);
     }
 
     private function resize() : void {
@@ -131,6 +139,10 @@ public class RightContainerMediator extends AbsMediator {
     private function modelUpdate() : void {
         _diyBg.bitmapData = dataProxy.currentSelectModel.bmd;
         resize();
+        
+        if(_chooseModelPanel.stage != null){
+        	_chooseModelPanel.setData(dataProxy.models);
+        }
     }
 
     private function addImage(vo : BitmapDataVo, stageX : Number, stageY : Number) : void {
@@ -166,6 +178,17 @@ public class RightContainerMediator extends AbsMediator {
 
             _currentSelectImage = null;
         }
+    }
+    
+    private function __changeModel(e : SCtrlBarEvent):void{
+    	_chooseModelPanel.setData(dataProxy.models);
+    	
+    	PopUpManager.getInstance().showPanel(_chooseModelPanel);
+    }
+    
+    private function __modelChangeHandler(e : ChooseBackgroundPanelEvent):void{
+    	dataProxy.chooseModel(e.vo);
+    	PopUpManager.getInstance().closeAll();
     }
 
     private function addFont(font : Font, stageX : Number, stageY : Number) : void {

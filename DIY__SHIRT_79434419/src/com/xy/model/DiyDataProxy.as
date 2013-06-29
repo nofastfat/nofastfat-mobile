@@ -5,12 +5,10 @@ import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.util.MulityLoad;
 import com.xy.util.STool;
-import com.xy.util.Tools;
 
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.text.Font;
-import flash.utils.setTimeout;
 
 import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -49,6 +47,13 @@ public class DiyDataProxy extends Proxy {
         });
     }
 
+	public function chooseModel(vo : BitmapDataVo):void{
+		_currentSelectModel.show = false;
+		_currentSelectModel = vo;
+		_currentSelectModel.show = true;
+		sendNotification(DiyDataNotice.MODEL_UPDATE);
+	}
+
     public function get currentSelectModel() : BitmapDataVo {
         return _currentSelectModel;
     }
@@ -59,6 +64,10 @@ public class DiyDataProxy extends Proxy {
 
     public function get decorates() : Map {
         return _decorates;
+    }
+    
+    public function get models() : Map{
+    	return _models;
     }
 
     public function skipSource(sourceType : int, vo : BitmapDataVo) : void {
@@ -164,6 +173,7 @@ public class DiyDataProxy extends Proxy {
 
             if (_currentSelectModel == null) {
                 _currentSelectModel = vo;
+                _currentSelectModel.show = true;
             }
 			
 			if(_currentSelectModel != null){
