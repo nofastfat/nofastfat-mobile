@@ -11,7 +11,6 @@ import flash.events.MouseEvent;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.ui.Mouse;
-import flash.ui.MouseCursor;
 
 public class ResizeBg extends Sprite {
 
@@ -174,30 +173,19 @@ public class ResizeBg extends Sprite {
         EnterFrameCall.getStage().addChild(_resize1Icon);
         _mouseIsDown = true;
 
-        _lastX = EnterFrameCall.getStage().mouseX;
-        _lastY = EnterFrameCall.getStage().mouseY;
         EnterFrameCall.add(resizeWH);
     }
-
-    private var _lastX : Number;
-    private var _lastY : Number;
 
     private function resizeWH() : void {
         var stageX : Number = EnterFrameCall.getStage().mouseX;
         var stageY : Number = EnterFrameCall.getStage().mouseY;
 
-        var offsetW : Number = stageX - _lastX;
-        var offsetH : Number = stageY - _lastY;
-
-        scaleOffset(offsetW, offsetH);
-
-        _lastX = stageX;
-        _lastY = stageY;
+	    scaleTo(stageX, stageY);
     }
 
-    private function scaleOffset(offsetW : Number, offsetH : Number) : void {
-		resize(_w + offsetW, _h+offsetH);
-		_diy.scaleOffset(offsetW, offsetH);
+    private function scaleTo(stageX : Number, stageY : Number) : void {
+		_diy.scaleTo(stageX, stageY);
+        resize(_diy.realW, _diy.realH);
     }
 
     private function __down2Handler(e : MouseEvent) : void {
