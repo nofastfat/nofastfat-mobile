@@ -56,11 +56,6 @@ public class DiyBase extends Sprite {
         mat.rotate(rotation * Math.PI / 180);
         center = mat.transformPoint(center);
 
-        var cx : Point = new Point(childX, childY);
-        cx = mat.transformPoint(cx);
-        //childX = cx.x;
-        //childY = cx.y;
-
         center.offset(x, y);
         _rotate.setRegistrationPoint(center);
     }
