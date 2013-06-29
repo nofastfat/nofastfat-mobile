@@ -75,7 +75,6 @@ public class RightContainerMediator extends AbsMediator {
 
     override public function onRegister() : void {
         _ctrlBar = new SCtrlBar();
-        ui.addChild(_ctrlBar);
         _ctrlBar.x = _ctrlBar.y = 10;
         _mask = new Shape();
         _mask.graphics.beginFill(0xFF0000);
@@ -89,6 +88,7 @@ public class RightContainerMediator extends AbsMediator {
         ui.addChild(_diyBg);
         ui.addChild(_mask);
         ui.addChild(_diyArea);
+        ui.addChild(_ctrlBar);
         _diyArea.mask = _mask;
 
         _diyBar = new SUserCtrlBar(ui);

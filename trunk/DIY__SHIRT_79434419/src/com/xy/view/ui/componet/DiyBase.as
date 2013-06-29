@@ -3,7 +3,6 @@ import com.xy.util.Rotator;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
-import flash.events.Event;
 import flash.geom.Matrix;
 import flash.geom.Point;
 
@@ -56,14 +55,19 @@ public class DiyBase extends Sprite {
         _rotate.setRegistrationPoint(center);
     }
 
-    public function scaleOffset(offsetW : Number, offsetH : Number) : void {
-        width += offsetW;
-        height += offsetH;
-
-        _realW += offsetW;
-        _realH += offsetH;
-    }
-
+	public function scaleTo(w : int, h : int):void{
+		var dis : DisplayObject = getChildAt(0);
+		var p : Point = new Point(w, h);
+		p = globalToLocal(p);
+		
+		dis.width = p.x;
+		dis.height = p.y;
+		
+        _realW = dis.width;
+        _realH = dis.height;
+        
+        resetRegister();
+	}
 
 }
 }
