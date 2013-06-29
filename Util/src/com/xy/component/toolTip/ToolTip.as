@@ -172,8 +172,16 @@ public class ToolTip {
             view.x = _stage.stageWidth - view.width - 10;
             view.y += source.height;
         }
+
         if (view.y + view.height > _stage.stageHeight) {
             view.y = _stage.stageHeight - view.height - 10 - source.height;
+
+        }
+        if (view.x < 0) {
+            view.x = 0;
+        }
+        if (view.y < 0) {
+            view.y = 0;
         }
     }
 
