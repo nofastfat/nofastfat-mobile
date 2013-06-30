@@ -6,14 +6,17 @@ import com.xy.model.vo.BitmapDataVo;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.PopUpManager;
 import com.xy.util.SMouse;
+import com.xy.util.STool;
 import com.xy.view.layer.RightContainer;
 import com.xy.view.ui.SCtrlBar;
+import com.xy.view.ui.componet.BitmapDragTip;
 import com.xy.view.ui.componet.DiyBase;
 import com.xy.view.ui.componet.DiyFont;
 import com.xy.view.ui.componet.DiySystemImage;
 import com.xy.view.ui.componet.SUserCtrlBar;
 import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
 import com.xy.view.ui.events.SCtrlBarEvent;
+import com.xy.view.ui.events.SUserCtrlBarEvent;
 import com.xy.view.ui.panels.ChooseBackgroundPanel;
 
 import flash.display.Bitmap;
@@ -61,12 +64,14 @@ public class RightContainerMediator extends AbsMediator {
 
     private var _lastX : Number;
     private var _lastY : Number;
-    
+
     private var _chooseModelPanel : ChooseBackgroundPanel;
+
+    private var _bmpDragTip : BitmapDragTip;
 
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
-        
+
         _chooseModelPanel = new ChooseBackgroundPanel(720, 520, "选择模板");
         _chooseModelPanel.addEventListener(ChooseBackgroundPanelEvent.BACKGROUND_STATUS, __modelChangeHandler);
     }
@@ -100,8 +105,18 @@ public class RightContainerMediator extends AbsMediator {
 
         _diyBar = new SUserCtrlBar(ui);
 
+        _bmpDragTip = new BitmapDragTip();
+
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
-        _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL,__changeModel);
+        _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL, __changeModel);
+        _diyBar.addEventListener(SUserCtrlBarEvent.LINE_CHANGE, __lineChangeHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.LINE_COLOR, __lineColorHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.ALPHA, __alphaHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.UP_LEVEL, __upLevelHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.DOWN_LEVEL, __downLevelHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.DELETE, __deleteHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.FULL_STATUS, __fullStatusHandler);
+        ui.bg.addEventListener(MouseEvent.CLICK, __unSelectHandler);
     }
 
     private function resize() : void {
@@ -134,23 +149,39 @@ public class RightContainerMediator extends AbsMediator {
             newRect.y = p.y;
             SMouse.getInstance().setHotArea(newRect);
         }
+
+        if (_currentSelectImage != null) {
+            _currentSelectImage.bg.showTo(ui);
+            if (_diyBar != null && _diyBar.stage != null) {
+                _diyBar.showByDiyBase(_currentSelectImage);
+            }
+        }
+
+        if (_bmpDragTip != null) {
+            _bmpDragTip.x = EnterFrameCall.getStage().stageWidth - _bmpDragTip.width - 10;
+            _bmpDragTip.y = _ctrlBar.y + _ctrlBar.height + 10;
+        }
     }
 
     private function modelUpdate() : void {
         _diyBg.bitmapData = dataProxy.currentSelectModel.bmd;
         resize();
-        
-        if(_chooseModelPanel.stage != null){
-        	_chooseModelPanel.setData(dataProxy.models);
+
+        if (_chooseModelPanel.stage != null) {
+            _chooseModelPanel.setData(dataProxy.models);
         }
     }
 
     private function addImage(vo : BitmapDataVo, stageX : Number, stageY : Number) : void {
-        var image : DiySystemImage = new DiySystemImage(vo);
+        var image : DiySystemImage = new DiySystemImage(vo, dataProxy.currentSelectModel.rect, _bmpDragTip);
         addAndRecordDiy(image, stageX, stageY);
     }
 
     private function __downHandler(e : MouseEvent) : void {
+        if (_currentSelectImage != null) {
+            _currentSelectImage.bg.hide();
+        }
+
         var sp : DiyBase = e.currentTarget as DiyBase;
         EnterFrameCall.add(drag);
         _lastX = e.stageX;
@@ -159,6 +190,12 @@ public class RightContainerMediator extends AbsMediator {
         _currentSelectImage = sp;
         _diyBar.hide();
         sp.bg.showTo(ui);
+
+        if (_currentSelectImage.editVo.isFull) {
+            _bmpDragTip.showBy(_currentSelectImage as DiySystemImage);
+        } else {
+            STool.remove(_bmpDragTip);
+        }
     }
 
     private function drag() : void {
@@ -169,27 +206,92 @@ public class RightContainerMediator extends AbsMediator {
 
         _lastX = stageX;
         _lastY = stageY;
+
+        _diyBar.showByDiyBase(_currentSelectImage);
     }
 
     private function __upHandler(e : MouseEvent) : void {
-        if (_currentSelectImage != null) {
-            EnterFrameCall.del(drag);
-            _diyBar.showByDiyBase(_currentSelectImage);
+        EnterFrameCall.del(drag);
+    }
 
-            _currentSelectImage = null;
+    private function __changeModel(e : SCtrlBarEvent) : void {
+        _chooseModelPanel.setData(dataProxy.models);
+
+        PopUpManager.getInstance().showPanel(_chooseModelPanel);
+    }
+
+    private function __modelChangeHandler(e : ChooseBackgroundPanelEvent) : void {
+        dataProxy.chooseModel(e.vo);
+        PopUpManager.getInstance().closeAll();
+    }
+
+    private function __lineChangeHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
         }
+        _currentSelectImage.setLineSickness(e.data);
+
     }
-    
-    private function __changeModel(e : SCtrlBarEvent):void{
-    	_chooseModelPanel.setData(dataProxy.models);
-    	
-    	PopUpManager.getInstance().showPanel(_chooseModelPanel);
+
+    private function __lineColorHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+        _currentSelectImage.setLineColor(e.data);
     }
-    
-    private function __modelChangeHandler(e : ChooseBackgroundPanelEvent):void{
-    	dataProxy.chooseModel(e.vo);
-    	PopUpManager.getInstance().closeAll();
+
+    private function __alphaHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+        _currentSelectImage.setAlpha(e.data);
     }
+
+    private function __upLevelHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+        _currentSelectImage.upLevel();
+    }
+
+    private function __downLevelHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+        _currentSelectImage.downLevel();
+    }
+
+    private function __deleteHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+        _currentSelectImage.deleted();
+        _currentSelectImage = null;
+        __unSelectHandler(null);
+        _diyBar.hide();
+    }
+
+    private function __fullStatusHandler(e : SUserCtrlBarEvent) : void {
+        var status : Boolean = e.data;
+        if (_currentSelectImage == null) {
+            return;
+        }
+        if (_currentSelectImage is DiySystemImage) {
+            (_currentSelectImage as DiySystemImage).setFullStatus(status);
+        }
+
+        _currentSelectImage.bg.showTo(ui);
+    }
+
+    private function __unSelectHandler(e : MouseEvent) : void {
+        if (_currentSelectImage != null) {
+            _currentSelectImage.bg.hide();
+            _diyBar.hide();
+        }
+        _currentSelectImage = null;
+        STool.remove(_bmpDragTip);
+    }
+
 
     private function addFont(font : Font, stageX : Number, stageY : Number) : void {
         var image : DiyFont = new DiyFont(font);
@@ -197,15 +299,19 @@ public class RightContainerMediator extends AbsMediator {
     }
 
     private function addAndRecordDiy(diy : DiyBase, stageX : Number, stageY : Number) : void {
+        __unSelectHandler(null);
+
         var p : Point = new Point(stageX, stageY);
         p = _diyArea.globalToLocal(p);
         diy.x = p.x;
         diy.y = p.y;
         _diyImages.push(diy);
-		_diyArea.addChild(diy);
-		diy.bg.showTo(ui);
+        _diyArea.addChild(diy);
+        diy.bg.showTo(ui);
         diy.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
-		diy.resetRegister();
+        diy.resetRegister();
+        _diyBar.showByDiyBase(diy);
+        _currentSelectImage = diy;
     }
 
     public function get ui() : RightContainer {
