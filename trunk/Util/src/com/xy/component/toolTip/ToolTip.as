@@ -18,6 +18,7 @@ public class ToolTip {
     private static var _stage : Stage;
     private static var _tipMaps : Array = [];
     private static var _simpleTip : SimpleTipContent = new SimpleTipContent();
+    private static var _simpleTipYellow : SimpleTipContentYellow = new SimpleTipContentYellow();
     private static var _lastShowSource : InteractiveObject;
 
     /**
@@ -44,6 +45,18 @@ public class ToolTip {
      */
     public static function setSimpleTip(source : InteractiveObject, htmlText : String, toolTipMode : int = 0) : void {
         setTip(source, _simpleTip, htmlText, toolTipMode);
+    }
+
+    /**
+     * 设置简单的文字TIP
+     * @param source 事件源
+     * @param htmlText 用于显示的htmlText
+     * @param toolTipMode TIP显示的方式
+     * @see ToolTipMode
+     *
+     */
+    public static function setSimpleYellowTip(source : InteractiveObject, htmlText : String, toolTipMode : int = 0) : void {
+        setTip(source, _simpleTipYellow, htmlText, toolTipMode);
     }
 
     /**
