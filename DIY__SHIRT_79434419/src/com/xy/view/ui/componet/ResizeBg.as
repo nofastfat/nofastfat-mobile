@@ -1,4 +1,6 @@
 package com.xy.view.ui.componet {
+import com.xy.model.DiyDataProxy;
+import com.xy.ui.BitmapDragButton;
 import com.xy.ui.Resize1Icon;
 import com.xy.ui.Resize2Icon;
 import com.xy.ui.RotationIcon;
@@ -11,6 +13,9 @@ import flash.events.MouseEvent;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.ui.Mouse;
+import flash.ui.MouseCursor;
+
+import org.puremvc.as3.patterns.facade.Facade;
 
 public class ResizeBg extends Sprite {
 
@@ -31,7 +36,9 @@ public class ResizeBg extends Sprite {
     private var _w : Number;
     private var _h : Number;
 
-    private var _rotate : Rotator
+    private var _rotate : Rotator;
+
+    private var _bmdDragBtn : BitmapDragButton;
 
     public function ResizeBg(diyBase : DiyBase) {
         super();
@@ -49,6 +56,8 @@ public class ResizeBg extends Sprite {
         _resize1Icon = new Resize1Icon();
         _resize2Icon = new Resize2Icon();
         _rotationIcon = new RotationIcon();
+
+        _bmdDragBtn = new BitmapDragButton();
 
         addChild(_rotationMc);
         addChild(_leftTopMc);
@@ -69,7 +78,6 @@ public class ResizeBg extends Sprite {
         _rotationMc.addEventListener(MouseEvent.ROLL_OUT, __outHandler);
         _rotationMc.addEventListener(MouseEvent.MOUSE_DOWN, __rotationDownHandler);
 
-
         _leftTopMc.addEventListener(MouseEvent.ROLL_OVER, __resize1OverHandler);
         _leftTopMc.addEventListener(MouseEvent.ROLL_OUT, __outHandler);
         _rightBottomMc.addEventListener(MouseEvent.ROLL_OVER, __resize1OverHandler);
@@ -83,6 +91,10 @@ public class ResizeBg extends Sprite {
         _rightTopMc.addEventListener(MouseEvent.ROLL_OUT, __outHandler);
         _leftBottomMc.addEventListener(MouseEvent.MOUSE_DOWN, __down2Handler);
         _rightTopMc.addEventListener(MouseEvent.MOUSE_DOWN, __down2Handler);
+
+        _bmdDragBtn.addEventListener(MouseEvent.ROLL_OVER, __overDragHandler);
+        _bmdDragBtn.addEventListener(MouseEvent.ROLL_OUT, __outDragHandler);
+        _bmdDragBtn.addEventListener(MouseEvent.MOUSE_DOWN, __downDragHandler);
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
     }
@@ -211,8 +223,44 @@ public class ResizeBg extends Sprite {
         EnterFrameCall.add(resizeWH);
     }
 
+    private function __overDragHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.HAND;
+    }
+
+    private function __outDragHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.AUTO;
+    }
+
+    private function __downDragHandler(e : MouseEvent) : void {
+        Mouse.cursor = MouseCursor.HAND;
+        _lastX = EnterFrameCall.getStage().mouseX;
+        _lastY = EnterFrameCall.getStage().mouseY;
+
+        EnterFrameCall.add(dragBmd);
+    }
+
+    private var _lastX : Number;
+    private var _lastY : Number;
+
+    private function dragBmd() : void {
+        Mouse.cursor = MouseCursor.HAND;
+        var stageX : Number = EnterFrameCall.getStage().mouseX;
+        var stageY : Number = EnterFrameCall.getStage().mouseY;
+
+        var offsetX : Number = stageX - _lastX;
+        var offsetY : Number = stageY - _lastY;
+
+        if (_diy is DiySystemImage) {
+            (_diy as DiySystemImage).bmdMoveOffset(offsetX, offsetY);
+        }
+
+        _lastX = stageX;
+        _lastY = stageY;
+    }
+
     private function __upHandler(e : MouseEvent) : void {
         Mouse.show();
+        Mouse.cursor = MouseCursor.AUTO;
         STool.remove(_resize1Icon);
         STool.remove(_resize2Icon);
         STool.remove(_rotationIcon);
@@ -220,14 +268,18 @@ public class ResizeBg extends Sprite {
         EnterFrameCall.del(rotate);
         EnterFrameCall.del(move);
         EnterFrameCall.del(resizeWH);
+        EnterFrameCall.del(dragBmd);
         _mouseIsDown = false;
     }
 
     public function showTo(parent : Sprite) : void {
         parent.addChild(this);
 
-
         resize();
+    }
+
+    public function hide() : void {
+        STool.remove(this);
     }
 
     private function resize() : void {
@@ -263,7 +315,16 @@ public class ResizeBg extends Sprite {
         _rightBottomMc.x = _w;
         _rightBottomMc.y = _h;
 
+        _bmdDragBtn.x = _w / 2;
+        _bmdDragBtn.y = _h / 2;
+
         resetRegister();
+
+        if (_diy.editVo.isFull) {
+            addChild(_bmdDragBtn);
+        } else {
+            STool.remove(_bmdDragBtn);
+        }
     }
 
     public function resetRegister() : void {
@@ -305,6 +366,51 @@ public class ResizeBg extends Sprite {
         sp.graphics.endFill();
 
         return sp;
+    }
+
+    public function destroy() : void {
+        EnterFrameCall.del(rotate);
+        EnterFrameCall.del(move);
+        EnterFrameCall.del(resizeWH);
+        EnterFrameCall.del(dragBmd);
+
+        _rotationMc.removeEventListener(MouseEvent.ROLL_OVER, __rotationOverHandler);
+        _rotationMc.removeEventListener(MouseEvent.ROLL_OUT, __outHandler);
+        _rotationMc.removeEventListener(MouseEvent.MOUSE_DOWN, __rotationDownHandler);
+
+
+        _leftTopMc.removeEventListener(MouseEvent.ROLL_OVER, __resize1OverHandler);
+        _leftTopMc.removeEventListener(MouseEvent.ROLL_OUT, __outHandler);
+        _rightBottomMc.removeEventListener(MouseEvent.ROLL_OVER, __resize1OverHandler);
+        _rightBottomMc.removeEventListener(MouseEvent.ROLL_OUT, __outHandler);
+        _leftTopMc.removeEventListener(MouseEvent.MOUSE_DOWN, __down1Handler);
+        _rightBottomMc.removeEventListener(MouseEvent.MOUSE_DOWN, __down1Handler);
+
+        _leftBottomMc.removeEventListener(MouseEvent.ROLL_OVER, __resize2OverHandler);
+        _leftBottomMc.removeEventListener(MouseEvent.ROLL_OUT, __outHandler);
+        _rightTopMc.removeEventListener(MouseEvent.ROLL_OVER, __resize2OverHandler);
+        _rightTopMc.removeEventListener(MouseEvent.ROLL_OUT, __outHandler);
+        _leftBottomMc.removeEventListener(MouseEvent.MOUSE_DOWN, __down2Handler);
+        _rightTopMc.removeEventListener(MouseEvent.MOUSE_DOWN, __down2Handler);
+
+        _bmdDragBtn.removeEventListener(MouseEvent.ROLL_OVER, __overDragHandler);
+        _bmdDragBtn.removeEventListener(MouseEvent.ROLL_OUT, __outDragHandler);
+        _bmdDragBtn.removeEventListener(MouseEvent.MOUSE_DOWN, __downDragHandler);
+        EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_UP, __upHandler);
+
+        STool.clear(this);
+        STool.remove(this);
+        _diy = null;
+        _leftBottomMc = null;
+        _leftTopMc = null;
+        _resize1Icon = null;
+        _resize2Icon = null;
+        _rotationIcon = null;
+        _rightBottomMc = null;
+        _rightTopMc = null;
+        _rotate.destroy();
+        _rotate = null;
+        _rotationMc = null;
     }
 }
 }

@@ -1,26 +1,19 @@
 package {
 import com.xy.DiyFacade;
-import com.xy.component.SButton;
 import com.xy.component.alert.Alert;
+import com.xy.component.menu.Menu;
 import com.xy.component.toolTip.ToolTip;
 import com.xy.ui.AlertBg;
-import com.xy.ui.BlackButton;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.Http;
-import com.xy.util.Purview;
-import com.xy.util.Tools;
 import com.xy.view.layer.LeftContainer;
 import com.xy.view.layer.RightContainer;
 import com.xy.view.ui.componet.SAlertTextUI;
 
-import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.events.Event;
-import flash.text.Font;
-
-import net.hires.debug.Stats;
 
 public class DIY__SHIRT_79434419 extends Sprite {
     private var _facade : DiyFacade;
@@ -39,6 +32,7 @@ public class DIY__SHIRT_79434419 extends Sprite {
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
 
+		Menu.initParent(stage, new Sprite());
         EnterFrameCall.initState(stage);
 		Alert.initParent(stage, new AlertBg(), true);
 

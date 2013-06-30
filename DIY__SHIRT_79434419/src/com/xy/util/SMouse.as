@@ -1,17 +1,13 @@
 package com.xy.util {
 import com.xy.cmd.AddFontCmd;
 import com.xy.cmd.AddImageCmd;
-import com.xy.model.enum.DiyDataNotice;
-import com.xy.model.enum.SourceType;
+import com.xy.model.DiyDataProxy;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.StatusIcon;
 
 import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
-import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.Font;
 import flash.text.TextField;
@@ -85,8 +81,9 @@ public class SMouse {
         _currentVo = vo;
         _bmp.bitmapData = _currentVo.bmd;
 
-        var scaleX : Number = 100 / _currentVo.bmd.width;
-        var scaleY : Number = 100 / _currentVo.bmd.height;
+        var modelRect : Rectangle = dataProxy.currentSelectModel.rect;
+        var scaleX : Number = modelRect.width * 0.8 / _currentVo.bmd.width;
+        var scaleY : Number = modelRect.height * 0.8 / _currentVo.bmd.height;
         var scale : Number;
 
         if (scaleX < 1 || scaleY < 1 || (scaleX > 1 && scaleY > 1)) {
@@ -143,24 +140,30 @@ public class SMouse {
     }
 
     private function __upHandler(e : MouseEvent) : void {
-		
-		EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_UP, __upHandler);
+
+        EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_UP, __upHandler);
         EnterFrameCall.del(move);
         Mouse.cursor = MouseCursor.AUTO;
         STool.remove(_bmp);
         STool.remove(_textShape);
         STool.remove(_statusIcon);
 
-        if (_hotArea != null && _hotArea.contains(e.stageX, e.stageY)) {
+        var stageX : Number = EnterFrameCall.getStage().stage.mouseX;
+        var stageY : Number = EnterFrameCall.getStage().stage.mouseY;
+        if (_hotArea != null && _hotArea.contains(stageX, stageY)) {
             switch (_mouseType) {
                 case 0:
-                    Facade.getInstance().sendNotification(AddImageCmd.NAME, _currentVo);
+                    Facade.getInstance().sendNotification(AddImageCmd.NAME, [_currentVo, _bmp.x, _bmp.y]);
                     break;
                 case 1:
-                    Facade.getInstance().sendNotification(AddFontCmd.NAME, _currentFont);
+                    Facade.getInstance().sendNotification(AddFontCmd.NAME, [_currentFont, _textShape.x, _textShape.y]);
                     break;
             }
         }
+    }
+
+    private function get dataProxy() : DiyDataProxy {
+        return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
     }
 }
 }

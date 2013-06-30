@@ -10,7 +10,7 @@ public class AddImageCmd extends AbsCommand {
 
     /**
      * 添加一个图片到场景上
-     *  vo:BitmapDataVo
+     *  [vo:BitmapDataVo, ix:int, iy:int]
      */
     public static const NAME : String = "AddImageCmd";
 
@@ -19,11 +19,11 @@ public class AddImageCmd extends AbsCommand {
     }
 
     override public function execute(notification : INotification) : void {
-        var vo : BitmapDataVo = notification.getBody() as BitmapDataVo;
-        var stageX : Number = EnterFrameCall.getStage().mouseX;
-        var stageY : Number = EnterFrameCall.getStage().mouseY;
+        var vo : BitmapDataVo = notification.getBody()[0];
+        var ix : Number = notification.getBody()[1];
+        var iy : Number = notification.getBody()[2];
 
-        sendNotification(RightContainerMediator.ADD_IMAGE, [vo, stageX, stageY]);
+        sendNotification(RightContainerMediator.ADD_IMAGE, [vo, ix, iy]);
     }
 }
 }
