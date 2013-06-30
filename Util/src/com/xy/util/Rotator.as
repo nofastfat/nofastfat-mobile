@@ -140,6 +140,10 @@ public class Rotator {
 
         target.rotation = target.rotation + angle;
     }
+    
+    public function destroy():void{
+    	target = null;
+    }
 }
 }
 

@@ -3,13 +3,10 @@ package com.xy.component.menu {
 import com.xy.util.STool;
 
 import flash.display.DisplayObject;
-import flash.display.MovieClip;
-import flash.display.SimpleButton;
+import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
-import flash.display.Stage;
 import flash.events.MouseEvent;
 import flash.geom.Point;
-import flash.utils.setTimeout;
 
 /**
  * 弹出式菜单
@@ -20,7 +17,7 @@ public class Menu {
 	/**
 	 * stage
 	 */
-	private static var _parent : Sprite;
+	private static var _parent : DisplayObjectContainer;
 
 	/**
 	 * 是否已经初始化
@@ -51,7 +48,7 @@ public class Menu {
 	 * 初始化
 	 * @param stage
 	 */
-	public static function initParent(parent : Sprite, bg : DisplayObject = null) : void {
+	public static function initParent(parent : DisplayObjectContainer, bg : DisplayObject = null) : void {
 		if (!_hasInit) {
 			_parent = parent;
 			_hasInit = true;
@@ -67,6 +64,10 @@ public class Menu {
 		_bg = null;
 		_content = null;
 		_hasInit = false;
+	}
+
+	public static function isShowed():Boolean{
+		return _content.stage != null;
 	}
 
 	/**
@@ -158,7 +159,7 @@ public class Menu {
 	}
 
 	private static function __hideHandler(e : MouseEvent = null) : void {
-		STool.safeRemove(_content, _parent);
+		STool.remove(_content);
 
 		STool.clear(_content);
 		for each (var dis : DisplayObject in _contentList) {
