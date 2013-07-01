@@ -1,6 +1,11 @@
 package com.xy.view.ui.componet {
+import com.xy.component.Slider.Slider;
+import com.xy.component.Slider.SliderMode;
+import com.xy.component.Slider.event.SliderEvent;
 import com.xy.component.buttons.ToggleButton;
+import com.xy.component.buttons.ToggleButtonGroup;
 import com.xy.component.buttons.event.ToggleButtonEvent;
+import com.xy.component.buttons.event.ToggleButtonGroupEvent;
 import com.xy.component.colorPicker.ColorPicker;
 import com.xy.component.colorPicker.ColorPikerEvent;
 import com.xy.component.colorPicker.enum.PreSwatches;
@@ -10,17 +15,21 @@ import com.xy.component.toolTip.enum.ToolTipMode;
 import com.xy.model.DiyDataProxy;
 import com.xy.model.enum.DiyImageType;
 import com.xy.model.vo.EditVo;
+import com.xy.ui.ScrollUI;
 import com.xy.ui.UserCtrlBar;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.STool;
 import com.xy.util.Tools;
 import com.xy.view.ui.events.SSelectAlphaUIEvent;
 import com.xy.view.ui.events.SUserCtrlBarEvent;
+import com.xy.view.ui.events.ScrollMenuEvent;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.text.Font;
+import flash.text.TextFormatAlign;
 
 import org.puremvc.as3.patterns.facade.Facade;
 
@@ -34,6 +43,12 @@ public class SUserCtrlBar extends UserCtrlBar {
     private var _fullBtn : ToggleButton;
     private var _selectAlphaUI : SSelectAlphaUI;
     private var _diyImageType : int;
+    private var _fontSizes : Array = ["2", "3", "4", "5", "6", "8", "9", "10", "12", "14", "18", "24", "30", "36", "48", "60", "80", "100"];
+    private var _fontFaces : Array = [];
+    private var _scrollMenu : ScrollMenu;
+
+    private var _boldTog : ToggleButton;
+    private var _alignGroup : ToggleButtonGroup;
 
     public function SUserCtrlBar(parent : Sprite) {
         super();
@@ -61,14 +76,27 @@ public class SUserCtrlBar extends UserCtrlBar {
             fontSizeBtn,
             colorBtn,
             boldMc,
-            //leftAlignMc,
-            //centerAlignMc,
-            //rightAlignMc,
+            leftAlignMc,
+            centerAlignMc,
+            rightAlignMc,
             alphaBtn,
             upLevelBtn,
             downLevelBtn,
             deleteBtn
             ];
+
+        ToolTip.setSimpleYellowTip(editTextBtn, "编辑文字", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        ToolTip.setSimpleYellowTip(leftAlignMc, "文字左对齐", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        ToolTip.setSimpleYellowTip(centerAlignMc, "文字居中对齐", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        ToolTip.setSimpleYellowTip(rightAlignMc, "文字右对齐", ToolTipMode.RIGHT_BOTTOM_CENTER);
+
+        _boldTog = new ToggleButton(boldMc);
+        _alignGroup = new ToggleButtonGroup();
+        _alignGroup.setToggleButtons([
+            new ToggleButton(leftAlignMc),
+            new ToggleButton(centerAlignMc),
+            new ToggleButton(rightAlignMc)
+            ]);
 
         lineBtn.tf.mouseEnabled = false;
         lineBtn.tf.text = "无描边";
@@ -77,6 +105,7 @@ public class SUserCtrlBar extends UserCtrlBar {
         _color.addEventListener(ColorPikerEvent.SELECT_COLOR, __selectColorHandler);
         _fullBtn = new ToggleButton(fullBtn);
         _selectAlphaUI = new SSelectAlphaUI();
+        _scrollMenu = new ScrollMenu();
 
         lineBtn.addEventListener(MouseEvent.CLICK, __showLineHandler);
         colorBtn.addEventListener(MouseEvent.CLICK, __showColorHandler);
@@ -86,8 +115,20 @@ public class SUserCtrlBar extends UserCtrlBar {
         upLevelBtn.addEventListener(MouseEvent.CLICK, __upLevelHandler);
         downLevelBtn.addEventListener(MouseEvent.CLICK, __downLevelHandler);
         deleteBtn.addEventListener(MouseEvent.CLICK, __delHandler);
+        editTextBtn.addEventListener(MouseEvent.CLICK, __showEditPanel);
+        fontSizeBtn.addEventListener(MouseEvent.CLICK, __showSizeMenuHandler);
+        fontFaceBtn.addEventListener(MouseEvent.CLICK, __showFaceMenuHandler);
+        _boldTog.addEventListener(ToggleButtonEvent.STATE_CHANGE, __boldHandler);
+        _alignGroup.addEventListener(ToggleButtonGroupEvent.STATE_CHANGE, __alignHandler);
+
+        _scrollMenu.addEventListener(ScrollMenuEvent.CHOOSE_VALUE, __scrollValueHandler);
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.CLICK, __stageClickHandler);
+
+        _fontFaces = [];
+        for each (var font : Font in dataProxy.userableFonts) {
+            _fontFaces.push(font.fontName);
+        }
     }
 
     private function __showLineHandler(e : MouseEvent) : void {
@@ -194,6 +235,68 @@ public class SUserCtrlBar extends UserCtrlBar {
         dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.DELETE));
     }
 
+    private function __showEditPanel(e : MouseEvent) : void {
+        dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.SHOW_EDIT_TEXT_PANEL));
+    }
+
+    private function __showSizeMenuHandler(e : MouseEvent) : void {
+        if (_scrollMenu.stage != null && _scrollMenu.source == fontSizeBtn) {
+            STool.remove(_scrollMenu);
+            return;
+        }
+
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        _scrollMenu.showBy(_fontSizes, fontSizeBtn, "px", _editVo.fontSize);
+    }
+
+    private function __showFaceMenuHandler(e : MouseEvent) : void {
+        if (_scrollMenu.stage != null && _scrollMenu.source == fontFaceBtn) {
+            STool.remove(_scrollMenu);
+            return;
+        }
+
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        _scrollMenu.showBy(_fontFaces, fontFaceBtn, "", _editVo.fontName);
+    }
+
+    private function __boldHandler(e : ToggleButtonEvent) : void {
+        dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.FONT_BOLD, e.selected));
+		
+		if (_boldTog.selected) {
+			ToolTip.setSimpleYellowTip(boldMc, "文字不加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
+		} else {
+			ToolTip.setSimpleYellowTip(boldMc, "文字加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
+		}
+    }
+
+    private function __alignHandler(e : ToggleButtonGroupEvent) : void {
+        var vl : String;
+        switch (e.selectedIndex) {
+            case 0:
+                vl = TextFormatAlign.LEFT;
+                break;
+            case 1:
+                vl = TextFormatAlign.CENTER;
+                break;
+            case 2:
+                vl = TextFormatAlign.RIGHT;
+                break;
+        }
+        dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.FONT_ALIGN, vl));
+    }
+
+    private function __scrollValueHandler(e : ScrollMenuEvent) : void {
+        if (_scrollMenu.source == fontSizeBtn) {
+            fontSizeBtn.tf.text = e.value + "px";
+            dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.FONT_SIZE, e.value));
+        } else if (_scrollMenu.source == fontFaceBtn) {
+            fontFaceBtn.tf.text = e.value;
+            dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.FONT_FACE, e.value));
+        }
+    }
+
     private function __stageClickHandler(e : MouseEvent) : void {
         if (e.target != _selectAlphaUI && e.target != _selectAlphaUI.sliderBg && e.target != _selectAlphaUI.sliderBtn) {
             STool.remove(_selectAlphaUI);
@@ -201,6 +304,10 @@ public class SUserCtrlBar extends UserCtrlBar {
 
         if (e.target != colorBtn && e.target != _color) {
             STool.remove(_color);
+        }
+
+        if (_scrollMenu.isEventNotIn(e.target)) {
+            STool.remove(_scrollMenu);
         }
     }
 
@@ -214,6 +321,26 @@ public class SUserCtrlBar extends UserCtrlBar {
         }
 
         _fullBtn.selected = _editVo.isFull;
+        fontFaceBtn.tf.text = _editVo.fontName;
+        fontSizeBtn.tf.text = _editVo.fontSize + "px";
+        _boldTog.selected = _editVo.isBold;
+        switch (_editVo.align) {
+            case TextFormatAlign.CENTER:
+                _alignGroup.setSelected(1);
+                break;
+            case TextFormatAlign.RIGHT:
+                _alignGroup.setSelected(2);
+                break;
+            case TextFormatAlign.CENTER:
+                _alignGroup.setSelected(0);
+                break;
+        }
+
+        if (_boldTog.selected) {
+            ToolTip.setSimpleYellowTip(boldMc, "文字不加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        } else {
+            ToolTip.setSimpleYellowTip(boldMc, "文字加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        }
     }
 
     public function showByDiyBase(diy : DiyBase) : void {
@@ -265,7 +392,6 @@ public class SUserCtrlBar extends UserCtrlBar {
     private function setVieMode(arr : Array) : void {
         var len : int = numChildren;
         var hideLineColor : Boolean = false;
-        var hideFull : Boolean = false;
 
         for (var i : int = 0; i < len; i++) {
             var child : DisplayObject = getChildAt(i);
@@ -276,10 +402,6 @@ public class SUserCtrlBar extends UserCtrlBar {
                     child.visible = true;
 
                     if (_diyImageType == DiyImageType.SYSTEM_IMAGE && _editVo.lineSickness == 0 && child == colorBtn) {
-                        hideLineColor = true;
-                        child.visible = false;
-                    }
-                    if (_diyImageType == DiyImageType.SYSTEM_IMAGE && _editVo.lineSickness == 0 && child == fullBtn) {
                         hideLineColor = true;
                         child.visible = false;
                     }

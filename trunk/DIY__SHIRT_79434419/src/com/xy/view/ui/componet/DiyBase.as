@@ -136,7 +136,7 @@ public class DiyBase extends Sprite {
         drawBorder();
     }
 
-    public function setLineColor(color : uint) : void {
+    public function setColor(color : uint) : void {
         _editVo.lineColor = color;
         drawBorder();
     }
