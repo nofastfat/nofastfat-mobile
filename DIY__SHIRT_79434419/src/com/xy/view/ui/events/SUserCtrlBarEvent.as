@@ -25,28 +25,57 @@ public class SUserCtrlBarEvent extends Event {
      * data:number
      */
     public static const ALPHA : String = "ALPHA";
-    
+
     /**
      * 上移一层
      */
     public static const UP_LEVEL : String = "UP_LEVEL";
-    
+
     /**
      * 下移一层
      */
     public static const DOWN_LEVEL : String = "DOWN_LEVEL";
-    
+
     /**
      * 删除
      */
     public static const DELETE : String = "DELETE";
-    
-    
+
+
+	/**
+	 * 显示编辑文字的面板 
+	 */	
+    public static const SHOW_EDIT_TEXT_PANEL : String = "SHOW_EDIT_TEXT_PANEL";
+	
     /**
      * 字体颜色
      * data:uint
-     */    
+     */
     public static const FONT_COLOR : String = "FONT_COLOR";
+	
+	/**
+	 * 字体类型
+	 * data:String 
+	 */	
+	public static const FONT_FACE : String = "FONT_FACE";
+	
+	/**
+	 * 字体大小
+	 * data:String 
+	 */	
+	public static const FONT_SIZE : String = "FONT_SIZE";
+	
+	/**
+	 * 加粗
+	 * data:boolean 
+	 */	
+	public static const FONT_BOLD : String = "FONT_BOLD";
+	
+	/**
+	 * 对齐方式
+	 * data:String 
+	 */	
+	public static const FONT_ALIGN : String = "FONT_ALIGN";
 
     public var data : *;
 

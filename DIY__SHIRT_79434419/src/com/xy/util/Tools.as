@@ -40,6 +40,15 @@ public class Tools {
         return btn;
     }
 
+    public static function makeSizeButton(size : int, w : int) : ButtonList {
+        var btn : ButtonList = new ButtonList();
+        btn.textTf.text = size + "px";
+        btn.textTf.width = btn.btn.width = w;
+
+        btn.textTf.mouseEnabled = false;
+        btn.name = size + "";
+        return btn;
+    }
 
     public static function makeId() : String {
         var id : String = STool.random(101, int.MAX_VALUE) + RandomName.makeName();

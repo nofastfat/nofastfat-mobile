@@ -1,8 +1,12 @@
 package com.xy.view {
+import com.adobe.images.JPGEncoder;
+import com.adobe.images.PNGEncoder;
+import com.xy.component.alert.Alert;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.ui.BuyButton;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.PopUpManager;
 import com.xy.util.SMouse;
@@ -13,20 +17,28 @@ import com.xy.view.ui.componet.BitmapDragTip;
 import com.xy.view.ui.componet.DiyBase;
 import com.xy.view.ui.componet.DiyFont;
 import com.xy.view.ui.componet.DiySystemImage;
+import com.xy.view.ui.componet.SAlertTextUI;
 import com.xy.view.ui.componet.SUserCtrlBar;
 import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
+import com.xy.view.ui.events.EditTextPanelEvent;
 import com.xy.view.ui.events.SCtrlBarEvent;
 import com.xy.view.ui.events.SUserCtrlBarEvent;
 import com.xy.view.ui.panels.ChooseBackgroundPanel;
+import com.xy.view.ui.panels.EditTextPanel;
 
 import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.FileReference;
 import flash.text.Font;
+import flash.utils.ByteArray;
+import flash.utils.getTimer;
 
 public class RightContainerMediator extends AbsMediator {
     public static const NAME : String = "RightContainerMediator";
@@ -69,6 +81,10 @@ public class RightContainerMediator extends AbsMediator {
 
     private var _bmpDragTip : BitmapDragTip;
 
+    private var _editPanel : EditTextPanel;
+
+    private var _buyBtn : BuyButton;
+
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
@@ -97,15 +113,20 @@ public class RightContainerMediator extends AbsMediator {
 
         _diyBg = new Bitmap();
 
+        _buyBtn = new BuyButton();
         ui.addChild(_diyBg);
         ui.addChild(_mask);
         ui.addChild(_diyArea);
         ui.addChild(_ctrlBar);
+        ui.addChild(_buyBtn);
         _diyArea.mask = _mask;
 
         _diyBar = new SUserCtrlBar(ui);
 
         _bmpDragTip = new BitmapDragTip();
+
+        _editPanel = new EditTextPanel();
+
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
         _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL, __changeModel);
@@ -116,6 +137,15 @@ public class RightContainerMediator extends AbsMediator {
         _diyBar.addEventListener(SUserCtrlBarEvent.DOWN_LEVEL, __downLevelHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.DELETE, __deleteHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.FULL_STATUS, __fullStatusHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.SHOW_EDIT_TEXT_PANEL, __showEditTextPanel);
+        _diyBar.addEventListener(SUserCtrlBarEvent.FONT_COLOR, __fontColorHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.FONT_FACE, __fontFaceHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.FONT_SIZE, __fontSizeHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.FONT_BOLD, __fontBoldHandler);
+        _diyBar.addEventListener(SUserCtrlBarEvent.FONT_ALIGN, __fontAlignHandler);
+
+        _buyBtn.addEventListener(MouseEvent.CLICK, __buyHandler);
+        _editPanel.addEventListener(EditTextPanelEvent.EDIT, __editOkHandler);
         ui.bg.addEventListener(MouseEvent.CLICK, __unSelectHandler);
     }
 
@@ -160,6 +190,11 @@ public class RightContainerMediator extends AbsMediator {
         if (_bmpDragTip != null) {
             _bmpDragTip.x = EnterFrameCall.getStage().stageWidth - _bmpDragTip.width - 10;
             _bmpDragTip.y = _ctrlBar.y + _ctrlBar.height + 10;
+        }
+
+        if (_buyBtn != null) {
+            _buyBtn.x = EnterFrameCall.getStage().stageWidth - 200 - _buyBtn.width - 40;
+            _buyBtn.y = EnterFrameCall.getStage().stageHeight - _buyBtn.height - 20;
         }
     }
 
@@ -237,7 +272,7 @@ public class RightContainerMediator extends AbsMediator {
         if (_currentSelectImage == null) {
             return;
         }
-        _currentSelectImage.setLineColor(e.data);
+        _currentSelectImage.setColor(e.data);
     }
 
     private function __alphaHandler(e : SUserCtrlBarEvent) : void {
@@ -283,6 +318,95 @@ public class RightContainerMediator extends AbsMediator {
         _currentSelectImage.bg.showTo(ui);
     }
 
+    private function __showEditTextPanel(e : Event) : void {
+        PopUpManager.getInstance().showPanel(_editPanel);
+
+        if (_currentSelectImage != null) {
+            _editPanel.setText(_currentSelectImage.editVo.text);
+        }
+    }
+
+    private function __fontColorHandler(e : SUserCtrlBarEvent) : void {
+
+        if (_currentSelectImage == null) {
+            return;
+        }
+
+        if (_currentSelectImage is DiyFont) {
+            (_currentSelectImage as DiyFont).setColor(e.data);
+        }
+    }
+
+    private function __fontFaceHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+
+        if (_currentSelectImage is DiyFont) {
+            (_currentSelectImage as DiyFont).setFontFace(e.data);
+        }
+    }
+
+    private function __fontSizeHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+
+        if (_currentSelectImage is DiyFont) {
+            (_currentSelectImage as DiyFont).setFontSize(e.data);
+        }
+    }
+
+    private function __fontBoldHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+
+        if (_currentSelectImage is DiyFont) {
+            (_currentSelectImage as DiyFont).setFontBold(e.data);
+        }
+    }
+
+    private function __fontAlignHandler(e : SUserCtrlBarEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+
+        if (_currentSelectImage is DiyFont) {
+            (_currentSelectImage as DiyFont).setFontAlign(e.data);
+        }
+    }
+
+    private function __buyHandler(e : MouseEvent) : void {
+		if(_diyArea.numChildren == 0){
+			Alert.show(new SAlertTextUI("先DIY一个自己的作品吧"));
+			return;
+		}
+		
+		_diyArea.mask = null;
+		var rect : Rectangle = dataProxy.currentSelectModel.rect;
+		var p : Point = rect.topLeft.clone();
+		
+        var bmd : BitmapData = new BitmapData(rect.width, rect.height, true, 0x00000000);
+		var mat : Matrix = new Matrix();
+		mat.translate(-p.x,-p.y);
+		bmd.draw(_diyArea, mat, null, null, new Rectangle(0, 0, rect.width, rect.height), true);
+		var f : FileReference = new FileReference();
+		var ba : ByteArray = PNGEncoder.encode(bmd);
+		_diyArea.mask = _mask;
+		f.save(ba, "DIY_" + getTimer() + ".png" );
+    }
+
+    private function __editOkHandler(e : EditTextPanelEvent) : void {
+        if (_currentSelectImage == null) {
+            return;
+        }
+
+        if (_currentSelectImage is DiyFont) {
+            (_currentSelectImage as DiyFont).setText(e.text);
+        }
+    }
+
     private function __unSelectHandler(e : MouseEvent) : void {
         if (_currentSelectImage != null) {
             _currentSelectImage.bg.hide();
@@ -296,6 +420,9 @@ public class RightContainerMediator extends AbsMediator {
     private function addFont(font : Font, stageX : Number, stageY : Number) : void {
         var image : DiyFont = new DiyFont(font);
         addAndRecordDiy(image, stageX, stageY);
+
+        image.doubleClickEnabled = true;
+        image.addEventListener(MouseEvent.DOUBLE_CLICK, __showEditTextPanel);
     }
 
     private function addAndRecordDiy(diy : DiyBase, stageX : Number, stageY : Number) : void {
