@@ -1,5 +1,6 @@
 package com.xy.component.menu {
 
+import com.xy.util.EnterFrameCall;
 import com.xy.util.STool;
 
 import flash.display.DisplayObject;
@@ -140,11 +141,11 @@ public class Menu {
 	 */
 	private static function locationCheck(location : Point) : void {
 
-		if (location.x + _content.width + 10 > 960) {
+		if (location.x + _content.width + 10 > EnterFrameCall.getStage().stageWidth) {
 			location.x -= _content.width;
 		}
 
-		if (location.y + _content.height + 10 > 560) {
+		if (location.y + _content.height + 10 > EnterFrameCall.getStage().stageHeight) {
 			location.y -= _content.height;
 		}
 
