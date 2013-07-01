@@ -13,8 +13,8 @@
 			 	  ih表示可编辑区域的高度
 	 -->
 	<models>
-		<model type="黑色T恤" url="assets/models/1.png" rect="157,250,127,209" />
-		<model type="黑色T恤" url="assets/models/2.png" rect="157,250,127,209" />
+		<model type="黑色T恤" url="assets/models/1.png" rect="100,120,270,300" />
+		<model type="黑色T恤" url="assets/models/2.png" rect="100,120,270,300" />
 	</models>
 	
 	
