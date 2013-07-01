@@ -46,7 +46,7 @@ public class DIY__SHIRT_79434419 extends Sprite {
 		
 		SLoading.getInstance().show();
 		
-		new Http("config/config.xml", loadOk);
+		new Http("config/config.xml?r" + Math.random(), loadOk);
     }
 	
 	private function loadOk(data:*):void{
