@@ -107,7 +107,7 @@ package com.xy.view.ui.ctrls {
 			}
 			
 			if (needLoad) {
-				MulityLoad.getInstance().load(loads, loadOk, SourceType.BACKGROUND);
+				MulityLoad.getInstance().load(loads, loadOk, SourceType.FRAME);
 			} else {
 				
 				for (i = 0; i < maxer; i++) {

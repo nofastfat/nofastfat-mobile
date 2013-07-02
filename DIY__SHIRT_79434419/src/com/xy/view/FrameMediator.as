@@ -2,6 +2,7 @@ package com.xy.view {
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
+import com.xy.model.enum.SourceType;
 import com.xy.util.PopUpManager;
 import com.xy.view.ui.ctrls.BackgroundContainer;
 import com.xy.view.ui.ctrls.DecorateContainer;
@@ -38,7 +39,7 @@ public class FrameMediator extends AbsMediator {
 
     private function __showPanelHandler(e : BackgroundContainerEvent) : void {
         if (_panel == null) {
-            _panel = new ChooseBackgroundPanel(720, 520, "添加边框");
+            _panel = new ChooseBackgroundPanel(SourceType.FRAME, 720, 520, "添加边框");
             _panel.addEventListener(ChooseBackgroundPanelEvent.BACKGROUND_STATUS, __bgStatusHandler);
         }
         PopUpManager.getInstance().showPanel(_panel);
