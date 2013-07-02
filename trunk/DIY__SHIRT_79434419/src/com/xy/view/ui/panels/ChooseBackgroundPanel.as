@@ -39,11 +39,13 @@ public class ChooseBackgroundPanel extends AbsPanel {
 
     private var _spage : SPage;
     private var _pageUI : PageUI;
+	private var _sourceType :int;
 
-    public function ChooseBackgroundPanel(w : int = 720, h : int = 520, title : String = "添加背景") {
+    public function ChooseBackgroundPanel(sourceType:int,w : int = 720, h : int = 520, title : String = "添加背景") {
         super(w, h, title);
 
         _btn0 = Tools.makeTabButton("风格");
+		_sourceType = sourceType;
 
         _line = new Shape();
         _line.graphics.lineStyle(1, 0xb8b8b8);
@@ -124,7 +126,7 @@ public class ChooseBackgroundPanel extends AbsPanel {
         }
 
         if (needLoad) {
-			MulityLoad.getInstance().load(loads, loadOk, SourceType.BACKGROUND);
+			MulityLoad.getInstance().load(loads, loadOk, _sourceType);
         } else {
             for (i = 0; i < 12; i++) {
                 var thumb : SImageThumbUI = _imageThumbs[i];

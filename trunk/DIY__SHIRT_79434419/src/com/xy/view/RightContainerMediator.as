@@ -5,6 +5,7 @@ import com.xy.component.alert.Alert;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
+import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.BuyButton;
 import com.xy.util.EnterFrameCall;
@@ -88,7 +89,7 @@ public class RightContainerMediator extends AbsMediator {
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
-        _chooseModelPanel = new ChooseBackgroundPanel(720, 520, "选择模板");
+        _chooseModelPanel = new ChooseBackgroundPanel(SourceType.MODEL, 720, 520, "选择模板");
         _chooseModelPanel.addEventListener(ChooseBackgroundPanelEvent.BACKGROUND_STATUS, __modelChangeHandler);
     }
 
@@ -378,23 +379,23 @@ public class RightContainerMediator extends AbsMediator {
     }
 
     private function __buyHandler(e : MouseEvent) : void {
-		if(_diyArea.numChildren == 0){
-			Alert.show(new SAlertTextUI("先DIY一个自己的作品吧"));
-			return;
-		}
-		
-		_diyArea.mask = null;
-		var rect : Rectangle = dataProxy.currentSelectModel.rect;
-		var p : Point = rect.topLeft.clone();
-		
+        if (_diyArea.numChildren == 0) {
+            Alert.show(new SAlertTextUI("先DIY一个自己的作品吧"));
+            return;
+        }
+
+        _diyArea.mask = null;
+        var rect : Rectangle = dataProxy.currentSelectModel.rect;
+        var p : Point = rect.topLeft.clone();
+
         var bmd : BitmapData = new BitmapData(rect.width, rect.height, true, 0x00000000);
-		var mat : Matrix = new Matrix();
-		mat.translate(-p.x,-p.y);
-		bmd.draw(_diyArea, mat, null, null, new Rectangle(0, 0, rect.width, rect.height), true);
-		var f : FileReference = new FileReference();
-		var ba : ByteArray = PNGEncoder.encode(bmd);
-		_diyArea.mask = _mask;
-		f.save(ba, "DIY_" + getTimer() + ".png" );
+        var mat : Matrix = new Matrix();
+        mat.translate(-p.x, -p.y);
+        bmd.draw(_diyArea, mat, null, null, new Rectangle(0, 0, rect.width, rect.height), true);
+        var f : FileReference = new FileReference();
+        var ba : ByteArray = PNGEncoder.encode(bmd);
+        _diyArea.mask = _mask;
+        f.save(ba, "DIY_" + getTimer() + ".png");
     }
 
     private function __editOkHandler(e : EditTextPanelEvent) : void {

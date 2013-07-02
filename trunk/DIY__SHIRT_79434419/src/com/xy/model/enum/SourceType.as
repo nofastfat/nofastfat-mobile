@@ -4,5 +4,6 @@ public class SourceType {
 	public static const BACKGROUND : int = 0;
 	public static const DECORATE : int = 1;
 	public static const FRAME : int = 2;
+	public static const MODEL : int = 3;
 }
 }

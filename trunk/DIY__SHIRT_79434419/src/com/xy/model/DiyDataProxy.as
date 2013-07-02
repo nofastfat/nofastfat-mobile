@@ -47,12 +47,12 @@ public class DiyDataProxy extends Proxy {
         });
     }
 
-	public function chooseModel(vo : BitmapDataVo):void{
-		_currentSelectModel.show = false;
-		_currentSelectModel = vo;
-		_currentSelectModel.show = true;
-		sendNotification(DiyDataNotice.MODEL_UPDATE);
-	}
+    public function chooseModel(vo : BitmapDataVo) : void {
+        _currentSelectModel.show = false;
+        _currentSelectModel = vo;
+        _currentSelectModel.show = true;
+        sendNotification(DiyDataNotice.MODEL_UPDATE);
+    }
 
     public function get currentSelectModel() : BitmapDataVo {
         return _currentSelectModel;
@@ -65,9 +65,9 @@ public class DiyDataProxy extends Proxy {
     public function get decorates() : Map {
         return _decorates;
     }
-    
-    public function get models() : Map{
-    	return _models;
+
+    public function get models() : Map {
+        return _models;
     }
 
     public function skipSource(sourceType : int, vo : BitmapDataVo) : void {
@@ -78,6 +78,32 @@ public class DiyDataProxy extends Proxy {
                 if (index != -1) {
                     arr.splice(index, 1);
                 }
+                break;
+
+            case SourceType.DECORATE:
+                arr = _decorates.get(vo.type);
+                index = arr.indexOf(vo);
+                if (index != -1) {
+                    arr.splice(index, 1);
+                }
+                break;
+            case SourceType.FRAME:
+				arr = _frames.get(vo.type);
+				index = arr.indexOf(vo);
+				if (index != -1) {
+					arr.splice(index, 1);
+				}
+                break;
+            case SourceType.MODEL:
+				arr = _models.get(vo.type);
+				index = arr.indexOf(vo);
+				if (index != -1) {
+					arr.splice(index, 1);
+				}
+				
+				if(_currentSelectModel.id == vo.id){
+					_currentSelectModel = _models.get(_models.keys[0])[0];
+				}
                 break;
         }
     }
@@ -175,12 +201,12 @@ public class DiyDataProxy extends Proxy {
                 _currentSelectModel = vo;
                 _currentSelectModel.show = true;
             }
-			
-			if(_currentSelectModel != null){
-				MulityLoad.getInstance().load([_currentSelectModel], function():void{
-					sendNotification(DiyDataNotice.MODEL_UPDATE);
-				}, -1)
-			}
+
+            if (_currentSelectModel != null) {
+                MulityLoad.getInstance().load([_currentSelectModel], function() : void {
+                    sendNotification(DiyDataNotice.MODEL_UPDATE);
+                }, SourceType.MODEL);
+            }
         }
     }
 
