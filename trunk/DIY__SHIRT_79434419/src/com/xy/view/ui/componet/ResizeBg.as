@@ -40,6 +40,8 @@ public class ResizeBg extends Sprite {
 
     private var _bmdDragBtn : BitmapDragButton;
 
+    private var _isSimpleShow : Boolean = false;
+
     public function ResizeBg(diyBase : DiyBase) {
         super();
 
@@ -180,6 +182,9 @@ public class ResizeBg extends Sprite {
         _lastAngle = angle;
     }
 
+	public function getRotate():Rotator{
+		return _rotate;
+	}
 
 
     private function resizeWH() : void {
@@ -272,8 +277,11 @@ public class ResizeBg extends Sprite {
         _mouseIsDown = false;
     }
 
-    public function showTo(parent : Sprite) : void {
+    public function showTo(parent : Sprite, simpleShow : Boolean = false) : void {
         parent.addChild(this);
+        _isSimpleShow = simpleShow;
+
+        _leftTopMc.visible = _leftBottomMc.visible = _rightBottomMc.visible = _rightTopMc.visible = _rotationMc.visible = !_isSimpleShow;
 
         resize();
     }
@@ -282,7 +290,7 @@ public class ResizeBg extends Sprite {
         STool.remove(this);
     }
 
-    private function resize() : void {
+    public function resize() : void {
         var p1 : Point = new Point(_diy.childX, _diy.childY);
         var mat : Matrix = new Matrix()
         mat.rotate(rotation * Math.PI / 180);
@@ -302,8 +310,11 @@ public class ResizeBg extends Sprite {
         graphics.lineStyle(2, 0xE3A96C);
         graphics.drawRect(-2, -2, _w + 4, _h + 4);
         graphics.endFill();
-        graphics.moveTo(_w / 2, _h / 2);
-        graphics.lineTo(_w / 2, -50);
+
+        if (!_isSimpleShow) {
+            graphics.moveTo(_w / 2, _h / 2);
+            graphics.lineTo(_w / 2, -50);
+        }
 
         _rotationMc.x = _w / 2;
         _rotationMc.y = -50;

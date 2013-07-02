@@ -2,6 +2,7 @@ package com.xy.model {
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
+import com.xy.model.history.IHistory;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.util.MulityLoad;
 import com.xy.util.STool;
@@ -25,6 +26,9 @@ public class DiyDataProxy extends Proxy {
 
     public var userableFonts : Array = Font.enumerateFonts(true);
 
+    private var _ctrlHistory : Array = [];
+    private var _currentHistoryIndex : int = -1;
+
     public function DiyDataProxy() {
         super(NAME);
 
@@ -45,6 +49,46 @@ public class DiyDataProxy extends Proxy {
 
             return 0;
         });
+    }
+
+    public function recordHistory(history : IHistory) : void {
+        if (_currentHistoryIndex + 1 >= _ctrlHistory.length) {
+            _ctrlHistory.push(history);
+            _currentHistoryIndex++;
+        } else {
+            _currentHistoryIndex++;
+            _ctrlHistory[_currentHistoryIndex] = history;
+            var delArr : Array = _ctrlHistory.splice(_currentHistoryIndex + 1, _ctrlHistory.length);
+            for each (var his : IHistory in delArr) {
+                his.destroy();
+            }
+        }
+
+        sendNotification(DiyDataNotice.HISTORY_UPDATE);
+    }
+
+    public function redo() : void {
+        if (_currentHistoryIndex + 1 >= _ctrlHistory.length) {
+            return;
+        }
+        _currentHistoryIndex++;
+        var his : IHistory = _ctrlHistory[_currentHistoryIndex];
+        his.redo();
+        sendNotification(DiyDataNotice.HISTORY_UPDATE);
+    }
+
+    public function undo() : void {
+        if (_ctrlHistory.length == 0 || _currentHistoryIndex < 0) {
+            return;
+        }
+        var his : IHistory = _ctrlHistory[_currentHistoryIndex];
+        his.undo();
+        _currentHistoryIndex--;
+        sendNotification(DiyDataNotice.HISTORY_UPDATE);
+    }
+
+    public function get ctrlHistory() : Array {
+        return _ctrlHistory;
     }
 
     public function chooseModel(vo : BitmapDataVo) : void {
@@ -88,22 +132,22 @@ public class DiyDataProxy extends Proxy {
                 }
                 break;
             case SourceType.FRAME:
-				arr = _frames.get(vo.type);
-				index = arr.indexOf(vo);
-				if (index != -1) {
-					arr.splice(index, 1);
-				}
+                arr = _frames.get(vo.type);
+                index = arr.indexOf(vo);
+                if (index != -1) {
+                    arr.splice(index, 1);
+                }
                 break;
             case SourceType.MODEL:
-				arr = _models.get(vo.type);
-				index = arr.indexOf(vo);
-				if (index != -1) {
-					arr.splice(index, 1);
-				}
-				
-				if(_currentSelectModel.id == vo.id){
-					_currentSelectModel = _models.get(_models.keys[0])[0];
-				}
+                arr = _models.get(vo.type);
+                index = arr.indexOf(vo);
+                if (index != -1) {
+                    arr.splice(index, 1);
+                }
+
+                if (_currentSelectModel.id == vo.id) {
+                    _currentSelectModel = _models.get(_models.keys[0])[0];
+                }
                 break;
         }
     }
@@ -208,6 +252,7 @@ public class DiyDataProxy extends Proxy {
                 }, SourceType.MODEL);
             }
         }
+        sendNotification(DiyDataNotice.HISTORY_UPDATE);
     }
 
     public function getShowableBg() : Array {
@@ -286,6 +331,44 @@ public class DiyDataProxy extends Proxy {
         }
 
         return arr;
+    }
+
+    public function get currentHistoryIndex() : int {
+        return _currentHistoryIndex;
+    }
+
+    public function getBitmapDataVoById(id : String) : BitmapDataVo {
+        var arr : Array = [_images, _backgrounds, _decorates, _frames];
+        for each (var ar : * in arr) {
+            if (ar is Array) {
+
+                for each (var vo : BitmapDataVo in ar) {
+                    if (vo.id == id) {
+                        return vo;
+                    }
+                }
+            } else {
+                for each (var key : String in ar.keys) {
+                    for each (vo in ar.get(key)) {
+                        if (vo.id == id) {
+                            return vo;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getFontByName(fontName : String) : Font {
+        for each (var font : Font in userableFonts) {
+            if (font.fontName == fontName) {
+                return font;
+            }
+        }
+
+        return null;
     }
 
 }

@@ -14,5 +14,7 @@ public class DiyDataNotice {
 
     public static const MODEL_UPDATE : String = NAME + "MODEL_UPDATE";
 
+    public static const HISTORY_UPDATE : String = NAME + "HISTORY_UPDATE";
+
 }
 }

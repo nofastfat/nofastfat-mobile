@@ -17,8 +17,8 @@ public class DiyFont extends DiyBase {
 
     private var _bmp : Bitmap;
 
-    public function DiyFont(font : Font) {
-        super();
+    public function DiyFont(font : Font, id : String = null) {
+        super(id);
 
         _editVo.text = "双击输入文字";
         _editVo.fontName = font.fontName;
@@ -27,6 +27,7 @@ public class DiyFont extends DiyBase {
         _editVo.tfWidth = 104;
         _editVo.tfHeight = 20;
         _editVo.align = TextFormatAlign.LEFT;
+        _editVo.isImage = false;
 
         _tf = new TextField();
         _tf.multiline = true;
@@ -76,14 +77,13 @@ public class DiyFont extends DiyBase {
         _tf.text = _editVo.text;
         _tf.setTextFormat(new TextFormat(_editVo.fontName, _editVo.fontSize, _editVo.fontColor, _editVo.isBold, null, null, null, null, _editVo.align));
 
-        var bmd : BitmapData = new BitmapData(_editVo.tfWidth, _editVo.tfHeight, true, 0x00000000);
+        var bmd : BitmapData = new BitmapData(Math.max(1, _editVo.tfWidth), Math.max(1, _editVo.tfHeight), true, 0x00000000);
         bmd.draw(_tf);
         _bmp.bitmapData = bmd;
 
-        _realH = _bmp.height;
-        _realW = _bmp.width;
+        _editVo.realH = _bmp.height;
+        _editVo.realW = _bmp.width;
     }
-
 
     override protected function setChild0Size(w : Number, h : Number) : void {
         _editVo.tfWidth = w;
