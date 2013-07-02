@@ -1,5 +1,6 @@
 package com.xy.view.ui.componet {
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.model.vo.EditVo;
 import com.xy.util.STool;
 
 import flash.display.Bitmap;
@@ -14,7 +15,7 @@ public class DiySystemImage extends DiyBase {
     private var _bmp : Bitmap;
     private var _bmdDrag : BitmapDragTip;
 
-    public function DiySystemImage(vo : BitmapDataVo, modelRect : Rectangle, bmdDrag : BitmapDragTip, id:String) {
+    public function DiySystemImage(vo : BitmapDataVo, modelRect : Rectangle, bmdDrag : BitmapDragTip, id : String) {
         super(id);
         this._vo = vo;
         this._bmdDrag = bmdDrag;
@@ -37,30 +38,41 @@ public class DiySystemImage extends DiyBase {
             _bmp.scaleX = _bmp.scaleY = scale;
         }
 
-		_editVo.realW = _bmp.width;
-		_editVo.realH = _bmp.height;
-		_editVo.isImage = true;
-		_editVo.bmdId = _vo.id;
+        _editVo.realW = _bmp.width;
+        _editVo.realH = _bmp.height;
+        _editVo.isImage = true;
+        _editVo.bmdId = _vo.id;
     }
-
-    private var _lastScaleX : Number;
-    private var _lastScaleY : Number;
 
     public function setFullStatus(full : Boolean) : void {
         _editVo.isFull = full;
 
         if (full) {
-            _lastScaleX = _bmp.scaleX;
-            _lastScaleY = _bmp.scaleY;
+            _editVo.lastScaleX = _bmp.scaleX;
+            _editVo.lastScaleY = _bmp.scaleY;
             _bmp.scaleX = _bmp.scaleY = 1;
             _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, realW, realH);
             _bmdDrag.showBy(this);
         } else {
             STool.remove(_bmdDrag);
-            _bmp.scaleX = _lastScaleX;
-            _bmp.scaleY = _lastScaleY;
+            _bmp.scaleX = _editVo.lastScaleX;
+            _bmp.scaleY = _editVo.lastScaleY;
             _bmp.scrollRect = new Rectangle(0, 0, _vo.bmd.width, _vo.bmd.height);
         }
+    }
+
+    override public function setByEditVo(vo : EditVo) : void {
+        super.setByEditVo(vo);
+        if (_editVo.isFull) {
+            _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, realW, realH);
+            if (_bmdDrag.stage != null) {
+                _bmdDrag.resetRect();
+            }
+        }else{
+            setFullStatus(_editVo.isFull);
+        }
+        
+        
     }
 
     public function bmdMoveOffset(ix : Number, iy : Number) : void {
@@ -79,12 +91,12 @@ public class DiySystemImage extends DiyBase {
     override protected function setChild0Size(w : Number, h : Number) : void {
         if (_editVo.isFull) {
             _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, w, h);
-            _lastScaleX = w / _vo.bmd.width;
-            _lastScaleY = h / _vo.bmd.height;
+            _editVo.lastScaleX = w / _vo.bmd.width;
+            _editVo.lastScaleY = h / _vo.bmd.height;
         } else {
             super.setChild0Size(w, h);
-            _lastScaleX = _bmp.scaleX;
-            _lastScaleY = _bmp.scaleY;
+            _editVo.lastScaleX = _bmp.scaleX;
+            _editVo.lastScaleY = _bmp.scaleY;
         }
 
         if (_bmdDrag.stage != null) {
