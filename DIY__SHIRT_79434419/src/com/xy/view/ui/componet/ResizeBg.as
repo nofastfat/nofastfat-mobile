@@ -1,5 +1,7 @@
 package com.xy.view.ui.componet {
 import com.xy.model.DiyDataProxy;
+import com.xy.model.history.ModifyHistory;
+import com.xy.model.vo.EditVo;
 import com.xy.ui.BitmapDragButton;
 import com.xy.ui.Resize1Icon;
 import com.xy.ui.Resize2Icon;
@@ -186,7 +188,6 @@ public class ResizeBg extends Sprite {
 		return _rotate;
 	}
 
-
     private function resizeWH() : void {
         var stageX : Number = EnterFrameCall.getStage().mouseX;
         var stageY : Number = EnterFrameCall.getStage().mouseY;
@@ -199,7 +200,11 @@ public class ResizeBg extends Sprite {
         resize();
     }
 
+	private var _prevVo : EditVo;
+
     private function __down1Handler(e : MouseEvent) : void {
+    	_prevVo = _diy.editVo.clone();
+    	
         if (e.currentTarget == _rightBottomMc) {
             _diy.resetScaleRegisterTo(0);
         } else {
@@ -275,6 +280,13 @@ public class ResizeBg extends Sprite {
         EnterFrameCall.del(resizeWH);
         EnterFrameCall.del(dragBmd);
         _mouseIsDown = false;
+        
+        if(_prevVo != null){
+        	var doneVo :EditVo = _diy.editVo.clone();
+        	dataProxy.recordHistory(new ModifyHistory(_prevVo, doneVo));
+        }
+        
+        _prevVo = null;
     }
 
     public function showTo(parent : Sprite, simpleShow : Boolean = false) : void {
@@ -422,6 +434,10 @@ public class ResizeBg extends Sprite {
         _rotate.destroy();
         _rotate = null;
         _rotationMc = null;
+    }
+    
+    public function get dataProxy():DiyDataProxy{
+    	return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
     }
 }
 }

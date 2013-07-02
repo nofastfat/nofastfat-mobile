@@ -1,9 +1,10 @@
 package com.xy.view.ui.componet {
+import com.xy.model.vo.EditVo;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.text.Font;
 import flash.text.TextField;
-import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
@@ -38,6 +39,11 @@ public class DiyFont extends DiyBase {
 
         updateShow();
     }
+
+	override public function setByEditVo(vo:EditVo):void{
+		super.setByEditVo(vo);
+		updateShow();
+	}
 
     public function setText(txt : String) : void {
         _editVo.text = txt;

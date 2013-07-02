@@ -28,22 +28,29 @@ public class DiyBase extends Sprite {
     }
 
     public function setByEditVo(vo : EditVo) : void {
-        _editVo = vo;
-        var ix : Number = vo.ix;
-        var iy : Number = vo.iy;
+        _editVo.copyFrom(vo);
+        var ix : Number = _editVo.ix;
+        var iy : Number = _editVo.iy;
 
-        _rotate.rotation = vo.rotation;
-        _bg.getRotate().rotation = vo.rotation;
+        _rotate.rotation = _editVo.rotation;
+        _bg.getRotate().rotation = _editVo.rotation;
+        alpha = _editVo.alpha;
 
-        if (vo.lastP != null) {
+        if (_editVo.lastP != null) {
             var dis : DisplayObject = getChildAt(0);
-			dis.x = vo.childX;
-			dis.y = vo.childY;
-			vo.registerIndex = 0;
-            var p : Point = new Point(vo.realW - dis.width, vo.realH - dis.height);
-            p = p.add(vo.lastP);
+			dis.x = _editVo.childX;
+			dis.y = _editVo.childY;
+			_editVo.registerIndex = 0;
+			var tmpPt : Point = _editVo.lastP.clone();
+			var tmpW : Number = _editVo.realW;
+			var tmpH : Number = _editVo.realH;
+            var p : Point = new Point(_editVo.realW - dis.width, _editVo.realH - dis.height);
+            p = p.add(_editVo.lastP);
             p = localToGlobal(p);
             scaleTo(p.x, p.y);
+            _editVo.lastP = tmpPt;
+            _editVo.realW = tmpW;
+            _editVo.realH = tmpH;
         }
 
         x = ix;

@@ -285,6 +285,7 @@ public class RightContainerMediator extends AbsMediator {
 		
 		var diy : DiyBase = getDiyBaseById(editVo.id);
 		diy.setByEditVo(editVo);
+        _diyBar.showByDiyBase(diy);
     }
 
     private function addFont(font : Font, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true) : void {
@@ -316,7 +317,7 @@ public class RightContainerMediator extends AbsMediator {
         _currentSelectImage = diy;
     }
 
-    private function getDiyBaseById(id : String) : DiyBase {
+    public function getDiyBaseById(id : String) : DiyBase {
         for each (var diy : DiyBase in _diyImages) {
             if (diy.id == id) {
                 return diy;
