@@ -14,8 +14,8 @@ public class DiySystemImage extends DiyBase {
     private var _bmp : Bitmap;
     private var _bmdDrag : BitmapDragTip;
 
-    public function DiySystemImage(vo : BitmapDataVo, modelRect : Rectangle, bmdDrag : BitmapDragTip) {
-        super();
+    public function DiySystemImage(vo : BitmapDataVo, modelRect : Rectangle, bmdDrag : BitmapDragTip, id:String) {
+        super(id);
         this._vo = vo;
         this._bmdDrag = bmdDrag;
         _bmp = new Bitmap(vo.bmd);
@@ -37,8 +37,10 @@ public class DiySystemImage extends DiyBase {
             _bmp.scaleX = _bmp.scaleY = scale;
         }
 
-        _realW = _bmp.width;
-        _realH = _bmp.height;
+		_editVo.realW = _bmp.width;
+		_editVo.realH = _bmp.height;
+		_editVo.isImage = true;
+		_editVo.bmdId = _vo.id;
     }
 
     private var _lastScaleX : Number;
@@ -51,7 +53,7 @@ public class DiySystemImage extends DiyBase {
             _lastScaleX = _bmp.scaleX;
             _lastScaleY = _bmp.scaleY;
             _bmp.scaleX = _bmp.scaleY = 1;
-            _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, _realW, _realH);
+            _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, realW, realH);
             _bmdDrag.showBy(this);
         } else {
             STool.remove(_bmdDrag);
@@ -67,7 +69,7 @@ public class DiySystemImage extends DiyBase {
         }
         _editVo.bmdScroll.x += ix;
         _editVo.bmdScroll.y += iy;
-        _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, _realW, _realH);
+        _bmp.scrollRect = new Rectangle(_editVo.bmdScroll.x, _editVo.bmdScroll.y, realW, realH);
 
         if (_bmdDrag.stage != null) {
             _bmdDrag.resetRect();

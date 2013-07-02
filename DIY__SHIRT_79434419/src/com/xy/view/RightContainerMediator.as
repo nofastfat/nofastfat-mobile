@@ -1,12 +1,16 @@
 package com.xy.view {
 import com.adobe.images.JPGEncoder;
 import com.adobe.images.PNGEncoder;
+import com.greensock.easing.Strong;
 import com.xy.component.alert.Alert;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
+import com.xy.model.history.AddHistory;
+import com.xy.model.history.DeleteHistory;
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.model.vo.EditVo;
 import com.xy.ui.BuyButton;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.PopUpManager;
@@ -86,6 +90,9 @@ public class RightContainerMediator extends AbsMediator {
 
     private var _buyBtn : BuyButton;
 
+    private var _selectedImages : Array;
+    private var _selectStartPt : Point;
+
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
@@ -97,6 +104,7 @@ public class RightContainerMediator extends AbsMediator {
         var map : Map = new Map();
         map.put(Event.RESIZE, resize);
         map.put(DiyDataNotice.MODEL_UPDATE, modelUpdate);
+        map.put(DiyDataNotice.HISTORY_UPDATE, historyUpdate);
         map.put(ADD_IMAGE, addImage);
         map.put(ADD_FONT, addFont);
         return map;
@@ -115,11 +123,11 @@ public class RightContainerMediator extends AbsMediator {
         _diyBg = new Bitmap();
 
         _buyBtn = new BuyButton();
-        ui.addChild(_diyBg);
-        ui.addChild(_mask);
-        ui.addChild(_diyArea);
-        ui.addChild(_ctrlBar);
-        ui.addChild(_buyBtn);
+        ui.container.addChild(_diyBg);
+        ui.container.addChild(_mask);
+        ui.container.addChild(_diyArea);
+        ui.container.addChild(_ctrlBar);
+        ui.container.addChild(_buyBtn);
         _diyArea.mask = _mask;
 
         _diyBar = new SUserCtrlBar(ui);
@@ -130,7 +138,12 @@ public class RightContainerMediator extends AbsMediator {
 
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
+
         _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL, __changeModel);
+        _ctrlBar.addEventListener(SCtrlBarEvent.UNDO, __undoHandler);
+        _ctrlBar.addEventListener(SCtrlBarEvent.REDO, __redoHandler);
+
+
         _diyBar.addEventListener(SUserCtrlBarEvent.LINE_CHANGE, __lineChangeHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.LINE_COLOR, __lineColorHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.ALPHA, __alphaHandler);
@@ -147,7 +160,7 @@ public class RightContainerMediator extends AbsMediator {
 
         _buyBtn.addEventListener(MouseEvent.CLICK, __buyHandler);
         _editPanel.addEventListener(EditTextPanelEvent.EDIT, __editOkHandler);
-        ui.bg.addEventListener(MouseEvent.CLICK, __unSelectHandler);
+        ui.bg.addEventListener(MouseEvent.MOUSE_DOWN, __bgDownHandler);
     }
 
     private function resize() : void {
@@ -182,7 +195,7 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage != null) {
-            _currentSelectImage.bg.showTo(ui);
+            _currentSelectImage.bg.showTo(ui.container);
             if (_diyBar != null && _diyBar.stage != null) {
                 _diyBar.showByDiyBase(_currentSelectImage);
             }
@@ -208,29 +221,37 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
-    private function addImage(vo : BitmapDataVo, stageX : Number, stageY : Number) : void {
-        var image : DiySystemImage = new DiySystemImage(vo, dataProxy.currentSelectModel.rect, _bmpDragTip);
-        addAndRecordDiy(image, stageX, stageY);
+    private function historyUpdate() : void {
+        _ctrlBar.updateData(dataProxy.ctrlHistory, dataProxy.currentHistoryIndex);
     }
 
-    private function __downHandler(e : MouseEvent) : void {
-        if (_currentSelectImage != null) {
-            _currentSelectImage.bg.hide();
+    private function addImage(vo : BitmapDataVo, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true) : void {
+        var image : DiySystemImage = new DiySystemImage(vo, dataProxy.currentSelectModel.rect, _bmpDragTip, id);
+        addAndRecordDiy(image, stageX, stageY);
+
+        if (needRecord) {
+            dataProxy.recordHistory(new AddHistory(addImage, deleteDiyById, vo, stageX, stageY, image.id));
+        }
+    }
+
+    private function deleteDiyById(id : String) : void {
+        var diyTmp : DiyBase = getDiyBaseById(id);
+
+        var index : int = _diyImages.indexOf(diyTmp);
+        if (index == -1) {
+            return;
         }
 
-        var sp : DiyBase = e.currentTarget as DiyBase;
-        EnterFrameCall.add(drag);
-        _lastX = e.stageX;
-        _lastY = e.stageY;
+        _diyImages.splice(index, 1);
+        diyTmp.deleted();
 
-        _currentSelectImage = sp;
-        _diyBar.hide();
-        sp.bg.showTo(ui);
+        diyTmp.removeEventListener(MouseEvent.DOUBLE_CLICK, __showEditTextPanel);
+        diyTmp.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
 
-        if (_currentSelectImage.editVo.isFull) {
-            _bmpDragTip.showBy(_currentSelectImage as DiySystemImage);
-        } else {
-            STool.remove(_bmpDragTip);
+        if (diyTmp == _currentSelectImage) {
+            _currentSelectImage = null;
+            __unSelectHandler(null);
+            _diyBar.hide();
         }
     }
 
@@ -238,22 +259,107 @@ public class RightContainerMediator extends AbsMediator {
         var stageX : Number = EnterFrameCall.getStage().mouseX;
         var stageY : Number = EnterFrameCall.getStage().mouseY;
 
-        _currentSelectImage.moveOffset(stageX - _lastX, stageY - _lastY);
+        if (_selectedImages == null || _selectedImages.length == 0) {
+            _currentSelectImage.moveOffset(stageX - _lastX, stageY - _lastY);
+
+            _diyBar.showByDiyBase(_currentSelectImage);
+        } else {
+            for each (var diy : DiyBase in _selectedImages) {
+                diy.moveOffset(stageX - _lastX, stageY - _lastY);
+            }
+        }
 
         _lastX = stageX;
         _lastY = stageY;
 
-        _diyBar.showByDiyBase(_currentSelectImage);
     }
 
-    private function __upHandler(e : MouseEvent) : void {
-        EnterFrameCall.del(drag);
+    private function addByEditVo(editVo : EditVo) : void {
+        var p : Point = new Point(editVo.ix, editVo.iy);
+        p = _diyArea.localToGlobal(p);
+        if (editVo.isImage) {
+            addImage(dataProxy.getBitmapDataVoById(editVo.bmdId), p.x, p.y, editVo.id, false);
+        } else {
+            addFont(dataProxy.getFontByName(editVo.fontName), p.x, p.y, editVo.id, false);
+        }
+		
+		var diy : DiyBase = getDiyBaseById(editVo.id);
+		diy.setByEditVo(editVo);
+    }
+
+    private function addFont(font : Font, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true) : void {
+        var image : DiyFont = new DiyFont(font, id);
+        addAndRecordDiy(image, stageX, stageY);
+
+        image.doubleClickEnabled = true;
+        image.addEventListener(MouseEvent.DOUBLE_CLICK, __showEditTextPanel);
+
+        if (needRecord) {
+            dataProxy.recordHistory(new AddHistory(addFont, deleteDiyById, font, stageX, stageY, image.id));
+        }
+    }
+
+    private function addAndRecordDiy(diy : DiyBase, stageX : Number, stageY : Number) : void {
+        __unSelectHandler(null);
+
+        var p : Point = new Point(stageX, stageY);
+        p = _diyArea.globalToLocal(p);
+        diy.x = p.x;
+        diy.y = p.y;
+		
+        _diyImages.push(diy);
+        _diyArea.addChild(diy);
+        diy.bg.showTo(ui.container);
+        diy.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+        diy.resetRegister();
+        _diyBar.showByDiyBase(diy);
+        _currentSelectImage = diy;
+    }
+
+    private function getDiyBaseById(id : String) : DiyBase {
+        for each (var diy : DiyBase in _diyImages) {
+            if (diy.id == id) {
+                return diy;
+            }
+        }
+
+        return null;
+    }
+
+    private function __downHandler(e : MouseEvent) : void {
+        if (_selectedImages == null || _selectedImages.length == 0) {
+            __unSelectHandler();
+
+            var sp : DiyBase = e.currentTarget as DiyBase;
+
+            _currentSelectImage = sp;
+            _diyBar.hide();
+            sp.bg.showTo(ui.container);
+
+            if (_currentSelectImage.editVo.isFull) {
+                _bmpDragTip.showBy(_currentSelectImage as DiySystemImage);
+            } else {
+                STool.remove(_bmpDragTip);
+            }
+        }
+
+        EnterFrameCall.add(drag);
+        _lastX = e.stageX;
+        _lastY = e.stageY;
     }
 
     private function __changeModel(e : SCtrlBarEvent) : void {
         _chooseModelPanel.setData(dataProxy.models);
 
         PopUpManager.getInstance().showPanel(_chooseModelPanel);
+    }
+
+    private function __undoHandler(e : SCtrlBarEvent) : void {
+        dataProxy.undo();
+    }
+
+    private function __redoHandler(e : SCtrlBarEvent) : void {
+        dataProxy.redo();
     }
 
     private function __modelChangeHandler(e : ChooseBackgroundPanelEvent) : void {
@@ -301,10 +407,9 @@ public class RightContainerMediator extends AbsMediator {
         if (_currentSelectImage == null) {
             return;
         }
-        _currentSelectImage.deleted();
-        _currentSelectImage = null;
-        __unSelectHandler(null);
-        _diyBar.hide();
+
+        dataProxy.recordHistory(new DeleteHistory(deleteDiyById, addByEditVo, _currentSelectImage.editVo.clone()));
+        deleteDiyById(_currentSelectImage.id);
     }
 
     private function __fullStatusHandler(e : SUserCtrlBarEvent) : void {
@@ -316,7 +421,7 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiySystemImage).setFullStatus(status);
         }
 
-        _currentSelectImage.bg.showTo(ui);
+        _currentSelectImage.bg.showTo(ui.container);
     }
 
     private function __showEditTextPanel(e : Event) : void {
@@ -408,38 +513,57 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
-    private function __unSelectHandler(e : MouseEvent) : void {
+    private function __bgDownHandler(e : MouseEvent) : void {
+        __unSelectHandler();
+        _selectStartPt = new Point(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+        _selectStartPt = ui.globalToLocal(_selectStartPt);
+
+        EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_MOVE, __updateSelectedHandler);
+    }
+
+    private function __upHandler(e : MouseEvent) : void {
+        EnterFrameCall.del(drag);
+        EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_MOVE, __updateSelectedHandler);
+
+        ui.selectUI.graphics.clear();
+    }
+
+    private function __unSelectHandler(e : MouseEvent = null) : void {
         if (_currentSelectImage != null) {
-            _currentSelectImage.bg.hide();
             _diyBar.hide();
         }
+
+        for each (var diy : DiyBase in _diyImages) {
+            diy.bg.hide();
+        }
         _currentSelectImage = null;
+        _selectedImages = null;
         STool.remove(_bmpDragTip);
     }
 
+    private function __updateSelectedHandler(e : MouseEvent) : void {
+        var nowPt : Point = new Point(EnterFrameCall.getStage().mouseX, EnterFrameCall.getStage().mouseY);
+        nowPt = ui.globalToLocal(nowPt);
+        ui.selectUI.graphics.clear();
+        ui.selectUI.graphics.lineStyle(1, 0xb8b8b8, 0.9);
+        ui.selectUI.graphics.beginFill(0xCCCCCC, 0.3);
 
-    private function addFont(font : Font, stageX : Number, stageY : Number) : void {
-        var image : DiyFont = new DiyFont(font);
-        addAndRecordDiy(image, stageX, stageY);
+        var startX : Number = Math.min(nowPt.x, _selectStartPt.x);
+        var startY : Number = Math.min(nowPt.y, _selectStartPt.y);
 
-        image.doubleClickEnabled = true;
-        image.addEventListener(MouseEvent.DOUBLE_CLICK, __showEditTextPanel);
-    }
+        ui.selectUI.graphics.drawRect(startX, startY, Math.abs(nowPt.x - _selectStartPt.x), Math.abs(nowPt.y - _selectStartPt.y));
+        ui.selectUI.graphics.endFill();
 
-    private function addAndRecordDiy(diy : DiyBase, stageX : Number, stageY : Number) : void {
-        __unSelectHandler(null);
+        _selectedImages = [];
 
-        var p : Point = new Point(stageX, stageY);
-        p = _diyArea.globalToLocal(p);
-        diy.x = p.x;
-        diy.y = p.y;
-        _diyImages.push(diy);
-        _diyArea.addChild(diy);
-        diy.bg.showTo(ui);
-        diy.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
-        diy.resetRegister();
-        _diyBar.showByDiyBase(diy);
-        _currentSelectImage = diy;
+        for each (var diy : DiyBase in _diyImages) {
+            if (ui.selectUI.hitTestObject(diy.getChildAt(0))) {
+                diy.bg.showTo(ui.container, true);
+                _selectedImages.push(diy);
+            } else {
+                diy.bg.hide();
+            }
+        }
     }
 
     public function get ui() : RightContainer {

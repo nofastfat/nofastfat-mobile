@@ -2,6 +2,7 @@ package com.xy.view.ui.componet {
 import com.xy.model.vo.EditVo;
 import com.xy.util.Rotator;
 import com.xy.util.STool;
+import com.xy.util.Tools;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
@@ -13,38 +14,37 @@ public class DiyBase extends Sprite {
 
     private var _bg : ResizeBg;
 
-    protected var _realW : Number;
-    protected var _realH : Number;
-
-    protected var _registerIndex : int = 0;
-
-    public var childX : Number = 0;
-    public var childY : Number = 0;
-
     protected var _editVo : EditVo;
 
-    public function DiyBase() {
+    public function DiyBase(id : String = null) {
         super();
+        if (id == null) {
+            id = Tools.makeId();
+        }
 
         _bg = new ResizeBg(this);
         _rotate = new Rotator(this);
-        _editVo = new EditVo();
+        _editVo = new EditVo(id);
     }
 
-    public function get realH() : Number {
-        return _realH;
-    }
+    public function setByEditVo(vo : EditVo) : void {
+        _editVo = vo;
+		var ix : Number = vo.ix;
+		var iy : Number = vo.iy;
+		
+		_rotate.rotation = vo.rotation;
+		_bg.getRotate().rotation = vo.rotation;
+		
+		if(vo.lastP != null){
+			//scaleTo(vo.realW, vo.realH);
+		}
+		
+		x = ix;
+		y = iy;
+		_bg.resize();
+		
+		resetRegister();
 
-    public function get realW() : Number {
-        return _realW;
-    }
-
-    public function get rotate() : Rotator {
-        return _rotate;
-    }
-
-    public function get bg() : ResizeBg {
-        return _bg;
     }
 
     public function moveOffset(ix : Number, iy : Number) : void {
@@ -57,7 +57,7 @@ public class DiyBase extends Sprite {
 
     public function resetRegister() : void {
         var mat : Matrix = new Matrix();
-        var center : Point = new Point(_realW / 2 + childX, _realH / 2 + childY);
+        var center : Point = new Point(realW / 2 + childX, realH / 2 + childY);
         mat.rotate(rotation * Math.PI / 180);
         center = mat.transformPoint(center);
 
@@ -65,12 +65,10 @@ public class DiyBase extends Sprite {
         _rotate.setRegistrationPoint(center);
     }
 
-    private var _lastP : Point;
-
     public function recordStage(w : int, h : int) : void {
         var dis : DisplayObject = getChildAt(0);
-        _lastP = new Point(w, h);
-        _lastP = globalToLocal(_lastP);
+        _editVo.lastP = new Point(w, h);
+		_editVo.lastP = globalToLocal(_editVo.lastP);
     }
 
     public function scaleTo(w : int, h : int) : void {
@@ -78,12 +76,12 @@ public class DiyBase extends Sprite {
         var p : Point = new Point(w, h);
         p = globalToLocal(p);
         var record : Point = p.clone();
-        p = p.subtract(_lastP);
-        _lastP = record;
+        p = p.subtract(_editVo.lastP);
+        _editVo.lastP = record;
 
         var nowX : int = dis.x;
         var nowY : int = dis.y;
-        switch (_registerIndex) {
+        switch (_editVo.registerIndex) {
             case 0:
                 p.x += dis.width;
                 p.y += dis.height;
@@ -114,21 +112,21 @@ public class DiyBase extends Sprite {
         childX = dis.x;
         childY = dis.y;
 
-        _realW = dis.width;
-        _realH = dis.height;
+        _editVo.realW = dis.width;
+        _editVo.realH = dis.height;
 
         resetRegister();
         drawBorder();
     }
-    
-    protected function setChild0Size(w : Number, h : Number):void{
+
+    protected function setChild0Size(w : Number, h : Number) : void {
         var dis : DisplayObject = getChildAt(0);
         dis.width = w;
         dis.height = h;
     }
 
     public function resetScaleRegisterTo(index : int) : void {
-        _registerIndex = index;
+        _editVo.registerIndex = index;
     }
 
     public function setLineSickness(sickness : int) : void {
@@ -147,50 +145,101 @@ public class DiyBase extends Sprite {
     }
 
     public function upLevel() : void {
-    	if(parent != null){
-    		var childIndex : int = parent.getChildIndex(this);
-    		childIndex++;
-    		if(childIndex < parent.numChildren){
-    			parent.setChildIndex(this, childIndex);
-    		}
-    	}
+        if (parent != null) {
+            var childIndex : int = parent.getChildIndex(this);
+            childIndex++;
+            if (childIndex < parent.numChildren) {
+                parent.setChildIndex(this, childIndex);
+            }
+        }
     }
 
     public function downLevel() : void {
-    	if(parent != null){
-    		var childIndex : int = parent.getChildIndex(this);
-    		childIndex--;
-    		if(childIndex >= 0){
-    			parent.setChildIndex(this, childIndex);
-    		}
-    	}
+        if (parent != null) {
+            var childIndex : int = parent.getChildIndex(this);
+            childIndex--;
+            if (childIndex >= 0) {
+                parent.setChildIndex(this, childIndex);
+            }
+        }
     }
 
     public function deleted() : void {
-    	destroy();
+        destroy();
     }
-    
-	public function destroy():void{
-		_bg.destroy();
-		_bg = null;
-		
-		STool.clear(this);
-		STool.remove(this);
-		_editVo = null;
-	}
+
+    public function destroy() : void {
+        _bg.destroy();
+        _bg = null;
+
+        STool.clear(this);
+        STool.remove(this);
+        _editVo = null;
+    }
 
     private function drawBorder() : void {
         graphics.clear();
 
         if (_editVo.lineSickness != 0) {
             graphics.lineStyle(_editVo.lineSickness, _editVo.lineColor);
-            graphics.drawRect(-_editVo.lineSickness / 2 + childX, -_editVo.lineSickness / 2 + childY, _realW + _editVo.lineSickness, _realH + _editVo.lineSickness);
+            graphics.drawRect(-_editVo.lineSickness / 2 + childX, -_editVo.lineSickness / 2 + childY, realW + _editVo.lineSickness, realH + _editVo.lineSickness);
         }
     }
 
-
     public function get editVo() : EditVo {
         return _editVo;
+    }
+
+    public function get id() : String {
+        return _editVo.id;
+    }
+
+    public function get childX() : Number {
+        return _editVo.childX;
+    }
+
+    public function get childY() : Number {
+        return _editVo.childY;
+    }
+
+    public function set childX(value : Number) : void {
+        _editVo.childX = value;
+    }
+
+    public function set childY(value : Number) : void {
+        _editVo.childY = value;
+    }
+
+    public function get realH() : Number {
+        return _editVo.realH;
+    }
+
+    public function get realW() : Number {
+        return _editVo.realW;
+    }
+
+    public function get rotate() : Rotator {
+        return _rotate;
+    }
+
+    public function get bg() : ResizeBg {
+        return _bg;
+    }
+
+    override public function set rotation(value : Number) : void {
+        super.rotation = value;
+
+        _editVo.rotation = value;
+    }
+
+    override public function set x(value : Number) : void {
+        super.x = value;
+        _editVo.ix = x;
+    }
+
+    override public function set y(value : Number) : void {
+        super.y = value;
+        _editVo.iy = y;
     }
 
 }
