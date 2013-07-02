@@ -29,21 +29,28 @@ public class DiyBase extends Sprite {
 
     public function setByEditVo(vo : EditVo) : void {
         _editVo = vo;
-		var ix : Number = vo.ix;
-		var iy : Number = vo.iy;
-		
-		_rotate.rotation = vo.rotation;
-		_bg.getRotate().rotation = vo.rotation;
-		
-		if(vo.lastP != null){
-			//scaleTo(vo.realW, vo.realH);
-		}
-		
-		x = ix;
-		y = iy;
-		_bg.resize();
-		
-		resetRegister();
+        var ix : Number = vo.ix;
+        var iy : Number = vo.iy;
+
+        _rotate.rotation = vo.rotation;
+        _bg.getRotate().rotation = vo.rotation;
+
+        if (vo.lastP != null) {
+            var dis : DisplayObject = getChildAt(0);
+			dis.x = vo.childX;
+			dis.y = vo.childY;
+			vo.registerIndex = 0;
+            var p : Point = new Point(vo.realW - dis.width, vo.realH - dis.height);
+            p = p.add(vo.lastP);
+            p = localToGlobal(p);
+            scaleTo(p.x, p.y);
+        }
+
+        x = ix;
+        y = iy;
+        _bg.resize();
+
+        resetRegister();
 
     }
 
@@ -68,7 +75,7 @@ public class DiyBase extends Sprite {
     public function recordStage(w : int, h : int) : void {
         var dis : DisplayObject = getChildAt(0);
         _editVo.lastP = new Point(w, h);
-		_editVo.lastP = globalToLocal(_editVo.lastP);
+        _editVo.lastP = globalToLocal(_editVo.lastP);
     }
 
     public function scaleTo(w : int, h : int) : void {
