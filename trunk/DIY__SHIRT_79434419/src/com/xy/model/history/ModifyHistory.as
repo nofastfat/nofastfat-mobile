@@ -1,4 +1,5 @@
 package com.xy.model.history {
+import com.adobe.serialization.json.JSON;
 import com.xy.model.vo.EditVo;
 import com.xy.view.RightContainerMediator;
 
@@ -11,14 +12,19 @@ public class ModifyHistory implements IHistory {
     public function ModifyHistory(prevVo : EditVo, doneVo : EditVo) {
     	_prevVo = prevVo;
     	_doneVo = doneVo;
+//		
+//		trace(JSON.encode(_prevVo));
+//		trace(JSON.encode(_doneVo));
     }
 
     public function redo() : void {
-    	mediator.getDiyBaseById(_prevVo.id).setByEditVo(_prevVo);
+    	mediator.getDiyBaseById(_prevVo.id).setByEditVo(_doneVo);
+		mediator.updateDiyBar();
     }
 
     public function undo() : void {
-    	mediator.getDiyBaseById(_doneVo.id).setByEditVo(_doneVo);
+    	mediator.getDiyBaseById(_doneVo.id).setByEditVo(_prevVo);
+		mediator.updateDiyBar();
     }
 
     public function destroy() : void {

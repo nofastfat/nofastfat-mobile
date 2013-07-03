@@ -91,11 +91,14 @@ public class DiyDataProxy extends Proxy {
         return _ctrlHistory;
     }
 
-    public function chooseModel(vo : BitmapDataVo) : void {
+    public function chooseModel(vo : BitmapDataVo, record : Boolean = true) : void {
+		if(vo == null){
+			return;
+		}
         _currentSelectModel.show = false;
         _currentSelectModel = vo;
         _currentSelectModel.show = true;
-        sendNotification(DiyDataNotice.MODEL_UPDATE);
+        sendNotification(DiyDataNotice.MODEL_UPDATE, record);
     }
 
     public function get currentSelectModel() : BitmapDataVo {
@@ -248,7 +251,7 @@ public class DiyDataProxy extends Proxy {
 
             if (_currentSelectModel != null) {
                 MulityLoad.getInstance().load([_currentSelectModel], function() : void {
-                    sendNotification(DiyDataNotice.MODEL_UPDATE);
+                    sendNotification(DiyDataNotice.MODEL_UPDATE, false);
                 }, SourceType.MODEL);
             }
         }
@@ -335,6 +338,18 @@ public class DiyDataProxy extends Proxy {
 
     public function get currentHistoryIndex() : int {
         return _currentHistoryIndex;
+    }
+
+    public function getModelById(id : String) : BitmapDataVo {
+        for each (var key : String in _models.keys) {
+            for each (var vo : BitmapDataVo in _models.get(key)) {
+                if (vo.id == id) {
+                    return vo;
+                }
+            }
+        }
+		
+		return null;
     }
 
     public function getBitmapDataVoById(id : String) : BitmapDataVo {

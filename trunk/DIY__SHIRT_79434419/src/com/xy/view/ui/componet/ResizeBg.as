@@ -156,6 +156,7 @@ public class ResizeBg extends Sprite {
     private var _lastAngle : Number;
 
     private function __rotationDownHandler(e : MouseEvent) : void {
+        _prevVo = _diy.editVo.clone();
         Mouse.hide();
         EnterFrameCall.getStage().addChild(_rotationIcon);
         _mouseIsDown = true;
@@ -184,9 +185,9 @@ public class ResizeBg extends Sprite {
         _lastAngle = angle;
     }
 
-	public function getRotate():Rotator{
-		return _rotate;
-	}
+    public function getRotate() : Rotator {
+        return _rotate;
+    }
 
     private function resizeWH() : void {
         var stageX : Number = EnterFrameCall.getStage().mouseX;
@@ -200,11 +201,11 @@ public class ResizeBg extends Sprite {
         resize();
     }
 
-	private var _prevVo : EditVo;
+    private var _prevVo : EditVo;
 
     private function __down1Handler(e : MouseEvent) : void {
-    	_prevVo = _diy.editVo.clone();
-    	
+        _prevVo = _diy.editVo.clone();
+
         if (e.currentTarget == _rightBottomMc) {
             _diy.resetScaleRegisterTo(0);
         } else {
@@ -220,6 +221,7 @@ public class ResizeBg extends Sprite {
     }
 
     private function __down2Handler(e : MouseEvent) : void {
+        _prevVo = _diy.editVo.clone();
         if (e.currentTarget == _rightTopMc) {
             _diy.resetScaleRegisterTo(2);
         } else {
@@ -242,6 +244,7 @@ public class ResizeBg extends Sprite {
     }
 
     private function __downDragHandler(e : MouseEvent) : void {
+        _prevVo = _diy.editVo.clone();
         Mouse.cursor = MouseCursor.HAND;
         _lastX = EnterFrameCall.getStage().mouseX;
         _lastY = EnterFrameCall.getStage().mouseY;
@@ -280,12 +283,12 @@ public class ResizeBg extends Sprite {
         EnterFrameCall.del(resizeWH);
         EnterFrameCall.del(dragBmd);
         _mouseIsDown = false;
-        
-        if(_prevVo != null){
-        	var doneVo :EditVo = _diy.editVo.clone();
-        	dataProxy.recordHistory(new ModifyHistory(_prevVo, doneVo));
+
+        if (_prevVo != null) {
+            var doneVo : EditVo = _diy.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(_prevVo, doneVo));
         }
-        
+
         _prevVo = null;
     }
 
@@ -310,9 +313,12 @@ public class ResizeBg extends Sprite {
 
         var p : Point = new Point(_diy.x + p1.x, _diy.y + p1.y);
         p = _diy.parent.localToGlobal(p);
-        p = parent.globalToLocal(p);
-        this.x = p.x;
-        this.y = p.y;
+
+        if (parent != null) {
+            p = parent.globalToLocal(p);
+            this.x = p.x;
+            this.y = p.y;
+        }
 
         _w = _diy.realW;
         _h = _diy.realH;
@@ -357,8 +363,11 @@ public class ResizeBg extends Sprite {
         mat.rotate(rotation * Math.PI / 180);
         center = mat.transformPoint(center);
         center.offset(x, y);
-        _stageP = parent.localToGlobal(center);
-        _rotate.setRegistrationPoint(center);
+
+        if (parent != null) {
+            _stageP = parent.localToGlobal(center);
+            _rotate.setRegistrationPoint(center);
+        }
     }
 
     public function moveOffset(ix : Number, iy : Number) : void {
@@ -435,9 +444,9 @@ public class ResizeBg extends Sprite {
         _rotate = null;
         _rotationMc = null;
     }
-    
-    public function get dataProxy():DiyDataProxy{
-    	return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
+
+    public function get dataProxy() : DiyDataProxy {
+        return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
     }
 }
 }

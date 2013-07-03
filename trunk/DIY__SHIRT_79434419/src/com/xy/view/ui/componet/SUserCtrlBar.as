@@ -14,6 +14,7 @@ import com.xy.component.toolTip.ToolTip;
 import com.xy.component.toolTip.enum.ToolTipMode;
 import com.xy.model.DiyDataProxy;
 import com.xy.model.enum.DiyImageType;
+import com.xy.model.history.ModifyHistory;
 import com.xy.model.vo.EditVo;
 import com.xy.ui.ScrollUI;
 import com.xy.ui.UserCtrlBar;
@@ -107,6 +108,9 @@ public class SUserCtrlBar extends UserCtrlBar {
         _selectAlphaUI = new SSelectAlphaUI();
         _scrollMenu = new ScrollMenu();
 
+        _selectAlphaUI.addEventListener(MouseEvent.MOUSE_DOWN, __alphaDownHandler);
+        _selectAlphaUI.addEventListener(MouseEvent.MOUSE_UP, __alphaUpHandler);
+
         lineBtn.addEventListener(MouseEvent.CLICK, __showLineHandler);
         colorBtn.addEventListener(MouseEvent.CLICK, __showColorHandler);
         _fullBtn.addEventListener(ToggleButtonEvent.STATE_CHANGE, __fullStatusHandler);
@@ -129,6 +133,19 @@ public class SUserCtrlBar extends UserCtrlBar {
         for each (var font : Font in dataProxy.userableFonts) {
             _fontFaces.push(font.fontName);
         }
+    }
+
+    private var _prevVo : EditVo;
+
+    private function __alphaDownHandler(e : MouseEvent) : void {
+        _prevVo = _editVo.clone();
+    }
+
+    private function __alphaUpHandler(e : MouseEvent) : void {
+        if (_prevVo != null && _prevVo.alpha != _editVo.alpha) {
+            dataProxy.recordHistory(new ModifyHistory(_prevVo, _editVo.clone()));
+        }
+        _prevVo = null;
     }
 
     private function __showLineHandler(e : MouseEvent) : void {
@@ -162,6 +179,7 @@ public class SUserCtrlBar extends UserCtrlBar {
 
                 _editVo.lineSickness = int(name);
                 updateIcons();
+				EnterFrameCall.getStage().focus = null;
             },
             [0, 0, 0, 0]
             );
@@ -263,12 +281,12 @@ public class SUserCtrlBar extends UserCtrlBar {
 
     private function __boldHandler(e : ToggleButtonEvent) : void {
         dispatchEvent(new SUserCtrlBarEvent(SUserCtrlBarEvent.FONT_BOLD, e.selected));
-		
-		if (_boldTog.selected) {
-			ToolTip.setSimpleYellowTip(boldMc, "文字不加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
-		} else {
-			ToolTip.setSimpleYellowTip(boldMc, "文字加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
-		}
+
+        if (_boldTog.selected) {
+            ToolTip.setSimpleYellowTip(boldMc, "文字不加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        } else {
+            ToolTip.setSimpleYellowTip(boldMc, "文字加粗", ToolTipMode.RIGHT_BOTTOM_CENTER);
+        }
     }
 
     private function __alignHandler(e : ToggleButtonGroupEvent) : void {
@@ -331,9 +349,8 @@ public class SUserCtrlBar extends UserCtrlBar {
             case TextFormatAlign.RIGHT:
                 _alignGroup.setSelected(2);
                 break;
-            case TextFormatAlign.CENTER:
+			default:
                 _alignGroup.setSelected(0);
-                break;
         }
 
         if (_boldTog.selected) {

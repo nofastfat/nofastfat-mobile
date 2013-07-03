@@ -114,6 +114,7 @@ public class ScrollMenu extends Sprite {
         _lastIndex = index;
 
         dispatchEvent(new ScrollMenuEvent(ScrollMenuEvent.CHOOSE_VALUE, data));
+		EnterFrameCall.getStage().focus = null;
         close();
     }
 }

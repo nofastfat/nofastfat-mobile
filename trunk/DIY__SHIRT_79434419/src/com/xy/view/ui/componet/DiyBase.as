@@ -38,12 +38,12 @@ public class DiyBase extends Sprite {
 
         if (_editVo.lastP != null) {
             var dis : DisplayObject = getChildAt(0);
-			dis.x = _editVo.childX;
-			dis.y = _editVo.childY;
-			_editVo.registerIndex = 0;
-			var tmpPt : Point = _editVo.lastP.clone();
-			var tmpW : Number = _editVo.realW;
-			var tmpH : Number = _editVo.realH;
+            dis.x = _editVo.childX;
+            dis.y = _editVo.childY;
+            _editVo.registerIndex = 0;
+            var tmpPt : Point = _editVo.lastP.clone();
+            var tmpW : Number = _editVo.realW;
+            var tmpH : Number = _editVo.realH;
             var p : Point = new Point(_editVo.realW - dis.width, _editVo.realH - dis.height);
             p = p.add(_editVo.lastP);
             p = localToGlobal(p);
@@ -58,8 +58,16 @@ public class DiyBase extends Sprite {
         _bg.resize();
 
         resetRegister();
-
+        drawBorder();
     }
+
+    public function groupBy(id : String) : void {
+        _editVo.groupId = id;
+    }
+	
+	public function unGroup():void{
+		_editVo.groupId = null;
+	}
 
     public function moveOffset(ix : Number, iy : Number) : void {
         x += ix;
@@ -158,24 +166,30 @@ public class DiyBase extends Sprite {
         _editVo.alpha = alpha;
     }
 
-    public function upLevel() : void {
+    public function upLevel() : Boolean {
         if (parent != null) {
             var childIndex : int = parent.getChildIndex(this);
             childIndex++;
             if (childIndex < parent.numChildren) {
                 parent.setChildIndex(this, childIndex);
+                return true;
             }
         }
+
+        return false;
     }
 
-    public function downLevel() : void {
+    public function downLevel() : Boolean {
         if (parent != null) {
             var childIndex : int = parent.getChildIndex(this);
             childIndex--;
             if (childIndex >= 0) {
                 parent.setChildIndex(this, childIndex);
+                return true;
             }
         }
+
+        return false;
     }
 
     public function deleted() : void {
@@ -238,6 +252,10 @@ public class DiyBase extends Sprite {
 
     public function get bg() : ResizeBg {
         return _bg;
+    }
+
+    public function isInGroup() : Boolean {
+        return _editVo.groupId != null;
     }
 
     override public function set rotation(value : Number) : void {
