@@ -5,6 +5,7 @@ import com.xy.view.BackgroundMediator;
 import com.xy.view.DecorateMediator;
 import com.xy.view.FrameMediator;
 import com.xy.view.ImageMediator;
+import com.xy.view.KeyboardMediator;
 import com.xy.view.LeftContainerMediator;
 import com.xy.view.RightContainerMediator;
 
@@ -29,7 +30,8 @@ public class RegistCmd extends AbsCommand {
         facade.registerMediator(new ImageMediator(leftMediator.leftCtrl.getContainer(0)));
         facade.registerMediator(new BackgroundMediator(leftMediator.leftCtrl.getContainer(2)));
         facade.registerMediator(new DecorateMediator(leftMediator.leftCtrl.getContainer(3)));
-        facade.registerMediator(new FrameMediator(leftMediator.leftCtrl.getContainer(4)));
+		facade.registerMediator(new FrameMediator(leftMediator.leftCtrl.getContainer(4)));
+		facade.registerMediator(new KeyboardMediator());
 		
 		facade.registerCommand(AddImageCmd.NAME, AddImageCmd);
 		facade.registerCommand(AddFontCmd.NAME, AddFontCmd);

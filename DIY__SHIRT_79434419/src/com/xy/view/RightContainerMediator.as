@@ -8,7 +8,12 @@ import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
 import com.xy.model.history.AddHistory;
+import com.xy.model.history.ChangeModelHistory;
+import com.xy.model.history.ChildIndexHistory;
 import com.xy.model.history.DeleteHistory;
+import com.xy.model.history.ModifyHistory;
+import com.xy.model.history.MulityDeleteHistory;
+import com.xy.model.history.MultyModifyHistory;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.model.vo.EditVo;
 import com.xy.ui.BuyButton;
@@ -16,12 +21,15 @@ import com.xy.util.EnterFrameCall;
 import com.xy.util.PopUpManager;
 import com.xy.util.SMouse;
 import com.xy.util.STool;
+import com.xy.util.Tools;
 import com.xy.view.layer.RightContainer;
 import com.xy.view.ui.SCtrlBar;
 import com.xy.view.ui.componet.BitmapDragTip;
 import com.xy.view.ui.componet.DiyBase;
 import com.xy.view.ui.componet.DiyFont;
 import com.xy.view.ui.componet.DiySystemImage;
+import com.xy.view.ui.componet.GroupResize;
+import com.xy.view.ui.componet.ResizeBg;
 import com.xy.view.ui.componet.SAlertTextUI;
 import com.xy.view.ui.componet.SUserCtrlBar;
 import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
@@ -68,6 +76,8 @@ public class RightContainerMediator extends AbsMediator {
      */
     public static const ADD_FONT : String = NAME + "ADD_FONT";
 
+    public static const KEY_DELETE : String = NAME + "KEY_DELETE";
+
     private var _ctrlBar : SCtrlBar;
 
     private var _diyBg : Bitmap;
@@ -93,6 +103,16 @@ public class RightContainerMediator extends AbsMediator {
     private var _selectedImages : Array;
     private var _selectStartPt : Point;
 
+    private var _prevVo : EditVo;
+    private var _prevVos : Array;
+
+    private var _currentModelId : String;
+
+    private var _groups : Array = [];
+	
+	private var _groupBg : GroupResize;
+
+
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
@@ -107,6 +127,7 @@ public class RightContainerMediator extends AbsMediator {
         map.put(DiyDataNotice.HISTORY_UPDATE, historyUpdate);
         map.put(ADD_IMAGE, addImage);
         map.put(ADD_FONT, addFont);
+        map.put(KEY_DELETE, keyDelete);
         return map;
     }
 
@@ -135,6 +156,8 @@ public class RightContainerMediator extends AbsMediator {
         _bmpDragTip = new BitmapDragTip();
 
         _editPanel = new EditTextPanel();
+		
+		_groupBg = new GroupResize();
 
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
@@ -142,6 +165,8 @@ public class RightContainerMediator extends AbsMediator {
         _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL, __changeModel);
         _ctrlBar.addEventListener(SCtrlBarEvent.UNDO, __undoHandler);
         _ctrlBar.addEventListener(SCtrlBarEvent.REDO, __redoHandler);
+        _ctrlBar.addEventListener(SCtrlBarEvent.GROUP, __groupHandler);
+        _ctrlBar.addEventListener(SCtrlBarEvent.UNGROUP, __ungroupHandler);
 
 
         _diyBar.addEventListener(SUserCtrlBarEvent.LINE_CHANGE, __lineChangeHandler);
@@ -212,13 +237,22 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
-    private function modelUpdate() : void {
+    private function modelUpdate(record : Boolean) : void {
+        if (_currentModelId == dataProxy.currentSelectModel.id) {
+            return;
+        }
+
+        if (_currentModelId != null && record) {
+            dataProxy.recordHistory(new ChangeModelHistory(_currentModelId, dataProxy.currentSelectModel.id));
+        }
+
         _diyBg.bitmapData = dataProxy.currentSelectModel.bmd;
         resize();
 
         if (_chooseModelPanel.stage != null) {
             _chooseModelPanel.setData(dataProxy.models);
         }
+        _currentModelId = dataProxy.currentSelectModel.id;
     }
 
     private function historyUpdate() : void {
@@ -282,10 +316,22 @@ public class RightContainerMediator extends AbsMediator {
         } else {
             addFont(dataProxy.getFontByName(editVo.fontName), p.x, p.y, editVo.id, false);
         }
-		
-		var diy : DiyBase = getDiyBaseById(editVo.id);
-		diy.setByEditVo(editVo);
+
+        var diy : DiyBase = getDiyBaseById(editVo.id);
+        diy.setByEditVo(editVo);
         _diyBar.showByDiyBase(diy);
+    }
+
+    public function updateDiyBar() : void {
+        if (_currentSelectImage != null) {
+            _diyBar.showByDiyBase(_currentSelectImage);
+
+            if (_currentSelectImage.editVo.isFull) {
+                _bmpDragTip.showBy(_currentSelectImage as DiySystemImage);
+            } else {
+                STool.remove(_bmpDragTip);
+            }
+        }
     }
 
     private function addFont(font : Font, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true) : void {
@@ -300,6 +346,22 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
+    private function keyDelete() : void {
+        if (_currentSelectImage != null) {
+            __deleteHandler(null);
+        }
+
+        if (_selectedImages != null && _selectedImages.length != 0) {
+            var vos : Array = [];
+            for each (var diy : DiyBase in _selectedImages) {
+                vos.push(diy.editVo.clone());
+
+                deleteDiyById(diy.id);
+            }
+            dataProxy.recordHistory(new MulityDeleteHistory(mulityDelete, mulityAdd, vos));
+        }
+    }
+
     private function addAndRecordDiy(diy : DiyBase, stageX : Number, stageY : Number) : void {
         __unSelectHandler(null);
 
@@ -307,7 +369,7 @@ public class RightContainerMediator extends AbsMediator {
         p = _diyArea.globalToLocal(p);
         diy.x = p.x;
         diy.y = p.y;
-		
+
         _diyImages.push(diy);
         _diyArea.addChild(diy);
         diy.bg.showTo(ui.container);
@@ -327,6 +389,62 @@ public class RightContainerMediator extends AbsMediator {
         return null;
     }
 
+    private function upLevel(id : String) : void {
+        var diy : DiyBase = getDiyBaseById(id);
+        diy.upLevel();
+    }
+
+    private function downLevel(id : String) : void {
+        var diy : DiyBase = getDiyBaseById(id);
+        diy.downLevel();
+    }
+
+    private function setMulitiData(vos : Array) : void {
+        for each (var vo : EditVo in vos) {
+            var diy : DiyBase = getDiyBaseById(vo.id);
+            if (diy != null) {
+                diy.setByEditVo(vo);
+            }
+        }
+    }
+
+    public function mulityAdd(vos : Array) : void {
+        for each (var vo : EditVo in vos) {
+            addByEditVo(vo);
+        }
+    }
+
+    public function mulityDelete(vos : Array) : void {
+        for each (var vo : EditVo in vos) {
+            deleteDiyById(vo.id);
+        }
+    }
+
+    private function makeGroup() : void {
+        if (_selectedImages == null || _selectedImages.length < 2) {
+            return;
+        }
+
+        var id : String = Tools.makeId();
+		for each (var diy : DiyBase in _selectedImages) {
+			diy.groupBy(id);
+		}
+        _groups.push(id);
+		_groupBg.showTo(ui.container,  getGroupsById(id));
+		__unSelectHandler();
+    }
+
+    public function getGroupsById(id : String) : Array {
+        var rs : Array = [];
+        for each (var diy : DiyBase in _diyImages) {
+            if (diy.editVo.groupId == id) {
+                rs.push(diy);
+            }
+        }
+
+        return rs;
+    }
+
     private function __downHandler(e : MouseEvent) : void {
         if (_selectedImages == null || _selectedImages.length == 0) {
             __unSelectHandler();
@@ -341,6 +459,15 @@ public class RightContainerMediator extends AbsMediator {
                 _bmpDragTip.showBy(_currentSelectImage as DiySystemImage);
             } else {
                 STool.remove(_bmpDragTip);
+            }
+
+            if (_currentSelectImage != null) {
+                _prevVo = _currentSelectImage.editVo.clone();
+            }
+        } else {
+            _prevVos = [];
+            for each (var diy : DiyBase in _selectedImages) {
+                _prevVos.push(diy.editVo.clone());
             }
         }
 
@@ -363,16 +490,28 @@ public class RightContainerMediator extends AbsMediator {
         dataProxy.redo();
     }
 
+    private function __groupHandler(e : SCtrlBarEvent) : void {
+        makeGroup();
+    }
+
+    private function __ungroupHandler(e : SCtrlBarEvent) : void {
+
+    }
+
     private function __modelChangeHandler(e : ChooseBackgroundPanelEvent) : void {
         dataProxy.chooseModel(e.vo);
         PopUpManager.getInstance().closeAll();
+        EnterFrameCall.getStage().focus = null;
     }
 
     private function __lineChangeHandler(e : SUserCtrlBarEvent) : void {
         if (_currentSelectImage == null) {
             return;
         }
+        var prevVo : EditVo = _currentSelectImage.editVo.clone();
         _currentSelectImage.setLineSickness(e.data);
+        var nextVo : EditVo = _currentSelectImage.editVo.clone();
+        dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
 
     }
 
@@ -380,7 +519,10 @@ public class RightContainerMediator extends AbsMediator {
         if (_currentSelectImage == null) {
             return;
         }
+        var prevVo : EditVo = _currentSelectImage.editVo.clone();
         _currentSelectImage.setColor(e.data);
+        var nextVo : EditVo = _currentSelectImage.editVo.clone();
+        dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
     }
 
     private function __alphaHandler(e : SUserCtrlBarEvent) : void {
@@ -394,14 +536,20 @@ public class RightContainerMediator extends AbsMediator {
         if (_currentSelectImage == null) {
             return;
         }
-        _currentSelectImage.upLevel();
+        var rs : Boolean = _currentSelectImage.upLevel();
+        if (rs) {
+            dataProxy.recordHistory(new ChildIndexHistory(upLevel, downLevel, _currentSelectImage.id));
+        }
     }
 
     private function __downLevelHandler(e : SUserCtrlBarEvent) : void {
         if (_currentSelectImage == null) {
             return;
         }
-        _currentSelectImage.downLevel();
+        var rs : Boolean = _currentSelectImage.downLevel();
+        if (rs) {
+            dataProxy.recordHistory(new ChildIndexHistory(downLevel, upLevel, _currentSelectImage.id));
+        }
     }
 
     private function __deleteHandler(e : SUserCtrlBarEvent) : void {
@@ -411,6 +559,7 @@ public class RightContainerMediator extends AbsMediator {
 
         dataProxy.recordHistory(new DeleteHistory(deleteDiyById, addByEditVo, _currentSelectImage.editVo.clone()));
         deleteDiyById(_currentSelectImage.id);
+        EnterFrameCall.getStage().focus = null;
     }
 
     private function __fullStatusHandler(e : SUserCtrlBarEvent) : void {
@@ -418,11 +567,14 @@ public class RightContainerMediator extends AbsMediator {
         if (_currentSelectImage == null) {
             return;
         }
+        var prevVo : EditVo = _currentSelectImage.editVo.clone();
         if (_currentSelectImage is DiySystemImage) {
             (_currentSelectImage as DiySystemImage).setFullStatus(status);
         }
 
         _currentSelectImage.bg.showTo(ui.container);
+        var nextVo : EditVo = _currentSelectImage.editVo.clone();
+        dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
     }
 
     private function __showEditTextPanel(e : Event) : void {
@@ -440,7 +592,10 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage is DiyFont) {
+            var prevVo : EditVo = _currentSelectImage.editVo.clone();
             (_currentSelectImage as DiyFont).setColor(e.data);
+            var nextVo : EditVo = _currentSelectImage.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
         }
     }
 
@@ -450,7 +605,10 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage is DiyFont) {
+            var prevVo : EditVo = _currentSelectImage.editVo.clone();
             (_currentSelectImage as DiyFont).setFontFace(e.data);
+            var nextVo : EditVo = _currentSelectImage.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
         }
     }
 
@@ -460,7 +618,10 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage is DiyFont) {
+            var prevVo : EditVo = _currentSelectImage.editVo.clone();
             (_currentSelectImage as DiyFont).setFontSize(e.data);
+            var nextVo : EditVo = _currentSelectImage.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
         }
     }
 
@@ -470,7 +631,10 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage is DiyFont) {
+            var prevVo : EditVo = _currentSelectImage.editVo.clone();
             (_currentSelectImage as DiyFont).setFontBold(e.data);
+            var nextVo : EditVo = _currentSelectImage.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
         }
     }
 
@@ -480,7 +644,10 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage is DiyFont) {
+            var prevVo : EditVo = _currentSelectImage.editVo.clone();
             (_currentSelectImage as DiyFont).setFontAlign(e.data);
+            var nextVo : EditVo = _currentSelectImage.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
         }
     }
 
@@ -510,8 +677,12 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (_currentSelectImage is DiyFont) {
+            var prevVo : EditVo = _currentSelectImage.editVo.clone();
             (_currentSelectImage as DiyFont).setText(e.text);
+            var nextVo : EditVo = _currentSelectImage.editVo.clone();
+            dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
         }
+        EnterFrameCall.getStage().focus = null;
     }
 
     private function __bgDownHandler(e : MouseEvent) : void {
@@ -527,6 +698,23 @@ public class RightContainerMediator extends AbsMediator {
         EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_MOVE, __updateSelectedHandler);
 
         ui.selectUI.graphics.clear();
+		_groupBg.hide();
+
+        if (_prevVos != null && _prevVos.length != 0 && _selectedImages != null && _prevVos[0].ix != _selectedImages[0].editVo.ix && _prevVos[0].iy != _selectedImages[0].editVo.iy) {
+            var nowVos : Array = [];
+            for each (var diy : DiyBase in _selectedImages) {
+                nowVos.push(diy.editVo.clone());
+            }
+
+            dataProxy.recordHistory(new MultyModifyHistory(setMulitiData, _prevVos, nowVos));
+        }
+
+        if (_prevVo != null && _prevVo.ix != _currentSelectImage.editVo.ix && _prevVo.iy != _currentSelectImage.editVo.iy && _currentSelectImage != null) {
+            dataProxy.recordHistory(new ModifyHistory(_prevVo, _currentSelectImage.editVo.clone()));
+        }
+
+        _prevVo = null;
+        _prevVos = null;
     }
 
     private function __unSelectHandler(e : MouseEvent = null) : void {
@@ -565,6 +753,8 @@ public class RightContainerMediator extends AbsMediator {
                 diy.bg.hide();
             }
         }
+
+        _ctrlBar.updateGroup(_selectedImages.length > 1, false);
     }
 
     public function get ui() : RightContainer {

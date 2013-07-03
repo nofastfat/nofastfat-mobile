@@ -4,6 +4,7 @@ import flash.geom.Point;
 
 public class EditVo {
     public var id : String;
+    public var groupId : String;
 
     public var ix : Number;
     public var iy : Number;
@@ -31,8 +32,8 @@ public class EditVo {
     public var tfWidth : Number = 0;
     public var tfHeight : Number = 0;
     public var align : String = "";
-    public var lastScaleX : Number = 0;
-    public var lastScaleY : Number = 0;
+    public var lastScaleX : Number = 1;
+    public var lastScaleY : Number = 1;
 
     public var isImage : Boolean = false;
 
@@ -43,6 +44,7 @@ public class EditVo {
     public function clone() : EditVo {
         var rs : EditVo = new EditVo();
         rs.id = this.id;
+        rs.groupId = this.groupId;
         rs.ix = this.ix;
         rs.iy = this.iy;
         rs.bmdId = this.bmdId;
@@ -77,6 +79,7 @@ public class EditVo {
 
     public function copyFrom(vo : EditVo) : void {
         this.id = vo.id;
+        this.groupId = vo.groupId;
         this.ix = vo.ix;
         this.iy = vo.iy;
         this.bmdId = vo.bmdId;

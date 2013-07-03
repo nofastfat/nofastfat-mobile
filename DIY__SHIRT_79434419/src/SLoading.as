@@ -32,26 +32,23 @@ public class SLoading extends Loading {
         _tmpW = this.width;
         _tmpH = this.height;
 
-        _mask.graphics.beginFill(0x000000, 0);
+        _mask.graphics.beginFill(0xFFFFFF, 0.3);
         _mask.graphics.drawRect(0, 0, 1, 1);
         _mask.graphics.endFill();
 
         _stage = EnterFrameCall.getStage();
         _stage.addEventListener(Event.RESIZE, __resizeHandler);
-        this.stop();
     }
 
     public function show() : void {
         _stage.addChild(_mask);
         _stage.addChild(this);
         __resizeHandler(null);
-        play();
     }
 
     public function hide() : void {
         STool.remove(this);
         STool.remove(_mask);
-        this.stop();
     }
 
     private function __resizeHandler(e : Event) : void {
