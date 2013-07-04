@@ -2,659 +2,662 @@
 <configs>
 
 	<!-- 
-		模特配置文件
+		模版配置文件
+		id	 唯一资源标记，不可与其他任意ID重复
 		type 类型
 		url  模特图片链接地址
 		rect 自定义的可编辑区域，英文逗号分隔，
 			 格式:"ix,iy,iw,ih"
-			 其中,ix表示可编辑区域相对于模特图片的x坐标
-			 	  ix表示可编辑区域相对于模特图片的y坐标
+			 其中,ix表示可编辑区域相对于【模特图片】的x坐标
+			 	  iy表示可编辑区域相对于【模特图片】的y坐标
 			 	  iw表示可编辑区域的宽度
 			 	  ih表示可编辑区域的高度
+		info 说明文字
+		page DIY的张数，默认1张，封面是第一张，封底是最后一张， 所以对于日历：总张数=12+1+1,一共14张
+		bgs  每张图片预设的背景图资源id，英文逗号分隔，数量需要与总页数保存一致，否则将缺失背景图
 	 -->
 	<models>
-		<model type="黑色T恤" url="assets/models/1.png" rect="100,120,270,300" />
-		<model type="黑色T恤" url="assets/models/2.png" rect="100,120,270,300" />
+		<model id="md1" type="服装" url="assets/models/1.png" rect="100,120,270,300" info="黑色T恤175(男)" />
+		<model id="md2" type="服装" url="assets/models/2.png" rect="100,120,270,300" info="黑色T恤165（女）" />
+		<model id="md100" type="水杯" url="assets/models/100.jpg" rect="100,100,140,140" info="烤瓷杯" />
+		<model id="md101" type="水杯" url="assets/models/101.jpg" rect="68,136,134,142" info="磨砂杯" />
+		<model id="md200" type="手机外壳" url="assets/models/200.jpg" rect="71,38,68,140" info="iphone4S外壳" />
+		<model id="md300" type="日历" url="assets/models/300.png" rect="39,16,460,372" info="12寸日历-卡通" page="14" bgs="bg1,bg2,bg3,bg4,bg5,bg6,bg7,bg8,bg9,bg10,bg11,bg12,bg13,bg1"/>
+		<model id="md301" type="日历" url="assets/models/300.png" rect="39,16,460,372" info="12寸日历-复古" page="14" bgs="bg401,bg402,bg403,bg404,bg405,bg406,bg407,bg408,bg409,bg410,bg411,bg412,bg413,bg401"/>
+		<model id="md400" type="画册" url="assets/models/400.png" rect="15,0,485,400" info="12寸画册-现代-10张" page="12" bgs="bg702,bg701,bg703,bg704,bg705,bg706,bg707,bg708,bg709,bg710,bg711,bg712"/>
 	</models>
 	
 	
 	<!-- 
 		背景配置文件
+		id	 唯一资源标记，不可与其他任意ID重复
 		type 类型
 		url  链接地址
 	 -->
 	<backgrounds>
-		<bg type="卡通背景" url="assets/backgrounds/1.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/2.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/3.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/4.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/5.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/6.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/7.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/8.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/9.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/10.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/11.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/12.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/13.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/14.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/15.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/16.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/17.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/18.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/19.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/20.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/21.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/22.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/23.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/24.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/25.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/26.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/27.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/28.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/29.jpg" />
-		<bg type="卡通背景" url="assets/backgrounds/30.jpg" />
+		<bg id="bg1" type="卡通背景" url="assets/backgrounds/1.jpg" />
+		<bg id="bg2" type="卡通背景" url="assets/backgrounds/2.jpg" />
+		<bg id="bg3" type="卡通背景" url="assets/backgrounds/3.jpg" />
+		<bg id="bg4" type="卡通背景" url="assets/backgrounds/4.jpg" />
+		<bg id="bg5" type="卡通背景" url="assets/backgrounds/5.jpg" />
+		<bg id="bg6" type="卡通背景" url="assets/backgrounds/6.jpg" />
+		<bg id="bg7" type="卡通背景" url="assets/backgrounds/7.jpg" />
+		<bg id="bg8" type="卡通背景" url="assets/backgrounds/8.jpg" />
+		<bg id="bg9" type="卡通背景" url="assets/backgrounds/9.jpg" />
+		<bg id="bg10" type="卡通背景" url="assets/backgrounds/10.jpg" />
+		<bg id="bg11" type="卡通背景" url="assets/backgrounds/11.jpg" />
+		<bg id="bg12" type="卡通背景" url="assets/backgrounds/12.jpg" />
+		<bg id="bg13" type="卡通背景" url="assets/backgrounds/13.jpg" />
+		<bg id="bg14" type="卡通背景" url="assets/backgrounds/14.jpg" />
+		<bg id="bg15" type="卡通背景" url="assets/backgrounds/15.jpg" />
+		<bg id="bg16" type="卡通背景" url="assets/backgrounds/16.jpg" />
+		<bg id="bg17" type="卡通背景" url="assets/backgrounds/17.jpg" />
+		<bg id="bg18" type="卡通背景" url="assets/backgrounds/18.jpg" />
+		<bg id="bg19" type="卡通背景" url="assets/backgrounds/19.jpg" />
+		<bg id="bg20" type="卡通背景" url="assets/backgrounds/20.jpg" />
+		<bg id="bg21" type="卡通背景" url="assets/backgrounds/21.jpg" />
+		<bg id="bg22" type="卡通背景" url="assets/backgrounds/22.jpg" />
+		<bg id="bg23" type="卡通背景" url="assets/backgrounds/23.jpg" />
+		<bg id="bg24" type="卡通背景" url="assets/backgrounds/24.jpg" />
+		<bg id="bg25" type="卡通背景" url="assets/backgrounds/25.jpg" />
+		<bg id="bg26" type="卡通背景" url="assets/backgrounds/26.jpg" />
+		<bg id="bg27" type="卡通背景" url="assets/backgrounds/27.jpg" />
+		<bg id="bg28" type="卡通背景" url="assets/backgrounds/28.jpg" />
+		<bg id="bg29" type="卡通背景" url="assets/backgrounds/29.jpg" />
+		<bg id="bg30" type="卡通背景" url="assets/backgrounds/30.jpg" />
 		
-		<bg type="小清新" url="assets/backgrounds/101.jpg" />
-		<bg type="小清新" url="assets/backgrounds/102.jpg" />
-		<bg type="小清新" url="assets/backgrounds/103.jpg" />
-		<bg type="小清新" url="assets/backgrounds/104.jpg" />
-		<bg type="小清新" url="assets/backgrounds/105.jpg" />
-		<bg type="小清新" url="assets/backgrounds/106.jpg" />
-		<bg type="小清新" url="assets/backgrounds/107.jpg" />
-		<bg type="小清新" url="assets/backgrounds/108.jpg" />
-		<bg type="小清新" url="assets/backgrounds/109.jpg" />
-		<bg type="小清新" url="assets/backgrounds/110.jpg" />
+		<bg id="bg101" type="小清新" url="assets/backgrounds/101.jpg" />
+		<bg id="bg102" type="小清新" url="assets/backgrounds/102.jpg" />
+		<bg id="bg103" type="小清新" url="assets/backgrounds/103.jpg" />
+		<bg id="bg104" type="小清新" url="assets/backgrounds/104.jpg" />
+		<bg id="bg105" type="小清新" url="assets/backgrounds/105.jpg" />
+		<bg id="bg106" type="小清新" url="assets/backgrounds/106.jpg" />
+		<bg id="bg107" type="小清新" url="assets/backgrounds/107.jpg" />
+		<bg id="bg108" type="小清新" url="assets/backgrounds/108.jpg" />
+		<bg id="bg109" type="小清新" url="assets/backgrounds/109.jpg" />
+		<bg id="bg110" type="小清新" url="assets/backgrounds/110.jpg" />
 		
-		<bg type="中国风" url="assets/backgrounds/201.jpg" />
+		<bg id="bg201" type="中国风" url="assets/backgrounds/201.jpg" />
 		
-		<bg type="文字背景" url="assets/backgrounds/301.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/302.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/303.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/304.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/305.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/306.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/307.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/308.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/309.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/310.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/311.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/312.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/313.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/314.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/315.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/316.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/317.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/318.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/319.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/320.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/321.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/322.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/323.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/324.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/325.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/326.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/327.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/328.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/329.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/330.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/331.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/332.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/333.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/334.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/335.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/336.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/337.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/338.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/339.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/340.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/341.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/342.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/343.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/344.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/345.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/346.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/347.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/348.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/349.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/350.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/351.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/352.jpg" />
-		<bg type="文字背景" url="assets/backgrounds/353.jpg" />
+		<bg id="bg301" type="文字背景" url="assets/backgrounds/301.jpg" />
+		<bg id="bg302" type="文字背景" url="assets/backgrounds/302.jpg" />
+		<bg id="bg303" type="文字背景" url="assets/backgrounds/303.jpg" />
+		<bg id="bg304" type="文字背景" url="assets/backgrounds/304.jpg" />
+		<bg id="bg305" type="文字背景" url="assets/backgrounds/305.jpg" />
+		<bg id="bg306" type="文字背景" url="assets/backgrounds/306.jpg" />
+		<bg id="bg307" type="文字背景" url="assets/backgrounds/307.jpg" />
+		<bg id="bg308" type="文字背景" url="assets/backgrounds/308.jpg" />
+		<bg id="bg309" type="文字背景" url="assets/backgrounds/309.jpg" />
+		<bg id="bg310" type="文字背景" url="assets/backgrounds/310.jpg" />
+		<bg id="bg311" type="文字背景" url="assets/backgrounds/311.jpg" />
+		<bg id="bg312" type="文字背景" url="assets/backgrounds/312.jpg" />
+		<bg id="bg313" type="文字背景" url="assets/backgrounds/313.jpg" />
+		<bg id="bg314" type="文字背景" url="assets/backgrounds/314.jpg" />
+		<bg id="bg315" type="文字背景" url="assets/backgrounds/315.jpg" />
+		<bg id="bg316" type="文字背景" url="assets/backgrounds/316.jpg" />
+		<bg id="bg317" type="文字背景" url="assets/backgrounds/317.jpg" />
+		<bg id="bg318" type="文字背景" url="assets/backgrounds/318.jpg" />
+		<bg id="bg319" type="文字背景" url="assets/backgrounds/319.jpg" />
+		<bg id="bg320" type="文字背景" url="assets/backgrounds/320.jpg" />
+		<bg id="bg321" type="文字背景" url="assets/backgrounds/321.jpg" />
+		<bg id="bg322" type="文字背景" url="assets/backgrounds/322.jpg" />
+		<bg id="bg323" type="文字背景" url="assets/backgrounds/323.jpg" />
+		<bg id="bg324" type="文字背景" url="assets/backgrounds/324.jpg" />
+		<bg id="bg325" type="文字背景" url="assets/backgrounds/325.jpg" />
+		<bg id="bg326" type="文字背景" url="assets/backgrounds/326.jpg" />
+		<bg id="bg327" type="文字背景" url="assets/backgrounds/327.jpg" />
+		<bg id="bg328" type="文字背景" url="assets/backgrounds/328.jpg" />
+		<bg id="bg329" type="文字背景" url="assets/backgrounds/329.jpg" />
+		<bg id="bg330" type="文字背景" url="assets/backgrounds/330.jpg" />
+		<bg id="bg331" type="文字背景" url="assets/backgrounds/331.jpg" />
+		<bg id="bg332" type="文字背景" url="assets/backgrounds/332.jpg" />
+		<bg id="bg333" type="文字背景" url="assets/backgrounds/333.jpg" />
+		<bg id="bg334" type="文字背景" url="assets/backgrounds/334.jpg" />
+		<bg id="bg335" type="文字背景" url="assets/backgrounds/335.jpg" />
+		<bg id="bg336" type="文字背景" url="assets/backgrounds/336.jpg" />
+		<bg id="bg337" type="文字背景" url="assets/backgrounds/337.jpg" />
+		<bg id="bg338" type="文字背景" url="assets/backgrounds/338.jpg" />
+		<bg id="bg339" type="文字背景" url="assets/backgrounds/339.jpg" />
+		<bg id="bg340" type="文字背景" url="assets/backgrounds/340.jpg" />
+		<bg id="bg341" type="文字背景" url="assets/backgrounds/341.jpg" />
+		<bg id="bg342" type="文字背景" url="assets/backgrounds/342.jpg" />
+		<bg id="bg343" type="文字背景" url="assets/backgrounds/343.jpg" />
+		<bg id="bg344" type="文字背景" url="assets/backgrounds/344.jpg" />
+		<bg id="bg345" type="文字背景" url="assets/backgrounds/345.jpg" />
+		<bg id="bg346" type="文字背景" url="assets/backgrounds/346.jpg" />
+		<bg id="bg347" type="文字背景" url="assets/backgrounds/347.jpg" />
+		<bg id="bg348" type="文字背景" url="assets/backgrounds/348.jpg" />
+		<bg id="bg349" type="文字背景" url="assets/backgrounds/349.jpg" />
+		<bg id="bg350" type="文字背景" url="assets/backgrounds/350.jpg" />
+		<bg id="bg351" type="文字背景" url="assets/backgrounds/351.jpg" />
+		<bg id="bg352" type="文字背景" url="assets/backgrounds/352.jpg" />
+		<bg id="bg353" type="文字背景" url="assets/backgrounds/353.jpg" />
 		
-		<bg type="复古" url="assets/backgrounds/401.jpg" />
-		<bg type="复古" url="assets/backgrounds/402.jpg" />
-		<bg type="复古" url="assets/backgrounds/403.jpg" />
-		<bg type="复古" url="assets/backgrounds/404.jpg" />
-		<bg type="复古" url="assets/backgrounds/405.jpg" />
-		<bg type="复古" url="assets/backgrounds/406.jpg" />
-		<bg type="复古" url="assets/backgrounds/407.jpg" />
-		<bg type="复古" url="assets/backgrounds/408.jpg" />
-		<bg type="复古" url="assets/backgrounds/409.jpg" />
-		<bg type="复古" url="assets/backgrounds/410.jpg" />
-		<bg type="复古" url="assets/backgrounds/411.jpg" />
-		<bg type="复古" url="assets/backgrounds/412.jpg" />
-		<bg type="复古" url="assets/backgrounds/413.jpg" />
+		<bg id="bg401" type="复古" url="assets/backgrounds/401.jpg" />
+		<bg id="bg402" type="复古" url="assets/backgrounds/402.jpg" />
+		<bg id="bg403" type="复古" url="assets/backgrounds/403.jpg" />
+		<bg id="bg404" type="复古" url="assets/backgrounds/404.jpg" />
+		<bg id="bg405" type="复古" url="assets/backgrounds/405.jpg" />
+		<bg id="bg406" type="复古" url="assets/backgrounds/406.jpg" />
+		<bg id="bg407" type="复古" url="assets/backgrounds/407.jpg" />
+		<bg id="bg408" type="复古" url="assets/backgrounds/408.jpg" />
+		<bg id="bg409" type="复古" url="assets/backgrounds/409.jpg" />
+		<bg id="bg410" type="复古" url="assets/backgrounds/410.jpg" />
+		<bg id="bg411" type="复古" url="assets/backgrounds/411.jpg" />
+		<bg id="bg412" type="复古" url="assets/backgrounds/412.jpg" />
+		<bg id="bg413" type="复古" url="assets/backgrounds/413.jpg" />
 		
-		<bg type="花朵背景" url="assets/backgrounds/501.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/502.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/503.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/504.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/505.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/506.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/507.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/508.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/509.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/510.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/511.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/512.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/513.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/514.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/515.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/516.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/517.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/518.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/519.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/520.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/521.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/522.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/523.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/524.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/525.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/526.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/527.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/528.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/529.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/530.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/531.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/532.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/533.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/534.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/535.jpg" />
-		<bg type="花朵背景" url="assets/backgrounds/536.jpg" />
+		<bg id="bg501" type="花朵背景" url="assets/backgrounds/501.jpg" />
+		<bg id="bg502" type="花朵背景" url="assets/backgrounds/502.jpg" />
+		<bg id="bg503" type="花朵背景" url="assets/backgrounds/503.jpg" />
+		<bg id="bg504" type="花朵背景" url="assets/backgrounds/504.jpg" />
+		<bg id="bg505" type="花朵背景" url="assets/backgrounds/505.jpg" />
+		<bg id="bg506" type="花朵背景" url="assets/backgrounds/506.jpg" />
+		<bg id="bg507" type="花朵背景" url="assets/backgrounds/507.jpg" />
+		<bg id="bg508" type="花朵背景" url="assets/backgrounds/508.jpg" />
+		<bg id="bg509" type="花朵背景" url="assets/backgrounds/509.jpg" />
+		<bg id="bg510" type="花朵背景" url="assets/backgrounds/510.jpg" />
+		<bg id="bg511" type="花朵背景" url="assets/backgrounds/511.jpg" />
+		<bg id="bg512" type="花朵背景" url="assets/backgrounds/512.jpg" />
+		<bg id="bg513" type="花朵背景" url="assets/backgrounds/513.jpg" />
+		<bg id="bg514" type="花朵背景" url="assets/backgrounds/514.jpg" />
+		<bg id="bg515" type="花朵背景" url="assets/backgrounds/515.jpg" />
+		<bg id="bg516" type="花朵背景" url="assets/backgrounds/516.jpg" />
+		<bg id="bg517" type="花朵背景" url="assets/backgrounds/517.jpg" />
+		<bg id="bg518" type="花朵背景" url="assets/backgrounds/518.jpg" />
+		<bg id="bg519" type="花朵背景" url="assets/backgrounds/519.jpg" />
+		<bg id="bg520" type="花朵背景" url="assets/backgrounds/520.jpg" />
+		<bg id="bg521" type="花朵背景" url="assets/backgrounds/521.jpg" />
+		<bg id="bg522" type="花朵背景" url="assets/backgrounds/522.jpg" />
+		<bg id="bg523" type="花朵背景" url="assets/backgrounds/523.jpg" />
+		<bg id="bg524" type="花朵背景" url="assets/backgrounds/524.jpg" />
+		<bg id="bg525" type="花朵背景" url="assets/backgrounds/525.jpg" />
+		<bg id="bg526" type="花朵背景" url="assets/backgrounds/526.jpg" />
+		<bg id="bg527" type="花朵背景" url="assets/backgrounds/527.jpg" />
+		<bg id="bg528" type="花朵背景" url="assets/backgrounds/528.jpg" />
+		<bg id="bg529" type="花朵背景" url="assets/backgrounds/529.jpg" />
+		<bg id="bg530" type="花朵背景" url="assets/backgrounds/530.jpg" />
+		<bg id="bg531" type="花朵背景" url="assets/backgrounds/531.jpg" />
+		<bg id="bg532" type="花朵背景" url="assets/backgrounds/532.jpg" />
+		<bg id="bg533" type="花朵背景" url="assets/backgrounds/533.jpg" />
+		<bg id="bg534" type="花朵背景" url="assets/backgrounds/534.jpg" />
+		<bg id="bg535" type="花朵背景" url="assets/backgrounds/535.jpg" />
+		<bg id="bg536" type="花朵背景" url="assets/backgrounds/536.jpg" />
 		
-		<bg type="简约风格" url="assets/backgrounds/601.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/602.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/603.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/604.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/605.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/606.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/607.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/608.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/609.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/610.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/611.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/612.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/613.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/614.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/615.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/616.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/617.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/618.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/619.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/620.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/621.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/622.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/623.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/624.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/625.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/626.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/627.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/628.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/629.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/630.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/631.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/632.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/633.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/634.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/635.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/636.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/637.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/638.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/639.jpg" />
-		<bg type="简约风格" url="assets/backgrounds/640.jpg" />
+		<bg id="bg601" type="简约风格" url="assets/backgrounds/601.jpg" />
+		<bg id="bg602" type="简约风格" url="assets/backgrounds/602.jpg" />
+		<bg id="bg603" type="简约风格" url="assets/backgrounds/603.jpg" />
+		<bg id="bg604" type="简约风格" url="assets/backgrounds/604.jpg" />
+		<bg id="bg605" type="简约风格" url="assets/backgrounds/605.jpg" />
+		<bg id="bg606" type="简约风格" url="assets/backgrounds/606.jpg" />
+		<bg id="bg607" type="简约风格" url="assets/backgrounds/607.jpg" />
+		<bg id="bg608" type="简约风格" url="assets/backgrounds/608.jpg" />
+		<bg id="bg609" type="简约风格" url="assets/backgrounds/609.jpg" />
+		<bg id="bg610" type="简约风格" url="assets/backgrounds/610.jpg" />
+		<bg id="bg611" type="简约风格" url="assets/backgrounds/611.jpg" />
+		<bg id="bg612" type="简约风格" url="assets/backgrounds/612.jpg" />
+		<bg id="bg613" type="简约风格" url="assets/backgrounds/613.jpg" />
+		<bg id="bg614" type="简约风格" url="assets/backgrounds/614.jpg" />
+		<bg id="bg615" type="简约风格" url="assets/backgrounds/615.jpg" />
+		<bg id="bg616" type="简约风格" url="assets/backgrounds/616.jpg" />
+		<bg id="bg617" type="简约风格" url="assets/backgrounds/617.jpg" />
+		<bg id="bg618" type="简约风格" url="assets/backgrounds/618.jpg" />
+		<bg id="bg619" type="简约风格" url="assets/backgrounds/619.jpg" />
+		<bg id="bg620" type="简约风格" url="assets/backgrounds/620.jpg" />
+		<bg id="bg621" type="简约风格" url="assets/backgrounds/621.jpg" />
+		<bg id="bg622" type="简约风格" url="assets/backgrounds/622.jpg" />
+		<bg id="bg623" type="简约风格" url="assets/backgrounds/623.jpg" />
+		<bg id="bg624" type="简约风格" url="assets/backgrounds/624.jpg" />
+		<bg id="bg625" type="简约风格" url="assets/backgrounds/625.jpg" />
+		<bg id="bg626" type="简约风格" url="assets/backgrounds/626.jpg" />
+		<bg id="bg627" type="简约风格" url="assets/backgrounds/627.jpg" />
+		<bg id="bg628" type="简约风格" url="assets/backgrounds/628.jpg" />
+		<bg id="bg629" type="简约风格" url="assets/backgrounds/629.jpg" />
+		<bg id="bg630" type="简约风格" url="assets/backgrounds/630.jpg" />
+		<bg id="bg631" type="简约风格" url="assets/backgrounds/631.jpg" />
+		<bg id="bg632" type="简约风格" url="assets/backgrounds/632.jpg" />
+		<bg id="bg633" type="简约风格" url="assets/backgrounds/633.jpg" />
+		<bg id="bg634" type="简约风格" url="assets/backgrounds/634.jpg" />
+		<bg id="bg635" type="简约风格" url="assets/backgrounds/635.jpg" />
+		<bg id="bg636" type="简约风格" url="assets/backgrounds/636.jpg" />
+		<bg id="bg637" type="简约风格" url="assets/backgrounds/637.jpg" />
+		<bg id="bg638" type="简约风格" url="assets/backgrounds/638.jpg" />
+		<bg id="bg639" type="简约风格" url="assets/backgrounds/639.jpg" />
+		<bg id="bg640" type="简约风格" url="assets/backgrounds/640.jpg" />
 		
-		<bg type="现代" url="assets/backgrounds/701.jpg" />
-		<bg type="现代" url="assets/backgrounds/702.jpg" />
-		<bg type="现代" url="assets/backgrounds/703.jpg" />
-		<bg type="现代" url="assets/backgrounds/704.jpg" />
-		<bg type="现代" url="assets/backgrounds/705.jpg" />
-		<bg type="现代" url="assets/backgrounds/706.jpg" />
-		<bg type="现代" url="assets/backgrounds/707.jpg" />
-		<bg type="现代" url="assets/backgrounds/708.jpg" />
-		<bg type="现代" url="assets/backgrounds/709.jpg" />
-		<bg type="现代" url="assets/backgrounds/710.jpg" />
-		<bg type="现代" url="assets/backgrounds/711.jpg" />
-		<bg type="现代" url="assets/backgrounds/712.jpg" />
-		<bg type="现代" url="assets/backgrounds/713.jpg" />
-		<bg type="现代" url="assets/backgrounds/714.jpg" />
+		<bg id="bg701" type="现代" url="assets/backgrounds/701.jpg" />
+		<bg id="bg702" type="现代" url="assets/backgrounds/702.jpg" />
+		<bg id="bg703" type="现代" url="assets/backgrounds/703.jpg" />
+		<bg id="bg704" type="现代" url="assets/backgrounds/704.jpg" />
+		<bg id="bg705" type="现代" url="assets/backgrounds/705.jpg" />
+		<bg id="bg706" type="现代" url="assets/backgrounds/706.jpg" />
+		<bg id="bg707" type="现代" url="assets/backgrounds/707.jpg" />
+		<bg id="bg708" type="现代" url="assets/backgrounds/708.jpg" />
+		<bg id="bg709" type="现代" url="assets/backgrounds/709.jpg" />
+		<bg id="bg710" type="现代" url="assets/backgrounds/710.jpg" />
+		<bg id="bg711" type="现代" url="assets/backgrounds/711.jpg" />
+		<bg id="bg712" type="现代" url="assets/backgrounds/712.jpg" />
+		<bg id="bg713" type="现代" url="assets/backgrounds/713.jpg" />
+		<bg id="bg714" type="现代" url="assets/backgrounds/714.jpg" />
 	</backgrounds>
 	
 	<!-- 
 		装饰配置文件
+		id	 唯一资源标记，不可与其他任意ID重复
 		type 类型
 		url 链接地址
 	 -->
 	<decorates>
-		<dc type="卡通动物" url="assets/decorates/1.png" />
-		<dc type="卡通动物" url="assets/decorates/2.png" />
-		<dc type="卡通动物" url="assets/decorates/3.png" />
-		<dc type="卡通动物" url="assets/decorates/4.png" />
-		<dc type="卡通动物" url="assets/decorates/5.png" />
-		<dc type="卡通动物" url="assets/decorates/6.png" />
-		<dc type="卡通动物" url="assets/decorates/7.png" />
-		<dc type="卡通动物" url="assets/decorates/8.png" />
-		<dc type="卡通动物" url="assets/decorates/9.png" />
-		<dc type="卡通动物" url="assets/decorates/10.png" />
-		<dc type="卡通动物" url="assets/decorates/11.png" />
-		<dc type="卡通动物" url="assets/decorates/12.png" />
-		
-		<dc type="14年日期" url="assets/decorates/101.png" />
-		<dc type="14年日期" url="assets/decorates/102.png" />
-		<dc type="14年日期" url="assets/decorates/103.png" />
-		<dc type="14年日期" url="assets/decorates/104.png" />
-		<dc type="14年日期" url="assets/decorates/105.png" />
-		<dc type="14年日期" url="assets/decorates/106.png" />
-		<dc type="14年日期" url="assets/decorates/107.png" />
-		<dc type="14年日期" url="assets/decorates/108.png" />
-		<dc type="14年日期" url="assets/decorates/109.png" />
-		<dc type="14年日期" url="assets/decorates/110.png" />
-		<dc type="14年日期" url="assets/decorates/111.png" />
-		<dc type="14年日期" url="assets/decorates/112.png" />
-		<dc type="14年日期" url="assets/decorates/113.png" />
-		<dc type="14年日期" url="assets/decorates/114.png" />
-		<dc type="14年日期" url="assets/decorates/115.png" />
-		<dc type="14年日期" url="assets/decorates/116.png" />
-		<dc type="14年日期" url="assets/decorates/117.png" />
-		<dc type="14年日期" url="assets/decorates/118.png" />
-		<dc type="14年日期" url="assets/decorates/119.png" />
-		<dc type="14年日期" url="assets/decorates/120.png" />
-		<dc type="14年日期" url="assets/decorates/121.png" />
-		<dc type="14年日期" url="assets/decorates/122.png" />
-		<dc type="14年日期" url="assets/decorates/123.png" />
-		<dc type="14年日期" url="assets/decorates/124.png" />
-		<dc type="14年日期" url="assets/decorates/125.png" />
-		<dc type="14年日期" url="assets/decorates/126.png" />
-		<dc type="14年日期" url="assets/decorates/127.png" />
-		<dc type="14年日期" url="assets/decorates/128.png" />
-		<dc type="14年日期" url="assets/decorates/129.png" />
-		<dc type="14年日期" url="assets/decorates/130.png" />
-		<dc type="14年日期" url="assets/decorates/131.png" />
-		<dc type="14年日期" url="assets/decorates/132.png" />
-		<dc type="14年日期" url="assets/decorates/133.png" />
-		<dc type="14年日期" url="assets/decorates/134.png" />
-		<dc type="14年日期" url="assets/decorates/135.png" />
-		<dc type="14年日期" url="assets/decorates/136.png" />
-		<dc type="14年日期" url="assets/decorates/137.png" />
-		<dc type="14年日期" url="assets/decorates/138.png" />
-		<dc type="14年日期" url="assets/decorates/139.png" />
-		<dc type="14年日期" url="assets/decorates/140.png" />
-		<dc type="14年日期" url="assets/decorates/141.png" />
-		<dc type="14年日期" url="assets/decorates/142.png" />
-		<dc type="14年日期" url="assets/decorates/143.png" />
-		<dc type="14年日期" url="assets/decorates/144.png" />
-		<dc type="14年日期" url="assets/decorates/145.png" />
-		<dc type="14年日期" url="assets/decorates/146.png" />
-		<dc type="14年日期" url="assets/decorates/147.png" />
-		<dc type="14年日期" url="assets/decorates/148.png" />
-		<dc type="14年日期" url="assets/decorates/149.png" />
-		<dc type="14年日期" url="assets/decorates/150.png" />
-		<dc type="14年日期" url="assets/decorates/151.png" />
-		<dc type="14年日期" url="assets/decorates/152.png" />
-		<dc type="14年日期" url="assets/decorates/153.png" />
-		<dc type="14年日期" url="assets/decorates/154.png" />
-		<dc type="14年日期" url="assets/decorates/155.png" />
-		<dc type="14年日期" url="assets/decorates/156.png" />
-		<dc type="14年日期" url="assets/decorates/157.png" />
-		<dc type="14年日期" url="assets/decorates/158.png" />
-		<dc type="14年日期" url="assets/decorates/159.png" />
-		<dc type="14年日期" url="assets/decorates/160.png" />
-		<dc type="14年日期" url="assets/decorates/161.png" />
-		<dc type="14年日期" url="assets/decorates/162.png" />
-		<dc type="14年日期" url="assets/decorates/163.png" />
-		<dc type="14年日期" url="assets/decorates/164.png" />
-		<dc type="14年日期" url="assets/decorates/165.png" />
-		<dc type="14年日期" url="assets/decorates/166.png" />
-		<dc type="14年日期" url="assets/decorates/167.png" />
-		<dc type="14年日期" url="assets/decorates/168.png" />
-		<dc type="14年日期" url="assets/decorates/169.png" />
-		<dc type="14年日期" url="assets/decorates/170.png" />
-		<dc type="14年日期" url="assets/decorates/171.png" />
-		<dc type="14年日期" url="assets/decorates/172.png" />
-				
-		<dc type="花剪贴画" url="assets/decorates/201.png" />
-		<dc type="花剪贴画" url="assets/decorates/202.png" />
-		<dc type="花剪贴画" url="assets/decorates/203.png" />
-		<dc type="花剪贴画" url="assets/decorates/204.png" />
-		<dc type="花剪贴画" url="assets/decorates/205.png" />
-		<dc type="花剪贴画" url="assets/decorates/206.png" />
-		<dc type="花剪贴画" url="assets/decorates/207.png" />
-		
-		<dc type="背部日期" url="assets/decorates/301.png" />
-		<dc type="背部日期" url="assets/decorates/302.png" />
-		<dc type="背部日期" url="assets/decorates/303.png" />
-		<dc type="背部日期" url="assets/decorates/304.png" />
-		<dc type="背部日期" url="assets/decorates/305.png" />
-		<dc type="背部日期" url="assets/decorates/306.png" />
-		<dc type="背部日期" url="assets/decorates/307.png" />
-		<dc type="背部日期" url="assets/decorates/308.png" />
-		<dc type="背部日期" url="assets/decorates/309.png" />
-		<dc type="背部日期" url="assets/decorates/310.png" />
-		<dc type="背部日期" url="assets/decorates/311.png" />
-		<dc type="背部日期" url="assets/decorates/312.png" />
-		<dc type="背部日期" url="assets/decorates/313.png" />
-		<dc type="背部日期" url="assets/decorates/314.png" />
-		<dc type="背部日期" url="assets/decorates/315.png" />
-		<dc type="背部日期" url="assets/decorates/316.png" />
-		<dc type="背部日期" url="assets/decorates/317.png" />
-		<dc type="背部日期" url="assets/decorates/318.png" />
-		<dc type="背部日期" url="assets/decorates/319.png" />
-		<dc type="背部日期" url="assets/decorates/320.png" />
-		<dc type="背部日期" url="assets/decorates/321.png" />
-		<dc type="背部日期" url="assets/decorates/322.png" />
-		<dc type="背部日期" url="assets/decorates/323.png" />
-		<dc type="背部日期" url="assets/decorates/324.png" />
-		
-		<dc type="13年日期" url="assets/decorates/401.png" />
-		<dc type="13年日期" url="assets/decorates/402.png" />
-		<dc type="13年日期" url="assets/decorates/403.png" />
-		<dc type="13年日期" url="assets/decorates/404.png" />
-		<dc type="13年日期" url="assets/decorates/405.png" />
-		<dc type="13年日期" url="assets/decorates/406.png" />
-		<dc type="13年日期" url="assets/decorates/407.png" />
-		<dc type="13年日期" url="assets/decorates/408.png" />
-		<dc type="13年日期" url="assets/decorates/409.png" />
-		<dc type="13年日期" url="assets/decorates/410.png" />
-		<dc type="13年日期" url="assets/decorates/411.png" />
-		<dc type="13年日期" url="assets/decorates/412.png" />
-		<dc type="13年日期" url="assets/decorates/413.png" />
-		<dc type="13年日期" url="assets/decorates/414.png" />
-		<dc type="13年日期" url="assets/decorates/415.png" />
-		<dc type="13年日期" url="assets/decorates/416.png" />
-		<dc type="13年日期" url="assets/decorates/417.png" />
-		<dc type="13年日期" url="assets/decorates/418.png" />
-		<dc type="13年日期" url="assets/decorates/419.png" />
-		<dc type="13年日期" url="assets/decorates/420.png" />
-		<dc type="13年日期" url="assets/decorates/421.png" />
-		<dc type="13年日期" url="assets/decorates/422.png" />
-		<dc type="13年日期" url="assets/decorates/423.png" />
-		<dc type="13年日期" url="assets/decorates/424.png" />
-		<dc type="13年日期" url="assets/decorates/425.png" />
-		<dc type="13年日期" url="assets/decorates/426.png" />
-		<dc type="13年日期" url="assets/decorates/427.png" />
-		<dc type="13年日期" url="assets/decorates/428.png" />
-		<dc type="13年日期" url="assets/decorates/429.png" />
-		<dc type="13年日期" url="assets/decorates/430.png" />
-		<dc type="13年日期" url="assets/decorates/431.png" />
-		<dc type="13年日期" url="assets/decorates/432.png" />
-		<dc type="13年日期" url="assets/decorates/433.png" />
-		<dc type="13年日期" url="assets/decorates/434.png" />
-		<dc type="13年日期" url="assets/decorates/435.png" />
-		<dc type="13年日期" url="assets/decorates/436.png" />
-		<dc type="13年日期" url="assets/decorates/437.png" />
-		<dc type="13年日期" url="assets/decorates/438.png" />
-		<dc type="13年日期" url="assets/decorates/439.png" />
-		<dc type="13年日期" url="assets/decorates/440.png" />
-		<dc type="13年日期" url="assets/decorates/441.png" />
-		<dc type="13年日期" url="assets/decorates/442.png" />
-		<dc type="13年日期" url="assets/decorates/443.png" />
-		<dc type="13年日期" url="assets/decorates/444.png" />
-		<dc type="13年日期" url="assets/decorates/445.png" />
-		<dc type="13年日期" url="assets/decorates/446.png" />
-		<dc type="13年日期" url="assets/decorates/447.png" />
-		<dc type="13年日期" url="assets/decorates/448.png" />
-		<dc type="13年日期" url="assets/decorates/449.png" />
-		<dc type="13年日期" url="assets/decorates/450.png" />
-		<dc type="13年日期" url="assets/decorates/451.png" />
-		<dc type="13年日期" url="assets/decorates/452.png" />
-		<dc type="13年日期" url="assets/decorates/453.png" />
-		<dc type="13年日期" url="assets/decorates/454.png" />
-		<dc type="13年日期" url="assets/decorates/455.png" />
-		<dc type="13年日期" url="assets/decorates/456.png" />
-		<dc type="13年日期" url="assets/decorates/457.png" />
-		<dc type="13年日期" url="assets/decorates/458.png" />
-		<dc type="13年日期" url="assets/decorates/459.png" />
-		<dc type="13年日期" url="assets/decorates/460.png" />
-		<dc type="13年日期" url="assets/decorates/461.png" />
-		<dc type="13年日期" url="assets/decorates/462.png" />
-		<dc type="13年日期" url="assets/decorates/463.png" />
-		<dc type="13年日期" url="assets/decorates/464.png" />
-		<dc type="13年日期" url="assets/decorates/465.png" />
-		<dc type="13年日期" url="assets/decorates/466.png" />
-		<dc type="13年日期" url="assets/decorates/467.png" />
-		<dc type="13年日期" url="assets/decorates/468.png" />
-		<dc type="13年日期" url="assets/decorates/469.png" />
-		<dc type="13年日期" url="assets/decorates/470.png" />
-		<dc type="13年日期" url="assets/decorates/471.png" />
-		<dc type="13年日期" url="assets/decorates/472.png" />
-		
-		<dc type="年份字型" url="assets/decorates/501.png" />
-		<dc type="年份字型" url="assets/decorates/502.png" />
-		<dc type="年份字型" url="assets/decorates/503.png" />
-		<dc type="年份字型" url="assets/decorates/504.png" />
-		<dc type="年份字型" url="assets/decorates/505.png" />
-		<dc type="年份字型" url="assets/decorates/506.png" />
-		<dc type="年份字型" url="assets/decorates/507.png" />
-		<dc type="年份字型" url="assets/decorates/508.png" />
-		<dc type="年份字型" url="assets/decorates/509.png" />
-		<dc type="年份字型" url="assets/decorates/510.png" />
-		<dc type="年份字型" url="assets/decorates/511.png" />
-		<dc type="年份字型" url="assets/decorates/512.png" />
-		<dc type="年份字型" url="assets/decorates/513.png" />
-		<dc type="年份字型" url="assets/decorates/514.png" />
-		<dc type="年份字型" url="assets/decorates/515.png" />
-		<dc type="年份字型" url="assets/decorates/516.png" />
-		<dc type="年份字型" url="assets/decorates/517.png" />
-		<dc type="年份字型" url="assets/decorates/518.png" />
-		<dc type="年份字型" url="assets/decorates/519.png" />
-		<dc type="年份字型" url="assets/decorates/520.png" />
-		<dc type="年份字型" url="assets/decorates/521.png" />
-		<dc type="年份字型" url="assets/decorates/522.png" />
-		<dc type="年份字型" url="assets/decorates/523.png" />
-		<dc type="年份字型" url="assets/decorates/524.png" />
-		<dc type="年份字型" url="assets/decorates/525.png" />
-		<dc type="年份字型" url="assets/decorates/526.png" />
-		<dc type="年份字型" url="assets/decorates/527.png" />
-		<dc type="年份字型" url="assets/decorates/528.png" />
-		<dc type="年份字型" url="assets/decorates/529.png" />
-		<dc type="年份字型" url="assets/decorates/530.png" />
-		<dc type="年份字型" url="assets/decorates/531.png" />
-		<dc type="年份字型" url="assets/decorates/532.png" />
-		
-		<dc type="大海" url="assets/decorates/601.png" />
-		<dc type="大海" url="assets/decorates/602.png" />
-		<dc type="大海" url="assets/decorates/603.png" />
-		<dc type="大海" url="assets/decorates/604.png" />
-		<dc type="大海" url="assets/decorates/605.png" />
-		<dc type="大海" url="assets/decorates/606.png" />
-		<dc type="大海" url="assets/decorates/607.png" />
-		<dc type="大海" url="assets/decorates/608.png" />
-		<dc type="大海" url="assets/decorates/609.png" />
-		<dc type="大海" url="assets/decorates/610.png" />
-		<dc type="大海" url="assets/decorates/611.png" />
-		
-		<dc type="月份字型" url="assets/decorates/701.png" />
-		<dc type="月份字型" url="assets/decorates/702.png" />
-		<dc type="月份字型" url="assets/decorates/703.png" />
-		<dc type="月份字型" url="assets/decorates/704.png" />
-		<dc type="月份字型" url="assets/decorates/705.png" />
-		<dc type="月份字型" url="assets/decorates/706.png" />
-		<dc type="月份字型" url="assets/decorates/707.png" />
-		<dc type="月份字型" url="assets/decorates/708.png" />
-		<dc type="月份字型" url="assets/decorates/709.png" />
-		<dc type="月份字型" url="assets/decorates/710.png" />
-		<dc type="月份字型" url="assets/decorates/711.png" />
-		<dc type="月份字型" url="assets/decorates/712.png" />
-		
-		<dc type="艺术文字" url="assets/decorates/801.png" />
-		<dc type="艺术文字" url="assets/decorates/802.png" />
-		<dc type="艺术文字" url="assets/decorates/803.png" />
-		<dc type="艺术文字" url="assets/decorates/804.png" />
-		<dc type="艺术文字" url="assets/decorates/805.png" />
-		<dc type="艺术文字" url="assets/decorates/806.png" />
-		<dc type="艺术文字" url="assets/decorates/807.png" />
-		<dc type="艺术文字" url="assets/decorates/808.png" />
-		<dc type="艺术文字" url="assets/decorates/809.png" />
-		<dc type="艺术文字" url="assets/decorates/810.png" />
-		<dc type="艺术文字" url="assets/decorates/811.png" />
-		<dc type="艺术文字" url="assets/decorates/812.png" />
-		<dc type="艺术文字" url="assets/decorates/813.png" />
-		<dc type="艺术文字" url="assets/decorates/814.png" />
-		<dc type="艺术文字" url="assets/decorates/815.png" />
-		<dc type="艺术文字" url="assets/decorates/816.png" />
-		<dc type="艺术文字" url="assets/decorates/817.png" />
-		<dc type="艺术文字" url="assets/decorates/818.png" />
-		<dc type="艺术文字" url="assets/decorates/819.png" />
-		<dc type="艺术文字" url="assets/decorates/820.png" />
-		<dc type="艺术文字" url="assets/decorates/821.png" />
-		<dc type="艺术文字" url="assets/decorates/822.png" />
-		<dc type="艺术文字" url="assets/decorates/823.png" />
-		<dc type="艺术文字" url="assets/decorates/824.png" />
-		<dc type="艺术文字" url="assets/decorates/825.png" />
-		<dc type="艺术文字" url="assets/decorates/826.png" />
-		<dc type="艺术文字" url="assets/decorates/827.png" />
-		<dc type="艺术文字" url="assets/decorates/828.png" />
-		<dc type="艺术文字" url="assets/decorates/829.png" />
-		<dc type="艺术文字" url="assets/decorates/830.png" />
-		<dc type="艺术文字" url="assets/decorates/831.png" />
-		<dc type="艺术文字" url="assets/decorates/832.png" />
-		<dc type="艺术文字" url="assets/decorates/833.png" />
-		<dc type="艺术文字" url="assets/decorates/834.png" />
-		<dc type="艺术文字" url="assets/decorates/835.png" />
-		<dc type="艺术文字" url="assets/decorates/836.png" />
-		<dc type="艺术文字" url="assets/decorates/837.png" />
-		<dc type="艺术文字" url="assets/decorates/838.png" />
-		<dc type="艺术文字" url="assets/decorates/839.png" />
-		<dc type="艺术文字" url="assets/decorates/840.png" />
-		<dc type="艺术文字" url="assets/decorates/841.png" />
-		<dc type="艺术文字" url="assets/decorates/842.png" />
-		<dc type="艺术文字" url="assets/decorates/843.png" />
-		<dc type="艺术文字" url="assets/decorates/844.png" />
-		<dc type="艺术文字" url="assets/decorates/845.png" />
-		<dc type="艺术文字" url="assets/decorates/846.png" />
-		<dc type="艺术文字" url="assets/decorates/847.png" />
-		<dc type="艺术文字" url="assets/decorates/848.png" />
-		<dc type="艺术文字" url="assets/decorates/849.png" />
-		<dc type="艺术文字" url="assets/decorates/850.png" />
-		<dc type="艺术文字" url="assets/decorates/851.png" />
-		<dc type="艺术文字" url="assets/decorates/852.png" />
-		<dc type="艺术文字" url="assets/decorates/853.png" />
-		<dc type="艺术文字" url="assets/decorates/854.png" />
-		<dc type="艺术文字" url="assets/decorates/855.png" />
-		<dc type="艺术文字" url="assets/decorates/856.png" />
-		<dc type="艺术文字" url="assets/decorates/857.png" />
-		<dc type="艺术文字" url="assets/decorates/858.png" />
-		<dc type="艺术文字" url="assets/decorates/859.png" />
-		<dc type="艺术文字" url="assets/decorates/860.png" />
-		<dc type="艺术文字" url="assets/decorates/861.png" />
-		<dc type="艺术文字" url="assets/decorates/862.png" />
-		<dc type="艺术文字" url="assets/decorates/863.png" />
-		<dc type="艺术文字" url="assets/decorates/864.png" />
-		<dc type="艺术文字" url="assets/decorates/865.png" />
-		<dc type="艺术文字" url="assets/decorates/866.png" />
-		<dc type="艺术文字" url="assets/decorates/867.png" />
-		<dc type="艺术文字" url="assets/decorates/868.png" />
-		<dc type="艺术文字" url="assets/decorates/869.png" />
-		<dc type="艺术文字" url="assets/decorates/870.png" />
-		<dc type="艺术文字" url="assets/decorates/871.png" />
-		<dc type="艺术文字" url="assets/decorates/872.png" />
-		<dc type="艺术文字" url="assets/decorates/873.png" />
-		<dc type="艺术文字" url="assets/decorates/874.png" />
-		<dc type="艺术文字" url="assets/decorates/875.png" />
-		<dc type="艺术文字" url="assets/decorates/876.png" />
-		<dc type="艺术文字" url="assets/decorates/877.png" />
-		<dc type="艺术文字" url="assets/decorates/878.png" />
-		<dc type="艺术文字" url="assets/decorates/879.png" />
-		<dc type="艺术文字" url="assets/decorates/880.png" />
-		<dc type="艺术文字" url="assets/decorates/881.png" />
-		<dc type="艺术文字" url="assets/decorates/882.png" />
-		<dc type="艺术文字" url="assets/decorates/883.png" />
-		<dc type="艺术文字" url="assets/decorates/884.png" />
-		
-		<dc type="小装饰图" url="assets/decorates/901.png" />
-		<dc type="小装饰图" url="assets/decorates/902.png" />
-		<dc type="小装饰图" url="assets/decorates/903.png" />
-		<dc type="小装饰图" url="assets/decorates/904.png" />
-		<dc type="小装饰图" url="assets/decorates/905.png" />
-		<dc type="小装饰图" url="assets/decorates/906.png" />
-		<dc type="小装饰图" url="assets/decorates/907.png" />
-		<dc type="小装饰图" url="assets/decorates/908.png" />
-		<dc type="小装饰图" url="assets/decorates/909.png" />
-		<dc type="小装饰图" url="assets/decorates/910.png" />
-		<dc type="小装饰图" url="assets/decorates/911.png" />
-		<dc type="小装饰图" url="assets/decorates/912.png" />
-		<dc type="小装饰图" url="assets/decorates/913.png" />
-		<dc type="小装饰图" url="assets/decorates/914.png" />
-		<dc type="小装饰图" url="assets/decorates/915.png" />
-		<dc type="小装饰图" url="assets/decorates/916.png" />
-		<dc type="小装饰图" url="assets/decorates/917.png" />
-		<dc type="小装饰图" url="assets/decorates/918.png" />
-		<dc type="小装饰图" url="assets/decorates/919.png" />
-		<dc type="小装饰图" url="assets/decorates/920.png" />
-		<dc type="小装饰图" url="assets/decorates/921.png" />
-		<dc type="小装饰图" url="assets/decorates/922.png" />
-		<dc type="小装饰图" url="assets/decorates/923.png" />
-		<dc type="小装饰图" url="assets/decorates/924.png" />
-		<dc type="小装饰图" url="assets/decorates/925.png" />
-		<dc type="小装饰图" url="assets/decorates/926.png" />
-		<dc type="小装饰��" url="assets/decorates/927.png" />
-		<dc type="小装饰图" url="assets/decorates/928.png" />
-		<dc type="小装饰图" url="assets/decorates/929.png" />
-		<dc type="小装饰图" url="assets/decorates/930.png" />
-		<dc type="小装饰图" url="assets/decorates/931.png" />
-		<dc type="小装饰图" url="assets/decorates/932.png" />
-		
-		<dc type="插画" url="assets/decorates/1001.png" />
-		<dc type="插画" url="assets/decorates/1002.png" />
+		<dc id="dc1" type="卡通动物" url="assets/decorates/1.png" />
+		<dc id="dc2" type="卡通动物" url="assets/decorates/2.png" />
+		<dc id="dc3" type="卡通动物" url="assets/decorates/3.png" />
+		<dc id="dc4" type="卡通动物" url="assets/decorates/4.png" />
+		<dc id="dc5" type="卡通动物" url="assets/decorates/5.png" />
+		<dc id="dc6" type="卡通动物" url="assets/decorates/6.png" />
+		<dc id="dc7" type="卡通动物" url="assets/decorates/7.png" />
+		<dc id="dc8" type="卡通动物" url="assets/decorates/8.png" />
+		<dc id="dc9" type="卡通动物" url="assets/decorates/9.png" />
+		<dc id="dc10" type="卡通动物" url="assets/decorates/10.png" />
+		<dc id="dc11" type="卡通动物" url="assets/decorates/11.png" />
+		<dc id="dc12" type="卡通动物" url="assets/decorates/12.png" />
+		<dc id="dc101" type="14年日期" url="assets/decorates/101.png" />
+		<dc id="dc102" type="14年日期" url="assets/decorates/102.png" />
+		<dc id="dc103" type="14年日期" url="assets/decorates/103.png" />
+		<dc id="dc104" type="14年日期" url="assets/decorates/104.png" />
+		<dc id="dc105" type="14年日期" url="assets/decorates/105.png" />
+		<dc id="dc106" type="14年日期" url="assets/decorates/106.png" />
+		<dc id="dc107" type="14年日期" url="assets/decorates/107.png" />
+		<dc id="dc108" type="14年日期" url="assets/decorates/108.png" />
+		<dc id="dc109" type="14年日期" url="assets/decorates/109.png" />
+		<dc id="dc110" type="14年日期" url="assets/decorates/110.png" />
+		<dc id="dc111" type="14年日期" url="assets/decorates/111.png" />
+		<dc id="dc112" type="14年日期" url="assets/decorates/112.png" />
+		<dc id="dc113" type="14年日期" url="assets/decorates/113.png" />
+		<dc id="dc114" type="14年日期" url="assets/decorates/114.png" />
+		<dc id="dc115" type="14年日期" url="assets/decorates/115.png" />
+		<dc id="dc116" type="14年日期" url="assets/decorates/116.png" />
+		<dc id="dc117" type="14年日期" url="assets/decorates/117.png" />
+		<dc id="dc118" type="14年日期" url="assets/decorates/118.png" />
+		<dc id="dc119" type="14年日期" url="assets/decorates/119.png" />
+		<dc id="dc120" type="14年日期" url="assets/decorates/120.png" />
+		<dc id="dc121" type="14年日期" url="assets/decorates/121.png" />
+		<dc id="dc122" type="14年日期" url="assets/decorates/122.png" />
+		<dc id="dc123" type="14年日期" url="assets/decorates/123.png" />
+		<dc id="dc124" type="14年日期" url="assets/decorates/124.png" />
+		<dc id="dc125" type="14年日期" url="assets/decorates/125.png" />
+		<dc id="dc126" type="14年日期" url="assets/decorates/126.png" />
+		<dc id="dc127" type="14年日期" url="assets/decorates/127.png" />
+		<dc id="dc128" type="14年日期" url="assets/decorates/128.png" />
+		<dc id="dc129" type="14年日期" url="assets/decorates/129.png" />
+		<dc id="dc130" type="14年日期" url="assets/decorates/130.png" />
+		<dc id="dc131" type="14年日期" url="assets/decorates/131.png" />
+		<dc id="dc132" type="14年日期" url="assets/decorates/132.png" />
+		<dc id="dc133" type="14年日期" url="assets/decorates/133.png" />
+		<dc id="dc134" type="14年日期" url="assets/decorates/134.png" />
+		<dc id="dc135" type="14年日期" url="assets/decorates/135.png" />
+		<dc id="dc136" type="14年日期" url="assets/decorates/136.png" />
+		<dc id="dc137" type="14年日期" url="assets/decorates/137.png" />
+		<dc id="dc138" type="14年日期" url="assets/decorates/138.png" />
+		<dc id="dc139" type="14年日期" url="assets/decorates/139.png" />
+		<dc id="dc140" type="14年日期" url="assets/decorates/140.png" />
+		<dc id="dc141" type="14年日期" url="assets/decorates/141.png" />
+		<dc id="dc142" type="14年日期" url="assets/decorates/142.png" />
+		<dc id="dc143" type="14年日期" url="assets/decorates/143.png" />
+		<dc id="dc144" type="14年日期" url="assets/decorates/144.png" />
+		<dc id="dc145" type="14年日期" url="assets/decorates/145.png" />
+		<dc id="dc146" type="14年日期" url="assets/decorates/146.png" />
+		<dc id="dc147" type="14年日期" url="assets/decorates/147.png" />
+		<dc id="dc148" type="14年日期" url="assets/decorates/148.png" />
+		<dc id="dc149" type="14年日期" url="assets/decorates/149.png" />
+		<dc id="dc150" type="14年日期" url="assets/decorates/150.png" />
+		<dc id="dc151" type="14年日期" url="assets/decorates/151.png" />
+		<dc id="dc152" type="14年日期" url="assets/decorates/152.png" />
+		<dc id="dc153" type="14年日期" url="assets/decorates/153.png" />
+		<dc id="dc154" type="14年日期" url="assets/decorates/154.png" />
+		<dc id="dc155" type="14年日期" url="assets/decorates/155.png" />
+		<dc id="dc156" type="14年日期" url="assets/decorates/156.png" />
+		<dc id="dc157" type="14年日期" url="assets/decorates/157.png" />
+		<dc id="dc158" type="14年日期" url="assets/decorates/158.png" />
+		<dc id="dc159" type="14年日期" url="assets/decorates/159.png" />
+		<dc id="dc160" type="14年日期" url="assets/decorates/160.png" />
+		<dc id="dc161" type="14年日期" url="assets/decorates/161.png" />
+		<dc id="dc162" type="14年日期" url="assets/decorates/162.png" />
+		<dc id="dc163" type="14年日期" url="assets/decorates/163.png" />
+		<dc id="dc164" type="14年日期" url="assets/decorates/164.png" />
+		<dc id="dc165" type="14年日期" url="assets/decorates/165.png" />
+		<dc id="dc166" type="14年日期" url="assets/decorates/166.png" />
+		<dc id="dc167" type="14年日期" url="assets/decorates/167.png" />
+		<dc id="dc168" type="14年日期" url="assets/decorates/168.png" />
+		<dc id="dc169" type="14年日期" url="assets/decorates/169.png" />
+		<dc id="dc170" type="14年日期" url="assets/decorates/170.png" />
+		<dc id="dc171" type="14年日期" url="assets/decorates/171.png" />
+		<dc id="dc172" type="14年日期" url="assets/decorates/172.png" />
+		<dc id="dc201" type="花剪贴画" url="assets/decorates/201.png" />
+		<dc id="dc202" type="花剪贴画" url="assets/decorates/202.png" />
+		<dc id="dc203" type="花剪贴画" url="assets/decorates/203.png" />
+		<dc id="dc204" type="花剪贴画" url="assets/decorates/204.png" />
+		<dc id="dc205" type="花剪贴画" url="assets/decorates/205.png" />
+		<dc id="dc206" type="花剪贴画" url="assets/decorates/206.png" />
+		<dc id="dc207" type="花剪贴画" url="assets/decorates/207.png" />
+		<dc id="dc301" type="背部日期" url="assets/decorates/301.png" />
+		<dc id="dc302" type="背部日期" url="assets/decorates/302.png" />
+		<dc id="dc303" type="背部日期" url="assets/decorates/303.png" />
+		<dc id="dc304" type="背部日期" url="assets/decorates/304.png" />
+		<dc id="dc305" type="背部日期" url="assets/decorates/305.png" />
+		<dc id="dc306" type="背部日期" url="assets/decorates/306.png" />
+		<dc id="dc307" type="背部日期" url="assets/decorates/307.png" />
+		<dc id="dc308" type="背部日期" url="assets/decorates/308.png" />
+		<dc id="dc309" type="背部日期" url="assets/decorates/309.png" />
+		<dc id="dc310" type="背部日期" url="assets/decorates/310.png" />
+		<dc id="dc311" type="背部日期" url="assets/decorates/311.png" />
+		<dc id="dc312" type="背部日期" url="assets/decorates/312.png" />
+		<dc id="dc313" type="背部日期" url="assets/decorates/313.png" />
+		<dc id="dc314" type="背部日期" url="assets/decorates/314.png" />
+		<dc id="dc315" type="背部日期" url="assets/decorates/315.png" />
+		<dc id="dc316" type="背部日期" url="assets/decorates/316.png" />
+		<dc id="dc317" type="背部日期" url="assets/decorates/317.png" />
+		<dc id="dc318" type="背部日期" url="assets/decorates/318.png" />
+		<dc id="dc319" type="背部日期" url="assets/decorates/319.png" />
+		<dc id="dc320" type="背部日期" url="assets/decorates/320.png" />
+		<dc id="dc321" type="背部日期" url="assets/decorates/321.png" />
+		<dc id="dc322" type="背部日期" url="assets/decorates/322.png" />
+		<dc id="dc323" type="背部日期" url="assets/decorates/323.png" />
+		<dc id="dc324" type="背部日期" url="assets/decorates/324.png" />
+		<dc id="dc401" type="13年日期" url="assets/decorates/401.png" />
+		<dc id="dc402" type="13年日期" url="assets/decorates/402.png" />
+		<dc id="dc403" type="13年日期" url="assets/decorates/403.png" />
+		<dc id="dc404" type="13年日期" url="assets/decorates/404.png" />
+		<dc id="dc405" type="13年日期" url="assets/decorates/405.png" />
+		<dc id="dc406" type="13年日期" url="assets/decorates/406.png" />
+		<dc id="dc407" type="13年日期" url="assets/decorates/407.png" />
+		<dc id="dc408" type="13年日期" url="assets/decorates/408.png" />
+		<dc id="dc409" type="13年日期" url="assets/decorates/409.png" />
+		<dc id="dc410" type="13年日期" url="assets/decorates/410.png" />
+		<dc id="dc411" type="13年日期" url="assets/decorates/411.png" />
+		<dc id="dc412" type="13年日期" url="assets/decorates/412.png" />
+		<dc id="dc413" type="13年日期" url="assets/decorates/413.png" />
+		<dc id="dc414" type="13年日期" url="assets/decorates/414.png" />
+		<dc id="dc415" type="13年日期" url="assets/decorates/415.png" />
+		<dc id="dc416" type="13年日期" url="assets/decorates/416.png" />
+		<dc id="dc417" type="13年日期" url="assets/decorates/417.png" />
+		<dc id="dc418" type="13年日期" url="assets/decorates/418.png" />
+		<dc id="dc419" type="13年日期" url="assets/decorates/419.png" />
+		<dc id="dc420" type="13年日期" url="assets/decorates/420.png" />
+		<dc id="dc421" type="13年日期" url="assets/decorates/421.png" />
+		<dc id="dc422" type="13年日期" url="assets/decorates/422.png" />
+		<dc id="dc423" type="13年日期" url="assets/decorates/423.png" />
+		<dc id="dc424" type="13年日期" url="assets/decorates/424.png" />
+		<dc id="dc425" type="13年日期" url="assets/decorates/425.png" />
+		<dc id="dc426" type="13年日期" url="assets/decorates/426.png" />
+		<dc id="dc427" type="13年日期" url="assets/decorates/427.png" />
+		<dc id="dc428" type="13年日期" url="assets/decorates/428.png" />
+		<dc id="dc429" type="13年日期" url="assets/decorates/429.png" />
+		<dc id="dc430" type="13年日期" url="assets/decorates/430.png" />
+		<dc id="dc431" type="13年日期" url="assets/decorates/431.png" />
+		<dc id="dc432" type="13年日期" url="assets/decorates/432.png" />
+		<dc id="dc433" type="13年日期" url="assets/decorates/433.png" />
+		<dc id="dc434" type="13年日期" url="assets/decorates/434.png" />
+		<dc id="dc435" type="13年日期" url="assets/decorates/435.png" />
+		<dc id="dc436" type="13年日期" url="assets/decorates/436.png" />
+		<dc id="dc437" type="13年日期" url="assets/decorates/437.png" />
+		<dc id="dc438" type="13年日期" url="assets/decorates/438.png" />
+		<dc id="dc439" type="13年日期" url="assets/decorates/439.png" />
+		<dc id="dc440" type="13年日期" url="assets/decorates/440.png" />
+		<dc id="dc441" type="13年日期" url="assets/decorates/441.png" />
+		<dc id="dc442" type="13年日期" url="assets/decorates/442.png" />
+		<dc id="dc443" type="13年日期" url="assets/decorates/443.png" />
+		<dc id="dc444" type="13年日期" url="assets/decorates/444.png" />
+		<dc id="dc445" type="13年日期" url="assets/decorates/445.png" />
+		<dc id="dc446" type="13年日期" url="assets/decorates/446.png" />
+		<dc id="dc447" type="13年日期" url="assets/decorates/447.png" />
+		<dc id="dc448" type="13年日期" url="assets/decorates/448.png" />
+		<dc id="dc449" type="13年日期" url="assets/decorates/449.png" />
+		<dc id="dc450" type="13年日期" url="assets/decorates/450.png" />
+		<dc id="dc451" type="13年日期" url="assets/decorates/451.png" />
+		<dc id="dc452" type="13年日期" url="assets/decorates/452.png" />
+		<dc id="dc453" type="13年日期" url="assets/decorates/453.png" />
+		<dc id="dc454" type="13年日期" url="assets/decorates/454.png" />
+		<dc id="dc455" type="13年日期" url="assets/decorates/455.png" />
+		<dc id="dc456" type="13年日期" url="assets/decorates/456.png" />
+		<dc id="dc457" type="13年日期" url="assets/decorates/457.png" />
+		<dc id="dc458" type="13年日期" url="assets/decorates/458.png" />
+		<dc id="dc459" type="13年日期" url="assets/decorates/459.png" />
+		<dc id="dc460" type="13年日期" url="assets/decorates/460.png" />
+		<dc id="dc461" type="13年日期" url="assets/decorates/461.png" />
+		<dc id="dc462" type="13年日期" url="assets/decorates/462.png" />
+		<dc id="dc463" type="13年日期" url="assets/decorates/463.png" />
+		<dc id="dc464" type="13年日期" url="assets/decorates/464.png" />
+		<dc id="dc465" type="13年日期" url="assets/decorates/465.png" />
+		<dc id="dc466" type="13年日期" url="assets/decorates/466.png" />
+		<dc id="dc467" type="13年日期" url="assets/decorates/467.png" />
+		<dc id="dc468" type="13年日期" url="assets/decorates/468.png" />
+		<dc id="dc469" type="13年日期" url="assets/decorates/469.png" />
+		<dc id="dc470" type="13年日期" url="assets/decorates/470.png" />
+		<dc id="dc471" type="13年日期" url="assets/decorates/471.png" />
+		<dc id="dc472" type="13年日期" url="assets/decorates/472.png" />
+		<dc id="dc501" type="年份字型" url="assets/decorates/501.png" />
+		<dc id="dc502" type="年份字型" url="assets/decorates/502.png" />
+		<dc id="dc503" type="年份字型" url="assets/decorates/503.png" />
+		<dc id="dc504" type="年份字型" url="assets/decorates/504.png" />
+		<dc id="dc505" type="年份字型" url="assets/decorates/505.png" />
+		<dc id="dc506" type="年份字型" url="assets/decorates/506.png" />
+		<dc id="dc507" type="年份字型" url="assets/decorates/507.png" />
+		<dc id="dc508" type="年份字型" url="assets/decorates/508.png" />
+		<dc id="dc509" type="年份字型" url="assets/decorates/509.png" />
+		<dc id="dc510" type="年份字型" url="assets/decorates/510.png" />
+		<dc id="dc511" type="年份字型" url="assets/decorates/511.png" />
+		<dc id="dc512" type="年份字型" url="assets/decorates/512.png" />
+		<dc id="dc513" type="年份字型" url="assets/decorates/513.png" />
+		<dc id="dc514" type="年份字型" url="assets/decorates/514.png" />
+		<dc id="dc515" type="年份字型" url="assets/decorates/515.png" />
+		<dc id="dc516" type="年份字型" url="assets/decorates/516.png" />
+		<dc id="dc517" type="年份字型" url="assets/decorates/517.png" />
+		<dc id="dc518" type="年份字型" url="assets/decorates/518.png" />
+		<dc id="dc519" type="年份字型" url="assets/decorates/519.png" />
+		<dc id="dc520" type="年份字型" url="assets/decorates/520.png" />
+		<dc id="dc521" type="年份字型" url="assets/decorates/521.png" />
+		<dc id="dc522" type="年份字型" url="assets/decorates/522.png" />
+		<dc id="dc523" type="年份字型" url="assets/decorates/523.png" />
+		<dc id="dc524" type="年份字型" url="assets/decorates/524.png" />
+		<dc id="dc525" type="年份字型" url="assets/decorates/525.png" />
+		<dc id="dc526" type="年份字型" url="assets/decorates/526.png" />
+		<dc id="dc527" type="年份字型" url="assets/decorates/527.png" />
+		<dc id="dc528" type="年份字型" url="assets/decorates/528.png" />
+		<dc id="dc529" type="年份字型" url="assets/decorates/529.png" />
+		<dc id="dc530" type="年份字型" url="assets/decorates/530.png" />
+		<dc id="dc531" type="年份字型" url="assets/decorates/531.png" />
+		<dc id="dc532" type="年份字型" url="assets/decorates/532.png" />
+		<dc id="dc601" type="大海" url="assets/decorates/601.png" />
+		<dc id="dc602" type="大海" url="assets/decorates/602.png" />
+		<dc id="dc603" type="大海" url="assets/decorates/603.png" />
+		<dc id="dc604" type="大海" url="assets/decorates/604.png" />
+		<dc id="dc605" type="大海" url="assets/decorates/605.png" />
+		<dc id="dc606" type="大海" url="assets/decorates/606.png" />
+		<dc id="dc607" type="大海" url="assets/decorates/607.png" />
+		<dc id="dc608" type="大海" url="assets/decorates/608.png" />
+		<dc id="dc609" type="大海" url="assets/decorates/609.png" />
+		<dc id="dc610" type="大海" url="assets/decorates/610.png" />
+		<dc id="dc611" type="大海" url="assets/decorates/611.png" />
+		<dc id="dc701" type="月份字型" url="assets/decorates/701.png" />
+		<dc id="dc702" type="月份字型" url="assets/decorates/702.png" />
+		<dc id="dc703" type="月份字型" url="assets/decorates/703.png" />
+		<dc id="dc704" type="月份字型" url="assets/decorates/704.png" />
+		<dc id="dc705" type="月份字型" url="assets/decorates/705.png" />
+		<dc id="dc706" type="月份字型" url="assets/decorates/706.png" />
+		<dc id="dc707" type="月份字型" url="assets/decorates/707.png" />
+		<dc id="dc708" type="月份字型" url="assets/decorates/708.png" />
+		<dc id="dc709" type="月份字型" url="assets/decorates/709.png" />
+		<dc id="dc710" type="月份字型" url="assets/decorates/710.png" />
+		<dc id="dc711" type="月份字型" url="assets/decorates/711.png" />
+		<dc id="dc712" type="月份字型" url="assets/decorates/712.png" />
+		<dc id="dc801" type="艺术文字" url="assets/decorates/801.png" />
+		<dc id="dc802" type="艺术文字" url="assets/decorates/802.png" />
+		<dc id="dc803" type="艺术文字" url="assets/decorates/803.png" />
+		<dc id="dc804" type="艺术文字" url="assets/decorates/804.png" />
+		<dc id="dc805" type="艺术文字" url="assets/decorates/805.png" />
+		<dc id="dc806" type="艺术文字" url="assets/decorates/806.png" />
+		<dc id="dc807" type="艺术文字" url="assets/decorates/807.png" />
+		<dc id="dc808" type="艺术文字" url="assets/decorates/808.png" />
+		<dc id="dc809" type="艺术文字" url="assets/decorates/809.png" />
+		<dc id="dc810" type="艺术文字" url="assets/decorates/810.png" />
+		<dc id="dc811" type="艺术文字" url="assets/decorates/811.png" />
+		<dc id="dc812" type="艺术文字" url="assets/decorates/812.png" />
+		<dc id="dc813" type="艺术文字" url="assets/decorates/813.png" />
+		<dc id="dc814" type="艺术文字" url="assets/decorates/814.png" />
+		<dc id="dc815" type="艺术文字" url="assets/decorates/815.png" />
+		<dc id="dc816" type="艺术文字" url="assets/decorates/816.png" />
+		<dc id="dc817" type="艺术文字" url="assets/decorates/817.png" />
+		<dc id="dc818" type="艺术文字" url="assets/decorates/818.png" />
+		<dc id="dc819" type="艺术文字" url="assets/decorates/819.png" />
+		<dc id="dc820" type="艺术文字" url="assets/decorates/820.png" />
+		<dc id="dc821" type="艺术文字" url="assets/decorates/821.png" />
+		<dc id="dc822" type="艺术文字" url="assets/decorates/822.png" />
+		<dc id="dc823" type="艺术文字" url="assets/decorates/823.png" />
+		<dc id="dc824" type="艺术文字" url="assets/decorates/824.png" />
+		<dc id="dc825" type="艺术文字" url="assets/decorates/825.png" />
+		<dc id="dc826" type="艺术文字" url="assets/decorates/826.png" />
+		<dc id="dc827" type="艺术文字" url="assets/decorates/827.png" />
+		<dc id="dc828" type="艺术文字" url="assets/decorates/828.png" />
+		<dc id="dc829" type="艺术文字" url="assets/decorates/829.png" />
+		<dc id="dc830" type="艺术文字" url="assets/decorates/830.png" />
+		<dc id="dc831" type="艺术文字" url="assets/decorates/831.png" />
+		<dc id="dc832" type="艺术文字" url="assets/decorates/832.png" />
+		<dc id="dc833" type="艺术文字" url="assets/decorates/833.png" />
+		<dc id="dc834" type="艺术文字" url="assets/decorates/834.png" />
+		<dc id="dc835" type="艺术文字" url="assets/decorates/835.png" />
+		<dc id="dc836" type="艺术文字" url="assets/decorates/836.png" />
+		<dc id="dc837" type="艺术文字" url="assets/decorates/837.png" />
+		<dc id="dc838" type="艺术文字" url="assets/decorates/838.png" />
+		<dc id="dc839" type="艺术文字" url="assets/decorates/839.png" />
+		<dc id="dc840" type="艺术文字" url="assets/decorates/840.png" />
+		<dc id="dc841" type="艺术文字" url="assets/decorates/841.png" />
+		<dc id="dc842" type="艺术文字" url="assets/decorates/842.png" />
+		<dc id="dc843" type="艺术文字" url="assets/decorates/843.png" />
+		<dc id="dc844" type="艺术文字" url="assets/decorates/844.png" />
+		<dc id="dc845" type="艺术文字" url="assets/decorates/845.png" />
+		<dc id="dc846" type="艺术文字" url="assets/decorates/846.png" />
+		<dc id="dc847" type="艺术文字" url="assets/decorates/847.png" />
+		<dc id="dc848" type="艺术文字" url="assets/decorates/848.png" />
+		<dc id="dc849" type="艺术文字" url="assets/decorates/849.png" />
+		<dc id="dc850" type="艺术文字" url="assets/decorates/850.png" />
+		<dc id="dc851" type="艺术文字" url="assets/decorates/851.png" />
+		<dc id="dc852" type="艺术文字" url="assets/decorates/852.png" />
+		<dc id="dc853" type="艺术文字" url="assets/decorates/853.png" />
+		<dc id="dc854" type="艺术文字" url="assets/decorates/854.png" />
+		<dc id="dc855" type="艺术文字" url="assets/decorates/855.png" />
+		<dc id="dc856" type="艺术文字" url="assets/decorates/856.png" />
+		<dc id="dc857" type="艺术文字" url="assets/decorates/857.png" />
+		<dc id="dc858" type="艺术文字" url="assets/decorates/858.png" />
+		<dc id="dc859" type="艺术文字" url="assets/decorates/859.png" />
+		<dc id="dc860" type="艺术文字" url="assets/decorates/860.png" />
+		<dc id="dc861" type="艺术文字" url="assets/decorates/861.png" />
+		<dc id="dc862" type="艺术文字" url="assets/decorates/862.png" />
+		<dc id="dc863" type="艺术文字" url="assets/decorates/863.png" />
+		<dc id="dc864" type="艺术文字" url="assets/decorates/864.png" />
+		<dc id="dc865" type="艺术文字" url="assets/decorates/865.png" />
+		<dc id="dc866" type="艺术文字" url="assets/decorates/866.png" />
+		<dc id="dc867" type="艺术文字" url="assets/decorates/867.png" />
+		<dc id="dc868" type="艺术文字" url="assets/decorates/868.png" />
+		<dc id="dc869" type="艺术文字" url="assets/decorates/869.png" />
+		<dc id="dc870" type="艺术文字" url="assets/decorates/870.png" />
+		<dc id="dc871" type="艺术文字" url="assets/decorates/871.png" />
+		<dc id="dc872" type="艺术文字" url="assets/decorates/872.png" />
+		<dc id="dc873" type="艺术文字" url="assets/decorates/873.png" />
+		<dc id="dc874" type="艺术文字" url="assets/decorates/874.png" />
+		<dc id="dc875" type="艺术文字" url="assets/decorates/875.png" />
+		<dc id="dc876" type="艺术文字" url="assets/decorates/876.png" />
+		<dc id="dc877" type="艺术文字" url="assets/decorates/877.png" />
+		<dc id="dc878" type="艺术文字" url="assets/decorates/878.png" />
+		<dc id="dc879" type="艺术文字" url="assets/decorates/879.png" />
+		<dc id="dc880" type="艺术文字" url="assets/decorates/880.png" />
+		<dc id="dc881" type="艺术文字" url="assets/decorates/881.png" />
+		<dc id="dc882" type="艺术文字" url="assets/decorates/882.png" />
+		<dc id="dc883" type="艺术文字" url="assets/decorates/883.png" />
+		<dc id="dc884" type="艺术文字" url="assets/decorates/884.png" />
+		<dc id="dc901" type="小装饰图" url="assets/decorates/901.png" />
+		<dc id="dc902" type="小装饰图" url="assets/decorates/902.png" />
+		<dc id="dc903" type="小装饰图" url="assets/decorates/903.png" />
+		<dc id="dc904" type="小装饰图" url="assets/decorates/904.png" />
+		<dc id="dc905" type="小装饰图" url="assets/decorates/905.png" />
+		<dc id="dc906" type="小装饰图" url="assets/decorates/906.png" />
+		<dc id="dc907" type="小装饰图" url="assets/decorates/907.png" />
+		<dc id="dc908" type="小装饰图" url="assets/decorates/908.png" />
+		<dc id="dc909" type="小装饰图" url="assets/decorates/909.png" />
+		<dc id="dc910" type="小装饰图" url="assets/decorates/910.png" />
+		<dc id="dc911" type="小装饰图" url="assets/decorates/911.png" />
+		<dc id="dc912" type="小装饰图" url="assets/decorates/912.png" />
+		<dc id="dc913" type="小装饰图" url="assets/decorates/913.png" />
+		<dc id="dc914" type="小装饰图" url="assets/decorates/914.png" />
+		<dc id="dc915" type="小装饰图" url="assets/decorates/915.png" />
+		<dc id="dc916" type="小装饰图" url="assets/decorates/916.png" />
+		<dc id="dc917" type="小装饰图" url="assets/decorates/917.png" />
+		<dc id="dc918" type="小装饰图" url="assets/decorates/918.png" />
+		<dc id="dc919" type="小装饰图" url="assets/decorates/919.png" />
+		<dc id="dc920" type="小装饰图" url="assets/decorates/920.png" />
+		<dc id="dc921" type="小装饰图" url="assets/decorates/921.png" />
+		<dc id="dc922" type="小装饰图" url="assets/decorates/922.png" />
+		<dc id="dc923" type="小装饰图" url="assets/decorates/923.png" />
+		<dc id="dc924" type="小装饰图" url="assets/decorates/924.png" />
+		<dc id="dc925" type="小装饰图" url="assets/decorates/925.png" />
+		<dc id="dc926" type="小装饰图" url="assets/decorates/926.png" />
+		<dc id="dc927" type="小装饰��" url="assets/decorates/927.png" />
+		<dc id="dc928" type="小装饰图" url="assets/decorates/928.png" />
+		<dc id="dc929" type="小装饰图" url="assets/decorates/929.png" />
+		<dc id="dc930" type="小装饰图" url="assets/decorates/930.png" />
+		<dc id="dc931" type="小装饰图" url="assets/decorates/931.png" />
+		<dc id="dc932" type="小装饰图" url="assets/decorates/932.png" />
+		<dc id="dc1001" type="插画" url="assets/decorates/1001.png" />
+		<dc id="dc1002" type="插画" url="assets/decorates/1002.png" />
 	</decorates>
 	
 	<!-- 
 		边框配置文件
+		id	 唯一资源标记，不可与其他任意ID重复
 		type 类型
 		url 链接地址
 	 -->
 	<frames>
-		<fm type="标准边框" url="assets/frames/1.png" />
-		<fm type="标准边框" url="assets/frames/2.png" />
-		<fm type="标准边框" url="assets/frames/3.png" />
-		<fm type="标准边框" url="assets/frames/4.png" />
-		<fm type="标准边框" url="assets/frames/5.png" />
-		<fm type="标准边框" url="assets/frames/6.png" />
-		<fm type="标准边框" url="assets/frames/7.png" />
-		<fm type="标准边框" url="assets/frames/8.png" />
-		<fm type="标准边框" url="assets/frames/9.png" />
-		<fm type="标准边框" url="assets/frames/10.png" />
-		<fm type="标准边框" url="assets/frames/11.png" />
-		<fm type="标准边框" url="assets/frames/12.png" />
-		<fm type="标准边框" url="assets/frames/13.png" />
-		<fm type="标准边框" url="assets/frames/14.png" />
-		<fm type="标准边框" url="assets/frames/15.png" />
-		<fm type="标准边框" url="assets/frames/16.png" />
-		<fm type="标准边框" url="assets/frames/17.png" />
-		<fm type="标准边框" url="assets/frames/18.png" />
-		<fm type="标准边框" url="assets/frames/19.png" />
-		<fm type="标准边框" url="assets/frames/20.png" />
-		<fm type="标准边框" url="assets/frames/21.png" />
-		<fm type="标准边框" url="assets/frames/22.png" />
-		<fm type="标准边框" url="assets/frames/23.png" />
-		<fm type="标准边框" url="assets/frames/24.png" />
-		<fm type="标准边框" url="assets/frames/25.png" />
-		<fm type="标准边框" url="assets/frames/26.png" />
-		<fm type="标准边框" url="assets/frames/27.png" />
-		
-		<fm type="背景框" url="assets/frames/101.png" />
-		<fm type="背景框" url="assets/frames/102.png" />
-		<fm type="背景框" url="assets/frames/103.png" />
-		<fm type="背景框" url="assets/frames/104.png" />
-		<fm type="背景框" url="assets/frames/105.png" />
-		<fm type="背景框" url="assets/frames/106.png" />
-		<fm type="背景框" url="assets/frames/107.png" />
-		<fm type="背景框" url="assets/frames/108.png" />
-		<fm type="背景框" url="assets/frames/109.png" />
-		<fm type="背景框" url="assets/frames/110.png" />
-		<fm type="背景框" url="assets/frames/111.png" />
-		<fm type="背景框" url="assets/frames/112.png" />
-		<fm type="背景框" url="assets/frames/113.png" />
-		<fm type="背景框" url="assets/frames/114.png" />
+		<fm id="fm1" type="标准边框" url="assets/frames/1.png" />
+		<fm id="fm2" type="标准边框" url="assets/frames/2.png" />
+		<fm id="fm3" type="标准边框" url="assets/frames/3.png" />
+		<fm id="fm4" type="标准边框" url="assets/frames/4.png" />
+		<fm id="fm5" type="标准边框" url="assets/frames/5.png" />
+		<fm id="fm6" type="标准边框" url="assets/frames/6.png" />
+		<fm id="fm7" type="标准边框" url="assets/frames/7.png" />
+		<fm id="fm8" type="标准边框" url="assets/frames/8.png" />
+		<fm id="fm9" type="标准边框" url="assets/frames/9.png" />
+		<fm id="fm10" type="标准边框" url="assets/frames/10.png" />
+		<fm id="fm11" type="标准边框" url="assets/frames/11.png" />
+		<fm id="fm12" type="标准边框" url="assets/frames/12.png" />
+		<fm id="fm13" type="标准边框" url="assets/frames/13.png" />
+		<fm id="fm14" type="标准边框" url="assets/frames/14.png" />
+		<fm id="fm15" type="标准边框" url="assets/frames/15.png" />
+		<fm id="fm16" type="标准边框" url="assets/frames/16.png" />
+		<fm id="fm17" type="标准边框" url="assets/frames/17.png" />
+		<fm id="fm18" type="标准边框" url="assets/frames/18.png" />
+		<fm id="fm19" type="标准边框" url="assets/frames/19.png" />
+		<fm id="fm20" type="标准边框" url="assets/frames/20.png" />
+		<fm id="fm21" type="标准边框" url="assets/frames/21.png" />
+		<fm id="fm22" type="标准边框" url="assets/frames/22.png" />
+		<fm id="fm23" type="标准边框" url="assets/frames/23.png" />
+		<fm id="fm24" type="标准边框" url="assets/frames/24.png" />
+		<fm id="fm25" type="标准边框" url="assets/frames/25.png" />
+		<fm id="fm26" type="标准边框" url="assets/frames/26.png" />
+		<fm id="fm27" type="标准边框" url="assets/frames/27.png" />
+		<fm id="fm101" type="背景框" url="assets/frames/101.png" />
+		<fm id="fm102" type="背景框" url="assets/frames/102.png" />
+		<fm id="fm103" type="背景框" url="assets/frames/103.png" />
+		<fm id="fm104" type="背景框" url="assets/frames/104.png" />
+		<fm id="fm105" type="背景框" url="assets/frames/105.png" />
+		<fm id="fm106" type="背景框" url="assets/frames/106.png" />
+		<fm id="fm107" type="背景框" url="assets/frames/107.png" />
+		<fm id="fm108" type="背景框" url="assets/frames/108.png" />
+		<fm id="fm109" type="背景框" url="assets/frames/109.png" />
+		<fm id="fm110" type="背景框" url="assets/frames/110.png" />
+		<fm id="fm111" type="背景框" url="assets/frames/111.png" />
+		<fm id="fm112" type="背景框" url="assets/frames/112.png" />
+		<fm id="fm113" type="背景框" url="assets/frames/113.png" />
+		<fm id="fm114" type="背景框" url="assets/frames/114.png" />
+
 	</frames>
 </configs>

@@ -7,6 +7,7 @@ import com.xy.component.colorPicker.enum.PreSwatches;
 import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.BlackButton;
+import com.xy.ui.BlueButton;
 import com.xy.ui.ScrollUI;
 import com.xy.util.MulityLoad;
 import com.xy.util.STool;
@@ -28,6 +29,7 @@ import mx.core.FontAsset;
 
 public class BackgroundContainer extends AbsContainer {
     private var _addBtn : BlackButton;
+    private var _deleteBgBtn : BlueButton;
     private var _sizeUI : SSimpleColorUI;
 
     private var _imageThumbs : Array = [];
@@ -40,14 +42,15 @@ public class BackgroundContainer extends AbsContainer {
 
     private var _images : Array = [];
 
-
     public function BackgroundContainer() {
 
         super();
         _addBtn = Tools.makeBlackButton("更多背景");
+        _deleteBgBtn = Tools.makeBlueButton("取消背景");
         _sizeUI = new SSimpleColorUI();
 
         addChild(_addBtn);
+        addChild(_deleteBgBtn);
         addChild(_sizeUI);
 
         _scrollUI = new ScrollUI();
@@ -63,8 +66,12 @@ public class BackgroundContainer extends AbsContainer {
 
         _addBtn.addEventListener(MouseEvent.CLICK, __uploadImageHandler);
         _slider.addEventListener(SliderEvent.DATA_UPDATE, __sliderHandler);
+		_deleteBgBtn.addEventListener(MouseEvent.CLICK, __deleteBgHandler);
 
         _sizeUI.addEventListener(SSimpleColorUIEvent.CHOOSE_COLOR, __chooseColorHandler);
+		
+		
+		updateDelete(false);
     }
 
     public function setData(bmds : Array) : void {
@@ -138,6 +145,11 @@ public class BackgroundContainer extends AbsContainer {
         }
     }
 
+    public function updateDelete(enable : Boolean) : void {
+        STool.setMovieClipEnable(_deleteBgBtn, enable);
+		_deleteBgBtn.mouseChildren = enable;
+    }
+
     private function loadOk() : void {
         setTimeout(updateShow, 100);
     }
@@ -150,6 +162,10 @@ public class BackgroundContainer extends AbsContainer {
         updateShow();
     }
 
+	private function __deleteBgHandler(e : MouseEvent):void{
+		dispatchEvent(new BackgroundContainerEvent(BackgroundContainerEvent.DELETE_BG));
+	}
+	
     private function __chooseColorHandler(e : SSimpleColorUIEvent) : void {
         dispatchEvent(new BackgroundContainerEvent(BackgroundContainerEvent.UPDATE_BACKGROUND, null, e.color));
     }
@@ -169,10 +185,16 @@ public class BackgroundContainer extends AbsContainer {
             _addBtn.y = 10;
         }
 
+        if (_deleteBgBtn != null) {
+            _deleteBgBtn.x = 10;
+            _deleteBgBtn.y = height - _deleteBgBtn.height - 7;
+        }
+
         if (_sizeUI != null) {
             _sizeUI.x = 200 - _sizeUI.width - 10;
             _sizeUI.y = height - _sizeUI.height - 5;
         }
+
 
         if (_scrollUI != null) {
             _itemMaxHeight = height - (_addBtn.y + _addBtn.height) - _sizeUI.height - 40;

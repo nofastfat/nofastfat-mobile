@@ -1,4 +1,5 @@
 package com.xy.util {
+import com.adobe.utils.StringUtil;
 import com.xy.ui.BlackButton;
 import com.xy.ui.BlueButton;
 import com.xy.ui.ButtonList;
@@ -60,6 +61,17 @@ public class Tools {
 
         return id;
     }
+	
+	public static function recordId(id : String):void{
+		_IDS.push(id);
+	}
+	
+	public static function gainConfig(str : String):String{
+		str = StringUtil.replace(str,"，", ",");
+		str = StringUtil.trim(str);
+		
+		return str;
+	}
 
 }
 }
