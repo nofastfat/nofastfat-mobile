@@ -5,6 +5,7 @@ import com.xy.component.buttons.event.ToggleButtonGroupEvent;
 import com.xy.component.page.SPage;
 import com.xy.component.page.event.SPageEvent;
 import com.xy.interfaces.Map;
+import com.xy.model.DiyDataProxy;
 import com.xy.model.enum.SourceType;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.BgListUI;
@@ -20,6 +21,8 @@ import flash.display.MovieClip;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.utils.setTimeout;
+
+import org.puremvc.as3.patterns.facade.Facade;
 
 public class ChooseBackgroundPanel extends AbsPanel {
     private var _btn0 : TabButton;
@@ -122,6 +125,14 @@ public class ChooseBackgroundPanel extends AbsPanel {
                     needLoad = true;
 					loads.push(vo);
                 }
+				
+				if(vo.bgs != null && vo.bgs.length != 0){
+					var tmp : BitmapDataVo = dataProxy.getBitmapDataVoById(vo.bgs[0]);
+					if(tmp != null && tmp.bmd == null){
+						needLoad = true;
+						loads.push(tmp);
+					}
+				}
             }
         }
 
@@ -199,5 +210,9 @@ public class ChooseBackgroundPanel extends AbsPanel {
     private function __imageThumbHandler(e : SImageThumbUIEvent) : void {
 		dispatchEvent(new ChooseBackgroundPanelEvent(ChooseBackgroundPanelEvent.BACKGROUND_STATUS,(e.currentTarget as SImageThumbUI).vo));
     }
+	
+	public function get dataProxy() : DiyDataProxy {
+		return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
+	}
 }
 }

@@ -25,7 +25,6 @@ public class AbsMediator extends Mediator implements ISimpleMediator {
         return new Map();
     }
 
-
     override public function listNotificationInterests() : Array {
         return _funMaps.keys;
     }

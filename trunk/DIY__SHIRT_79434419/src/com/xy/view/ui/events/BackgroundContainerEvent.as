@@ -5,6 +5,7 @@ public class BackgroundContainerEvent extends Event {
     public static const SHOW_MORE_PANEL : String = "SHOW_MORE_PANEL";
     public static const UPDATE_BACKGROUND : String = "UPDATE_BACKGROUND";
     public static const HIDE_BACKGROUND : String = "HIDE_BACKGROUND";
+	public static const DELETE_BG : String = "DELETE_BG";
 
     public var color : uint;
     public var hideId : String;

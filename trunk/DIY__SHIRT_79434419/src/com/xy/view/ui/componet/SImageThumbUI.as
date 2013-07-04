@@ -3,6 +3,7 @@ import com.xy.component.buttons.ToggleButton;
 import com.xy.component.buttons.event.ToggleButtonEvent;
 import com.xy.component.toolTip.ToolTip;
 import com.xy.component.toolTip.enum.ToolTipMode;
+import com.xy.model.DiyDataProxy;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.ui.ImageThumbUI;
 import com.xy.util.SMouse;
@@ -10,9 +11,13 @@ import com.xy.util.STool;
 import com.xy.view.ui.events.SImageThumbUIEvent;
 
 import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
+import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
+import org.puremvc.as3.patterns.facade.Facade;
 
 public class SImageThumbUI extends ImageThumbUI {
     private var _container : Sprite;
@@ -53,12 +58,12 @@ public class SImageThumbUI extends ImageThumbUI {
             setChildIndex(bg2, 0);
             addEventListener(MouseEvent.ROLL_OVER, __overHandler);
             addEventListener(MouseEvent.ROLL_OUT, __outHandler);
-		addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+            addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
         }
 
         _toggleBtn.addEventListener(ToggleButtonEvent.STATE_CHANGE, __changeHandler);
         closeBtn.addEventListener(MouseEvent.CLICK, __closeHandler);
-		
+
     }
 
     public function setSize(w : int, h : int) : void {
@@ -91,15 +96,33 @@ public class SImageThumbUI extends ImageThumbUI {
         } else {
             scale = Math.max(scaleX, scaleY);
         }
+		bmp.scaleX = bmp.scaleY = scale;
+		bmp.x = (_w - bmp.width) / 2;
+		bmp.y = (_h - bmp.height) / 2;
 
-        bmp.scaleX = bmp.scaleY = scale;
-        bmp.x = (_w - bmp.width) / 2;
-        bmp.y = (_h - bmp.height) / 2;
+		var tipData : Array =[vo.bmd];
+        if (vo.bgs != null && vo.bgs.length != 0) {
+            var tmpVo : BitmapDataVo = dataProxy.getBitmapDataVoById(vo.bgs[0]);
+            if (tmpVo != null && tmpVo.bmd != null) {
+                var tmp : Bitmap = new Bitmap(tmpVo.bmd);
+				_container.addChildAt(tmp, 0);
+
+                var rect : Rectangle = vo.rect;
+                tmp.width = rect.width * scale;
+                tmp.height = rect.height * scale;
+                tmp.x = rect.x* scale;
+                tmp.y = rect.y* scale;
+				
+				tipData.push(tmp.bitmapData);
+				tipData.push(rect.clone());
+            }
+        }
 
         _toggleBtn.selected = vo.show;
         sizeTf.text = int(vo.bmd.width) + "×" + int(vo.bmd.height);
+        infoTf.text = vo.info;
 
-        ToolTip.setTip(this, ImageTip.getInstance(), vo.bmd, ToolTipMode.RIGHT_BOTTOM_CENTER);
+        ToolTip.setTip(this, ImageTip.getInstance(), tipData, ToolTipMode.RIGHT_BOTTOM_CENTER);
     }
 
     override public function get width() : Number {
@@ -111,17 +134,17 @@ public class SImageThumbUI extends ImageThumbUI {
     }
 
     private function __changeHandler(e : ToggleButtonEvent) : void {
-		vo.show = _toggleBtn.selected;
+        vo.show = _toggleBtn.selected;
         dispatchEvent(new SImageThumbUIEvent(SImageThumbUIEvent.STATUS_CHANGE, _toggleBtn.selected));
     }
 
     private function __closeHandler(e : MouseEvent) : void {
         dispatchEvent(new SImageThumbUIEvent(SImageThumbUIEvent.STATUS_CHANGE, false));
     }
-	
-	private function __downHandler(e:MouseEvent):void{
-		SMouse.getInstance().setMouseBmd(vo, e.localX, e.localY);
-	}
+
+    private function __downHandler(e : MouseEvent) : void {
+        SMouse.getInstance().setMouseBmd(vo, e.localX, e.localY);
+    }
 
     private function __overHandler(e : MouseEvent) : void {
         closeBtn.visible = bg2.visible = true;
@@ -131,6 +154,9 @@ public class SImageThumbUI extends ImageThumbUI {
         closeBtn.visible = bg2.visible = false;
     }
 
+    public function get dataProxy() : DiyDataProxy {
+        return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
+    }
 
 }
 }

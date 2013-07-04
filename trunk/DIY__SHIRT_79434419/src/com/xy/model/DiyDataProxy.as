@@ -4,13 +4,16 @@ import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
 import com.xy.model.history.IHistory;
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.model.vo.DefaultImageVo;
 import com.xy.util.MulityLoad;
 import com.xy.util.STool;
+import com.xy.util.Tools;
 
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.text.Font;
 
+import org.osmf.traits.SeekableTrait;
 import org.puremvc.as3.patterns.proxy.Proxy;
 
 public class DiyDataProxy extends Proxy {
@@ -28,6 +31,8 @@ public class DiyDataProxy extends Proxy {
 
     private var _ctrlHistory : Array = [];
     private var _currentHistoryIndex : int = -1;
+
+    private var _currentPageDatas : Array = [];
 
     public function DiyDataProxy() {
         super(NAME);
@@ -64,6 +69,13 @@ public class DiyDataProxy extends Proxy {
             }
         }
 
+        if (_ctrlHistory.length > 100) {
+            delArr = _ctrlHistory.splice(0, _ctrlHistory.length - 100);
+            for each (his in delArr) {
+                his.destroy();
+            }
+        }
+
         sendNotification(DiyDataNotice.HISTORY_UPDATE);
     }
 
@@ -92,9 +104,9 @@ public class DiyDataProxy extends Proxy {
     }
 
     public function chooseModel(vo : BitmapDataVo, record : Boolean = true) : void {
-		if(vo == null){
-			return;
-		}
+        if (vo == null) {
+            return;
+        }
         _currentSelectModel.show = false;
         _currentSelectModel = vo;
         _currentSelectModel.show = true;
@@ -162,13 +174,14 @@ public class DiyDataProxy extends Proxy {
     public function initConfigXML(xml : XML) : void {
         var randomShow : int = 5;
         for each (var xx : XML in xml..bg) {
+            var id : String = String(xx.@id);
             var type : String = String(xx.@type);
             var url : String = String(xx.@url);
 
             if (!_backgrounds.containsKey(type)) {
                 _backgrounds.put(type, []);
             }
-            var vo : BitmapDataVo = new BitmapDataVo();
+            var vo : BitmapDataVo = new BitmapDataVo(xx.name(), id);
             vo.type = type;
             vo.url = url;
             vo.show = false;
@@ -184,13 +197,14 @@ public class DiyDataProxy extends Proxy {
 
         randomShow = 5;
         for each (xx in xml..dc) {
+            id = String(xx.@id);
             type = String(xx.@type);
             url = String(xx.@url);
 
             if (!_decorates.containsKey(type)) {
                 _decorates.put(type, []);
             }
-            vo = new BitmapDataVo();
+            vo = new BitmapDataVo(xx.name(), id);
             vo.type = type;
             vo.url = url;
             vo.show = false;
@@ -201,17 +215,19 @@ public class DiyDataProxy extends Proxy {
                 vo.show = true;
                 randomShow--;
             }
+
         }
 
         randomShow = 5;
         for each (xx in xml..fm) {
+            id = String(xx.@id);
             type = String(xx.@type);
             url = String(xx.@url);
 
             if (!_frames.containsKey(type)) {
                 _frames.put(type, []);
             }
-            vo = new BitmapDataVo();
+            vo = new BitmapDataVo(xx.name(), id);
             vo.type = type;
             vo.url = url;
             vo.show = false;
@@ -225,9 +241,20 @@ public class DiyDataProxy extends Proxy {
         }
 
         for each (xx in xml..model) {
+            id = String(xx.@id);
             type = String(xx.@type);
             url = String(xx.@url);
+            var info : String = xx.@info;
+            var page : int = int(xx.@page);
+            var bgs : String = String(xx.@bgs);
+            bgs = Tools.gainConfig(bgs);
+
+            if (info == null) {
+                info = "";
+            }
             var rectStr : String = String(xx.@rect);
+            rectStr = Tools.gainConfig(rectStr);
+
             var rectArr : Array = rectStr.split(",");
             if (rectArr.length != 4) {
                 rectArr = [0, 0, 0, 0];
@@ -236,11 +263,34 @@ public class DiyDataProxy extends Proxy {
             if (!_models.containsKey(type)) {
                 _models.put(type, []);
             }
-            vo = new BitmapDataVo();
+            vo = new BitmapDataVo(xx.name(), id);
             vo.type = type;
             vo.url = url;
             vo.show = false;
-            vo.rect = new Rectangle(rectArr[0], rectArr[1], rectArr[2], rectArr[3])
+            vo.rect = new Rectangle(Number(rectArr[0]), Number(rectArr[1]), Number(rectArr[2]), Number(rectArr[3]));
+            vo.info = info;
+
+            for each (var xxx : XML in xx.defaultImage) {
+                var dvo : DefaultImageVo = new DefaultImageVo();
+                dvo.id = String(xxx.@id);
+                rectStr = String(xxx.@rect);
+                rectStr = Tools.gainConfig(rectStr);
+
+                rectArr = rectStr.split(",");
+                if (rectArr.length != 4) {
+                    rectArr = [0, 0, 0, 0];
+                }
+                dvo.rect = new Rectangle(Number(rectArr[0]), Number(rectArr[1]), Number(rectArr[2]), Number(rectArr[3]));
+                vo.defaultImages.push(dvo);
+            }
+
+            if (page >= 1) {
+                vo.page = page;
+            }
+
+            if (bgs != null) {
+                vo.bgs = bgs.split(",");
+            }
 
             _models.get(type).push(vo);
 
@@ -250,12 +300,32 @@ public class DiyDataProxy extends Proxy {
             }
 
             if (_currentSelectModel != null) {
-                MulityLoad.getInstance().load([_currentSelectModel], function() : void {
+                MulityLoad.getInstance().load(getNeedLoadBy(_currentSelectModel), function() : void {
                     sendNotification(DiyDataNotice.MODEL_UPDATE, false);
                 }, SourceType.MODEL);
             }
         }
         sendNotification(DiyDataNotice.HISTORY_UPDATE);
+    }
+
+    public function getNeedLoadBy(vo : BitmapDataVo) : Array {
+        var rs : Array = [vo];
+
+        for each (var dvo : DefaultImageVo in vo.defaultImages) {
+            var tmp : BitmapDataVo = getBitmapDataVoById(dvo.id);
+            if (tmp != null && tmp.bmd != null) {
+                rs.push(tmp);
+            }
+        }
+
+        for each (var id : String in vo.bgs) {
+            tmp = getBitmapDataVoById(id);
+            if (tmp != null && tmp.bmd != null) {
+                rs.push(tmp);
+            }
+        }
+
+        return rs;
     }
 
     public function getShowableBg() : Array {
@@ -304,7 +374,7 @@ public class DiyDataProxy extends Proxy {
      */
     public function addImages(bitmapDats : Array) : void {
         for each (var bmd : BitmapData in bitmapDats) {
-            _images.push(new BitmapDataVo(bmd));
+            _images.push(new BitmapDataVo("free", null, bmd));
         }
 
         sendNotification(DiyDataNotice.IMAGE_UPDATE);
@@ -348,8 +418,8 @@ public class DiyDataProxy extends Proxy {
                 }
             }
         }
-		
-		return null;
+
+        return null;
     }
 
     public function getBitmapDataVoById(id : String) : BitmapDataVo {
@@ -385,6 +455,14 @@ public class DiyDataProxy extends Proxy {
 
         return null;
     }
+
+    /**
+     * 对于多页的数据
+     */
+    public function get currentPageDatas() : Array {
+        return _currentPageDatas;
+    }
+
 
 }
 }

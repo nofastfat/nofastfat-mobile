@@ -13,6 +13,7 @@ import flash.events.Event;
 
 public class BackgroundMediator extends AbsMediator {
     public static const NAME : String = "BackgroundMediator";
+	public static const UPDATE_DELETE_BG : String = NAME + "UPDATE_DELETE_BG";
 
     private var _panel : ChooseBackgroundPanel;
 
@@ -24,14 +25,16 @@ public class BackgroundMediator extends AbsMediator {
         ui.setData([]);
         ui.addEventListener(BackgroundContainerEvent.SHOW_MORE_PANEL, __showPanelHandler);
         ui.addEventListener(BackgroundContainerEvent.HIDE_BACKGROUND, __hideHandler);
-        ui.addEventListener(BackgroundContainerEvent.UPDATE_BACKGROUND, __updateHandler);
+		ui.addEventListener(BackgroundContainerEvent.UPDATE_BACKGROUND, __updateHandler);
+		ui.addEventListener(BackgroundContainerEvent.DELETE_BG, __deleteBgtHandler);
     }
 
 
     override public function makeNoticeMap() : Map {
         var map : Map = new Map();
         map.put(Event.RESIZE, resize);
-        map.put(DiyDataNotice.BACKGROUND_UPDATE, backgroundUpdate);
+		map.put(DiyDataNotice.BACKGROUND_UPDATE, backgroundUpdate);
+		map.put(UPDATE_DELETE_BG, diyDataNotice);
         return map;
     }
 
@@ -53,11 +56,20 @@ public class BackgroundMediator extends AbsMediator {
 	}
 	
     private function __updateHandler(e : BackgroundContainerEvent) : void {
+		sendNotification(RightContainerMediator.SET_BG_AS_COLOR, e.color);
     }
+	
+	private function __deleteBgtHandler(e : Event):void{
+		sendNotification(RightContainerMediator.DELETE_BG);
+	}
 
     private function backgroundUpdate() : void {
         ui.setData(dataProxy.getShowableBg());
     }
+	
+	private function diyDataNotice(enable : Boolean):void{
+		ui.updateDelete(enable);
+	}
 
     private function resize() : void {
         if (_panel != null && _panel.stage != null) {
