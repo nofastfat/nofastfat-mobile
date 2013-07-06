@@ -10,6 +10,7 @@ public class ExportVo {
     public var bgData : *;
     public var diys : Array = [];
     public var exportBmd : BitmapData;
+    public var calVo : CalVo;
     
     public function ExportVo():void{
     	id = Tools.makeId();

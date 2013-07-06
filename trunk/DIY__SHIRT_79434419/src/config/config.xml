@@ -13,8 +13,15 @@
 			 	  iw表示可编辑区域的宽度
 			 	  ih表示可编辑区域的高度
 		info 说明文字
-		page DIY的张数，默认1张，封面是第一张，封底是最后一张， 所以对于日历：总张数=12+1+1,一共14张
-		bgs  每张图片预设的背景图资源id，英文逗号分隔，数量需要与总页数保存一致，否则将缺失背景图
+		page 单张可以去掉该属性，DIY的张数，默认1张，封面是第一张，封底是最后一张， 所以对于日历：总张数=12+1+1,一共14张
+		bgs  单张可以去掉该属性，每张图片预设的背景图资源id，英文逗号分隔，数量需要与总页数保存一致，否则将缺失背景图
+		calStyle	日历才会有该属性，表示使用的日历样式名，需要对应calendars中的style属性
+		calRect		日历才会有该属性，日历相对于可编辑区域的位置及大小，英文逗号分隔，
+			 格式:"ix,iy,iw,ih"
+			 其中,ix表示可【日历】相对于【编辑区域】的x坐标
+			 	  iy表示可【日历】相对于【编辑区域】的y坐标
+			 	  iw表示【日历】的宽度
+			 	  ih表示【日历】的高度
 	 -->
 	<models>
 		<model id="md1" type="服装" url="assets/models/1.png" rect="100,120,270,300" info="黑色T恤175(男)" />
@@ -22,11 +29,72 @@
 		<model id="md100" type="水杯" url="assets/models/100.jpg" rect="100,100,140,140" info="烤瓷杯" />
 		<model id="md101" type="水杯" url="assets/models/101.jpg" rect="68,136,134,142" info="磨砂杯" />
 		<model id="md200" type="手机外壳" url="assets/models/200.jpg" rect="71,38,68,140" info="iphone4S外壳" />
-		<model id="md300" type="日历" url="assets/models/300.png" rect="39,16,460,372" info="12寸日历-卡通" page="14" bgs="bg1,bg2,bg3,bg4,bg5,bg6,bg7,bg8,bg9,bg10,bg11,bg12,bg13,bg1"/>
-		<model id="md301" type="日历" url="assets/models/300.png" rect="39,16,460,372" info="12寸日历-复古" page="14" bgs="bg401,bg402,bg403,bg404,bg405,bg406,bg407,bg408,bg409,bg410,bg411,bg412,bg413,bg401"/>
+		<model id="md300" type="日历" url="assets/models/300.png" rect="39,16,460,372" info="12寸日历-卡通" page="14" bgs="bg1,bg2,bg3,bg4,bg5,bg6,bg7,bg8,bg9,bg10,bg11,bg12,bg13,bg1" calStyle="gray" calRect="25,90,45,200"/>
+		<model id="md301" type="日历" url="assets/models/300.png" rect="39,16,460,372" info="12寸日历-复古" page="14" bgs="bg401,bg402,bg403,bg404,bg405,bg406,bg407,bg408,bg409,bg410,bg411,bg412,bg413,bg401" calStyle="blue" calRect="25,90,45,200"/>
 		<model id="md400" type="画册" url="assets/models/400.png" rect="15,0,485,400" info="12寸画册-现代-10张" page="12" bgs="bg702,bg701,bg703,bg704,bg705,bg706,bg707,bg708,bg709,bg710,bg711,bg712"/>
 	</models>
 	
+	<!--
+		 日历配置文件
+		 id		唯一资源标记，不可与其他任意ID重复
+		 style	日历文字样式，一个系列包含多个年份和月份
+		 year	年份,int类型，如2013
+		 month	月份,int类型，1-12月
+		 url	资源链接地址
+	-->
+	<calendars>
+		<calendar id="cal_gray_2013_12" style="gray" year="2013" month="12" url="assets/calendar/437.png" />
+		<calendar id="cal_gray_2013_11" style="gray" year="2013" month="11" url="assets/calendar/438.png" />
+		<calendar id="cal_gray_2013_10" style="gray" year="2013" month="10" url="assets/calendar/439.png" />
+		<calendar id="cal_gray_2013_09" style="gray" year="2013" month="9" url="assets/calendar/440.png" />
+		<calendar id="cal_gray_2013_08" style="gray" year="2013" month="8" url="assets/calendar/441.png" />
+		<calendar id="cal_gray_2013_07" style="gray" year="2013" month="7" url="assets/calendar/442.png" />
+		<calendar id="cal_gray_2013_06" style="gray" year="2013" month="6" url="assets/calendar/443.png" />
+		<calendar id="cal_gray_2013_05" style="gray" year="2013" month="5" url="assets/calendar/444.png" />
+		<calendar id="cal_gray_2013_04" style="gray" year="2013" month="4" url="assets/calendar/445.png" />
+		<calendar id="cal_gray_2013_03" style="gray" year="2013" month="3" url="assets/calendar/446.png" />
+		<calendar id="cal_gray_2013_02" style="gray" year="2013" month="2" url="assets/calendar/447.png" />
+		<calendar id="cal_gray_2013_01" style="gray" year="2013" month="1" url="assets/calendar/448.png" />
+		
+		<calendar id="cal_gray_2014_12" style="gray" year="2014" month="12" url="assets/calendar/149.png" />
+		<calendar id="cal_gray_2014_11" style="gray" year="2014" month="11" url="assets/calendar/150.png" />
+		<calendar id="cal_gray_2014_10" style="gray" year="2014" month="10" url="assets/calendar/151.png" />
+		<calendar id="cal_gray_2014_09" style="gray" year="2014" month="9" url="assets/calendar/152.png" />
+		<calendar id="cal_gray_2014_08" style="gray" year="2014" month="8" url="assets/calendar/153.png" />
+		<calendar id="cal_gray_2014_07" style="gray" year="2014" month="7" url="assets/calendar/154.png" />
+		<calendar id="cal_gray_2014_06" style="gray" year="2014" month="6" url="assets/calendar/155.png" />
+		<calendar id="cal_gray_2014_05" style="gray" year="2014" month="5" url="assets/calendar/156.png" />
+		<calendar id="cal_gray_2014_04" style="gray" year="2014" month="4" url="assets/calendar/157.png" />
+		<calendar id="cal_gray_2014_03" style="gray" year="2014" month="3" url="assets/calendar/158.png" />
+		<calendar id="cal_gray_2014_02" style="gray" year="2014" month="2" url="assets/calendar/159.png" />
+		<calendar id="cal_gray_2014_01" style="gray" year="2014" month="1" url="assets/calendar/160.png" />
+		
+		<calendar id="cal_a_2013_12" style="blue" year="2013" month="12" url="assets/calendar/449.png" />
+		<calendar id="cal_a_2013_11" style="blue" year="2013" month="11" url="assets/calendar/450.png" />
+		<calendar id="cal_a_2013_10" style="blue" year="2013" month="10" url="assets/calendar/451.png" />
+		<calendar id="cal_a_2013_09" style="blue" year="2013" month="9" url="assets/calendar/452.png" />
+		<calendar id="cal_a_2013_08" style="blue" year="2013" month="8" url="assets/calendar/453.png" />
+		<calendar id="cal_a_2013_07" style="blue" year="2013" month="7" url="assets/calendar/454.png" />
+		<calendar id="cal_a_2013_06" style="blue" year="2013" month="6" url="assets/calendar/455.png" />
+		<calendar id="cal_a_2013_05" style="blue" year="2013" month="5" url="assets/calendar/456.png" />
+		<calendar id="cal_a_2013_04" style="blue" year="2013" month="4" url="assets/calendar/457.png" />
+		<calendar id="cal_a_2013_03" style="blue" year="2013" month="3" url="assets/calendar/458.png" />
+		<calendar id="cal_a_2013_02" style="blue" year="2013" month="2" url="assets/calendar/459.png" />
+		<calendar id="cal_a_2013_01" style="blue" year="2013" month="1" url="assets/calendar/460.png" />
+		
+		<calendar id="cal_a_2014_12" style="blue" year="2014" month="12" url="assets/calendar/161.png" />
+		<calendar id="cal_a_2014_11" style="blue" year="2014" month="11" url="assets/calendar/162.png" />
+		<calendar id="cal_a_2014_10" style="blue" year="2014" month="10" url="assets/calendar/163.png" />
+		<calendar id="cal_a_2014_09" style="blue" year="2014" month="9" url="assets/calendar/164.png" />
+		<calendar id="cal_a_2014_08" style="blue" year="2014" month="8" url="assets/calendar/165.png" />
+		<calendar id="cal_a_2014_07" style="blue" year="2014" month="7" url="assets/calendar/166.png" />
+		<calendar id="cal_a_2014_06" style="blue" year="2014" month="6" url="assets/calendar/167.png" />
+		<calendar id="cal_a_2014_05" style="blue" year="2014" month="5" url="assets/calendar/168.png" />
+		<calendar id="cal_a_2014_04" style="blue" year="2014" month="4" url="assets/calendar/169.png" />
+		<calendar id="cal_a_2014_03" style="blue" year="2014" month="3" url="assets/calendar/170.png" />
+		<calendar id="cal_a_2014_02" style="blue" year="2014" month="2" url="assets/calendar/171.png" />
+		<calendar id="cal_a_2014_01" style="blue" year="2014" month="1" url="assets/calendar/172.png" />
+	</calendars>
 	
 	<!-- 
 		背景配置文件

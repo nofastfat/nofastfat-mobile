@@ -15,6 +15,8 @@ public class BitmapDataVo {
     private var _page : int = 1;
 	public var bgs : Array = [];
 	public var cate:String;
+	public var calStyle:String;
+	public var calRect : Rectangle;
 
     public var defaultImages : Array = [];
 

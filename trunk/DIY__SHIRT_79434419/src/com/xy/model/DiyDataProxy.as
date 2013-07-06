@@ -4,6 +4,7 @@ import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
 import com.xy.model.history.IHistory;
 import com.xy.model.vo.BitmapDataVo;
+import com.xy.model.vo.CalVo;
 import com.xy.model.vo.DefaultImageVo;
 import com.xy.util.MulityLoad;
 import com.xy.util.STool;
@@ -32,6 +33,7 @@ public class DiyDataProxy extends Proxy {
     private var _currentHistoryIndex : int = -1;
 
     public var currentPageDatas : Array = [];
+    public var cals : Array = [];
 
     public function DiyDataProxy() {
         super(NAME);
@@ -193,7 +195,6 @@ public class DiyDataProxy extends Proxy {
             }
         }
 
-
         randomShow = 5;
         for each (xx in xml..dc) {
             id = String(xx.@id);
@@ -268,6 +269,14 @@ public class DiyDataProxy extends Proxy {
             vo.show = false;
             vo.rect = new Rectangle(Number(rectArr[0]), Number(rectArr[1]), Number(rectArr[2]), Number(rectArr[3]));
             vo.info = info;
+            vo.calStyle = String(xx.@calStyle);
+
+            rectStr = String(xx.@calRect);
+            rectArr = rectStr.split(",");
+            if (rectArr.length != 4) {
+                rectArr = [0, 0, 0, 0];
+            }
+            vo.calRect = new Rectangle(Number(rectArr[0]), Number(rectArr[1]), Number(rectArr[2]), Number(rectArr[3]));
 
             for each (var xxx : XML in xx.defaultImage) {
                 var dvo : DefaultImageVo = new DefaultImageVo();
@@ -304,7 +313,68 @@ public class DiyDataProxy extends Proxy {
                 }, SourceType.MODEL);
             }
         }
+
+        for each (xx in xml..calendar) {
+            id = String(xx.@id);
+            type = String(xx.@type);
+            url = String(xx.@url);
+            var calVo : CalVo = new CalVo(xx.name(), id);
+            calVo.url = url;
+            calVo.style = String(xx.@style);
+            calVo.year = int(xx.@year);
+            calVo.month = int(xx.@month);
+            cals.push(calVo);
+        }
+
         sendNotification(DiyDataNotice.HISTORY_UPDATE);
+    }
+
+    public function getCalVoById(id : String) : CalVo {
+        for each (var vo : CalVo in cals) {
+            if (vo.id == id) {
+                return vo;
+            }
+        }
+
+        return null;
+    }
+
+    public function getCalVoBy(style : String, year : int, month : int) : CalVo {
+        for each (var vo : CalVo in cals) {
+            if (vo.style == style && vo.year == year && vo.month == month) {
+                return vo;
+            }
+        }
+
+        return null;
+    }
+    
+    public function getSelectAbleCals(style : String) : Array {
+    	var rs : Array = [];
+    	for each(var vo : CalVo in cals){
+    		if(vo.style == style){
+    			rs.push(vo);
+    		}
+    	}
+    	rs.sort(sortFun);
+    	
+    	return rs;
+    }
+    
+    private function sortFun(cal1 : CalVo, cal2 : CalVo):int{
+    	if(cal1.year < cal2.year){
+    		return -1;
+    	}else if(cal1.year > cal2.year){
+    		return 1;
+    	}else{
+    		if(cal1.month < cal2.month){
+    			return -1;
+    		}else if(cal1.month > cal2.month){
+    			return 1;
+    		}else{
+    			return 0;
+    		}
+    	}
     }
 
     public function getNeedLoadBy(vo : BitmapDataVo) : Array {
@@ -379,14 +449,14 @@ public class DiyDataProxy extends Proxy {
         sendNotification(DiyDataNotice.IMAGE_UPDATE);
     }
 
-	public function clearHistorys():void{
-		for each(var iHis : IHistory in _ctrlHistory){
-			iHis.destroy();
-		}
-		_ctrlHistory = [];
-		_currentHistoryIndex = -1;
+    public function clearHistorys() : void {
+        for each (var iHis : IHistory in _ctrlHistory) {
+            iHis.destroy();
+        }
+        _ctrlHistory = [];
+        _currentHistoryIndex = -1;
         sendNotification(DiyDataNotice.HISTORY_UPDATE);
-	}
+    }
 
     public function clearAll() : void {
         _images = [];

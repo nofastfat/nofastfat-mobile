@@ -34,12 +34,14 @@ import com.xy.view.ui.componet.GroupResize;
 import com.xy.view.ui.componet.SAlertTextUI;
 import com.xy.view.ui.componet.SMulityPageUI;
 import com.xy.view.ui.componet.SUserCtrlBar;
+import com.xy.view.ui.events.AbsPanelEvent;
 import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
 import com.xy.view.ui.events.EditTextPanelEvent;
 import com.xy.view.ui.events.SCtrlBarEvent;
 import com.xy.view.ui.events.SMulityPageUIEvent;
 import com.xy.view.ui.events.SUserCtrlBarEvent;
 import com.xy.view.ui.panels.ChooseBackgroundPanel;
+import com.xy.view.ui.panels.ChooseCalendar;
 import com.xy.view.ui.panels.EditTextPanel;
 
 import flash.display.Bitmap;
@@ -127,6 +129,8 @@ public class RightContainerMediator extends AbsMediator {
 
     private var _mulityPageUI : SMulityPageUI;
 
+    private var _chooseCalPanel : ChooseCalendar;
+
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
@@ -183,6 +187,7 @@ public class RightContainerMediator extends AbsMediator {
 
         _mulityPageUI = new SMulityPageUI();
 
+        _chooseCalPanel = new ChooseCalendar();
 
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
 
@@ -207,6 +212,7 @@ public class RightContainerMediator extends AbsMediator {
         _diyBar.addEventListener(SUserCtrlBarEvent.FONT_BOLD, __fontBoldHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.FONT_ALIGN, __fontAlignHandler);
 
+        _chooseCalPanel.addEventListener(AbsPanelEvent.CLOSE, __closeHandler);
         _mulityPageUI.addEventListener(SMulityPageUIEvent.SELECT_ONE, __selectOneHandler);
         _buyBtn.addEventListener(MouseEvent.CLICK, __buyHandler);
         _editPanel.addEventListener(EditTextPanelEvent.EDIT, __editOkHandler);
@@ -326,6 +332,7 @@ public class RightContainerMediator extends AbsMediator {
                 dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _exportVo.bgData));
             }
             sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
+            checkCalBg();
         } else {
             var image : DiySystemImage = new DiySystemImage(vo, dataProxy.currentSelectModel.rect, _bmpDragTip, id);
             addAndRecordDiy(image, stageX, stageY);
@@ -341,22 +348,28 @@ public class RightContainerMediator extends AbsMediator {
 
     private function setBackground(data : *, needreDrawResult : Boolean = true) : void {
         if (data == null) {
-            deleteBg(false);
-
-            if (needreDrawResult) {
-                reDrawResult();
-            }
+            deleteBg(false, needreDrawResult);
         } else if (data is uint) {
-            setBgAsColor(data as uint, false);
-            if (needreDrawResult) {
-                reDrawResult();
-            }
+            setBgAsColor(data as uint, false, needreDrawResult);
         } else {
             var vo : BitmapDataVo = dataProxy.getBitmapDataVoById(data as String);
 
             if (vo != null) {
                 addImage(vo, 0, 0, null, false, needreDrawResult);
             }
+        }
+    }
+
+    private function checkCalBg() : void {
+        if (_exportVo.calVo != null) {
+            var bmp : Bitmap = new Bitmap(_exportVo.calVo.bmd);
+            var rect : Rectangle = dataProxy.currentSelectModel.calRect;
+            var rect2 : Rectangle = dataProxy.currentSelectModel.rect;
+            bmp.width = rect.width;
+            bmp.height = rect.height;
+            bmp.x = rect.x + rect2.x;
+            bmp.y = rect.y + rect2.y;
+            _background.addChild(bmp);
         }
     }
 
@@ -484,7 +497,7 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
-    private function deleteBg(record : Boolean = true) : void {
+    private function deleteBg(record : Boolean = true, needReDraw : Boolean = true) : void {
         var oldData : * = _exportVo.bgData;
         STool.clear(_background);
         _exportVo.bgData = null;
@@ -493,9 +506,14 @@ public class RightContainerMediator extends AbsMediator {
             dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _exportVo.bgData));
         }
         sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
+        checkCalBg();
+        
+        if(needReDraw){
+        	reDrawResult();
+        }
     }
 
-    private function setBgAsColor(color : uint, record : Boolean = true) : void {
+    private function setBgAsColor(color : uint, record : Boolean = true,needreDrawResult:Boolean = true) : void {
         var oldData : * = _exportVo.bgData;
         STool.clear(_background);
         var shape : Shape = new Shape();
@@ -512,6 +530,11 @@ public class RightContainerMediator extends AbsMediator {
             dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _exportVo.bgData));
         }
         sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
+        checkCalBg();
+        
+        if(needreDrawResult){
+        	reDrawResult();
+        }
     }
 
     private function addAndRecordDiy(diy : DiyBase, stageX : Number, stageY : Number) : void {
@@ -653,6 +676,7 @@ public class RightContainerMediator extends AbsMediator {
 
     private function __modelChangeHandler(e : ChooseBackgroundPanelEvent) : void {
         STool.clear(_background);
+        PopUpManager.getInstance().closeAll();
         if (_diyArea.numChildren != 0) {
             Alert.show(new SAlertTextUI("更换模板将删除现有DIY，确认更换?"), function(type : int, data : *) : void {
                 if (type == AlertType.OK) {
@@ -664,14 +688,29 @@ public class RightContainerMediator extends AbsMediator {
         } else {
             checkModel(e.vo);
         }
-        PopUpManager.getInstance().closeAll();
         EnterFrameCall.getStage().focus = null;
         _exportVo.bgData = null;
     }
 
+    private var _tempVo : BitmapDataVo;
+
     private function checkModel(vo : BitmapDataVo) : void {
+        _tempVo = vo;
+        if (vo.calStyle != null && vo.calStyle != "") {
+            _chooseCalPanel.setData(dataProxy.getSelectAbleCals(vo.calStyle));
+            PopUpManager.getInstance().showPanel(_chooseCalPanel);
+        } else {
+            startLoadModelSource();
+        }
+    }
+
+    private function startLoadModelSource(cals : Array = null) : void {
         var loads : Array = [];
-        for each (var bg : String in vo.bgs) {
+        if (cals != null) {
+            loads = cals.concat();
+        }
+
+        for each (var bg : String in _tempVo.bgs) {
             var tmp : BitmapDataVo = dataProxy.getBitmapDataVoById(bg);
             if (tmp != null && tmp.bmd == null) {
                 loads.push(tmp);
@@ -679,15 +718,15 @@ public class RightContainerMediator extends AbsMediator {
         }
 
         if (loads.length == 0) {
-            changeModel(vo);
+            changeModel(_tempVo, cals);
         } else {
             MulityLoad.getInstance().load(loads, function() : void {
-                changeModel(vo);
+                changeModel(_tempVo, cals);
             }, 0);
         }
     }
 
-    private function changeModel(vo : BitmapDataVo) : void {
+    private function changeModel(vo : BitmapDataVo, cals : Array) : void {
         dataProxy.chooseModel(vo);
         dataProxy.clearHistorys();
 
@@ -695,10 +734,6 @@ public class RightContainerMediator extends AbsMediator {
             ui.container.setChildIndex(_diyBg, 3);
         } else {
             ui.container.setChildIndex(_diyBg, 0);
-        }
-
-        if (vo.bgs.length != 0) {
-            setBackground(vo.bgs[0]);
         }
 
         if (vo.page > 1) {
@@ -712,16 +747,42 @@ public class RightContainerMediator extends AbsMediator {
                 } else {
                     exportVo.bgData = vo.bgs[i];
                 }
+                if (i != 0 && i != vo.page && cals != null) {
+                    exportVo.calVo = cals[i - 1];
+                }
                 var tmp : BitmapDataVo = dataProxy.getBitmapDataVoById(exportVo.bgData);
-                exportVo.exportBmd = tmp.bmd;
+
+                var sp : Sprite = new Sprite();
+                var bmp : Bitmap = new Bitmap(tmp.bmd);
+                var rect : Rectangle = vo.rect;
+                bmp.width = rect.width;
+                bmp.height = rect.height;
+                sp.addChild(bmp);
+                if (exportVo.calVo != null) {
+                    var bmp2 : Bitmap = new Bitmap(exportVo.calVo.bmd);
+                    rect = vo.calRect;
+                    bmp2.width = rect.width;
+                    bmp2.height = rect.height;
+                    bmp2.x = rect.x;
+                    bmp2.y = rect.y;
+                    sp.addChild(bmp2);
+                }
+
+                var rsBmd : BitmapData = new BitmapData(sp.width, sp.height, true, 0x00000000);
+                rsBmd.draw(sp);
+                exportVo.exportBmd = rsBmd;
 
                 exportVo.index = i;
+
                 dataProxy.currentPageDatas.push(exportVo);
             }
 
             _exportVo = dataProxy.currentPageDatas[0];
         } else {
             _exportVo = new ExportVo();
+        }
+        if (vo.bgs.length != 0) {
+            setBackground(vo.bgs[0]);
         }
 
         clear();
@@ -886,6 +947,10 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
+    private function __closeHandler(e : AbsPanelEvent) : void {
+        startLoadModelSource(_chooseCalPanel.getResult());
+    }
+
     private function __selectOneHandler(e : SMulityPageUIEvent) : void {
         clear();
         dataProxy.clearHistorys();
@@ -911,6 +976,7 @@ public class RightContainerMediator extends AbsMediator {
         STool.remove(_bmpDragTip);
         _currentModelId = null;
         _currentSelectImage = null;
+        _tempVo = null;
     }
 
     private function __buyHandler(e : MouseEvent) : void {
