@@ -9,6 +9,7 @@ import com.xy.ui.RotationIcon;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.Rotator;
 import com.xy.util.STool;
+import com.xy.view.RightContainerMediator;
 
 import flash.display.Sprite;
 import flash.events.MouseEvent;
@@ -287,6 +288,7 @@ public class ResizeBg extends Sprite {
         if (_prevVo != null) {
             var doneVo : EditVo = _diy.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(_prevVo, doneVo));
+            rightMediator.reDrawResult();
         }
 
         _prevVo = null;
@@ -312,7 +314,9 @@ public class ResizeBg extends Sprite {
         p1 = mat.transformPoint(p1);
 
         var p : Point = new Point(_diy.x + p1.x, _diy.y + p1.y);
-        p = _diy.parent.localToGlobal(p);
+        if (_diy.parent != null) {
+            p = _diy.parent.localToGlobal(p);
+        }
 
         if (parent != null) {
             p = parent.globalToLocal(p);
@@ -447,6 +451,10 @@ public class ResizeBg extends Sprite {
 
     public function get dataProxy() : DiyDataProxy {
         return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
+    }
+    
+    public function get rightMediator():RightContainerMediator{
+        return Facade.getInstance().retrieveMediator(RightContainerMediator.NAME) as RightContainerMediator;
     }
 }
 }

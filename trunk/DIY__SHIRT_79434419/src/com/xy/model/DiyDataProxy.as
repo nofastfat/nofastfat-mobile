@@ -13,7 +13,6 @@ import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.text.Font;
 
-import org.osmf.traits.SeekableTrait;
 import org.puremvc.as3.patterns.proxy.Proxy;
 
 public class DiyDataProxy extends Proxy {
@@ -32,7 +31,7 @@ public class DiyDataProxy extends Proxy {
     private var _ctrlHistory : Array = [];
     private var _currentHistoryIndex : int = -1;
 
-    private var _currentPageDatas : Array = [];
+    public var currentPageDatas : Array = [];
 
     public function DiyDataProxy() {
         super(NAME);
@@ -380,6 +379,15 @@ public class DiyDataProxy extends Proxy {
         sendNotification(DiyDataNotice.IMAGE_UPDATE);
     }
 
+	public function clearHistorys():void{
+		for each(var iHis : IHistory in _ctrlHistory){
+			iHis.destroy();
+		}
+		_ctrlHistory = [];
+		_currentHistoryIndex = -1;
+        sendNotification(DiyDataNotice.HISTORY_UPDATE);
+	}
+
     public function clearAll() : void {
         _images = [];
         sendNotification(DiyDataNotice.IMAGE_UPDATE);
@@ -454,13 +462,6 @@ public class DiyDataProxy extends Proxy {
         }
 
         return null;
-    }
-
-    /**
-     * 对于多页的数据
-     */
-    public function get currentPageDatas() : Array {
-        return _currentPageDatas;
     }
 
 

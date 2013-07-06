@@ -1,7 +1,4 @@
 package com.xy.view.ui.componet {
-import com.xy.component.Slider.Slider;
-import com.xy.component.Slider.SliderMode;
-import com.xy.component.Slider.event.SliderEvent;
 import com.xy.component.buttons.ToggleButton;
 import com.xy.component.buttons.ToggleButtonGroup;
 import com.xy.component.buttons.event.ToggleButtonEvent;
@@ -16,11 +13,11 @@ import com.xy.model.DiyDataProxy;
 import com.xy.model.enum.DiyImageType;
 import com.xy.model.history.ModifyHistory;
 import com.xy.model.vo.EditVo;
-import com.xy.ui.ScrollUI;
 import com.xy.ui.UserCtrlBar;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.STool;
 import com.xy.util.Tools;
+import com.xy.view.RightContainerMediator;
 import com.xy.view.ui.events.SSelectAlphaUIEvent;
 import com.xy.view.ui.events.SUserCtrlBarEvent;
 import com.xy.view.ui.events.ScrollMenuEvent;
@@ -144,6 +141,7 @@ public class SUserCtrlBar extends UserCtrlBar {
     private function __alphaUpHandler(e : MouseEvent) : void {
         if (_prevVo != null && _prevVo.alpha != _editVo.alpha) {
             dataProxy.recordHistory(new ModifyHistory(_prevVo, _editVo.clone()));
+            rightMediator.reDrawResult();
         }
         _prevVo = null;
     }
@@ -179,7 +177,7 @@ public class SUserCtrlBar extends UserCtrlBar {
 
                 _editVo.lineSickness = int(name);
                 updateIcons();
-				EnterFrameCall.getStage().focus = null;
+                EnterFrameCall.getStage().focus = null;
             },
             [0, 0, 0, 0]
             );
@@ -349,7 +347,7 @@ public class SUserCtrlBar extends UserCtrlBar {
             case TextFormatAlign.RIGHT:
                 _alignGroup.setSelected(2);
                 break;
-			default:
+            default:
                 _alignGroup.setSelected(0);
         }
 
@@ -363,7 +361,9 @@ public class SUserCtrlBar extends UserCtrlBar {
     public function showByDiyBase(diy : DiyBase) : void {
         _editVo = diy.editVo;
         var p : Point = new Point(diy.x + diy.childX, diy.y + diy.childY);
-        p = diy.parent.localToGlobal(p);
+        if (diy.parent != null) {
+            p = diy.parent.localToGlobal(p);
+        }
         p = _parent.globalToLocal(p);
         _parent.addChild(this);
 
@@ -440,6 +440,10 @@ public class SUserCtrlBar extends UserCtrlBar {
 
     private function get dataProxy() : DiyDataProxy {
         return Facade.getInstance().retrieveProxy(DiyDataProxy.NAME) as DiyDataProxy;
+    }
+
+    public function get rightMediator() : RightContainerMediator {
+        return Facade.getInstance().retrieveMediator(RightContainerMediator.NAME) as RightContainerMediator;
     }
 }
 }
