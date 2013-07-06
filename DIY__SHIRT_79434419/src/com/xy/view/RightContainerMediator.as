@@ -1,9 +1,7 @@
 package com.xy.view {
-import com.adobe.images.JPGEncoder;
 import com.adobe.images.PNGEncoder;
-import com.greensock.easing.Strong;
-import com.xy.animation.Juggler;
 import com.xy.component.alert.Alert;
+import com.xy.component.alert.enum.AlertType;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
@@ -18,9 +16,10 @@ import com.xy.model.history.MulityDeleteHistory;
 import com.xy.model.history.MultyModifyHistory;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.model.vo.EditVo;
+import com.xy.model.vo.ExportVo;
 import com.xy.ui.BuyButton;
-import com.xy.ui.CtrlBar;
 import com.xy.util.EnterFrameCall;
+import com.xy.util.MulityLoad;
 import com.xy.util.PopUpManager;
 import com.xy.util.SMouse;
 import com.xy.util.STool;
@@ -32,13 +31,13 @@ import com.xy.view.ui.componet.DiyBase;
 import com.xy.view.ui.componet.DiyFont;
 import com.xy.view.ui.componet.DiySystemImage;
 import com.xy.view.ui.componet.GroupResize;
-import com.xy.view.ui.componet.ResizeBg;
 import com.xy.view.ui.componet.SAlertTextUI;
 import com.xy.view.ui.componet.SMulityPageUI;
 import com.xy.view.ui.componet.SUserCtrlBar;
 import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
 import com.xy.view.ui.events.EditTextPanelEvent;
 import com.xy.view.ui.events.SCtrlBarEvent;
+import com.xy.view.ui.events.SMulityPageUIEvent;
 import com.xy.view.ui.events.SUserCtrlBarEvent;
 import com.xy.view.ui.panels.ChooseBackgroundPanel;
 import com.xy.view.ui.panels.EditTextPanel;
@@ -94,8 +93,9 @@ public class RightContainerMediator extends AbsMediator {
     private var _diyBg : Bitmap;
     private var _mask : Shape;
     private var _diyArea : Sprite;
+    private var _diys : Array = [];
 
-    private var _diyImages : Array = [];
+    private var _exportVo : ExportVo;
 
     private var _currentSelectImage : DiyBase;
     private var _diyBar : SUserCtrlBar;
@@ -124,7 +124,6 @@ public class RightContainerMediator extends AbsMediator {
     private var _groupBg : GroupResize;
 
     private var _background : Sprite;
-    private var _currentBgData : *;
 
     private var _mulityPageUI : SMulityPageUI;
 
@@ -174,6 +173,8 @@ public class RightContainerMediator extends AbsMediator {
 
         _diyBar = new SUserCtrlBar(ui);
 
+        _exportVo = new ExportVo();
+
         _bmpDragTip = new BitmapDragTip();
 
         _editPanel = new EditTextPanel();
@@ -206,6 +207,7 @@ public class RightContainerMediator extends AbsMediator {
         _diyBar.addEventListener(SUserCtrlBarEvent.FONT_BOLD, __fontBoldHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.FONT_ALIGN, __fontAlignHandler);
 
+        _mulityPageUI.addEventListener(SMulityPageUIEvent.SELECT_ONE, __selectOneHandler);
         _buyBtn.addEventListener(MouseEvent.CLICK, __buyHandler);
         _editPanel.addEventListener(EditTextPanelEvent.EDIT, __editOkHandler);
         ui.bg.addEventListener(MouseEvent.MOUSE_DOWN, __bgDownHandler);
@@ -287,6 +289,8 @@ public class RightContainerMediator extends AbsMediator {
 
         _diyBg.bitmapData = dataProxy.currentSelectModel.bmd;
         resize();
+        _exportVo.vo = dataProxy.currentSelectModel;
+        _exportVo.bgData = dataProxy.currentSelectModel.bgs[0];
 
         if (_chooseModelPanel.stage != null) {
             _chooseModelPanel.setData(dataProxy.models);
@@ -306,9 +310,9 @@ public class RightContainerMediator extends AbsMediator {
         _ctrlBar.updateData(dataProxy.ctrlHistory, dataProxy.currentHistoryIndex);
     }
 
-    private function addImage(vo : BitmapDataVo, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true) : void {
+    private function addImage(vo : BitmapDataVo, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true, needreDrawResult : Boolean = true) : void {
         if (vo.cate == "bg") {
-            var oldData : * = _currentBgData;
+            var oldData : * = _exportVo.bgData;
             var bmp : Bitmap = new Bitmap(vo.bmd);
             var rect : Rectangle = dataProxy.currentSelectModel.rect;
             bmp.width = rect.width;
@@ -317,9 +321,9 @@ public class RightContainerMediator extends AbsMediator {
             bmp.y = rect.y;
             STool.clear(_background);
             _background.addChild(bmp);
-            _currentBgData = vo.id;
+            _exportVo.bgData = vo.id;
             if (needRecord) {
-                dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _currentBgData));
+                dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _exportVo.bgData));
             }
             sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
         } else {
@@ -329,26 +333,58 @@ public class RightContainerMediator extends AbsMediator {
                 dataProxy.recordHistory(new AddHistory(addImage, deleteDiyById, vo, stageX, stageY, image.id));
             }
         }
+
+        if (needreDrawResult) {
+            reDrawResult();
+        }
     }
 
-    private function setBackground(data : *) : void {
+    private function setBackground(data : *, needreDrawResult : Boolean = true) : void {
         if (data == null) {
             deleteBg(false);
+
+            if (needreDrawResult) {
+                reDrawResult();
+            }
         } else if (data is uint) {
             setBgAsColor(data as uint, false);
+            if (needreDrawResult) {
+                reDrawResult();
+            }
         } else {
             var vo : BitmapDataVo = dataProxy.getBitmapDataVoById(data as String);
 
             if (vo != null) {
-                addImage(vo, 0, 0, null, false);
+                addImage(vo, 0, 0, null, false, needreDrawResult);
             }
         }
+    }
+
+    public function reDrawResult() : void {
+        var arr : Array = [];
+        for each (var diy : DiyBase in _diys) {
+            arr.push(diy.editVo.clone());
+        }
+        _exportVo.diys = arr;
+
+        var rect : Rectangle = dataProxy.currentSelectModel.rect;
+        var p : Point = rect.topLeft.clone();
+        var bmd : BitmapData = new BitmapData(rect.width, rect.height, true, 0x00000000);
+        var mat : Matrix = new Matrix();
+        mat.translate(-p.x, -p.y);
+
+        _diyArea.mask = null;
+        bmd.draw(_background, mat);
+        bmd.draw(_diyArea, mat, null, null, new Rectangle(0, 0, rect.width, rect.height), true);
+        _diyArea.mask = _mask;
+        _exportVo.exportBmd = bmd;
+        _mulityPageUI.updateSelectedShow();
     }
 
     private function deleteDiyById(id : String) : void {
         var diyTmp : DiyBase = getDiyBaseById(id);
 
-        var index : int = _diyImages.indexOf(diyTmp);
+        var index : int = _diys.indexOf(diyTmp);
         if (index == -1) {
             var vo : BitmapDataVo = dataProxy.getBitmapDataVoById(id);
             if (vo != null && vo.cate == "bg") {
@@ -357,7 +393,7 @@ public class RightContainerMediator extends AbsMediator {
             return;
         }
 
-        _diyImages.splice(index, 1);
+        _diys.splice(index, 1);
         diyTmp.deleted();
 
         diyTmp.removeEventListener(MouseEvent.DOUBLE_CLICK, __showEditTextPanel);
@@ -389,13 +425,13 @@ public class RightContainerMediator extends AbsMediator {
 
     }
 
-    private function addByEditVo(editVo : EditVo) : void {
+    private function addByEditVo(editVo : EditVo, redraw : Boolean) : void {
         var p : Point = new Point(editVo.ix, editVo.iy);
         p = _diyArea.localToGlobal(p);
         if (editVo.isImage) {
-            addImage(dataProxy.getBitmapDataVoById(editVo.bmdId), p.x, p.y, editVo.id, false);
+            addImage(dataProxy.getBitmapDataVoById(editVo.bmdId), p.x, p.y, editVo.id, false, redraw);
         } else {
-            addFont(dataProxy.getFontByName(editVo.fontName), p.x, p.y, editVo.id, false);
+            addFont(dataProxy.getFontByName(editVo.fontName), p.x, p.y, editVo.id, false, redraw);
         }
 
         var diy : DiyBase = getDiyBaseById(editVo.id);
@@ -415,7 +451,7 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
-    private function addFont(font : Font, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true) : void {
+    private function addFont(font : Font, stageX : Number, stageY : Number, id : String = null, needRecord : Boolean = true, redraw : Boolean = true) : void {
         var image : DiyFont = new DiyFont(font, id);
         addAndRecordDiy(image, stageX, stageY);
 
@@ -424,6 +460,10 @@ public class RightContainerMediator extends AbsMediator {
 
         if (needRecord) {
             dataProxy.recordHistory(new AddHistory(addFont, deleteDiyById, font, stageX, stageY, image.id));
+        }
+
+        if (redraw) {
+            reDrawResult();
         }
     }
 
@@ -440,26 +480,27 @@ public class RightContainerMediator extends AbsMediator {
                 deleteDiyById(diy.id);
             }
             dataProxy.recordHistory(new MulityDeleteHistory(mulityDelete, mulityAdd, vos));
+            reDrawResult();
         }
     }
 
     private function deleteBg(record : Boolean = true) : void {
-        var oldData : * = _currentBgData;
+        var oldData : * = _exportVo.bgData;
         STool.clear(_background);
-        _currentBgData = null;
+        _exportVo.bgData = null;
 
         if (record) {
-            dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _currentBgData));
+            dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _exportVo.bgData));
         }
         sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
     }
 
     private function setBgAsColor(color : uint, record : Boolean = true) : void {
-        var oldData : * = _currentBgData;
+        var oldData : * = _exportVo.bgData;
         STool.clear(_background);
         var shape : Shape = new Shape();
         _background.addChild(shape);
-        _currentBgData = color;
+        _exportVo.bgData = color;
 
         var rect : Rectangle = dataProxy.currentSelectModel.rect;
         shape.graphics.beginFill(color);
@@ -468,7 +509,7 @@ public class RightContainerMediator extends AbsMediator {
         _background.addChild(shape);
 
         if (record) {
-            dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _currentBgData));
+            dataProxy.recordHistory(new BackgroundHistory(setBackground, oldData, _exportVo.bgData));
         }
         sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
     }
@@ -481,7 +522,7 @@ public class RightContainerMediator extends AbsMediator {
         diy.x = p.x;
         diy.y = p.y;
 
-        _diyImages.push(diy);
+        _diys.push(diy);
         _diyArea.addChild(diy);
         diy.bg.showTo(ui.container);
         diy.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
@@ -490,8 +531,9 @@ public class RightContainerMediator extends AbsMediator {
         _currentSelectImage = diy;
     }
 
+
     public function getDiyBaseById(id : String) : DiyBase {
-        for each (var diy : DiyBase in _diyImages) {
+        for each (var diy : DiyBase in _diys) {
             if (diy.id == id) {
                 return diy;
             }
@@ -519,9 +561,9 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
-    public function mulityAdd(vos : Array) : void {
+    public function mulityAdd(vos : Array, redraw : Boolean = true) : void {
         for each (var vo : EditVo in vos) {
-            addByEditVo(vo);
+            addByEditVo(vo, redraw);
         }
     }
 
@@ -547,7 +589,7 @@ public class RightContainerMediator extends AbsMediator {
 
     public function getGroupsById(id : String) : Array {
         var rs : Array = [];
-        for each (var diy : DiyBase in _diyImages) {
+        for each (var diy : DiyBase in _diys) {
             if (diy.editVo.groupId == id) {
                 rs.push(diy);
             }
@@ -610,9 +652,80 @@ public class RightContainerMediator extends AbsMediator {
     }
 
     private function __modelChangeHandler(e : ChooseBackgroundPanelEvent) : void {
-        dataProxy.chooseModel(e.vo);
+        STool.clear(_background);
+        if (_diyArea.numChildren != 0) {
+            Alert.show(new SAlertTextUI("更换模板将删除现有DIY，确认更换?"), function(type : int, data : *) : void {
+                if (type == AlertType.OK) {
+                    checkModel(e.vo);
+                } else {
+                    e.vo.show = false;
+                }
+            });
+        } else {
+            checkModel(e.vo);
+        }
         PopUpManager.getInstance().closeAll();
         EnterFrameCall.getStage().focus = null;
+        _exportVo.bgData = null;
+    }
+
+    private function checkModel(vo : BitmapDataVo) : void {
+        var loads : Array = [];
+        for each (var bg : String in vo.bgs) {
+            var tmp : BitmapDataVo = dataProxy.getBitmapDataVoById(bg);
+            if (tmp != null && tmp.bmd == null) {
+                loads.push(tmp);
+            }
+        }
+
+        if (loads.length == 0) {
+            changeModel(vo);
+        } else {
+            MulityLoad.getInstance().load(loads, function() : void {
+                changeModel(vo);
+            }, 0);
+        }
+    }
+
+    private function changeModel(vo : BitmapDataVo) : void {
+        dataProxy.chooseModel(vo);
+        dataProxy.clearHistorys();
+
+        if (vo.page > 1) {
+            ui.container.setChildIndex(_diyBg, 3);
+        } else {
+            ui.container.setChildIndex(_diyBg, 0);
+        }
+
+        if (vo.bgs.length != 0) {
+            setBackground(vo.bgs[0]);
+        }
+
+        if (vo.page > 1) {
+            dataProxy.currentPageDatas = [];
+            for (var i : int = 0; i < vo.page; i++) {
+                var exportVo : ExportVo = new ExportVo();
+                exportVo.vo = vo;
+
+                if (i >= vo.bgs.length) {
+                    exportVo.bgData = vo.bgs[vo.bgs.length - 1];
+                } else {
+                    exportVo.bgData = vo.bgs[i];
+                }
+                var tmp : BitmapDataVo = dataProxy.getBitmapDataVoById(exportVo.bgData);
+                exportVo.exportBmd = tmp.bmd;
+
+                exportVo.index = i;
+                dataProxy.currentPageDatas.push(exportVo);
+            }
+
+            _exportVo = dataProxy.currentPageDatas[0];
+        } else {
+            _exportVo = new ExportVo();
+        }
+
+        clear();
+        _mulityPageUI.setData(dataProxy.currentPageDatas);
     }
 
     private function __lineChangeHandler(e : SUserCtrlBarEvent) : void {
@@ -624,6 +737,7 @@ public class RightContainerMediator extends AbsMediator {
         var nextVo : EditVo = _currentSelectImage.editVo.clone();
         dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
 
+        reDrawResult();
     }
 
     private function __lineColorHandler(e : SUserCtrlBarEvent) : void {
@@ -634,6 +748,7 @@ public class RightContainerMediator extends AbsMediator {
         _currentSelectImage.setColor(e.data);
         var nextVo : EditVo = _currentSelectImage.editVo.clone();
         dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+        reDrawResult();
     }
 
     private function __alphaHandler(e : SUserCtrlBarEvent) : void {
@@ -650,6 +765,7 @@ public class RightContainerMediator extends AbsMediator {
         var rs : Boolean = _currentSelectImage.upLevel();
         if (rs) {
             dataProxy.recordHistory(new ChildIndexHistory(upLevel, downLevel, _currentSelectImage.id));
+            reDrawResult();
         }
     }
 
@@ -660,6 +776,7 @@ public class RightContainerMediator extends AbsMediator {
         var rs : Boolean = _currentSelectImage.downLevel();
         if (rs) {
             dataProxy.recordHistory(new ChildIndexHistory(downLevel, upLevel, _currentSelectImage.id));
+            reDrawResult();
         }
     }
 
@@ -671,6 +788,7 @@ public class RightContainerMediator extends AbsMediator {
         dataProxy.recordHistory(new DeleteHistory(deleteDiyById, addByEditVo, _currentSelectImage.editVo.clone()));
         deleteDiyById(_currentSelectImage.id);
         EnterFrameCall.getStage().focus = null;
+        reDrawResult();
     }
 
     private function __fullStatusHandler(e : SUserCtrlBarEvent) : void {
@@ -686,6 +804,7 @@ public class RightContainerMediator extends AbsMediator {
         _currentSelectImage.bg.showTo(ui.container);
         var nextVo : EditVo = _currentSelectImage.editVo.clone();
         dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+        reDrawResult();
     }
 
     private function __showEditTextPanel(e : Event) : void {
@@ -707,6 +826,7 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiyFont).setColor(e.data);
             var nextVo : EditVo = _currentSelectImage.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+            reDrawResult();
         }
     }
 
@@ -720,6 +840,7 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiyFont).setFontFace(e.data);
             var nextVo : EditVo = _currentSelectImage.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+            reDrawResult();
         }
     }
 
@@ -733,6 +854,7 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiyFont).setFontSize(e.data);
             var nextVo : EditVo = _currentSelectImage.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+            reDrawResult();
         }
     }
 
@@ -746,6 +868,7 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiyFont).setFontBold(e.data);
             var nextVo : EditVo = _currentSelectImage.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+            reDrawResult();
         }
     }
 
@@ -759,7 +882,35 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiyFont).setFontAlign(e.data);
             var nextVo : EditVo = _currentSelectImage.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+            reDrawResult();
         }
+    }
+
+    private function __selectOneHandler(e : SMulityPageUIEvent) : void {
+        clear();
+        dataProxy.clearHistorys();
+        _exportVo = e.vo;
+
+        setBackground(e.vo.bgData, false);
+
+        var arr : Array = [];
+        mulityAdd(e.vo.diys, false);
+        _diyBar.hide();
+        for each (var diy : DiyBase in _diys) {
+            diy.bg.hide();
+        }
+    }
+
+    private function clear() : void {
+        for each (var diy : DiyBase in _diys) {
+            diy.deleted();
+        }
+        _diyBar.hide();
+        STool.clear(_diyArea);
+        _diys = [];
+        STool.remove(_bmpDragTip);
+        _currentModelId = null;
+        _currentSelectImage = null;
     }
 
     private function __buyHandler(e : MouseEvent) : void {
@@ -775,6 +926,7 @@ public class RightContainerMediator extends AbsMediator {
         var bmd : BitmapData = new BitmapData(rect.width, rect.height, true, 0x00000000);
         var mat : Matrix = new Matrix();
         mat.translate(-p.x, -p.y);
+        bmd.draw(_background, mat);
         bmd.draw(_diyArea, mat, null, null, new Rectangle(0, 0, rect.width, rect.height), true);
         var f : FileReference = new FileReference();
         var ba : ByteArray = PNGEncoder.encode(bmd);
@@ -792,6 +944,7 @@ public class RightContainerMediator extends AbsMediator {
             (_currentSelectImage as DiyFont).setText(e.text);
             var nextVo : EditVo = _currentSelectImage.editVo.clone();
             dataProxy.recordHistory(new ModifyHistory(prevVo, nextVo));
+            reDrawResult();
         }
         EnterFrameCall.getStage().focus = null;
     }
@@ -818,10 +971,12 @@ public class RightContainerMediator extends AbsMediator {
             }
 
             dataProxy.recordHistory(new MultyModifyHistory(setMulitiData, _prevVos, nowVos));
+            reDrawResult();
         }
 
         if (_prevVo != null && _prevVo.ix != _currentSelectImage.editVo.ix && _prevVo.iy != _currentSelectImage.editVo.iy && _currentSelectImage != null) {
             dataProxy.recordHistory(new ModifyHistory(_prevVo, _currentSelectImage.editVo.clone()));
+            reDrawResult();
         }
 
         _prevVo = null;
@@ -833,7 +988,7 @@ public class RightContainerMediator extends AbsMediator {
             _diyBar.hide();
         }
 
-        for each (var diy : DiyBase in _diyImages) {
+        for each (var diy : DiyBase in _diys) {
             diy.bg.hide();
         }
         _currentSelectImage = null;
@@ -856,7 +1011,7 @@ public class RightContainerMediator extends AbsMediator {
 
         _selectedImages = [];
 
-        for each (var diy : DiyBase in _diyImages) {
+        for each (var diy : DiyBase in _diys) {
             if (ui.selectUI.hitTestObject(diy.getChildAt(0))) {
                 diy.bg.showTo(ui.container, true);
                 _selectedImages.push(diy);
