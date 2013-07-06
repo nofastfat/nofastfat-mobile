@@ -47,6 +47,13 @@ public class DIY__SHIRT_79434419 extends Sprite {
 		SLoading.getInstance().show();
 		
 		new Http("config/config.xml?r" + Math.random(), loadOk);
+		
+		//TODO 增加权限控制
+		//TODO 增加URL参数定位模板
+		//TODO 保存，填写帐号，密码，导出多张图片
+		//TODO 保存作品的http接口，base64+压缩
+		//TODO 配置文件编辑说明文档
+		//TODO 接入说明，crossdomain.xml
     }
 	
 	private function loadOk(data:*):void{
