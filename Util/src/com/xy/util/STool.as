@@ -6,8 +6,9 @@ import flash.display.Loader;
 import flash.display.MovieClip;
 import flash.display.SimpleButton;
 import flash.display.Sprite;
-import flash.geom.Matrix;
+import flash.external.ExternalInterface;
 import flash.geom.Point;
+import flash.net.URLVariables;
 import flash.text.TextField;
 
 public class STool {
@@ -236,6 +237,18 @@ public class STool {
     }
 
     /**
+     * 搞一个超链接
+     * @param str
+     * @param eventName
+     * @return
+     */
+    public static function makeLink2(str : String, url : String) : String {
+        var vl : String;
+        vl = "<u><a href='" + url + "' target='_blank'><font color='#1E65B7'>" + str + "</font></a></u>";
+        return vl;
+    }
+
+    /**
      * 设置按钮是否可用
      * @param btn
      * @param enable
@@ -380,26 +393,49 @@ public class STool {
         }
         return str;
     }
-	
-	/**
-	 * 停止容器中的所有动画 
-	 * @param parent
-	 */	
-	public static function stopAll(parent : DisplayObjectContainer):void{
-		if(parent is MovieClip){
-			(parent as MovieClip).stop();
-		}
-		
-		for (var i : int = 0; i < parent.numChildren;i++){
-			var child : DisplayObject = parent.getChildAt(i);
-			if(child is DisplayObjectContainer){
-				stopAll(child as DisplayObjectContainer);
-			}else{
-				if(child is MovieClip){
-					(child as MovieClip).stop();
-				}
-			}
-		}
-	}
+
+    /**
+     * 停止容器中的所有动画
+     * @param parent
+     */
+    public static function stopAll(parent : DisplayObjectContainer) : void {
+        if (parent is MovieClip) {
+            (parent as MovieClip).stop();
+        }
+
+        for (var i : int = 0; i < parent.numChildren; i++) {
+            var child : DisplayObject = parent.getChildAt(i);
+            if (child is DisplayObjectContainer) {
+                stopAll(child as DisplayObjectContainer);
+            } else {
+                if (child is MovieClip) {
+                    (child as MovieClip).stop();
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取当前浏览器的参数
+     * @param key
+     * @return
+     */
+    public static function getUrlParam(key : String) : String {
+        if (!ExternalInterface.available) {
+            return null;
+        }
+        var url : String = ExternalInterface.call("function(){return window.location.href;}");
+        if (url == null || url == "") {
+            return null;
+        }
+        var mark : int = url.indexOf("?");
+        if (mark == -1) {
+            return null;
+        }
+        var params : String = url.substr(mark + 1);
+        var urlvars : URLVariables = new URLVariables(params);
+
+        return urlvars[key];
+    }
 }
 }
