@@ -12,6 +12,10 @@ public class DiyDataNotice {
     public static const DECORATE_UPDATE : String = NAME + "DECORATE_UPDATE";
     public static const FRAME_UPDATE : String = NAME + "FRAME_UPDATE";
 
+    /**
+     * vo : BitmapDataVo 
+     */
+    public static const MODEL_INIT : String = NAME + "MODEL_INIT";
     public static const MODEL_UPDATE : String = NAME + "MODEL_UPDATE";
 
     public static const HISTORY_UPDATE : String = NAME + "HISTORY_UPDATE";

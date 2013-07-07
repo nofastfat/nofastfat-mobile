@@ -79,6 +79,7 @@ public class SPreLoading extends Sprite {
     private function startUp() : void {
         var mainClass : Class = STool.getClazzFromLoader("DIY__SHIRT_79434419", _loader);
         var sp : Sprite = new mainClass() as Sprite;
+        sp["setParams"](loaderInfo.parameters);
         stage.addChild(sp);
         _loader.unloadAndStop();
         _loader = null;

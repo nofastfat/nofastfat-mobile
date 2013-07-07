@@ -20,8 +20,8 @@ public class SFontThumb extends FontThumb {
 
     public function setFont(font : Font) : void {
         _font = font;
-        fontNameTf.htmlText = "<font face='" + font.fontName + "'>" + font.fontName + "</font>";
-        testTf.htmlText = "<font face='" + font.fontName + "'>ABC</font>";
+        fontNameTf.htmlText = "<font color='#000000' face='" + font.fontName + "'>" + font.fontName + "</font>";
+        testTf.htmlText = "<font color='#000000' face='" + font.fontName + "'>ABC</font>";
         ToolTip.setTip(this, STextTip.getInstance(), "[" + font.fontName + "]<br>拖拽到右边添加文字", ToolTipMode.RIGHT_BOTTOM_CENTER);
     }
 

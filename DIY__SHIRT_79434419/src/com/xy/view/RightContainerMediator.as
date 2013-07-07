@@ -1,9 +1,11 @@
 package com.xy.view {
 import com.adobe.images.PNGEncoder;
+import com.adobe.serialization.json.JSON;
 import com.xy.component.alert.Alert;
 import com.xy.component.alert.enum.AlertType;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
+import com.xy.model.URLConfig;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
 import com.xy.model.history.AddHistory;
@@ -19,6 +21,7 @@ import com.xy.model.vo.EditVo;
 import com.xy.model.vo.ExportVo;
 import com.xy.ui.BuyButton;
 import com.xy.util.EnterFrameCall;
+import com.xy.util.Http;
 import com.xy.util.MulityLoad;
 import com.xy.util.PopUpManager;
 import com.xy.util.SMouse;
@@ -38,11 +41,16 @@ import com.xy.view.ui.events.AbsPanelEvent;
 import com.xy.view.ui.events.ChooseBackgroundPanelEvent;
 import com.xy.view.ui.events.EditTextPanelEvent;
 import com.xy.view.ui.events.SCtrlBarEvent;
+import com.xy.view.ui.events.SLoginPanelEvent;
 import com.xy.view.ui.events.SMulityPageUIEvent;
 import com.xy.view.ui.events.SUserCtrlBarEvent;
 import com.xy.view.ui.panels.ChooseBackgroundPanel;
 import com.xy.view.ui.panels.ChooseCalendar;
 import com.xy.view.ui.panels.EditTextPanel;
+import com.xy.view.ui.panels.SLoginPanel;
+import com.xy.view.ui.panels.SUploadPanel;
+
+import deng.fzip.FZip;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -54,9 +62,16 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.net.FileReference;
+import flash.net.URLLoaderDataFormat;
+import flash.net.URLRequestMethod;
+import flash.net.URLVariables;
+import flash.net.navigateToURL;
 import flash.text.Font;
 import flash.utils.ByteArray;
 import flash.utils.getTimer;
+import flash.utils.setTimeout;
+
+import mx.utils.Base64Encoder;
 
 public class RightContainerMediator extends AbsMediator {
     public static const NAME : String = "RightContainerMediator";
@@ -131,6 +146,10 @@ public class RightContainerMediator extends AbsMediator {
 
     private var _chooseCalPanel : ChooseCalendar;
 
+    private var _loginPanel : SLoginPanel;
+
+    private var _uploadPanel : SUploadPanel;
+
     public function RightContainerMediator(viewComponent : Object = null) {
         super(NAME, viewComponent);
 
@@ -148,6 +167,7 @@ public class RightContainerMediator extends AbsMediator {
         map.put(KEY_DELETE, keyDelete);
         map.put(DELETE_BG, deleteBg);
         map.put(SET_BG_AS_COLOR, setBgAsColor);
+        map.put(DiyDataNotice.MODEL_INIT, checkModel);
         return map;
     }
 
@@ -189,6 +209,10 @@ public class RightContainerMediator extends AbsMediator {
 
         _chooseCalPanel = new ChooseCalendar();
 
+        _loginPanel = new SLoginPanel();
+
+        _uploadPanel = new SUploadPanel();
+
         EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler);
 
         _ctrlBar.addEventListener(SCtrlBarEvent.CHANGE_MODEL, __changeModel);
@@ -212,6 +236,7 @@ public class RightContainerMediator extends AbsMediator {
         _diyBar.addEventListener(SUserCtrlBarEvent.FONT_BOLD, __fontBoldHandler);
         _diyBar.addEventListener(SUserCtrlBarEvent.FONT_ALIGN, __fontAlignHandler);
 
+        _loginPanel.addEventListener(SLoginPanelEvent.LOGIN, __loginHandler);
         _chooseCalPanel.addEventListener(AbsPanelEvent.CLOSE, __closeHandler);
         _mulityPageUI.addEventListener(SMulityPageUIEvent.SELECT_ONE, __selectOneHandler);
         _buyBtn.addEventListener(MouseEvent.CLICK, __buyHandler);
@@ -375,7 +400,8 @@ public class RightContainerMediator extends AbsMediator {
 
     public function reDrawResult() : void {
         var arr : Array = [];
-        for each (var diy : DiyBase in _diys) {
+        for(var i : int = 0; i < _diyArea.numChildren; i++){
+        	var diy : DiyBase = _diyArea.getChildAt(i) as DiyBase;
             arr.push(diy.editVo.clone());
         }
         _exportVo.diys = arr;
@@ -507,13 +533,13 @@ public class RightContainerMediator extends AbsMediator {
         }
         sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
         checkCalBg();
-        
-        if(needReDraw){
-        	reDrawResult();
+
+        if (needReDraw) {
+            reDrawResult();
         }
     }
 
-    private function setBgAsColor(color : uint, record : Boolean = true,needreDrawResult:Boolean = true) : void {
+    private function setBgAsColor(color : uint, record : Boolean = true, needreDrawResult : Boolean = true) : void {
         var oldData : * = _exportVo.bgData;
         STool.clear(_background);
         var shape : Shape = new Shape();
@@ -531,9 +557,9 @@ public class RightContainerMediator extends AbsMediator {
         }
         sendNotification(BackgroundMediator.UPDATE_DELETE_BG, _background.numChildren > 0);
         checkCalBg();
-        
-        if(needreDrawResult){
-        	reDrawResult();
+
+        if (needreDrawResult) {
+            reDrawResult();
         }
     }
 
@@ -947,6 +973,13 @@ public class RightContainerMediator extends AbsMediator {
         }
     }
 
+    private function __loginHandler(e : SLoginPanelEvent) : void {
+        dataProxy.uName = e.uName;
+        dataProxy.uPwd = e.pwd;
+
+        uploadTMp();
+    }
+
     private function __closeHandler(e : AbsPanelEvent) : void {
         startLoadModelSource(_chooseCalPanel.getResult());
     }
@@ -985,19 +1018,101 @@ public class RightContainerMediator extends AbsMediator {
             return;
         }
 
-        _diyArea.mask = null;
-        var rect : Rectangle = dataProxy.currentSelectModel.rect;
-        var p : Point = rect.topLeft.clone();
 
-        var bmd : BitmapData = new BitmapData(rect.width, rect.height, true, 0x00000000);
-        var mat : Matrix = new Matrix();
-        mat.translate(-p.x, -p.y);
-        bmd.draw(_background, mat);
-        bmd.draw(_diyArea, mat, null, null, new Rectangle(0, 0, rect.width, rect.height), true);
-        var f : FileReference = new FileReference();
-        var ba : ByteArray = PNGEncoder.encode(bmd);
-        _diyArea.mask = _mask;
-        f.save(ba, "DIY_" + getTimer() + ".png");
+        var debug : String = STool.getUrlParam("debug");
+        if (debug == "true") {
+            var f : FileReference = new FileReference();
+            if (dataProxy.currentSelectModel.page == 1) {
+                var ba : ByteArray = PNGEncoder.encode(_exportVo.exportBmd);
+                _diyArea.mask = _mask;
+                f.save(ba, "DIY_" + getTimer() + ".png");
+            } else {
+                var fzip : FZip = new FZip();
+                for (var i : int = 0; i < dataProxy.currentPageDatas.length; i++) {
+                    var expVp : ExportVo = dataProxy.currentPageDatas[i];
+                    ba = PNGEncoder.encode(expVp.exportBmd);
+                    var name : String = "";
+                    if (i == 0) {
+                        name = "封面";
+                    } else if (i == dataProxy.currentPageDatas.length - 1) {
+                        name = "封底";
+                    } else {
+                        name = "第" + i + "张";
+                    }
+                    fzip.addFile(name + ".png", ba);
+                }
+
+                var rs : ByteArray = new ByteArray();
+                fzip.serialize(rs);
+                rs.position = 0;
+                f.save(rs, "DIY_" + getTimer() + ".zip");
+            }
+        } else {
+            if (dataProxy.uName == null) {
+                PopUpManager.getInstance().showPanel(_loginPanel);
+                _loginPanel.setPwdNull();
+            } else {
+                uploadTMp();
+            }
+        }
+    }
+
+    private function uploadTMp() : void {
+        PopUpManager.getInstance().closeAll();
+        PopUpManager.getInstance().showPanel(_uploadPanel);
+        _uploadPanel.playMc();
+        _uploadPanel.setData("正在上传您的作品，请稍候");
+        setTimeout(upload, 500);
+    }
+
+    private function upload() : void {
+        var params : URLVariables = new URLVariables();
+        params.uName = dataProxy.uName;
+        params.uPwd = dataProxy.uPwd;
+        params.pageCount = dataProxy.currentSelectModel.page;
+        var images : Array = [];
+        var base64 : Base64Encoder = new Base64Encoder();
+        if (dataProxy.currentSelectModel.page == 1) {
+            var ba : ByteArray = PNGEncoder.encode(_exportVo.exportBmd);
+            base64.flush();
+            images.push(base64.encodeBytes(ba));
+        } else {
+            for (var i : int = 0; i < dataProxy.currentPageDatas.length; i++) {
+                var expVp : ExportVo = dataProxy.currentPageDatas[i];
+                ba = PNGEncoder.encode(expVp.exportBmd);
+                base64.flush();
+                images.push(base64.encodeBytes(ba));
+            }
+        }
+        params.images = JSON.encode(images);
+
+        new Http(URLConfig.UPLOAD_URL, function(data : String) : void {
+            PopUpManager.getInstance().closeAll();
+            var rs : *;
+
+            if (data != null) {
+                try {
+                    rs = JSON.decode(data);
+                } catch (e : Error) {
+                    rs = null;
+                }
+            }
+            if (rs == null || rs.status != 0) {
+            	dataProxy.uName = dataProxy.uPwd = null;
+                var txt : String = "上传失败，请稍候再试";
+                if (rs != null) {
+                    txt = rs.data;
+                }
+                Alert.show(new SAlertTextUI(txt), function(type : int, data : *) : void {
+                });
+            } else {
+                Alert.show(new SAlertTextUI("上传成功，是否查看购物车？"), function(type : int, data : *) : void {
+                    if (type == AlertType.OK) {
+                        navigateToURL(rs.data, "_blank");
+                    }
+                });
+            }
+        }, URLLoaderDataFormat.TEXT, params, URLRequestMethod.POST);
     }
 
     private function __editOkHandler(e : EditTextPanelEvent) : void {

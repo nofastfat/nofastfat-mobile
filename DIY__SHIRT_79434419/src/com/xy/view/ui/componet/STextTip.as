@@ -15,7 +15,7 @@ public class STextTip extends TextTip implements ITipViewContent {
     }
 
     public function setData(data : *) : void {
-        msgTf.htmlText = data;
+        msgTf.htmlText = "<font color='#000000'>" + data + "</font>";
     }
 
     public function destroy() : void {

@@ -32,6 +32,8 @@ public class ChooseCalendar extends AbsPanel {
 
         _scrollMenu = new ScrollMenu();
 
+		closeBtn.visible = false;
+		
         _content.selectBtn.tf.mouseEnabled = false;
         _content.selectBtn.buttonMode = true;
         _content.selectBtn.addEventListener(MouseEvent.CLICK, __showMenuHandler);

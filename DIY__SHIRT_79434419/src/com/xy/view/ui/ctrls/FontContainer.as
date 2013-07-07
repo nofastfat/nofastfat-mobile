@@ -2,12 +2,11 @@ package com.xy.view.ui.ctrls {
 import com.xy.component.Slider.Slider;
 import com.xy.component.Slider.SliderMode;
 import com.xy.component.Slider.event.SliderEvent;
+import com.xy.model.URLConfig;
 import com.xy.ui.ScrollUI;
 import com.xy.util.STool;
 import com.xy.view.ui.componet.SFontThumb;
 
-import flash.display.Sprite;
-import flash.filters.GlowFilter;
 import flash.text.Font;
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -46,9 +45,8 @@ public class FontContainer extends AbsContainer {
         _tf.height = 20;
         _tf.width = 200;
 		//_tf.filters = [new GlowFilter(0x000000, 1, 3, 3, 5)];
-        var url : String = "http://g.cn";
-        _tf.defaultTextFormat = new TextFormat("宋体", 12, 0x0000ff, null, null, true, url, "_blank", TextFormatAlign.CENTER);
-        _tf.htmlText = "<a href='" + url + "' target='_blank'><font face='宋体' color='#0000ff'>如何使用更多的字体？</font></a>";
+        _tf.defaultTextFormat = new TextFormat("宋体", 12, 0x0000ff, null, null, true, URLConfig.HOW_TO_ADD_FONT, "_blank", TextFormatAlign.CENTER);
+        _tf.htmlText = "<a href='" + URLConfig.HOW_TO_ADD_FONT + "' target='_blank'><font face='宋体' color='#0000ff'>如何使用更多的字体？</font></a>";
         addChild(_tf);
     }
 

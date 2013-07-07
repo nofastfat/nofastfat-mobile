@@ -3,6 +3,7 @@ import com.xy.DiyFacade;
 import com.xy.component.alert.Alert;
 import com.xy.component.menu.Menu;
 import com.xy.component.toolTip.ToolTip;
+import com.xy.model.URLConfig;
 import com.xy.ui.AlertBg;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.Http;
@@ -23,6 +24,13 @@ public class DIY__SHIRT_79434419 extends Sprite {
 
     public function DIY__SHIRT_79434419() {
         addEventListener(Event.ADDED_TO_STAGE, __addToStageHandler);
+    }
+    
+    public function setParams(obj : *) : void {
+        URLConfig.FOGOT_PASSWORD = obj["forgotPwdUrl"];
+        URLConfig.HOW_TO_ADD_FONT = obj["addFontUrl"];
+        URLConfig.REGISTER_PAGE = obj["registerUrl"];
+        URLConfig.UPLOAD_URL = obj["uploadImageUrl"];
     }
 
     private function __addToStageHandler(e : Event) : void {
@@ -45,13 +53,9 @@ public class DIY__SHIRT_79434419 extends Sprite {
         _facade = new DiyFacade();
 		
 		SLoading.getInstance().show();
-		
 		new Http("config/config.xml?r" + Math.random(), loadOk);
 		
 		//TODO 增加权限控制
-		//TODO 增加URL参数定位模板
-		//TODO 保存，填写帐号，密码，导出多张图片
-		//TODO 保存作品的http接口，base64+压缩
 		//TODO 配置文件编辑说明文档
 		//TODO 接入说明，crossdomain.xml
     }

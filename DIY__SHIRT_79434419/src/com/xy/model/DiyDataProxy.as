@@ -34,6 +34,9 @@ public class DiyDataProxy extends Proxy {
 
     public var currentPageDatas : Array = [];
     public var cals : Array = [];
+    
+    public var uName : String;
+    public var uPwd : String;
 
     public function DiyDataProxy() {
         super(NAME);
@@ -302,16 +305,21 @@ public class DiyDataProxy extends Proxy {
 
             _models.get(type).push(vo);
 
-            if (_currentSelectModel == null) {
-                _currentSelectModel = vo;
-                _currentSelectModel.show = true;
-            }
+        }
 
-            if (_currentSelectModel != null) {
-                MulityLoad.getInstance().load(getNeedLoadBy(_currentSelectModel), function() : void {
-                    sendNotification(DiyDataNotice.MODEL_UPDATE, false);
-                }, SourceType.MODEL);
-            }
+        var defaultModeId : String = STool.getUrlParam("modelId");
+        if (defaultModeId != null && defaultModeId != "") {
+            _currentSelectModel = getModelById(defaultModeId);
+        }
+        if (_currentSelectModel == null) {
+            _currentSelectModel = _models.get(_models.keys[0])[0];
+        }
+
+        if (_currentSelectModel != null) {
+            _currentSelectModel.show = true;
+            MulityLoad.getInstance().load(getNeedLoadBy(_currentSelectModel), function() : void {
+                sendNotification(DiyDataNotice.MODEL_INIT, _currentSelectModel);
+            }, SourceType.MODEL);
         }
 
         for each (xx in xml..calendar) {
@@ -348,33 +356,33 @@ public class DiyDataProxy extends Proxy {
 
         return null;
     }
-    
+
     public function getSelectAbleCals(style : String) : Array {
-    	var rs : Array = [];
-    	for each(var vo : CalVo in cals){
-    		if(vo.style == style){
-    			rs.push(vo);
-    		}
-    	}
-    	rs.sort(sortFun);
-    	
-    	return rs;
+        var rs : Array = [];
+        for each (var vo : CalVo in cals) {
+            if (vo.style == style) {
+                rs.push(vo);
+            }
+        }
+        rs.sort(sortFun);
+
+        return rs;
     }
-    
-    private function sortFun(cal1 : CalVo, cal2 : CalVo):int{
-    	if(cal1.year < cal2.year){
-    		return -1;
-    	}else if(cal1.year > cal2.year){
-    		return 1;
-    	}else{
-    		if(cal1.month < cal2.month){
-    			return -1;
-    		}else if(cal1.month > cal2.month){
-    			return 1;
-    		}else{
-    			return 0;
-    		}
-    	}
+
+    private function sortFun(cal1 : CalVo, cal2 : CalVo) : int {
+        if (cal1.year < cal2.year) {
+            return -1;
+        } else if (cal1.year > cal2.year) {
+            return 1;
+        } else {
+            if (cal1.month < cal2.month) {
+                return -1;
+            } else if (cal1.month > cal2.month) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
 
     public function getNeedLoadBy(vo : BitmapDataVo) : Array {
