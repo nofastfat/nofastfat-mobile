@@ -38,7 +38,27 @@
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "playerProductInstall.swf";
             var flashvars = {};
+            
 			flashvars.version = "1.0";
+			flashvars.addFontUrl="http://www.google.cn/?r=1";//如何添加更多字体的页面
+			flashvars.registerUrl="http://www.google.cn/?r=2";//注册页面
+			flashvars.forgotPwdUrl="http://www.google.cn/?r=3";//忘记密码
+			
+			//上传图片
+			//post参数:
+			// uName:用户名,String
+			// uPwd:密码MD5后的值,String
+			// pageCount:用户DIY作品的中页数,int
+			// images:用户DIY作品的图片Json数组，数组的内容是PNG图片Base64转换后的数据, [Base64(*.png), Base64(*.png), ...]
+			//返回数据:
+			//Json格式的字符串
+			//{
+			//	status:int, --结果状态，0表示成功，非0表示失败
+			//	data:String --如果status为0，data应该为一个URL，该URL链接到当前用户的购物车
+			//				--如果stats为非0，data应该为一个描述错误信息的字符串
+			//}
+			flashvars.uploadImageUrl="http://www.google.cn/?r=3";
+			
             var params = {};
             params.quality = "high";
             params.bgcolor = "#ffffff";

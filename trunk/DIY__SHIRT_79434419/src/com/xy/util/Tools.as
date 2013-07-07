@@ -10,7 +10,7 @@ public class Tools {
 
     public static function makeBlackButton(txt : String) : BlackButton {
         var btn : BlackButton = new BlackButton();
-        btn.tf.text = txt;
+        btn.tf.htmlText = "<b><font color='#FFFFFF'>" + txt + "</font></b>";
         btn.tf.mouseEnabled = false;
         return btn;
     }
@@ -61,17 +61,17 @@ public class Tools {
 
         return id;
     }
-	
-	public static function recordId(id : String):void{
-		_IDS.push(id);
-	}
-	
-	public static function gainConfig(str : String):String{
-		str = StringUtil.replace(str,"，", ",");
-		str = StringUtil.trim(str);
-		
-		return str;
-	}
+
+    public static function recordId(id : String) : void {
+        _IDS.push(id);
+    }
+
+    public static function gainConfig(str : String) : String {
+        str = StringUtil.replace(str, "，", ",");
+        str = StringUtil.trim(str);
+
+        return str;
+    }
 
 }
 }
