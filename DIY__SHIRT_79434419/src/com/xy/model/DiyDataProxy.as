@@ -397,7 +397,7 @@ public class DiyDataProxy extends Proxy {
 
         for each (var id : String in vo.bgs) {
             tmp = getBitmapDataVoById(id);
-            if (tmp != null && tmp.bmd != null) {
+            if (tmp != null && tmp.bmd == null) {
                 rs.push(tmp);
             }
         }
