@@ -20,6 +20,7 @@ import com.xy.model.vo.BitmapDataVo;
 import com.xy.model.vo.EditVo;
 import com.xy.model.vo.ExportVo;
 import com.xy.ui.BuyButton;
+import com.xy.util.Base64;
 import com.xy.util.EnterFrameCall;
 import com.xy.util.Http;
 import com.xy.util.MulityLoad;
@@ -71,7 +72,6 @@ import flash.utils.ByteArray;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
 
-import mx.utils.Base64Encoder;
 
 public class RightContainerMediator extends AbsMediator {
     public static const NAME : String = "RightContainerMediator";
@@ -1071,17 +1071,15 @@ public class RightContainerMediator extends AbsMediator {
         params.uPwd = dataProxy.uPwd;
         params.pageCount = dataProxy.currentSelectModel.page;
         var images : Array = [];
-        var base64 : Base64Encoder = new Base64Encoder();
         if (dataProxy.currentSelectModel.page == 1) {
             var ba : ByteArray = PNGEncoder.encode(_exportVo.exportBmd);
-            base64.flush();
-            images.push(base64.encodeBytes(ba));
+            images.push(Base64.encode(ba));
+			
         } else {
             for (var i : int = 0; i < dataProxy.currentPageDatas.length; i++) {
                 var expVp : ExportVo = dataProxy.currentPageDatas[i];
                 ba = PNGEncoder.encode(expVp.exportBmd);
-                base64.flush();
-                images.push(base64.encodeBytes(ba));
+				images.push(Base64.encode(ba));
             }
         }
         params.images = JSON.encode(images);
