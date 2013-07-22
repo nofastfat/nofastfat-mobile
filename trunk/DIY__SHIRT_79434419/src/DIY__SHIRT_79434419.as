@@ -31,6 +31,7 @@ public class DIY__SHIRT_79434419 extends Sprite {
         URLConfig.HOW_TO_ADD_FONT = obj["addFontUrl"];
         URLConfig.REGISTER_PAGE = obj["registerUrl"];
         URLConfig.UPLOAD_URL = obj["uploadImageUrl"];
+        URLConfig.LOGIN_DATA = obj["loginParams"];
     }
 
     private function __addToStageHandler(e : Event) : void {
@@ -56,8 +57,6 @@ public class DIY__SHIRT_79434419 extends Sprite {
 		new Http("config/config.xml?r" + Math.random(), loadOk);
 		
 		//TODO 增加权限控制
-		//TODO 配置文件编辑说明文档
-		//TODO 接入说明，crossdomain.xml
     }
 	
 	private function loadOk(data:*):void{
