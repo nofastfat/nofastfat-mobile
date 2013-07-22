@@ -1,4 +1,5 @@
 package com.xy.model {
+import com.adobe.serialization.json.JSON;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.DiyDataNotice;
 import com.xy.model.enum.SourceType;
@@ -6,6 +7,7 @@ import com.xy.model.history.IHistory;
 import com.xy.model.vo.BitmapDataVo;
 import com.xy.model.vo.CalVo;
 import com.xy.model.vo.DefaultImageVo;
+import com.xy.util.Base64;
 import com.xy.util.MulityLoad;
 import com.xy.util.STool;
 import com.xy.util.Tools;
@@ -13,6 +15,7 @@ import com.xy.util.Tools;
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.text.Font;
+import flash.utils.ByteArray;
 
 import org.puremvc.as3.patterns.proxy.Proxy;
 
@@ -174,6 +177,17 @@ public class DiyDataProxy extends Proxy {
     public function get backgrounds() : Map {
         return _backgrounds;
     }
+
+	public function initLoginData():void{
+		if(URLConfig.LOGIN_DATA != null && URLConfig.LOGIN_DATA != ""){
+			var ba : ByteArray = Base64.decode(URLConfig.LOGIN_DATA);
+			ba.position = 0;
+			var json : String = ba.readUTF();
+			var obj : * = JSON.decode(json);
+			uName = obj.id;
+			uPwd = obj.pwd;
+		}
+	}
 
     public function initConfigXML(xml : XML) : void {
         var randomShow : int = 5;

@@ -5,5 +5,6 @@ public class URLConfig {
     public static var REGISTER_PAGE : String = "";
     public static var FOGOT_PASSWORD : String = "";
     public static var UPLOAD_URL : String = "";
+    public static var LOGIN_DATA : String = "";
 }
 }
