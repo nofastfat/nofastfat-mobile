@@ -57,7 +57,11 @@
 			//	data:String --如果status为0，data应该为一个URL，该URL链接到当前用户的购物车
 			//				--如果stats为非0，data应该为一个描述错误信息的字符串
 			//}
-			flashvars.uploadImageUrl="http://www.google.cn/?r=3";
+			flashvars.uploadImageUrl="http://192.168.1.222/diy.php";
+			
+			//没有登录过的话，loginParams就是传一个空字符串（不是null）过来
+			//登录过的，把登录数据用json格式组合，然后base64处理成字符串
+			flashvars.loginParams="";//Base64.encode({id:String, pwd:String, userName:String, shopcartUrl:String});
 			
             var params = {};
             params.quality = "high";
