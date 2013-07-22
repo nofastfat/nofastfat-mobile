@@ -60,8 +60,15 @@
 			flashvars.uploadImageUrl="http://192.168.1.222/diy.php";
 			
 			//没有登录过的话，loginParams就是传一个空字符串（不是null）过来
-			//登录过的，把登录数据用json格式组合，然后base64处理成字符串
-			flashvars.loginParams="";//Base64.encode({id:String, pwd:String, userName:String, shopcartUrl:String});
+			//登录过的，把登录数据用json格式组合，然后base64处理成字符串,通过loginParams传递
+			// Json格式:
+			//{
+			//	id:String, 			--用户登录名
+			//	pwd:String,			--MD5以后的密码
+			//	userName:String,	--用户昵称
+			//	shopcartUrl:String	--购物车连接
+			//}
+			flashvars.loginParams="";
 			
             var params = {};
             params.quality = "high";
