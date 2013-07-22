@@ -2,8 +2,8 @@
 import flash.utils.ByteArray;
 
 public class Base64 {
-    private static const _encodeChars : Vector.<int> = InitEncoreChar();
-    private static const _decodeChars : Vector.<int> = InitDecodeChar();
+    private static const _encodeChars : Array = InitEncoreChar();
+    private static const _decodeChars : Array = InitDecodeChar();
 
     public static function encode(data : ByteArray) : String {
         var out : ByteArray = new ByteArray();
@@ -110,8 +110,8 @@ public class Base64 {
         return out;
     }
 
-    public static function InitEncoreChar() : Vector.<int> {
-        var encodeChars : Vector.<int> = new Vector.<int>();
+    public static function InitEncoreChar() : Array {
+        var encodeChars : Array = [];
         // We could push the number directly, but i think it's nice to see the characters (with no overhead on encode/decode)
         var chars : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         for (var i : int = 0; i < 64; i++) {
@@ -131,8 +131,8 @@ public class Base64 {
         return encodeChars;
     }
 
-    public static function InitDecodeChar() : Vector.<int> {
-        var decodeChars : Vector.<int> = new Vector.<int>();
+    public static function InitDecodeChar() : Array {
+        var decodeChars : Array = [];
 
         decodeChars.push(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
