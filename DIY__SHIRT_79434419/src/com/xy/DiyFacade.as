@@ -19,6 +19,7 @@ public class DiyFacade extends Facade {
         sendNotification(RegistCmd.NAME, root);
 		
 		dataProxy.initConfigXML(config);
+		dataProxy.initLoginData();
     }
 
     public function get dataProxy() : DiyDataProxy {
