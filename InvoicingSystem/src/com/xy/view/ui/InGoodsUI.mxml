@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:ContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
+              xmlns:ui="com.xy.view.ui.*"
+              layout="absolute"
+              width="400"
+              title="进货"
+              height="300" fontSize="12">
+
+</ui:ContentUI>
