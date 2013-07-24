@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                titleIcon="@Embed(source='../../../../../assets/1374649625_Login.png')"
+                layout="absolute"
+                width="362"
+                height="212"
+                showCloseButton="false"
+                title="登录"
+                horizontalAlign="left"
+                textAlign="left"
+                fontSize="12">
+
+    <mx:Script>
+        <![CDATA[
+            import com.adobe.utils.StringUtil;
+            import com.xy.util.EnterFrameCall;
+            import com.xy.view.events.LoginUIEvent;
+
+            import flash.debugger.enterDebugger;
+
+            public function init() : void {
+                nameTf.text = "";
+                pwdTf.text = "";
+                warnTf.text = "";
+                loginBtn.enabled = true;
+                EnterFrameCall.getStage().focus = nameTf;
+            }
+
+            protected function button1_clickHandler(event : MouseEvent) : void {
+                var uName : String = nameTf.text;
+                var pwd : String = pwdTf.text;
+
+                uName = StringUtil.trim(uName);
+                pwd = StringUtil.trim(pwd);
+
+                if (uName == "") {
+                    warnTf.text = "账号不能为空";
+                    EnterFrameCall.getStage().focus = nameTf;
+                    return;
+                }
+                if (pwd == "") {
+                    warnTf.text = "密码不能为空";
+                    EnterFrameCall.getStage().focus = pwdTf;
+                    return;
+                }
+
+                warnTf.htmlText = "<font color='#000000'>登录中...</font>";
+                loginBtn.enabled = false;
+
+                dispatchEvent(new LoginUIEvent(LoginUIEvent.SUBMIT, uName, pwd));
+            }
+
+            public function showFaild(rs : String) : void {
+                warnTf.text = rs;
+                loginBtn.enabled = true;
+            }
+        ]]>
+    </mx:Script>
+
+    <mx:Label x="73"
+              y="34"
+              text="帐号："/>
+    <mx:Label x="73"
+              y="62"
+              text="密码："/>
+    <mx:TextInput x="122"
+                  id="nameTf"
+                  restrict="0-9 a-z A-Z _ @ ."
+                  maxChars="15"
+                  y="32"/>
+    <mx:TextInput x="122"
+                  y="60"
+                  id="pwdTf"
+                  restrict="0-9 a-z A-Z _ @ ."
+                  maxChars="15"
+                  displayAsPassword="true"/>
+    <mx:Button x="115"
+               y="112"
+               label="登录"
+               width="112"
+               height="34"
+               id="loginBtn"
+               click="button1_clickHandler(event)"
+               icon="@Embed(source='../../../../../assets/1374650292_login.png')"/>
+    <mx:Image x="48"
+              source="@Embed(source='../../../../../assets/1374649952_administrator.png')"
+              y="33"
+              height="24"
+              width="24"/>
+    <mx:Image x="51"
+              source="@Embed(source='../../../../../assets/1374650025_key.png')"
+              y="65"
+              height="16"
+              width="16"/>
+    <mx:Label x="62"
+              y="89"
+              id="warnTf"
+              text=""
+              width="207"
+              color="#FF1503"
+              textAlign="center"/>
+
+</mx:TitleWindow>

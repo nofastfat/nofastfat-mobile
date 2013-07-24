@@ -1,14 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
                 layout="absolute"
-                addedToStage="init()">
+                addedToStage="added()"
+                xmlns:ui="com.xy.view.ui.*"
+                width="100%"
+                resize="application1_resizeHandler(event)"
+                height="100%">
     <mx:Script>
         <![CDATA[
-            private function init() : void {
+			import com.InvoicingFacade;
+			import com.xy.model.Config;
+			import com.xy.util.EnterFrameCall;
+			import com.xy.view.ui.ContentUI;
+			
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+
+            private var _contentUI : ContentUI;
+
+            private var _facade : InvoicingFacade;
+
+            private function added() : void {
                 stage.scaleMode = StageScaleMode.NO_SCALE;
                 stage.align = StageAlign.TOP_LEFT;
+                application1_resizeHandler(null);
+				
+				Config.HTTP_URL = parameters["httpUrl"];
+				
+				EnterFrameCall.initState(stage);
+				
+				_facade = new InvoicingFacade();
+				_facade.startUp(this);
             }
+
+            protected function application1_resizeHandler(event : ResizeEvent) : void {
+                if (stage == null) {
+                    return;
+                }
+
+                var sh : int = stage.stageHeight;
+                var sw : int = stage.stageWidth;
+
+                if (leftMenuUI != null) {
+                    var h : int = sh - leftMenuUI.y - 10;
+                    h = Math.max(h, 542);
+                    leftMenuUI.height = h;
+                }
+
+                if (topUI != null) {
+                    topUI.width = sw - topUI.x - 10;
+                }
+
+                if (_contentUI != null) {
+                    var w : int = sw - _contentUI.x - 10;
+                    w = Math.max(w, _contentUI.getMinWidth());
+
+                    h = sh - _contentUI.y - 10;
+                    h = Math.max(h, _contentUI.getMinHeight());
+
+                    _contentUI.width = w;
+                    _contentUI.height = h;
+                }
+            }
+
         ]]>
     </mx:Script>
+    <ui:TopUI left="10"
+              id="topUI"
+              top="10"
+              right="10"
+              height="106">
+    </ui:TopUI>
+    <ui:LeftMenuUI x="10"
+                   id="leftMenuUI"
+                   y="124">
+    </ui:LeftMenuUI>
+
+
 </mx:Application>
 
