@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+
+	<fx:Script>
+		<![CDATA[
+			protected function button1_clickHandler(event : MouseEvent) : void {
+				var f : File = new File();
+				f.browseForOpen("选择XML文件", [new FileFilter("*.xml", "*.xml")]);
+				f.addEventListener(Event.SELECT, function(e : Event) : void {
+					var path : String = f.parent.nativePath;
+					var fr : FileStream = new FileStream();
+					fr.open(f, FileMode.READ);
+					var ba : ByteArray = new ByteArray();
+					fr.readBytes(ba);
+					fr.close()
+					var xml : XML = new XML(ba);
+					var reXmls : Array = [];
+					for each(var sub : XML in xml.SubTexture){
+						var name : String = String(sub.@name);
+						var subFrameX : int = int(sub.@frameX);
+						var subFrameY : int = int(sub.@frameY);
+						var subX : int = int(sub.@x);
+						var subY : int = int(sub.@y);
+						var subFile : File = new File(path + File.separator + name + ".xml");
+						if(subFile.exists){
+							fr.open(subFile, FileMode.READ);
+							ba = new ByteArray();
+							fr.readBytes(ba);
+							fr.close()
+							var subXml : XML = new XML(ba);
+							for each(var subSub : XML in subXml.SubTexture){
+								var subSubName : String = String(subSub.@name);
+								subSubName=name + subSubName.substr(subSubName.length-4);
+								subSub.@name = subSubName;
+								subSub.@x = int(subSub.@x) + subX;
+								subSub.@y = int(subSub.@y) + subY;
+								//subSub.@frameX = int(subSub.@frameX) + subFrameX;
+								//subSub.@frameY = int(subSub.@frameY) + subFrameY;
+								reXmls.push(subSub);
+							}
+						}else{
+							reXmls.push(sub);
+							trace("警告:" + subFile.name + " 文件不存在");
+						}
+					}
+					
+					//trace(reXmls);
+					delete xml.SubTexture;
+					for each(var xx : XML in reXmls){
+						xml.appendChild(xx);
+					}
+					var newf : File = new File();
+					newf.save(xml, f.name);
+				});
+			}
+
+			protected function button2_clickHandler(event : MouseEvent) : void {
+			}
+		]]>
+	</fx:Script>
+
+	<s:TextInput id="sourceXml"
+				 width="100">
+
+	</s:TextInput>
+	<s:Button label="选择XML文件"
+			  x="120"
+			  click="button1_clickHandler(event)">
+
+	</s:Button>
+
+	<s:Button label="开始转换"
+			  click="button2_clickHandler(event)"
+			  x="230">
+
+	</s:Button>
+</s:WindowedApplication>
