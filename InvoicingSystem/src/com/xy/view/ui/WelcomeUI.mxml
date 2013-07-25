@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:ContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
+              xmlns:ui="com.xy.view.ui.*"
+              title="欢迎 »"
+              layout="absolute"
+              titleIcon="@Embed(source='../../../../../assets/welcome.png')"
+              width="400"
+              height="300"
+              fontSize="12">
+    <mx:Text x="10"
+             y="10"
+             text="admin,你好"
+             width="83"/>
+    <mx:Text x="10"
+             y="38"
+             text="上次登录时间: 2013-7-23 20:28:00"
+             width="250"/>
+    <mx:HRule x="10"
+              y="66"
+              width="360"/>
+    <mx:Text x="10"
+             y="76"
+             text="昨日出货10件，毛利：203.1元"/>
+    <mx:Text x="10"
+             y="104"
+             text="本周出货10件，毛利：203.1元"/>
+    <mx:Text x="10"
+             y="132"
+             text="本月出货10件，毛利：203.1元"/>
+
+</ui:ContentUI>

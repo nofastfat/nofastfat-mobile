@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+                      xmlns:listClasses="mx.controls.listClasses.*" width="148" height="28" fontSize="12">
+    <mx:Script>
+        <![CDATA[
+            override public function set data(value : Object) : void {
+				super.data = value;
+            }
+        ]]>
+    </mx:Script>
+    <mx:Button label="删除"
+               x="77" y="2" fontSize="12">
+
+    </mx:Button>
+    <mx:Button x="17" y="2" label="修改" fontSize="12"/>
+</mx:Canvas>

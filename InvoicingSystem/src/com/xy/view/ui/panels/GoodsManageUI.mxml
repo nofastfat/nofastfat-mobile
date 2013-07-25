@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="absolute"
+                width="476"
+                height="448"
+                titleIcon="@Embed(source='../../../../../../assets/goodsManage24.png')"
+                title="商品管理"
+                close="PopUpManager.removePopUp(this);"
+                fontSize="12"
+                showCloseButton="true">
+    <mx:TextInput x="10"
+                  y="18"
+                  width="210"/>
+    <mx:Button x="228"
+               y="18"
+               label="查找"/>
+    <mx:Button x="288"
+               y="18"
+               label="添加商品"
+               width="91"/>
+    <mx:HRule x="10"
+              y="59"
+              width="436"
+              height="1"/>
+    <mx:DataGrid x="10"
+                 y="68"
+                 width="436"
+                 dataProvider="{tableData}"
+                 height="328">
+        <mx:columns>
+            <mx:DataGridColumn headerText="SBNID"
+                               dataField="SBNId"/>
+            <mx:DataGridColumn headerText="名字"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="重量(kg)"
+                               dataField="weight"/>
+            <mx:DataGridColumn headerText="备注"
+                               dataField="description"/>
+            <mx:DataGridColumn headerText="操作"
+                               width="148"
+                               itemRenderer="com.xy.view.ui.render.GoodsItemCtrl"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+    <mx:Script>
+        <![CDATA[
+            import mx.collections.ArrayCollection;
+            import mx.managers.PopUpManager;
+
+            [Bindable]
+            public var tableData : ArrayCollection = new ArrayCollection([{name: 123, SBNId: 2, weight: 1, description: "动画"}]);
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

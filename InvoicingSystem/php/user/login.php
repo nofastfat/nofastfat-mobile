@@ -14,7 +14,7 @@
 	$sql = "select type from UsersTb where id='".$uid."' and pwd='".$pwd."';";
 	$rs = query($db, $sql);
 	if(count($rs) == 0){
-		echo makeJsonRs(false, "登录失败");
+		echo makeJsonRs(false, "登录失败,用户名或密码不正确");
 	}else{
 		echo makeJsonRs(true, $rs[0][0]);
 	}

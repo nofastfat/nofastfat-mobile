@@ -1,8 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:ContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
               xmlns:ui="com.xy.view.ui.*"
-              layout="absolute" title="库存"
-              width="400"
-              height="300">
+              layout="absolute"
+              title="库存 »"
+              titleIcon="@Embed(source='../../../../../assets/storge24.png')"
+              width="500"
+              height="356">
+    <mx:Script>
+        <![CDATA[
+            import com.xy.view.events.StorgeUIEvent;
+        ]]>
+    </mx:Script>
+    <mx:Button x="19"
+               y="20"
+               labelPlacement="bottom"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_GOODS_MANAGE))"
+               icon="@Embed(source='../../../../../assets/goodsManage.png')"
+               label="商品管理"
+               width="80"
+               height="80"/>
+    <mx:Button x="118"
+               y="20"
+               labelPlacement="bottom"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_COURIER_MANAGE))"
+               icon="@Embed(source='../../../../../assets/courierManage.png')"
+               label="快递管理"
+               width="80"
+               height="80"/>
+    <mx:Button x="216"
+               y="20"
+               labelPlacement="bottom"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_IN_GOODS_LOG))"
+               icon="@Embed(source='../../../../../assets/logs.png')"
+               label="进货记录"
+               width="80"
+               height="80"/>
+    <mx:Button x="314"
+               y="20"
+               labelPlacement="bottom"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_OUT_GOODS_LOG))"
+               icon="@Embed(source='../../../../../assets/logs.png')"
+               label="出货记录"
+               width="80"
+               height="80"/>
+    <mx:HRule x="10"
+              y="144"
+              width="460"
+              height="1"/>
+    <mx:Text x="19"
+             y="125"
+             text="库存查询"/>
 
 </ui:ContentUI>

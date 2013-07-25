@@ -4,6 +4,7 @@ import com.xy.model.Config;
 import com.xy.model.vo.ResultVo;
 import com.xy.util.Http;
 import com.xy.view.LoginUIMediator;
+import com.xy.view.WelcomeMediator;
 
 import org.puremvc.as3.interfaces.INotification;
 
@@ -43,6 +44,11 @@ public class LoginCmd extends AbsCommand {
 
         /* UI显示 */
         sendNotification(LoginUIMediator.LOGIN_RESULT, vo);
+		
+		/* 欢迎界面 */
+		if(vo.status){
+			sendNotification(WelcomeMediator.SHOW);
+		}
     }
 }
 }

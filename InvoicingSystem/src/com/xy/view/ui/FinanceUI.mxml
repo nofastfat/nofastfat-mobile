@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:ContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
               xmlns:ui="com.xy.view.ui.*"
-              layout="absolute" title="财务"
+              layout="absolute"
+              title="财务 »"
+			  titleIcon="@Embed(source='../../../../../assets/finance24.png')"
               width="400"
               height="300">
 
