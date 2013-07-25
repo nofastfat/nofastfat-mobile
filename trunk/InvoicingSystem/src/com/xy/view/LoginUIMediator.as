@@ -6,7 +6,6 @@ import com.xy.model.vo.ResultVo;
 import com.xy.view.events.LoginUIEvent;
 import com.xy.view.ui.LoginUI;
 
-import flash.events.InvokeEvent;
 import flash.events.MouseEvent;
 
 import mx.managers.PopUpManager;

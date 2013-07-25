@@ -1,4 +1,4 @@
-package com{
+package com {
 import com.xy.cmd.RegisterCmd;
 import com.xy.view.LoginUIMediator;
 
@@ -9,15 +9,15 @@ public class InvoicingFacade extends Facade {
         super();
     }
 
-	override protected function initializeController():void{
-		super.initializeController();
-		registerCommand(RegisterCmd.NAME, RegisterCmd);
-	}
-	
+    override protected function initializeController() : void {
+        super.initializeController();
+        registerCommand(RegisterCmd.NAME, RegisterCmd);
+    }
+
     public function startUp(root : InvoicingSystem) : void {
-		sendNotification(RegisterCmd.NAME, root);
-		
-		sendNotification(LoginUIMediator.SHOW_PANEL);
+        sendNotification(RegisterCmd.NAME, root);
+
+        sendNotification(LoginUIMediator.SHOW_PANEL);
     }
 }
 }
