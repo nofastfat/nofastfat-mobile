@@ -5,7 +5,8 @@
                 xmlns:ui="com.xy.view.ui.*"
                 width="100%"
                 resize="application1_resizeHandler(event)"
-                height="100%" xmlns:panels="com.xy.view.ui.panels.*">
+                height="100%"
+                xmlns:panels="com.xy.view.ui.panels.*">
     <mx:Script>
         <![CDATA[
             import com.InvoicingFacade;
@@ -45,7 +46,7 @@
 
                 if (leftMenuUI != null) {
                     var h : int = sh - leftMenuUI.y - 10;
-                    h = Math.max(h, 554);
+                    h = Math.max(h, 464);
                     leftMenuUI.height = h;
                 }
 
@@ -87,11 +88,11 @@
               id="topUI"
               top="10"
               right="10"
-              height="106">
+              height="90">
     </ui:TopUI>
     <ui:LeftMenuUI x="10"
                    id="leftMenuUI"
-                   y="124">
+                   y="108">
     </ui:LeftMenuUI>
 
 

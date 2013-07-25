@@ -3,17 +3,17 @@
                           width="514"
                           horizontalScrollPolicy="off"
                           verticalScrollPolicy="off"
-                          height="106">
+                          height="90">
     <mx:Canvas width="100%"
                height="100%">
         <mx:Image source="@Embed(source='../../../../../assets/1374649269_06.png')"
                   x="16"
-                  y="15"/>
+                  y="7"/>
         <mx:Label text="进销存系统"
                   fontSize="30"
                   fontStyle="italic"
                   x="96"
-                  y="26"
+                  y="18"
                   width="211"/>
     </mx:Canvas>
 </mx:ApplicationControlBar>
