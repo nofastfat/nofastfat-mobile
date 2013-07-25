@@ -1,0 +1,74 @@
+<TextureAtlas imagePath="monster.png">
+  <SubTexture name="monster20001_LB_Attack0000" x="4" y="1032" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0001" x="4" y="1032" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0002" x="4" y="1032" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0003" x="4" y="1152" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0004" x="4" y="1152" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0005" x="4" y="1152" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0006" x="4" y="1272" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0007" x="4" y="1272" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Attack0008" x="4" y="1272" width="150" height="118"/>
+  <SubTexture name="monster20001_LB_Die0000" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0001" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0002" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0003" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0004" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0005" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0006" x="520" y="776" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Die0007" x="520" y="890" width="137" height="112"/>
+  <SubTexture name="monster20001_LB_Hit0000" x="262" y="776" width="110" height="101" frameX="-8" frameY="-6" frameWidth="124" frameHeight="111"/>
+  <SubTexture name="monster20001_LB_Hit0001" x="374" y="776" width="110" height="100" frameX="-14" frameY="-11" frameWidth="124" frameHeight="111"/>
+  <SubTexture name="monster20001_LB_Hit0002" x="262" y="776" width="110" height="101" frameX="-8" frameY="-5" frameWidth="124" frameHeight="111"/>
+  <SubTexture name="monster20001_LB_Hit0003" x="262" y="879" width="110" height="107" frameX="-2" frameY="0" frameWidth="124" frameHeight="111"/>
+  <SubTexture name="monster20001_LB_Hit0004" x="374" y="879" width="110" height="100" frameX="0" frameY="-11" frameWidth="124" frameHeight="111"/>
+  <SubTexture name="monster20001_LB_Hit0005" x="262" y="776" width="110" height="101" frameX="-8" frameY="-6" frameWidth="124" frameHeight="111"/>
+  <SubTexture name="monster20001_LB_Stand0000" x="776" y="4" width="121" height="105"/>
+  <SubTexture name="monster20001_LB_Walk0000" x="520" y="518" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0001" x="520" y="518" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0002" x="520" y="518" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0003" x="643" y="518" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0004" x="643" y="518" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0005" x="643" y="518" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0006" x="520" y="626" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0007" x="520" y="626" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0008" x="520" y="626" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0009" x="643" y="626" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0010" x="643" y="626" width="121" height="106"/>
+  <SubTexture name="monster20001_LB_Walk0011" x="643" y="626" width="121" height="106"/>
+  <SubTexture name="monster20001_RU_Attack0000" x="4" y="518" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0001" x="4" y="518" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0002" x="4" y="518" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0003" x="4" y="641" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0004" x="4" y="641" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0005" x="4" y="641" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0006" x="4" y="764" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0007" x="4" y="764" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Attack0008" x="4" y="764" width="152" height="121"/>
+  <SubTexture name="monster20001_RU_Die0000" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0001" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0002" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0003" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0004" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0005" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0006" x="262" y="518" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Die0007" x="262" y="643" width="132" height="123"/>
+  <SubTexture name="monster20001_RU_Hit0000" x="4" y="4" width="134" height="114" frameX="-6" frameY="-6" frameWidth="144" frameHeight="120"/>
+  <SubTexture name="monster20001_RU_Hit0001" x="140" y="4" width="134" height="110" frameX="-10" frameY="-10" frameWidth="144" frameHeight="120"/>
+  <SubTexture name="monster20001_RU_Hit0002" x="276" y="4" width="135" height="115" frameX="-5" frameY="-5" frameWidth="144" frameHeight="120"/>
+  <SubTexture name="monster20001_RU_Hit0003" x="4" y="121" width="134" height="120" frameX="-1" frameY="0" frameWidth="144" frameHeight="120"/>
+  <SubTexture name="monster20001_RU_Hit0004" x="140" y="121" width="134" height="112" frameX="0" frameY="-8" frameWidth="144" frameHeight="120"/>
+  <SubTexture name="monster20001_RU_Hit0005" x="4" y="4" width="134" height="114" frameX="-6" frameY="-6" frameWidth="144" frameHeight="120"/>
+  <SubTexture name="monster20001_RU_Stand0000" x="4" y="1546" width="127" height="116"/>
+  <SubTexture name="monster20001_RU_Walk0000" x="518" y="4" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0001" x="518" y="4" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0002" x="518" y="4" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0003" x="518" y="124" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0004" x="518" y="124" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0005" x="518" y="124" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0006" x="518" y="244" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0007" x="518" y="244" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0008" x="518" y="244" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0009" x="518" y="364" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0010" x="518" y="364" width="132" height="118"/>
+  <SubTexture name="monster20001_RU_Walk0011" x="518" y="364" width="132" height="118"/>
+</TextureAtlas>

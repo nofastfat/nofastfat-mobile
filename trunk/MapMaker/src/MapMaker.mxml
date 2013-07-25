@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   width="1400"
+					   height="780"
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.enum.DataConfig;
+			import com.xy.model.vo.MapVo;
+			import com.xy.util.MapUtil;
+
+			import flash.filters.GlowFilter;
+			import flash.net.registerClassAlias;
+
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+
+			private var _bmd : BitmapData;
+			private var _xml : XML;
+			private var _positionXml : XML;
+			private var _mat : Matrix = new Matrix();
+
+			private var _mapData : Array;
+
+			protected function windowedapplication1_creationCompleteHandler(event : FlexEvent) : void {
+				var bmp : Bitmap = new AssetEmbeds_1x.roleTexture();
+				_bmd = bmp.bitmapData;
+				_xml = new XML(new AssetEmbeds_1x.roleXml());
+				_positionXml = new XML(new AssetEmbeds_1x.positionXml());
+
+				initMap();
+				initCtrl();
+			}
+
+			private function initMap() : void {
+
+				var mapArr : Array = MapUtil.makeRandomMap(8, 6);
+				drawTiles(mapArr)
+
+				container.addEventListener(MouseEvent.DOUBLE_CLICK, __addHandler);
+				container.addEventListener(MouseEvent.RIGHT_CLICK, __delHandler);
+			}
+
+			private function __addHandler(e : MouseEvent) : void {
+				if (_prevBmp != null) {
+					var s : MapTile = _prevBmp.clone();
+					var p : Point = new Point(e.stageX, e.stageY);
+					p = container.globalToLocal(p);
+					addMapTile(s, p.x, p.y);
+				}
+			}
+
+			private function addMapTile(s : MapTile, px : Number, py : Number) : void {
+				s.scaleX = s.scaleY = 2;
+				container.addChild(s);
+				var po : Point = getUIPostion(s.name);
+				s.x = px - po.x * 2;
+				s.y = py - po.y * 2;
+
+				s.addEventListener(MouseEvent.MOUSE_DOWN, function(e : Event) : void {
+					s.startDrag();
+				});
+
+				s.addEventListener(MouseEvent.MOUSE_UP, function(e : Event) : void {
+					s.stopDrag();
+				});
+			}
+
+			private function __delHandler(e : MouseEvent) : void {
+				var s : MapTile = e.target as MapTile;
+				if (s != null) {
+					container.removeChild(s);
+				}
+			}
+
+			private function initCtrl() : void {
+				var npcMax : int = 7;
+				var max : int = 19;
+				var th : int = 0;
+
+				for (var i : int = 1; i <= npcMax; i++) {
+					var gdcode : int = 60000 + i;
+					var ui : BitmapData = getUI("npc" + gdcode + "_LB_Stand");
+					var bmp : Bitmap = new Bitmap(ui);
+					bmp.y = th;
+					bmp.name = "npc" + gdcode + "_LB_Stand";
+
+					th += bmp.height + 5;
+					var sp : MapTile = new MapTile();
+					sp.addChild(bmp);
+					ctrlBar.addChild(sp);
+					sp.name = "npc" + gdcode + "_LB_Stand";
+					sp.addEventListener(MouseEvent.CLICK, __clickHandler);
+				}
+
+				for (i = 1; i <= max; i++) {
+					gdcode = 50000 + i;
+					ui = getUI("ui" + gdcode);
+					bmp = new Bitmap(ui);
+					bmp.y = th;
+					bmp.name = "ui" + gdcode;
+
+					th += bmp.height + 5;
+					sp = new MapTile();
+					sp.addChild(bmp);
+					ctrlBar.addChild(sp);
+					sp.name = "ui" + gdcode;
+					sp.addEventListener(MouseEvent.CLICK, __clickHandler);
+				}
+
+				ctrlBar.height = th;
+			}
+
+			private var _prevBmp : MapTile;
+
+			private function __clickHandler(e : Event) : void {
+				var bmp : MapTile = e.currentTarget as MapTile;
+
+				if (_prevBmp != null) {
+					_prevBmp.filters = [];
+				}
+				_prevBmp = bmp;
+				_prevBmp.filters = [new GlowFilter(0xFF0000)];
+			}
+
+			protected function getUI(name : String) : BitmapData {
+				var xx : XML = getXML(name);
+				var ix : int = int(xx.@x);
+				var iy : int = int(xx.@y);
+				var iwidth : int = int(xx.@width);
+				var iheight : int = int(xx.@height);
+
+				var bmd : BitmapData = new BitmapData(iwidth, iheight, true, 0xFF0000);
+				_mat = new Matrix();
+				_mat.translate(-ix, -iy);
+				bmd.draw(_bmd, _mat);
+
+				return bmd;
+			}
+
+			private function getXML(name : String) : XML {
+				for each (var xml : XML in _xml.SubTexture) {
+					if (xml.@name == name) {
+						return xml;
+					}
+				}
+				return null;
+			}
+
+			private function getUIPostion(name : String) : Point {
+				var p : Point;
+				var xml : XML;
+				if (name.indexOf("npc") != -1) {
+					xml = _positionXml[name.substr(0, 8)].RB.Stand[0];
+				} else {
+					xml = _positionXml.ui[name][0];
+				}
+				p = new Point(int(xml.@x), int(xml.@y));
+				return p;
+			}
+
+			private function hasSize(name : String) : Boolean {
+				var xml : XML = _positionXml.ui[name][0];
+				if (xml == null) {
+					return true;
+				}
+
+				return int(xml.@width) != 0;
+			}
+
+			protected function button1_clickHandler(event : MouseEvent) : void {
+				var mapID : int = int(mapId.text);
+				var mapNAME : String = mapName.text;
+				if (mapID < 70000 || mapID > 79999) {
+					Alert.show("请输出正确的地图ID（70000-79999）", "错误");
+					return;
+				}
+
+				if (mapNAME == "") {
+					Alert.show("请输出地图名", "错误");
+					return;
+				}
+
+				var npcs : Array = [];
+				var baffles : Array = [];
+				var mapDecks : Array = [];
+
+				for (var i : int = 0; i < container.numChildren; i++) {
+					var sp : Sprite = container.getChildAt(i) as Sprite;
+					if (sp != null) {
+						var name : String = sp.name;
+						var p : Point = getUIPostion(name);
+						p.x *= 2;
+						p.y *= 2;
+						p.offset(sp.x, sp.y);
+
+						if (name.indexOf("npc") != -1) {
+							npcs.push({gdcode: name.substr(3, 5), px: p.x, py: p.y});
+						} else {
+							if (hasSize(name)) {
+								baffles.push({gdcode: name.substr(2, 5), px: p.x, py: p.y});
+							} else {
+								mapDecks.push({gdcode: name.substr(2, 5), px: p.x, py: p.y});
+							}
+						}
+					}
+				}
+				var mapVo : MapVo = new MapVo();
+				mapVo.id = mapID;
+				mapVo.name = mapNAME;
+				mapVo.underMapData = _mapData;
+				mapVo.npcs = npcs;
+				mapVo.baffleMapData = baffles;
+				mapVo.mapDeckMapData = mapDecks;
+				mapVo.width = _mapData.length * DataConfig.TILE_SIZE;
+				mapVo.height = _mapData[0].length * DataConfig.TILE_SIZE;
+				var ba : ByteArray = new ByteArray();
+				registerClassAlias("MapVo", MapVo);
+				ba.writeObject(mapVo);
+				var f : File = new File();
+				f.save(ba, mapID + ".map");
+
+			}
+
+			protected function button2_clickHandler(event : MouseEvent) : void {
+				registerClassAlias("MapVo", MapVo);
+				var f : File = new File();
+				f.browseForOpen("选择地图文件", [new FileFilter("*.map", "*.map")]);
+				f.addEventListener(Event.SELECT, function(e : Event) : void {
+					var fr : FileStream = new FileStream();
+					fr.open(f, FileMode.READ);
+					var vo : MapVo = fr.readObject();
+					fr.close();
+
+					drawTiles(vo.underMapData);
+
+					for each (var deck : * in vo.mapDeckMapData) {
+						var tile : MapTile = ctrlBar.getChildByName("ui" + deck.gdcode) as MapTile;
+						addMapTile(tile.clone(), deck.px, deck.py);
+					}
+
+					for each (var baffle : * in vo.baffleMapData) {
+						tile = ctrlBar.getChildByName("ui" + baffle.gdcode) as MapTile;
+						addMapTile(tile.clone(), baffle.px, baffle.py);
+					}
+					for each (var npc : * in vo.npcs) {
+						tile = ctrlBar.getChildByName("npc" + npc.gdcode + "_LB_Stand") as MapTile;
+						addMapTile(tile.clone(), npc.px, npc.py);
+					}
+					
+					mapId.text = vo.id + "";
+					mapName.text = vo.name;
+				});
+			}
+
+			protected function button3_clickHandler(event : MouseEvent) : void {
+				var ww : int = int(newWidth.text);
+				var hh : int = int(newHeight.text);
+
+				if (ww == 0 || hh == 0) {
+					return;
+				}
+
+				if (ww % DataConfig.TILE_SIZE != 0) {
+					ww = (ww / DataConfig.TILE_SIZE + 1) * DataConfig.TILE_SIZE;
+				}
+				if (hh % DataConfig.TILE_SIZE != 0) {
+					hh = (hh / DataConfig.TILE_SIZE + 1) * DataConfig.TILE_SIZE;
+				}
+
+				var mapArr : Array = MapUtil.makeRandomMap(ww / DataConfig.TILE_SIZE, hh / DataConfig.TILE_SIZE);
+
+				drawTiles(mapArr);
+			}
+
+
+			private function drawTiles(mapArr : Array) : void {
+				while (container.numChildren > 0) {
+					container.removeChildAt(0)
+				}
+
+				for (var i : int = 0; i < mapArr.length; i++) {
+					for (var j : int = 0; j < mapArr[0].length; j++) {
+						var tileIndex : int = mapArr[i][j];
+						var tileName : String = MapUtil.makeTileName(tileIndex);
+						var bmd : BitmapData = getUI(tileName);
+						var bp : Bitmap = new Bitmap(bmd);
+						bp.x = i * DataConfig.TILE_SIZE;
+						bp.y = j * DataConfig.TILE_SIZE;
+						container.addChild(bp);
+					}
+				}
+				container.doubleClickEnabled = true;
+				container.width = mapArr.length * DataConfig.TILE_SIZE;
+				container.height = mapArr[0].length * DataConfig.TILE_SIZE;
+				_mapData = mapArr;
+			}
+		]]>
+	</fx:Script>
+	<s:BorderContainer width="960"
+					   x="10"
+					   y="10"
+					   height="640">
+		<s:Scroller width="100%"
+					height="100%">
+			<s:Group id="myScroller1">
+				<mx:UIComponent width="1920"
+								height="1280"
+								id="container">
+				</mx:UIComponent>
+			</s:Group>
+		</s:Scroller>
+	</s:BorderContainer>
+
+	<s:BorderContainer borderVisible="true"
+					   width="200"
+					   height="768"
+					   x="1044"
+					   y="10">
+		<s:Scroller width="100%"
+					height="100%">
+			<s:Group id="myScroller">
+				<mx:UIComponent width="100%"
+								height="1000"
+								id="ctrlBar">
+				</mx:UIComponent>
+			</s:Group>
+		</s:Scroller>
+	</s:BorderContainer>
+	<s:BorderContainer x="1254"
+					   borderVisible="false"
+					   y="10">
+
+		<s:Label text="地图ID（70000系列）">
+
+		</s:Label>
+		<s:TextInput id="mapId"
+					 y="20">
+
+		</s:TextInput>
+		<s:Label text="地图名"
+				 y="60">
+
+		</s:Label>
+		<s:TextInput id="mapName"
+					 y="80">
+
+		</s:TextInput>
+		<s:Button click="button1_clickHandler(event)"
+				  y="120"
+				  label="导出地图">
+
+		</s:Button>
+
+
+		<s:Button label="导入地图"
+				  y="150"
+				  click="button2_clickHandler(event)">
+
+		</s:Button>
+
+
+		<s:Label text="宽:"
+				 y="183">
+
+		</s:Label>
+		<s:TextInput id="newWidth"
+					 width="70"
+					 y="180"
+					 x="30">
+
+		</s:TextInput>
+		<s:Label text="高:"
+				 y="213">
+
+		</s:Label>
+		<s:TextInput id="newHeight"
+					 width="70"
+					 y="210"
+					 x="30">
+
+		</s:TextInput>
+
+
+		<s:Button label="重新生成地表"
+				  y="240"
+				  click="button3_clickHandler(event)">
+
+		</s:Button>
+	</s:BorderContainer>
+</s:WindowedApplication>
