@@ -5,17 +5,18 @@
                 xmlns:ui="com.xy.view.ui.*"
                 width="100%"
                 resize="application1_resizeHandler(event)"
-                height="100%">
+                height="100%" xmlns:panels="com.xy.view.ui.panels.*">
     <mx:Script>
         <![CDATA[
-			import com.InvoicingFacade;
-			import com.xy.model.Config;
-			import com.xy.util.EnterFrameCall;
-			import com.xy.view.ui.ContentUI;
-			
-			import mx.events.FlexEvent;
-			import mx.events.ResizeEvent;
-			import mx.managers.PopUpManager;
+            import com.InvoicingFacade;
+            import com.xy.model.Config;
+            import com.xy.util.EnterFrameCall;
+            import com.xy.util.STool;
+            import com.xy.view.ui.ContentUI;
+
+            import mx.events.FlexEvent;
+            import mx.events.ResizeEvent;
+            import mx.managers.PopUpManager;
 
             private var _contentUI : ContentUI;
 
@@ -24,17 +25,17 @@
             private function added() : void {
                 stage.scaleMode = StageScaleMode.NO_SCALE;
                 stage.align = StageAlign.TOP_LEFT;
-                application1_resizeHandler(null);
-				
-				Config.HTTP_URL = parameters["httpUrl"];
-				
-				EnterFrameCall.initState(stage);
-				
-				_facade = new InvoicingFacade();
-				_facade.startUp(this);
+                application1_resizeHandler();
+
+                Config.HTTP_URL = parameters["httpUrl"];
+
+                EnterFrameCall.initState(stage);
+
+                _facade = new InvoicingFacade();
+                _facade.startUp(this);
             }
 
-            protected function application1_resizeHandler(event : ResizeEvent) : void {
+            protected function application1_resizeHandler(event : ResizeEvent = null) : void {
                 if (stage == null) {
                     return;
                 }
@@ -44,7 +45,7 @@
 
                 if (leftMenuUI != null) {
                     var h : int = sh - leftMenuUI.y - 10;
-                    h = Math.max(h, 542);
+                    h = Math.max(h, 554);
                     leftMenuUI.height = h;
                 }
 
@@ -53,6 +54,8 @@
                 }
 
                 if (_contentUI != null) {
+                    _contentUI.x = leftMenuUI.x + leftMenuUI.width + 10;
+                    _contentUI.y = topUI.y + topUI.height + 10;
                     var w : int = sw - _contentUI.x - 10;
                     w = Math.max(w, _contentUI.getMinWidth());
 
@@ -64,6 +67,20 @@
                 }
             }
 
+            public function setContent(contentUI : ContentUI) : void {
+                if (_contentUI == contentUI) {
+                    return;
+                }
+                if (_contentUI != null) {
+                    STool.remove(_contentUI);
+                }
+
+                _contentUI = contentUI;
+
+                this.addChild(_contentUI);
+
+                application1_resizeHandler();
+            }
         ]]>
     </mx:Script>
     <ui:TopUI left="10"

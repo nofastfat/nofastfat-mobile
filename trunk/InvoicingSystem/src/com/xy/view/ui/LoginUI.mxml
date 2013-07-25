@@ -15,15 +15,16 @@
             import com.adobe.utils.StringUtil;
             import com.xy.util.EnterFrameCall;
             import com.xy.view.events.LoginUIEvent;
-
+            
             import flash.debugger.enterDebugger;
 
             public function init() : void {
-                nameTf.text = "";
-                pwdTf.text = "";
+                nameTf.text = "admin";
+                pwdTf.text = "admin";
                 warnTf.text = "";
                 loginBtn.enabled = true;
                 EnterFrameCall.getStage().focus = nameTf;
+				EnterFrameCall.getStage().addEventListener(KeyboardEvent.KEY_UP, __keyHandler);
             }
 
             protected function button1_clickHandler(event : MouseEvent) : void {
@@ -48,7 +49,15 @@
                 loginBtn.enabled = false;
 
                 dispatchEvent(new LoginUIEvent(LoginUIEvent.SUBMIT, uName, pwd));
+				
+				EnterFrameCall.getStage().removeEventListener(KeyboardEvent.KEY_UP, __keyHandler);
             }
+			
+			private function __keyHandler(e : KeyboardEvent):void{
+				if(e.keyCode == Keyboard.ENTER){
+					button1_clickHandler(null);
+				}
+			}
 
             public function showFaild(rs : String) : void {
                 warnTf.text = rs;
@@ -65,13 +74,13 @@
               text="密码："/>
     <mx:TextInput x="122"
                   id="nameTf"
-                  restrict="0-9 a-z A-Z _ @ ."
+                  restrict="0-9a-zA-Z_@."
                   maxChars="15"
                   y="32"/>
     <mx:TextInput x="122"
                   y="60"
                   id="pwdTf"
-                  restrict="0-9 a-z A-Z _ @ ."
+				  restrict="0-9a-zA-Z_@."
                   maxChars="15"
                   displayAsPassword="true"/>
     <mx:Button x="115"

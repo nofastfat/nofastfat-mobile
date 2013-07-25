@@ -1,42 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:ApplicationControlBar xmlns:mx="http://www.adobe.com/2006/mxml"
                           width="164"
-                          height="542">
+                          height="554">
+
+    <mx:Script>
+        <![CDATA[
+            import com.xy.view.events.LeftMenuUIEvent;
+        ]]>
+    </mx:Script>
+
     <mx:Canvas width="100%"
                height="100%">
         <mx:Button label="进货"
                    width="130"
-                   height="84"
+                   height="95"
                    fontSize="12"
-                   icon="@Embed(source='../../../../../assets/1374648459_palet02.png')"
+                   labelPlacement="bottom"
+                   icon="@Embed(source='../../../../../assets/inGoods.png')"
+                   click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_IN_GOODS))"
                    x="10"
                    y="10"/>
         <mx:Button label="出货"
                    width="130"
-                   height="84"
+                   height="100"
                    fontSize="12"
-                   icon="@Embed(source='../../../../../assets/1374648470_packing.png')"
+                   labelPlacement="bottom"
+                   icon="@Embed(source='../../../../../assets/outGoods.png')"
+                   click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_OUT_GOODS))"
                    x="10"
                    y="113"/>
         <mx:Button label="库存"
                    width="130"
-                   height="84"
+                   height="97"
                    fontSize="12"
-                   icon="@Embed(source='../../../../../assets/1374648659_Box_content.png')"
+                   labelPlacement="bottom"
+                   icon="@Embed(source='../../../../../assets/storge.png')"
+                   click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_STORGE))"
                    x="10"
                    y="221"/>
         <mx:Button label="财务"
                    width="130"
-                   height="84"
+                   height="98"
+                   labelPlacement="bottom"
                    fontSize="12"
-                   icon="@Embed(source='../../../../../assets/1374648763_Emblem-Money-64.png')"
+                   icon="@Embed(source='../../../../../assets/finance.png')"
+                   click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_FINANCE))"
                    x="10"
                    y="326"/>
         <mx:Button label="账户"
                    width="130"
-                   height="84"
+                   height="100"
                    fontSize="12"
-                   icon="@Embed(source='../../../../../assets/1374648604_Supervisor.png')"
+                   labelPlacement="bottom"
+                   icon="@Embed(source='../../../../../assets/account.png')"
+                   click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_ACCOUNT))"
                    x="10"
                    y="432"/>
     </mx:Canvas>

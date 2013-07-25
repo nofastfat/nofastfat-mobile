@@ -2,18 +2,18 @@
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
           layout="absolute"
           width="400"
+          fontSize="12"
           height="300">
 
-	<mx:Script>
-		<![CDATA[
-			
-			public function getMinWidth():int{
-				return 0;
-			}
-			
-			public function getMinHeight():int{
-				return 0;
-			}
-		]]>
-	</mx:Script>
+    <mx:Script>
+        <![CDATA[
+            public function getMinWidth() : int {
+                return 0;
+            }
+
+            public function getMinHeight() : int {
+                return 0;
+            }
+        ]]>
+    </mx:Script>
 </mx:Panel>
