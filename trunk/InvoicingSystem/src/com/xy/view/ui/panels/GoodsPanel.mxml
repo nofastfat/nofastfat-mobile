@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="absolute"
+                width="400"
+                height="416"
+                title="添加商品"
+                showCloseButton="true"
+                titleIcon="@Embed(source='../../../../../../assets/add.png')"
+                close="PopUpManager.removePopUp(this);"
+                fontSize="12">
+
+    <mx:Script>
+        <![CDATA[
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.GoodsVo;
+            import com.xy.util.EnterFrameCall;
+            import com.xy.util.STool;
+            import com.xy.view.events.GoodsPanelEvent;
+
+            import mx.collections.ArrayCollection;
+            import mx.managers.PopUpManager;
+
+            [Bindable]
+            private var _datas : ArrayCollection = new ArrayCollection();
+
+            private var _isCreate : Boolean = false;
+
+            private var _initData : GoodsVo;
+
+            public function setShowType(isCreate : Boolean, typs : Array, initData : GoodsVo = null) : void {
+                _isCreate = isCreate;
+                sbnError.visible = false;
+                nameError.visible = false;
+                typeError.visible = false;
+                msgTf.text = "";
+                addBtn.enabled = true;
+                closeBtn.enabled = true;
+                showCloseButton = true;
+
+                if (initData == null) {
+                    _initData = null;
+                } else {
+                    _initData = initData.clone();
+                }
+				
+				_datas = new ArrayCollection(typs);
+                if (isCreate) {
+                    title = "添加商品";
+                    nameTf.text = "";
+                    infoTf.text = "";
+                    weightTf.value = 0;
+                    sbnIdTf.text = "";
+                    typeTf.text = "";
+                    addBtn.label = "添加";
+                } else {
+                    title = "修改商品";
+                    nameTf.text = initData.name;
+                    infoTf.text = initData.info;
+                    weightTf.value = initData.weight;
+                    sbnIdTf.text = initData.sbn;
+					typeTf.selectedItem = initData.type;
+                    addBtn.label = "修改";
+                }
+            }
+
+            private function submit() : void {
+                var vo : GoodsVo = new GoodsVo();
+                vo.info = STool.makeSafeRequest(infoTf.text);
+                vo.name = STool.makeSafeRequest(StringUtil.trim(nameTf.text));
+                vo.sbn = STool.makeSafeRequest(StringUtil.trim(sbnIdTf.text));
+                vo.type = STool.makeSafeRequest(StringUtil.trim(typeTf.text));
+                vo.weight = weightTf.value;
+
+                if (vo.sbn == "") {
+                    sbnError.visible = true;
+                    EnterFrameCall.getStage().focus = sbnIdTf;
+                    msgTf.text = "SBNID不能为空";
+                    return;
+                } else {
+                    sbnError.visible = false;
+                }
+
+
+                if (vo.name == "") {
+                    nameError.visible = true;
+                    EnterFrameCall.getStage().focus = nameTf;
+                    msgTf.text = "商品名不能为空";
+                    return;
+                } else {
+                    nameError.visible = false;
+                }
+                if (vo.type == "") {
+                    typeError.visible = true;
+                    EnterFrameCall.getStage().focus = typeTf;
+                    msgTf.text = "商品类型不能为空";
+                    return;
+                } else {
+                    typeError.visible = false;
+                }
+                if (_initData != null) {
+                    vo.id = _initData.id;
+                    _initData.copyFrom(vo);
+                }
+
+
+                if (_isCreate) {
+                    dispatchEvent(new GoodsPanelEvent(GoodsPanelEvent.ADD_SUBMIT, vo));
+                } else {
+                    dispatchEvent(new GoodsPanelEvent(GoodsPanelEvent.MODIFY_SUBMIT, vo));
+                }
+
+
+                msgTf.text = "数据提交中...";
+                addBtn.enabled = false;
+                closeBtn.enabled = false;
+                showCloseButton = false;
+            }
+
+            public function get isCreate() : Boolean {
+                return _isCreate;
+            }
+
+            public function get initData() : GoodsVo {
+                return _initData;
+            }
+        ]]>
+    </mx:Script>
+
+    <mx:Label x="35"
+              y="26"
+              text="SBNID："
+              textAlign="right"
+              width="60"/>
+    <mx:Label x="35"
+              y="58"
+              text="商品名："
+              textAlign="right"
+              width="60"/>
+    <mx:Label x="35"
+              y="90"
+              text="重量(kg)："
+              textAlign="right"/>
+    <mx:Label x="35"
+              y="123"
+              text="类别："
+              textAlign="right"
+              width="60"/>
+    <mx:Label x="35"
+              y="153"
+              text="备注："
+              textAlign="right"
+              width="60"/>
+    <mx:TextInput x="103"
+                  y="24"
+                  width="242"
+                  id="sbnIdTf"/>
+    <mx:TextInput x="103"
+                  y="56"
+                  width="242"
+                  id="nameTf"/>
+    <mx:NumericStepper x="103"
+                       y="88"
+                       stepSize="0.1"
+                       value="0"
+                       width="108"
+                       maximum="999999"
+                       id="weightTf"/>
+    <mx:ComboBox x="103"
+                 dataProvider="{_datas}"
+                 y="120"
+                 editable="true"
+                 id="typeTf" width="160">
+    </mx:ComboBox>
+    <mx:TextArea x="103"
+                 y="152"
+                 width="242"
+                 height="139"
+                 id="infoTf"/>
+    <mx:Button x="103"
+               y="324"
+               label="添加"
+               id="addBtn"
+               click="submit()"
+               width="77"/>
+    <mx:Button x="212"
+               y="324"
+               id="closeBtn"
+               click="PopUpManager.removePopUp(this);"
+               label="取消"
+               width="74"/>
+    <mx:Image x="350"
+              y="22"
+              source="@Embed(source='../../../../../../assets/error.png')"
+              id="sbnError"/>
+    <mx:Image x="351"
+              y="54"
+              id="nameError"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Image x="271"
+              y="120"
+              id="typeError"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Text x="10"
+             y="302"
+             text="请求处理中..."
+             width="360"
+             textAlign="center"
+             color="#FF1D0C"
+             id="msgTf"/>
+
+</mx:TitleWindow>

@@ -1,5 +1,5 @@
 <?php
-	//modifyCommodity.php?self=admin&selfPwd=admin&modifyId=5&name=123&weight=10
+	//modifyCommodity.php?self=admin&selfPwd=admin&modifyId=12&name=测试商品&description=说明&weight=1.9&SBNId=1&type=营养品
 	header("Content-Type: text/html; charset=UTF-8");
 	
 	$self = getParam("self");
@@ -9,6 +9,7 @@
 	$description = getParam("description");
 	$weight = getParam("weight");
 	$SBNId = getParam("SBNId");
+	$type = getParam("type");
 
 	if(empty($self) ||empty($selfPwd) || empty($modifyId)){
 		echo makeJsonRs(false, "修改商品失败，参数不正确");
@@ -38,25 +39,28 @@
 
 	$sql = "update Commodity set ";
 	if(!empty($name)){
-		$sql .= "name=$name,";
+		$sql .= "name='$name',";
 	}
 	if(!empty($description)){
-		$sql .= "description=$description,";
+		$sql .= "description='$description',";
 	}
 	if(!empty($weight)){
 		$sql .= "weight=$weight,";
 	}
 	if(!empty($SBNId)){
-		$sql .= "SBNId=$SBNId,";
+		$sql .= "SBNId='$SBNId',";
+	}
+	if(!empty($type)){
+		$sql .= "type='$type',";
 	}
 
 	$sql = substr($sql, 0, strlen($sql)-1);
 	$sql .= " where id=$modifyId";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "true");
+		echo makeJsonRs(true, "修改商品成功");
 	}else{
-		echo makeJsonRs(false, "修改商品成功");
+		echo makeJsonRs(false, "修改商品失败");
 	}
 	closeConn($db);
 

@@ -7,6 +7,11 @@
                 resize="application1_resizeHandler(event)"
                 height="100%"
                 xmlns:panels="com.xy.view.ui.panels.*">
+    <mx:Style>
+		Alert{
+			font-size:12px;
+		}
+	</mx:Style>
     <mx:Script>
         <![CDATA[
             import com.InvoicingFacade;
@@ -14,6 +19,7 @@
             import com.xy.util.EnterFrameCall;
             import com.xy.util.STool;
             import com.xy.view.ui.ContentUI;
+            import com.xy.view.ui.MessageUI;
 
             import mx.events.FlexEvent;
             import mx.events.ResizeEvent;
@@ -34,6 +40,9 @@
 
                 _facade = new InvoicingFacade();
                 _facade.startUp(this);
+
+                ProgressUI.init(this, progressUI);
+                STool.remove(progressUI);
             }
 
             protected function application1_resizeHandler(event : ResizeEvent = null) : void {
@@ -94,7 +103,10 @@
                    id="leftMenuUI"
                    y="108">
     </ui:LeftMenuUI>
-
+    <ui:ProgressUI x="179"
+                   y="10"
+                   id="progressUI">
+    </ui:ProgressUI>
 
 </mx:Application>
 

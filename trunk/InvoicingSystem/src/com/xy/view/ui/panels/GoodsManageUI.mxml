@@ -1,54 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-                layout="absolute"
-                width="476"
-                height="448"
-                titleIcon="@Embed(source='../../../../../../assets/goodsManage24.png')"
-                title="商品管理"
-                close="PopUpManager.removePopUp(this);"
-                fontSize="12"
-                showCloseButton="true">
-    <mx:TextInput x="10"
-                  y="18"
-                  width="210"/>
-    <mx:Button x="228"
-               y="18"
-               label="查找"/>
-    <mx:Button x="288"
-               y="18"
-               label="添加商品"
-               width="91"/>
-    <mx:HRule x="10"
-              y="59"
-              width="436"
+
+<ui:SecondContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
+                    xmlns:ui="com.xy.view.ui.*"
+                    width="680"
+                    height="448"
+                    resize="secondcontentui1_resizeHandler(event)"
+                    fontSize="12">
+    <mx:Label x="32"
+              y="17"
+              text="商品管理 »"/>
+    <mx:Image x="0"
+              y="14"
+              source="@Embed(source='../../../../../../assets/goodsManage24.png')"/>
+    <mx:HRule x="0"
+              y="41"
+              width="100%"
               height="1"/>
-    <mx:DataGrid x="10"
-                 y="68"
-                 width="436"
+
+    <mx:TextInput x="0"
+                  y="50"
+                  styleName="inputTf"
+                  width="210"
+                  id="searchTf"
+                  height="33"/>
+    <mx:Button x="223"
+               y="50"
+               icon="@Embed(source='../../../../../../assets/search.png')"
+               click="search()"
+               label="查找"
+               height="33"/>
+    <mx:Button x="311.2"
+               y="50"
+               label="添加商品"
+               click="showAddPanel()"
+               icon="@Embed(source='../../../../../../assets/add.png')"
+               width="122.8"
+               height="33"/>
+    <mx:DataGrid x="0"
+                 y="91"
+                 width="100%"
                  dataProvider="{tableData}"
-                 height="328">
+                 height="357"
+                 id="table">
         <mx:columns>
             <mx:DataGridColumn headerText="SBNID"
-                               dataField="SBNId"/>
+                               dataField="sbn"/>
             <mx:DataGridColumn headerText="名字"
                                dataField="name"/>
+            <mx:DataGridColumn headerText="类别"
+                               dataField="type"/>
             <mx:DataGridColumn headerText="重量(kg)"
                                dataField="weight"/>
             <mx:DataGridColumn headerText="备注"
-                               dataField="description"/>
+                               showDataTips="true"
+                               dataTipField="info"
+                               dataField="info"/>
             <mx:DataGridColumn headerText="操作"
                                width="148"
                                itemRenderer="com.xy.view.ui.render.GoodsItemCtrl"/>
         </mx:columns>
     </mx:DataGrid>
 
+    <mx:Style>
+		.inputTf{
+			padding-top:5px;
+		}
+    </mx:Style>
+
     <mx:Script>
         <![CDATA[
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.GoodsVo;
+            import com.xy.model.vo.ResultVo;
+            import com.xy.view.events.GoodsManageUIEvent;
+            import com.xy.view.events.GoodsPanelEvent;
+            import com.xy.view.ui.ProgressUI;
+            
+            import flash.net.sendToURL;
+            
             import mx.collections.ArrayCollection;
+            import mx.events.ResizeEvent;
             import mx.managers.PopUpManager;
 
             [Bindable]
-            public var tableData : ArrayCollection = new ArrayCollection([{name: 123, SBNId: 2, weight: 1, description: "动画"}]);
+            public var tableData : ArrayCollection = new ArrayCollection();
+
+            private var _goodsPanel : GoodsPanel;
+
+            private var _isInit : Boolean;
+
+            private var _datas : Array;
+			
+			private var _types : Array = [];
+
+            public function addResult(vo : ResultVo) : void {
+                if (vo.status) {
+                    PopUpManager.removePopUp(_goodsPanel);
+                } else {
+                    _goodsPanel.setShowType(_goodsPanel.isCreate, _types, _goodsPanel.initData);
+                    _goodsPanel.msgTf.text = vo.data;
+                }
+            }
+
+            public function setDatas(arr : Array, types : Array, chooseId : int = -1) : void {
+                if (arr == null) {
+                    _isInit = false;
+                    return;
+                }
+
+                _datas = arr;
+                _isInit = true;
+				_types = types;
+                updateSearch(chooseId);
+            }
+
+            private function updateSearch(chooseId : int = -1) : void {
+                var txt : String = StringUtil.trim(searchTf.text);
+
+                if (txt == "") {
+                    arr = _datas;
+                } else {
+                    var arr : Array = [];
+                    for each (var vo : GoodsVo in _datas) {
+                        if (vo.info.indexOf(txt) != -1 || vo.name.indexOf(txt) != -1 || vo.sbn.indexOf(txt) != -1 || vo.type.indexOf(txt) != -1) {
+                            arr.push(vo);
+                        }
+                    }
+                }
+
+                tableData = new ArrayCollection(arr);
+
+                if (chooseId != -1) {
+                    var index : int = 0;
+                    for (var i : int = 0; i < arr.length; i++) {
+                        vo = arr[i];
+                        if (vo.id == chooseId) {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    table.selectedIndex = index;
+                }
+            }
+
+            private function showAddPanel() : void {
+                if (_goodsPanel == null) {
+                    _goodsPanel = new GoodsPanel();
+                    _goodsPanel.addEventListener(GoodsPanelEvent.ADD_SUBMIT, __addHandler);
+                    _goodsPanel.addEventListener(GoodsPanelEvent.MODIFY_SUBMIT, __modifyHandler);
+                }
+
+                PopUpManager.addPopUp(_goodsPanel, this.parent, true);
+                PopUpManager.centerPopUp(_goodsPanel);
+                _goodsPanel.setShowType(true, _types);
+            }
+
+            public function showModify(vo : GoodsVo) : void {
+                if (_goodsPanel == null) {
+                    _goodsPanel = new GoodsPanel();
+                    _goodsPanel.addEventListener(GoodsPanelEvent.ADD_SUBMIT, __addHandler);
+                    _goodsPanel.addEventListener(GoodsPanelEvent.MODIFY_SUBMIT, __modifyHandler);
+                }
+
+                PopUpManager.addPopUp(_goodsPanel, this.parent, true);
+                PopUpManager.centerPopUp(_goodsPanel);
+                _goodsPanel.setShowType(false, _types, vo);
+            }
+
+            public function deleteGoods(vo : GoodsVo) : void {
+                dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.DELETE_GOODS, vo));
+            }
+
+            private function search() : void {
+                if (!_isInit) {
+                    ProgressUI.show();
+
+                    dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.QUERY, null));
+                    return;
+                }
+
+                updateSearch();
+            }
+
+            private function __addHandler(e : GoodsPanelEvent) : void {
+                dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.ADD_GOODS, e.vo));
+            }
+
+            private function __modifyHandler(e : GoodsPanelEvent) : void {
+                dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.MODIFY_GOODS, e.vo));
+            }
+
+            protected function secondcontentui1_resizeHandler(event : ResizeEvent) : void {
+                table.height = this.height - table.y;
+            }
         ]]>
     </mx:Script>
-</mx:TitleWindow>
+</ui:SecondContentUI>

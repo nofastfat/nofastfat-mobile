@@ -32,7 +32,7 @@
 
 		
 		//添加商品
-		//?method=addCommodity&self=admin&selfPwd=admin&name=测试商品&description=说明&weight=1.9&SBNId=1
+		//?method=addCommodity&self=admin&selfPwd=admin&name=测试商品&description=说明&weight=1.9&SBNId=1&type=营养品
 		"addCommodity"	  => "commodity/addCommodity.php",
 
 		//删除商品
@@ -40,13 +40,13 @@
 		"deleteCommodity" => "commodity/deleteCommodity.php",
 
 		//修改商品
-		//?method=modifyCommodity&self=admin&selfPwd=admin&modifyId=5&name=123&weight=10
+		//?method=modifyCommodity&self=admin&selfPwd=admin&modifyId=12&name=测试商品&description=说明&weight=1.9&SBNId=1&type=营养品
 		"modifyCommodity" => "commodity/modifyCommodity.php",
 
 		//查询商品列表
 		//?method=queryCommodity&self=admin&selfPwd=admin
 		//结果中的data为字符串，需要先反转BASE64，再zlib解压缩，才能还原为json
-		//{"status":true,"data":[[id, name, description, weight, SBNId], [id, name, description, weight, SBNId], ...]}
+		//{"status":true,"data":[[id, name, description, weight, SBNId, type], [id, name, description, weight, SBNId, type], ...]}
 		"queryCommodity"  => "commodity/queryCommodity.php",
 		
 

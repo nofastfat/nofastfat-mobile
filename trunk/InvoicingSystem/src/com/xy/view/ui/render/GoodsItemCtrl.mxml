@@ -1,16 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-                      xmlns:listClasses="mx.controls.listClasses.*" width="148" height="28" fontSize="12">
+           xmlns:listClasses="mx.controls.listClasses.*"
+           width="148"
+           height="28"
+           fontSize="12">
     <mx:Script>
         <![CDATA[
+			import com.xy.model.vo.GoodsVo;
+			import com.xy.view.events.GoodsManageUIEvent;
+			import com.xy.view.ui.panels.GoodsManageUI;
+			
+			import flash.desktop.Icon;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+
+            [Embed(source = '../../../../../../assets/warn.png')]
+            private static const Icon : Class;
+
             override public function set data(value : Object) : void {
-				super.data = value;
+                super.data = value;
+            }
+
+            protected function button1_clickHandler(event : MouseEvent) : void {
+				
+                Alert.show("确定删除商品【" + data.name + "】？一旦删除，将无法恢复。", "警告", Alert.YES | Alert.NO, null, function(e : CloseEvent) : void {
+                    if (e.detail == Alert.YES) {
+						(parentDocument as GoodsManageUI).deleteGoods(data as GoodsVo);
+                    }
+                }, Icon);
+            }
+
+            protected function button2_clickHandler(event : MouseEvent) : void {
+				(parentDocument as GoodsManageUI).showModify(data as GoodsVo);
             }
         ]]>
     </mx:Script>
     <mx:Button label="删除"
-               x="77" y="2" fontSize="12">
+               x="77"
+               click="button1_clickHandler(event)"
+               y="2"
+               fontSize="12">
 
     </mx:Button>
-    <mx:Button x="17" y="2" label="修改" fontSize="12"/>
+    <mx:Button x="17"
+               click="button2_clickHandler(event)"
+               y="2"
+               label="修改"
+               fontSize="12"/>
 </mx:Canvas>
