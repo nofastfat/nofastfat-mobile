@@ -34,8 +34,12 @@ public class RegisterCmd extends AbsCommand {
         facade.registerMediator(new FinanceMediator(root));
 		facade.registerMediator(new AccountMediator(root));
 		facade.registerMediator(new GoodManageMediator(root));
-
-        facade.registerCommand(LoginCmd.NAME, LoginCmd);
+		
+		facade.registerCommand(LoginCmd.NAME, LoginCmd);
+		facade.registerCommand(AddCommodityCmd.NAME, AddCommodityCmd);
+		facade.registerCommand(QueryCommodityCmd.NAME, QueryCommodityCmd);
+		facade.registerCommand(ModifyCommodityCmd.NAME, ModifyCommodityCmd);
+		facade.registerCommand(DeleteCommodityCmd.NAME, DeleteCommodityCmd);
 
     }
 }

@@ -1,5 +1,5 @@
 <?php
-	//addCommodity.php?self=admin&selfPwd=admin&name=测试商品&description=说明&weight=1.9&SBNId=1
+	//addCommodity.php?self=admin&selfPwd=admin&name=测试商品&description=说明&weight=1.9&SBNId=1&type=营养品
 	header("Content-Type: text/html; charset=UTF-8");
 	
 	$self = getParam("self");
@@ -8,6 +8,7 @@
 	$description = getParam("description");
 	$weight = getParam("weight");
 	$SBNId = getParam("SBNId");
+	$type = getParam("type");
 	
 	if(empty($self) ||empty($selfPwd) || empty($name)){
 		echo makeJsonRs(false, "添加新商品失败，参数不正确");
@@ -39,11 +40,16 @@
 	if(empty($SBNId)){
 		$SBNId = "0";
 	}
+	if(empty($type)){
+		$type = "0";
+	}
 
-	$sql = "insert into Commodity(name, description, weight, SBNId) values('$name', '$description', $weight, '$SBNId')";
+	$sql = "insert into Commodity(name, description, weight, SBNId, type) values('$name', '$description', $weight, '$SBNId', '$type')";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "");
+		$sql = "select max(id) from Commodity";
+		$rs = query($db, $sql);
+		echo makeJsonRs(true, $rs[0][0]);
 	}else{
 		echo makeJsonRs(false, "添加新商品失败");
 	}

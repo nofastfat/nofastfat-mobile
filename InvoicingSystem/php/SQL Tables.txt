@@ -4,12 +4,13 @@
 	'type' int,							//账户类型，值越小，权限越高
 	creator VARCHAR(200)						//创建者
 	);",
-"CREATE TABLE [Commodity] (						//商品表
-	[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,	
+"CREATE TABLE [Commodity] (
+	[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 	[name] VARCHAR(200)  NOT NULL,
-	[description] VARCHAR(200)  NULL,	//商品名
-	[weight] FLOAT DEFAULT '0' NULL,				//重量，单位:kg
-	[SBNId] VARCHAR(200)  NOT NULL				//商品SBN
+	[description] VARCHAR(200)  NULL,
+	[weight] FLOAT DEFAULT '''''''0''''''' NULL,
+	[SBNId] VARCHAR(200)  NOT NULL,
+	[type] VARCHAR(200)  NOT NULL
 	)",
 "CREATE TABLE [PurchaseLog] (						//进货记录表
 	[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,		

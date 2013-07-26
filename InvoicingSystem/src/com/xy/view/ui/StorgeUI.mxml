@@ -5,50 +5,75 @@
               title="库存 »"
               titleIcon="@Embed(source='../../../../../assets/storge24.png')"
               width="500"
+              resize="contentui1_resizeHandler(event)"
               height="356">
     <mx:Script>
         <![CDATA[
+            import com.xy.util.STool;
             import com.xy.view.events.StorgeUIEvent;
+
+            import mx.events.ResizeEvent;
+
+            private var _content : SecondContentUI;
+
+            public function setContent(content : SecondContentUI) : void {
+                if (_content == content) {
+                    return;
+                }
+                if (_content != null) {
+                    STool.remove(_content);
+                }
+
+                _content = content;
+
+                this.addChild(_content);
+
+                contentui1_resizeHandler(null);
+            }
+
+            protected function contentui1_resizeHandler(event : ResizeEvent) : void {
+                if (_content == null) {
+                    return;
+                }
+                _content.x = goodsIcon.x;
+                _content.y = goodsIcon.y + goodsIcon.height + 10;
+                _content.width = this.width - 40;
+                _content.height = this.height - _content.y - 50;
+            }
         ]]>
     </mx:Script>
-    <mx:Button x="19"
-               y="20"
+    <mx:Button x="10"
+               y="10"
                labelPlacement="bottom"
-               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_GOODS_MANAGE))"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_GOODS_MANAGE, this))"
                icon="@Embed(source='../../../../../assets/goodsManage.png')"
                label="商品管理"
                width="80"
-               height="80"/>
-    <mx:Button x="118"
-               y="20"
+               height="80"
+               id="goodsIcon"/>
+    <mx:Button x="109"
+               y="10"
                labelPlacement="bottom"
-               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_COURIER_MANAGE))"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_COURIER_MANAGE, this))"
                icon="@Embed(source='../../../../../assets/courierManage.png')"
                label="快递管理"
                width="80"
                height="80"/>
-    <mx:Button x="216"
-               y="20"
+    <mx:Button x="207"
+               y="10"
                labelPlacement="bottom"
-               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_IN_GOODS_LOG))"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_IN_GOODS_LOG, this))"
                icon="@Embed(source='../../../../../assets/logs.png')"
                label="进货记录"
                width="80"
                height="80"/>
-    <mx:Button x="314"
-               y="20"
+    <mx:Button x="305"
+               y="10"
                labelPlacement="bottom"
-               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_OUT_GOODS_LOG))"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_OUT_GOODS_LOG, this))"
                icon="@Embed(source='../../../../../assets/logs.png')"
                label="出货记录"
                width="80"
                height="80"/>
-    <mx:HRule x="10"
-              y="144"
-              width="460"
-              height="1"/>
-    <mx:Text x="19"
-             y="125"
-             text="库存查询"/>
 
 </ui:ContentUI>

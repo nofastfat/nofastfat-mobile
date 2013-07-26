@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="400"
+           height="26">
+    <mx:ProgressBar x="0"
+                    y="0"
+                    indeterminate="true"
+                    labelPlacement="center"
+                    label="请求数据"
+                    fontSize="12"
+                    height="100%"
+                    width="100%"
+                    enabled="false"/>
+    <mx:Script>
+        <![CDATA[
+			import mx.managers.PopUpManager;
+            private static var _instance : ProgressUI;
+			private static var _root:InvoicingSystem;
+
+            public static function init(root:InvoicingSystem, ins : ProgressUI) : void {
+				_root = root;
+                _instance = ins;
+            }
+
+            public static function show() : void {
+				PopUpManager.addPopUp(_instance, _root, true);
+				PopUpManager.centerPopUp(_instance);
+            }
+
+            public static function hide() : void {
+				PopUpManager.removePopUp(_instance);
+            }
+        ]]>
+    </mx:Script>
+
+</mx:Canvas>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:ui="com.xy.view.ui.*"
+           width="400"
+           height="300">
+    <mx:Script>
+        <![CDATA[
+            public function getMinWidth() : int {
+                return 0;
+            }
+
+            public function getMinHeight() : int {
+                return 0;
+            }
+        ]]>
+    </mx:Script>
+</mx:Canvas>

@@ -30,7 +30,7 @@
 	$sql = "delete from Commodity where id=$delId";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "true");
+		echo makeJsonRs(true, "删除商品成功");
 	}else{
 		echo makeJsonRs(false, "删除商品失败,商品不存在");
 	}

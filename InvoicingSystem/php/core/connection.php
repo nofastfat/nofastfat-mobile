@@ -17,8 +17,9 @@
 			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 			[name] VARCHAR(200)  NOT NULL,
 			[description] VARCHAR(200)  NULL,
-			[weight] FLOAT DEFAULT '''0''' NULL,
-			[SBNId] VARCHAR(200)  NOT NULL
+			[weight] FLOAT DEFAULT '''''''0''''''' NULL,
+			[SBNId] VARCHAR(200)  NOT NULL,
+			[type] VARCHAR(200)  NOT NULL
 			)",
 		"CREATE TABLE [PurchaseLog] (
 			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
