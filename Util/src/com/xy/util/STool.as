@@ -11,6 +11,8 @@ import flash.geom.Point;
 import flash.net.URLVariables;
 import flash.text.TextField;
 
+import mx.utils.StringUtil;
+
 public class STool {
     private static const pattern : RegExp = /^[\u4E00-\u9FA5\uF900-\uFA2D]+$/; //验证中文
 
@@ -437,5 +439,18 @@ public class STool {
 
         return urlvars[key];
     }
+	
+	/**
+	 * 过滤特殊字符，保证sql安全 
+	 * @param str
+	 * @return 
+	 */	
+	public static function makeSafeRequest(str : String):String{
+		var reg : RegExp = new RegExp("'","g");
+		str = str.replace(reg, "‘");
+		reg = new RegExp("\"", "g");
+		str = str.replace(reg, "“");
+		return str;
+	}
 }
 }
