@@ -100,7 +100,7 @@
 			while ($row = $rs->fetchArray()) {
 				$tmpArr = array();
 				for($i = 0; $i < $len; $i++){
-					$tmpArr[$i] = $row[$i];
+					$tmpArr[$i] = iconv("gb2312", "UTF-8", $row[$i]);
 				}
 				array_push($arr, $tmpArr);
 			}
@@ -109,6 +109,9 @@
 			$rs =sqlite_query($db,$sql);
 			//echo "<font color='red'>".$error."</font>";
 			while ($row = sqlite_fetch_array($rs)) {
+				for($i = 0; $i < count($row); $i++){
+					$row[$i] = iconv("gb2312", "UTF-8", $row[$i]);
+				}
 				array_push($arr, $row);
 			}
 		}
