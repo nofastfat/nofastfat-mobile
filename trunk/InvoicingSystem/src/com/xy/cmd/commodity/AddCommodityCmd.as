@@ -6,6 +6,7 @@ import com.xy.model.vo.ResultVo;
 import com.xy.util.Http;
 import com.xy.view.GoodManageMediator;
 import com.xy.view.ui.MessageUI;
+import com.xy.view.ui.ProgressUI;
 
 import org.puremvc.as3.interfaces.INotification;
 
@@ -39,8 +40,17 @@ public class AddCommodityCmd extends AbsCommand {
 
         /* 记录数据 */
         if (vo.status) {
-			_vo.id = int(vo.data);
-            dataProxy.addGoods(_vo);
+            var goodsVo : GoodsVo = GoodsVo.fromStr(vo.data as String);
+
+            if (goodsVo.name != _vo.name || goodsVo.weight != _vo.weight || goodsVo.type != _vo.type) {
+                /* 清理脏数据 */
+                dataProxy.clearGoods();
+                
+				ProgressUI.show();
+                sendNotification(QueryCommodityCmd.NAME);
+            } else {
+                dataProxy.addGoods(goodsVo);
+            }
             MessageUI.getInstance().showMessage("商品添加成功");
         }
 

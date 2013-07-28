@@ -6,11 +6,12 @@ import com.xy.model.vo.ResultVo;
 import com.xy.util.Http;
 import com.xy.view.CourierMediator;
 import com.xy.view.ui.MessageUI;
+import com.xy.view.ui.ProgressUI;
 
 import org.puremvc.as3.interfaces.INotification;
 
 public class AddCourierCmd extends AbsCommand {
-    
+
     /**
      * 添加商品
      * vo:GoodsVo
@@ -35,8 +36,16 @@ public class AddCourierCmd extends AbsCommand {
 
         /* 记录数据 */
         if (vo.status) {
-			_vo.id = int(vo.data);
-            dataProxy.addCourier(_vo);
+
+            var cVo : CourierVo = CourierVo.fromStr(vo.data as String);
+            if (cVo.name != _vo.name) {
+				dataProxy.clearCourier();
+				
+				sendNotification(QueryCourierCmd.NAME);
+				ProgressUI.show();
+            } else {
+                dataProxy.addCourier(cVo);
+            }
             MessageUI.getInstance().showMessage("快递添加成功");
         }
 

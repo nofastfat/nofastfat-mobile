@@ -7,6 +7,7 @@ import com.xy.cmd.courier.AddCourierCmd;
 import com.xy.cmd.courier.DeleteCourierCmd;
 import com.xy.cmd.courier.ModifyCourierCmd;
 import com.xy.cmd.courier.QueryCourierCmd;
+import com.xy.cmd.store.PurchaseCmd;
 import com.xy.cmd.user.LoginCmd;
 import com.xy.interfaces.AbsCommand;
 import com.xy.model.InvoicingDataProxy;
@@ -55,6 +56,7 @@ public class RegisterCmd extends AbsCommand {
 		facade.registerCommand(QueryCourierCmd.NAME, QueryCourierCmd);
 		facade.registerCommand(DeleteCourierCmd.NAME, DeleteCourierCmd);
 		facade.registerCommand(ModifyCourierCmd.NAME, ModifyCourierCmd);
+		facade.registerCommand(PurchaseCmd.NAME, PurchaseCmd);
 
     }
 }

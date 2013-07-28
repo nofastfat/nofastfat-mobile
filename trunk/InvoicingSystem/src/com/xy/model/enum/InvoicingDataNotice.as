@@ -10,6 +10,11 @@ public class InvoicingDataNotice {
      * 快递列表更新
      */
     public static const COURIER_LIST_UPDATE : String = "COURIER_LIST_UPDATE";
+    
+    /**
+     * 库存列表更新 
+     */    
+    public static const STORE_LIST_UPDATE : String = "STORE_LIST_UPDATE";
 
 }
 }

@@ -1,6 +1,7 @@
 package com.xy.model {
 import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
+import com.xy.model.vo.StoreVo;
 import com.xy.util.STool;
 
 import org.puremvc.as3.patterns.facade.Facade;
@@ -91,6 +92,7 @@ public class Config {
         rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
         return rs;
     }
+
     /**
      * 删除商品
      * @param vo
@@ -101,6 +103,7 @@ public class Config {
         rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id);
         return rs;
     }
+
     /**
      * 修改商品
      * @param vo
@@ -109,6 +112,17 @@ public class Config {
     public static function makeModifyCourierUrl(vo : CourierVo) : String {
         var rs : String = HTTP_URL + "?method=modifyCourier&self={0}&selfPwd={1}&id={2}&name={3}" + "&r=" + Math.random();
         rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id, vo.name);
+        return rs;
+    }
+
+    /**
+     * 入库
+     * @param vo
+     * @return
+     */
+    public static function makePurchaseUrl(vo : StoreVo) : String {
+        var rs : String = HTTP_URL + "?method=purchase&self={0}&selfPwd={1}&commonditySBN={2}&commondityName={3}&num={4}&realRetailPrice={5}&madeTime={6}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.SBN, vo.name, vo.num, vo.retailPrice, vo.madeTime);
         return rs;
     }
 

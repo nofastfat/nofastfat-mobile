@@ -4,7 +4,31 @@
               layout="absolute"
 			  title="出货 »"
 			  titleIcon="@Embed(source='../../../../../assets/outGoods24.png')"
-              width="400"
-              height="300">
+              width="522"
+              height="460">
+	<mx:Label x="10" y="10" text="客户名:" width="79" textAlign="right"/>
+	<mx:Label x="218" y="10" text="总重量(kg):" width="76" textAlign="right"/>
+	<mx:Label x="10" y="102" text="地址:" width="79" textAlign="right"/>
+	<mx:Label x="10" y="42" text="快递公司:" width="79" textAlign="right"/>
+	<mx:Label x="232" y="41" text="快递单号:" width="62" textAlign="right"/>
+	<mx:Label x="232" y="72" text="运费(元):" width="62" textAlign="right"/>
+	<mx:Label x="10" y="72" text="付款(元):" width="79" textAlign="right"/>
+	<mx:Label x="10" y="134" text="货物清单:" width="79" textAlign="right"/>
+	<mx:DataGrid x="31" y="162" width="461" height="201">
+		<mx:columns>
+			<mx:DataGridColumn headerText="货物" dataField="col1"/>
+			<mx:DataGridColumn headerText="数量" dataField="col2"/>
+			<mx:DataGridColumn headerText="操作" dataField="col3"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:Button x="193" y="371" label="出货" width="101" height="37"/>
+	<mx:Button x="97" y="132" label="添加货物"/>
+	<mx:TextInput x="97" y="8" width="113"/>
+	<mx:TextInput x="302" y="8" width="122"/>
+	<mx:ComboBox x="97" y="39" width="113"></mx:ComboBox>
+	<mx:TextInput x="302" y="39" width="190"/>
+	<mx:TextInput x="302" y="70" width="122"/>
+	<mx:TextInput x="97" y="70" width="113"/>
+	<mx:TextInput x="97" y="100" width="395"/>
 
 </ui:ContentUI>

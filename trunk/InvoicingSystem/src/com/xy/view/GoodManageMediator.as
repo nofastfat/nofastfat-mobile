@@ -66,7 +66,7 @@ public class GoodManageMediator extends AbsMediator {
     }
 
     private function __deleteHandler(e : GoodsManageUIEvent) : void {
-		sendNotification(DeleteCommodityCmd.NAME, e.vo);
+        sendNotification(DeleteCommodityCmd.NAME, e.vo);
     }
 
     private function __modifyHandler(e : GoodsManageUIEvent) : void {
@@ -74,11 +74,16 @@ public class GoodManageMediator extends AbsMediator {
     }
 
     private function addResult(vo : ResultVo) : void {
-        _panel.addResult(vo);
+
+        if (_panel != null && _panel.stage != null) {
+            _panel.addResult(vo);
+        }
     }
 
     private function goodsListUpdate(keyGoodsId : int = -1) : void {
-        _panel.setDatas(dataProxy.goods, dataProxy.getGoodsTypes(), keyGoodsId);
+        if (_panel != null && _panel.stage != null) {
+            _panel.setDatas(dataProxy.goods, dataProxy.getGoodsTypes(), keyGoodsId);
+        }
     }
 
     public function get ui() : InvoicingSystem {
