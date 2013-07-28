@@ -1,5 +1,5 @@
 <?php
-	
+	//?self=admin&selfPwd=admin&storeId=1,2&clientName=gaga&num=2,3&totalWeight=20.2&soldAddress=地址&senderCompany=韵达&sendId=订单号&clientPay=用户付款&sendPrice=运费
 	header("Content-Type: text/html; charset=UTF-8");
 	
 	$self = getParam("self");
