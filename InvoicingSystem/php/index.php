@@ -59,6 +59,10 @@
 		//?method=deleteCourier&self=admin&selfPwd=admin&id=2
 		"deleteCourier"  => "courier/deleteCourier.php",
 
+		//修改快递
+		//?method=modifyCourier&self=admin&selfPwd=admin&id=5&name=123
+		"modifyCourier" => "courier/modifyCourier.php",
+		
 		//查询快递
 		//?method=queryCourier&self=admin&selfPwd=admin
 		//结果中的data为字符串，需要先反转BASE64，再zlib解压缩，才能还原为json
@@ -68,11 +72,11 @@
 		
 
 		//入库
-		//?method=purchase&self=admin&selfPwd=admin&commondityName=lala&num=10&realRetailPrice=10.2
+		//?method=purchase&self=admin&selfPwd=admin&commonditySBN=sbn&commondityName=lala&num=10&realRetailPrice=10.2&madeTime=2222222
 		"purchase"			  => "store/purchase.php",
 
 		//出库
-		//?method=sold&self=admin&selfPwd=admin&storeId=1,2&clientName=gaga&num=2,3&totalWeight=20.2&clientPay=312&sendPrice=17
+		//?method=sold&self=admin&selfPwd=admin&storeId=1,2&clientName=gaga&num=2,3&totalWeight=20.2&soldAddress=地址&senderCompany=韵达&sendId=订单号&clientPay=用户付款&sendPrice=运费
 		"sold"				  => "store/sold.php",
 
 		//查询利润
