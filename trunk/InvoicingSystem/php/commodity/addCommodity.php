@@ -47,9 +47,12 @@
 	$sql = "insert into Commodity(name, description, weight, SBNId, type) values('$name', '$description', $weight, '$SBNId', '$type')";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		$sql = "select max(id) from Commodity";
+		$sql = "select * from Commodity where id=(select max(id) from Commodity)";
 		$rs = query($db, $sql);
-		echo makeJsonRs(true, $rs[0][0]);
+		$rs = json_encode($rs);
+		$rs = gzcompress($rs, 9);
+		$rs = base64_encode($rs);
+		echo makeJsonRs(true, $rs);
 	}else{
 		echo makeJsonRs(false, "添加新商品失败");
 	}

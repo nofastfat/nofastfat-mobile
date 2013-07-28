@@ -41,6 +41,7 @@
 	if(!empty($name)){
 		$sql .= "name='$name',";
 	}
+	
 	if(!empty($description)){
 		$sql .= "description='$description',";
 	}
