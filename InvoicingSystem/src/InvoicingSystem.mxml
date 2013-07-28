@@ -97,11 +97,11 @@
               id="topUI"
               top="10"
               right="10"
-              height="90">
+              height="74">
     </ui:TopUI>
     <ui:LeftMenuUI x="10"
                    id="leftMenuUI"
-                   y="108">
+                   y="92">
     </ui:LeftMenuUI>
     <ui:ProgressUI x="179"
                    y="10"

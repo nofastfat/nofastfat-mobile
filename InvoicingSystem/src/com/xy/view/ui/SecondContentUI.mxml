@@ -2,6 +2,8 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:ui="com.xy.view.ui.*"
            width="400"
+           verticalScrollPolicy="off"
+           horizontalScrollPolicy="off"
            height="300">
     <mx:Script>
         <![CDATA[

@@ -1,12 +1,10 @@
 package com.xy.view {
-import com.xy.cmd.LoginCmd;
+import com.xy.cmd.user.LoginCmd;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.vo.ResultVo;
 import com.xy.view.events.LoginUIEvent;
 import com.xy.view.ui.LoginUI;
-
-import flash.events.MouseEvent;
 
 import mx.managers.PopUpManager;
 

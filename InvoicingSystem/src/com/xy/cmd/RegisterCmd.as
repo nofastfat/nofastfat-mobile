@@ -1,7 +1,17 @@
 package com.xy.cmd {
+import com.xy.cmd.commodity.AddCommodityCmd;
+import com.xy.cmd.commodity.DeleteCommodityCmd;
+import com.xy.cmd.commodity.ModifyCommodityCmd;
+import com.xy.cmd.commodity.QueryCommodityCmd;
+import com.xy.cmd.courier.AddCourierCmd;
+import com.xy.cmd.courier.DeleteCourierCmd;
+import com.xy.cmd.courier.ModifyCourierCmd;
+import com.xy.cmd.courier.QueryCourierCmd;
+import com.xy.cmd.user.LoginCmd;
 import com.xy.interfaces.AbsCommand;
 import com.xy.model.InvoicingDataProxy;
 import com.xy.view.AccountMediator;
+import com.xy.view.CourierMediator;
 import com.xy.view.FinanceMediator;
 import com.xy.view.GoodManageMediator;
 import com.xy.view.InGoodsMediator;
@@ -34,12 +44,17 @@ public class RegisterCmd extends AbsCommand {
         facade.registerMediator(new FinanceMediator(root));
 		facade.registerMediator(new AccountMediator(root));
 		facade.registerMediator(new GoodManageMediator(root));
+		facade.registerMediator(new CourierMediator(root));
 		
 		facade.registerCommand(LoginCmd.NAME, LoginCmd);
 		facade.registerCommand(AddCommodityCmd.NAME, AddCommodityCmd);
 		facade.registerCommand(QueryCommodityCmd.NAME, QueryCommodityCmd);
 		facade.registerCommand(ModifyCommodityCmd.NAME, ModifyCommodityCmd);
 		facade.registerCommand(DeleteCommodityCmd.NAME, DeleteCommodityCmd);
+		facade.registerCommand(AddCourierCmd.NAME, AddCourierCmd);
+		facade.registerCommand(QueryCourierCmd.NAME, QueryCourierCmd);
+		facade.registerCommand(DeleteCourierCmd.NAME, DeleteCourierCmd);
+		facade.registerCommand(ModifyCourierCmd.NAME, ModifyCourierCmd);
 
     }
 }

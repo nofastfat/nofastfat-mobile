@@ -37,8 +37,19 @@
                 }
                 _content.x = goodsIcon.x;
                 _content.y = goodsIcon.y + goodsIcon.height + 10;
-                _content.width = this.width - 40;
-                _content.height = this.height - _content.y - 50;
+                
+                var w : int = this.width - 40;
+                var h : int = this.height - _content.y - 50;
+                _content.width = Math.max(w, _content.getMinWidth());
+                _content.height = Math.max(h, _content.getMinHeight());
+            }
+            
+            override public function getMinWidth() : int {
+                return 500;
+            }
+
+            override public function getMinHeight() : int {
+                return 420;
             }
         ]]>
     </mx:Script>

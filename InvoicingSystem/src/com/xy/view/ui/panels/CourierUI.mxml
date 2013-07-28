@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ui:SecondContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
+                    width="438"
                     xmlns:ui="com.xy.view.ui.*"
-                    width="432"
-                    height="270"
+                    height="246"
                     resize="secondcontentui1_resizeHandler(event)"
                     fontSize="12">
     <mx:Label x="32"
               y="3"
-              text="商品管理 »"/>
+              text="快递管理 »"/>
     <mx:Image x="0"
               y="0"
-              source="@Embed(source='../../../../../../assets/goodsManage24.png')"/>
+              source="@Embed(source='../../../../../../assets/courierManage24.png')"/>
     <mx:HRule x="0"
               y="25"
               width="100%"
               height="1"/>
-
     <mx:TextInput x="0"
                   y="34"
                   styleName="inputTf"
@@ -31,30 +29,22 @@
                height="33"/>
     <mx:Button x="311.2"
                y="34"
-               label="添加商品"
+               label="添加快递"
                click="showAddPanel()"
-               icon="@Embed(source='../../../../../../assets/add.png')"
+               icon="@Embed(source='../../../../../../assets/addCar.png')"
                width="122.8"
                height="33"/>
     <mx:DataGrid x="0"
                  y="75"
                  width="100%"
                  dataProvider="{tableData}"
-                 height="195"
+                 height="171"
                  id="table">
         <mx:columns>
-            <mx:DataGridColumn headerText="SBNID"
-                               dataField="sbn"/>
+            <mx:DataGridColumn headerText="编号"
+                               dataField="id"/>
             <mx:DataGridColumn headerText="名字"
                                dataField="name"/>
-            <mx:DataGridColumn headerText="类别"
-                               dataField="type"/>
-            <mx:DataGridColumn headerText="重量(kg)"
-                               dataField="weight"/>
-            <mx:DataGridColumn headerText="备注"
-                               showDataTips="true"
-                               dataTipField="info"
-                               dataField="info"/>
             <mx:DataGridColumn headerText="操作"
                                width="148"
                                itemRenderer="com.xy.view.ui.render.GoodsItemCtrl"/>
@@ -69,48 +59,43 @@
 
     <mx:Script>
         <![CDATA[
-            import com.adobe.utils.StringUtil;
-            import com.xy.model.vo.GoodsVo;
             import com.xy.model.vo.ResultVo;
-            import com.xy.view.events.GoodsManageUIEvent;
-            import com.xy.view.events.GoodsPanelEvent;
-            import com.xy.view.ui.ProgressUI;
-
-            import flash.net.sendToURL;
-
-            import mx.collections.ArrayCollection;
             import mx.events.ResizeEvent;
             import mx.managers.PopUpManager;
+            import com.xy.view.events.CourierPanelEvent;
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.CourierVo;
+            import com.xy.view.events.CourierUIEvent;
+            import com.xy.view.ui.ProgressUI;
+            import mx.collections.ArrayCollection;
 
             [Bindable]
             public var tableData : ArrayCollection = new ArrayCollection();
 
-            private var _goodsPanel : GoodsPanel;
+            private var _courierPanel : CourierPanel;
 
             private var _isInit : Boolean;
 
             private var _datas : Array;
 
-            private var _types : Array = [];
-
             override public function getMinWidth() : int {
-                return 432;
+                return 438;
             }
 
             override public function getMinHeight() : int {
-                return 270;
+                return 246;
             }
 
             public function addResult(vo : ResultVo) : void {
                 if (vo.status) {
-                    PopUpManager.removePopUp(_goodsPanel);
+                    PopUpManager.removePopUp(_courierPanel);
                 } else {
-                    _goodsPanel.setShowType(_goodsPanel.isCreate, _types, _goodsPanel.initData);
-                    _goodsPanel.msgTf.text = vo.data;
+                    _courierPanel.setShowType(_courierPanel.isCreate, _courierPanel.initData);
+                    _courierPanel.msgTf.text = vo.data;
                 }
             }
 
-            public function setDatas(arr : Array, types : Array, chooseId : int = -1) : void {
+            public function setDatas(arr : Array, chooseId : int = -1) : void {
                 if (arr == null) {
                     _isInit = false;
                     return;
@@ -118,8 +103,18 @@
 
                 _datas = arr;
                 _isInit = true;
-                _types = types;
                 updateSearch(chooseId);
+            }
+
+            private function search() : void {
+                if (!_isInit) {
+                    ProgressUI.show();
+
+                    dispatchEvent(new CourierUIEvent(CourierUIEvent.QUERY, null));
+                    return;
+                }
+
+                updateSearch();
             }
 
             private function updateSearch(chooseId : int = -1) : void {
@@ -129,8 +124,8 @@
                     arr = _datas;
                 } else {
                     var arr : Array = [];
-                    for each (var vo : GoodsVo in _datas) {
-                        if (vo.info.indexOf(txt) != -1 || vo.name.indexOf(txt) != -1 || vo.sbn.indexOf(txt) != -1 || vo.type.indexOf(txt) != -1) {
+                    for each (var vo : CourierVo in _datas) {
+                        if (vo.name.indexOf(txt) != -1) {
                             arr.push(vo);
                         }
                     }
@@ -153,50 +148,39 @@
             }
 
             private function showAddPanel() : void {
-                if (_goodsPanel == null) {
-                    _goodsPanel = new GoodsPanel();
-                    _goodsPanel.addEventListener(GoodsPanelEvent.ADD_SUBMIT, __addHandler);
-                    _goodsPanel.addEventListener(GoodsPanelEvent.MODIFY_SUBMIT, __modifyHandler);
+                if (_courierPanel == null) {
+                    _courierPanel = new CourierPanel();
+                    _courierPanel.addEventListener(CourierPanelEvent.ADD_SUBMIT, __addHandler);
+                    _courierPanel.addEventListener(CourierPanelEvent.MODIFY_SUBMIT, __modifyHandler);
                 }
 
-                PopUpManager.addPopUp(_goodsPanel, this.parent, true);
-                PopUpManager.centerPopUp(_goodsPanel);
-                _goodsPanel.setShowType(true, _types);
+                PopUpManager.addPopUp(_courierPanel, this.parent, true);
+                PopUpManager.centerPopUp(_courierPanel);
+                _courierPanel.setShowType(true);
             }
 
-            public function showModify(vo : GoodsVo) : void {
-                if (_goodsPanel == null) {
-                    _goodsPanel = new GoodsPanel();
-                    _goodsPanel.addEventListener(GoodsPanelEvent.ADD_SUBMIT, __addHandler);
-                    _goodsPanel.addEventListener(GoodsPanelEvent.MODIFY_SUBMIT, __modifyHandler);
+            public function deleteCourier(vo : CourierVo) : void {
+                dispatchEvent(new CourierUIEvent(CourierUIEvent.DELETE_COURIER, vo));
+            }
+
+            public function showModify(vo : CourierVo) : void {
+                if (_courierPanel == null) {
+                    _courierPanel = new CourierPanel();
+                    _courierPanel.addEventListener(CourierPanelEvent.ADD_SUBMIT, __addHandler);
+                    _courierPanel.addEventListener(CourierPanelEvent.MODIFY_SUBMIT, __modifyHandler);
                 }
 
-                PopUpManager.addPopUp(_goodsPanel, this.parent, true);
-                PopUpManager.centerPopUp(_goodsPanel);
-                _goodsPanel.setShowType(false, _types, vo);
+                PopUpManager.addPopUp(_courierPanel, this.parent, true);
+                PopUpManager.centerPopUp(_courierPanel);
+                _courierPanel.setShowType(false, vo);
             }
 
-            public function deleteGoods(vo : GoodsVo) : void {
-                dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.DELETE_GOODS, vo));
+            private function __addHandler(e : CourierPanelEvent) : void {
+                dispatchEvent(new CourierUIEvent(CourierUIEvent.ADD_COURIER, e.vo));
             }
 
-            private function search() : void {
-                if (!_isInit) {
-                    ProgressUI.show();
-
-                    dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.QUERY, null));
-                    return;
-                }
-
-                updateSearch();
-            }
-
-            private function __addHandler(e : GoodsPanelEvent) : void {
-                dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.ADD_GOODS, e.vo));
-            }
-
-            private function __modifyHandler(e : GoodsPanelEvent) : void {
-                dispatchEvent(new GoodsManageUIEvent(GoodsManageUIEvent.MODIFY_GOODS, e.vo));
+            private function __modifyHandler(e : CourierPanelEvent) : void {
+                dispatchEvent(new CourierUIEvent(CourierUIEvent.MODIFY_COURIER, e.vo));
             }
 
             protected function secondcontentui1_resizeHandler(event : ResizeEvent) : void {
