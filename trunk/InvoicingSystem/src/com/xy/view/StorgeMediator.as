@@ -3,7 +3,6 @@ import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.view.events.StorgeUIEvent;
 import com.xy.view.ui.StorgeUI;
-import com.xy.view.ui.panels.GoodsManageUI;
 
 import flash.events.Event;
 
@@ -41,10 +40,11 @@ public class StorgeMediator extends AbsMediator {
     }
 
     private function __showCourierHandler(e : Event) : void {
+        sendNotification(CourierMediator.SHOW, _panel);
     }
 
     private function __showGoodsManageHandler(e : Event) : void {
-		sendNotification(GoodManageMediator.SHOW, _panel);
+        sendNotification(GoodManageMediator.SHOW, _panel);
     }
 
     private function __showInGoodsHandler(e : Event) : void {

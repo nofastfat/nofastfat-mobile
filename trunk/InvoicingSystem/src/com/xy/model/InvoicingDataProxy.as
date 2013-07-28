@@ -1,7 +1,7 @@
 package com.xy.model {
 import com.adobe.serialization.json.JSON;
-import com.adobe.utils.ArrayUtil;
 import com.xy.model.enum.InvoicingDataNotice;
+import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
 import com.xy.util.Base64;
 
@@ -17,6 +17,8 @@ public class InvoicingDataProxy extends Proxy {
     private var _pwd : String;
 
     private var _goods : Array;
+
+    private var _couriers : Array;
 
     public function InvoicingDataProxy() {
         super(NAME);
@@ -113,6 +115,63 @@ public class InvoicingDataProxy extends Proxy {
         sendNotification(InvoicingDataNotice.GOODS_LIST_UPDATE);
     }
 
+    public function addCourier(vo : CourierVo) : void {
+        if (_couriers == null) {
+            return;
+        }
+
+        _couriers.push(vo);
+
+        sendNotification(InvoicingDataNotice.COURIER_LIST_UPDATE, vo.id);
+    }
+
+    /**
+     * 初始化快递列表
+     * [[id, name], [id, name], ...]
+     * @param arr
+     */
+    public function initCouriers(data : String) : void {
+        _couriers = [];
+        var ba : ByteArray = Base64.decode(data);
+        ba.uncompress();
+        ba.position = 0;
+        var json : String = ba.readUTFBytes(ba.bytesAvailable);
+        var arr : Array = JSON.decode(json);
+
+        for each (var ar : Array in arr) {
+            var vo : CourierVo = new CourierVo();
+            vo.id = int(ar[0]);
+            vo.name = ar[1];
+            _couriers.push(vo);
+        }
+
+        sendNotification(InvoicingDataNotice.COURIER_LIST_UPDATE);
+    }
+
+    public function deleteCourier(vo : CourierVo) : void {
+        for (var i : int = 0; i < _couriers.length; i++) {
+            if (_couriers[i].id == vo.id) {
+                _couriers.splice(i, 1);
+                break;
+            }
+        }
+
+        sendNotification(InvoicingDataNotice.COURIER_LIST_UPDATE);
+    }
+    /**
+     * 更新数据
+     * @param vo
+     */
+    public function updateCourier(vo : CourierVo) : void {
+        for each (var vv : CourierVo in _couriers) {
+            if (vv.id == vo.id) {
+                vv.copyFrom(vo);
+            }
+        }
+
+        sendNotification(InvoicingDataNotice.COURIER_LIST_UPDATE, vo.id);
+    }
+
     /**
      * 帐号
      */
@@ -129,6 +188,10 @@ public class InvoicingDataProxy extends Proxy {
 
     public function get goods() : Array {
         return _goods;
+    }
+
+    public function get couriers() : Array {
+        return _couriers;
     }
 
 

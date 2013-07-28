@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="absolute"
+                width="400"
+                title="添加"
+                showCloseButton="true"
+                titleIcon="@Embed(source='../../../../../../assets/addCar.png')"
+                close="PopUpManager.removePopUp(this);"
+                fontSize="12"
+                height="166">
+    <mx:Script>
+        <![CDATA[
+        	import com.xy.util.EnterFrameCall;
+        	import com.adobe.utils.StringUtil;
+        	import com.xy.util.STool;
+        	import com.xy.view.events.CourierPanelEvent;
+            import mx.managers.PopUpManager;
+            import com.xy.model.vo.CourierVo;
+
+            private var _isCreate : Boolean = false;
+
+            private var _initData : CourierVo;
+
+            public function setShowType(isCreate : Boolean, initData : CourierVo = null) : void {
+               _isCreate = isCreate;
+                nameError.visible = false;
+                msgTf.text = "";
+                addBtn.enabled = true;
+                closeBtn.enabled = true;
+                showCloseButton = true;
+
+                if (initData == null) {
+                    _initData = null;
+                } else {
+                    _initData = initData.clone();
+                }
+				
+                if (isCreate) {
+                    title = "添加快递";
+                    nameTf.text = "";
+                    addBtn.label = "添加";
+                } else {
+                    title = "修改快递";
+                    nameTf.text = initData.name;
+                }
+            }
+
+            private function submit() : void {
+                var vo : CourierVo = new CourierVo();
+                vo.name = STool.makeSafeRequest(StringUtil.trim(nameTf.text));
+
+                if (vo.name == "") {
+                    nameError.visible = true;
+                    EnterFrameCall.getStage().focus = nameTf;
+                    msgTf.text = "快递名不能为空";
+                    return;
+                } else {
+                    nameError.visible = false;
+                }
+                
+                if (_initData != null) {
+                    vo.id = _initData.id;
+                    _initData.copyFrom(vo);
+                }
+
+
+                if (_isCreate) {
+                    dispatchEvent(new CourierPanelEvent(CourierPanelEvent.ADD_SUBMIT, vo));
+                } else {
+                    dispatchEvent(new CourierPanelEvent(CourierPanelEvent.MODIFY_SUBMIT, vo));
+                }
+
+
+                msgTf.text = "数据提交中...";
+                addBtn.enabled = false;
+                closeBtn.enabled = false;
+                showCloseButton = false;
+            }
+
+            public function get isCreate() : Boolean {
+                return _isCreate;
+            }
+
+            public function get initData() : CourierVo {
+                return _initData;
+            }
+        ]]>
+    </mx:Script>
+    <mx:Label x="33"
+              y="20"
+              text="快递名："
+              textAlign="right"
+              width="60"/>
+    <mx:TextInput x="101"
+                  y="18"
+                  width="207"
+                  id="nameTf"/>
+    <mx:Button x="88"
+               y="76"
+               label="添加"
+               id="addBtn"
+               click="submit()"
+               width="77"/>
+    <mx:Button x="197"
+               y="76"
+               id="closeBtn"
+               click="PopUpManager.removePopUp(this);"
+               label="取消"
+               width="74"/>
+    <mx:Image x="316"
+              y="18"
+              id="nameError"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Text x="10"
+             y="48"
+             text="请求处理中..."
+             width="360"
+             textAlign="center"
+             color="#FF1D0C"
+             id="msgTf"/>
+</mx:TitleWindow>

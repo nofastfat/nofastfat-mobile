@@ -1,4 +1,4 @@
-package com.xy.cmd {
+package com.xy.cmd.user {
 import com.xy.interfaces.AbsCommand;
 import com.xy.model.Config;
 import com.xy.model.vo.ResultVo;

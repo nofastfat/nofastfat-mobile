@@ -1,8 +1,8 @@
 package com.xy.view {
-import com.xy.cmd.AddCommodityCmd;
-import com.xy.cmd.DeleteCommodityCmd;
-import com.xy.cmd.ModifyCommodityCmd;
-import com.xy.cmd.QueryCommodityCmd;
+import com.xy.cmd.commodity.AddCommodityCmd;
+import com.xy.cmd.commodity.DeleteCommodityCmd;
+import com.xy.cmd.commodity.ModifyCommodityCmd;
+import com.xy.cmd.commodity.QueryCommodityCmd;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
 import com.xy.model.enum.InvoicingDataNotice;
@@ -11,8 +11,6 @@ import com.xy.view.events.GoodsManageUIEvent;
 import com.xy.view.ui.ProgressUI;
 import com.xy.view.ui.StorgeUI;
 import com.xy.view.ui.panels.GoodsManageUI;
-
-import mx.managers.PopUpManager;
 
 public class GoodManageMediator extends AbsMediator {
     public static const NAME : String = "GoodManageMediator";
