@@ -3,7 +3,7 @@
 	
 	$self = getParam("self");
 	$selfPwd = getParam("selfPwd");
-	$id = getParam("id");
+	$id = getParam("delId");
 	
 	if(empty($self) ||empty($selfPwd) || empty($id)){
 		echo makeJsonRs(false, "删除快递失败，参数不正确");
@@ -29,7 +29,7 @@
 	$sql = "delete from SendCompany where id=$id";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "");
+		echo makeJsonRs(true, "删除快递成功");
 	}else{
 		echo makeJsonRs(false, "删除快递失败");
 	}
