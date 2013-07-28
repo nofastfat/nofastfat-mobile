@@ -50,7 +50,12 @@
 		$rs = execute($db, $sql);
 		if($rs == 1){
 			execute($db, "COMMIT");
-			echo makeJsonRs(true, "true");
+			$sql = "select * from Store where id=(select max(id) from Store)";
+			$rs = query($db, $sql);
+			$rs = json_encode($rs);
+			$rs = gzcompress($rs, 9);
+			$rs = base64_encode($rs);
+			echo makeJsonRs(true, $rs);
 		}else{
 			execute($db, "ROLLBACK");
 			echo makeJsonRs(false, "入库失败,无法生成日志");
