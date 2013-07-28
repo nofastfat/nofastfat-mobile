@@ -3,6 +3,7 @@ import com.adobe.serialization.json.JSON;
 import com.xy.model.enum.InvoicingDataNotice;
 import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
+import com.xy.model.vo.StoreVo;
 import com.xy.util.Base64;
 
 import flash.utils.ByteArray;
@@ -19,6 +20,8 @@ public class InvoicingDataProxy extends Proxy {
     private var _goods : Array;
 
     private var _couriers : Array;
+
+    private var _stores : Array;
 
     public function InvoicingDataProxy() {
         super(NAME);
@@ -48,17 +51,15 @@ public class InvoicingDataProxy extends Proxy {
         var arr : Array = JSON.decode(json);
 
         for each (var ar : Array in arr) {
-            var vo : GoodsVo = new GoodsVo();
-            vo.id = int(ar[0]);
-            vo.name = ar[1];
-            vo.info = ar[2];
-            vo.weight = Number(ar[3]);
-            vo.sbn = ar[4];
-            vo.type = ar[5];
+            var vo : GoodsVo = GoodsVo.fromArr(ar);
             _goods.push(vo);
         }
 
         sendNotification(InvoicingDataNotice.GOODS_LIST_UPDATE);
+    }
+
+    public function clearGoods() : void {
+        _goods = null;
     }
 
     /**
@@ -114,6 +115,10 @@ public class InvoicingDataProxy extends Proxy {
 
         sendNotification(InvoicingDataNotice.GOODS_LIST_UPDATE);
     }
+    
+    public function clearCourier():void{
+    	_couriers = null;
+    }
 
     public function addCourier(vo : CourierVo) : void {
         if (_couriers == null) {
@@ -139,9 +144,7 @@ public class InvoicingDataProxy extends Proxy {
         var arr : Array = JSON.decode(json);
 
         for each (var ar : Array in arr) {
-            var vo : CourierVo = new CourierVo();
-            vo.id = int(ar[0]);
-            vo.name = ar[1];
+            var vo : CourierVo = CourierVo.fromArr(ar);
             _couriers.push(vo);
         }
 
@@ -158,6 +161,7 @@ public class InvoicingDataProxy extends Proxy {
 
         sendNotification(InvoicingDataNotice.COURIER_LIST_UPDATE);
     }
+
     /**
      * 更新数据
      * @param vo
@@ -170,6 +174,19 @@ public class InvoicingDataProxy extends Proxy {
         }
 
         sendNotification(InvoicingDataNotice.COURIER_LIST_UPDATE, vo.id);
+    }
+
+    public function clearStore() : void {
+        _stores = null;
+    }
+
+    public function addStore(vo : StoreVo) : void {
+        if (_stores == null) {
+            return;
+        }
+
+        _stores.push(vo);
+        sendNotification(InvoicingDataNotice.STORE_LIST_UPDATE, vo.id);
     }
 
     /**

@@ -4,7 +4,7 @@
               layout="absolute"
               title="库存 »"
               titleIcon="@Embed(source='../../../../../assets/storge24.png')"
-              width="500"
+              width="538"
               resize="contentui1_resizeHandler(event)"
               height="356">
     <mx:Script>
@@ -53,7 +53,7 @@
             }
         ]]>
     </mx:Script>
-    <mx:Button x="10"
+    <mx:Button x="111"
                y="10"
                labelPlacement="bottom"
                click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_GOODS_MANAGE, this))"
@@ -61,8 +61,8 @@
                label="商品管理"
                width="80"
                height="80"
-               id="goodsIcon"/>
-    <mx:Button x="109"
+/>
+    <mx:Button x="210"
                y="10"
                labelPlacement="bottom"
                click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_COURIER_MANAGE, this))"
@@ -70,21 +70,30 @@
                label="快递管理"
                width="80"
                height="80"/>
-    <mx:Button x="207"
+    <mx:Button x="308"
                y="10"
                labelPlacement="bottom"
                click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_IN_GOODS_LOG, this))"
-               icon="@Embed(source='../../../../../assets/logs.png')"
+               icon="@Embed(source='../../../../../assets/logs_in.png')"
                label="进货记录"
                width="80"
                height="80"/>
-    <mx:Button x="305"
+    <mx:Button x="406"
                y="10"
                labelPlacement="bottom"
                click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_OUT_GOODS_LOG, this))"
-               icon="@Embed(source='../../../../../assets/logs.png')"
+               icon="@Embed(source='../../../../../assets/logs_out.png')"
                label="出货记录"
                width="80"
                height="80"/>
+    <mx:Button x="10"
+               y="10"
+               labelPlacement="bottom"
+               click="dispatchEvent(new StorgeUIEvent(StorgeUIEvent.SHOW_STORE_SEARCH, this))"
+               icon="@Embed(source='../../../../../assets/storgeSearch.png')"
+               label="库存查询"
+               width="80"
+               height="80"
+ id="goodsIcon"/>
 
 </ui:ContentUI>

@@ -34,7 +34,7 @@
                    icon="@Embed(source='../../../../../assets/storge.png')"
                    click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_STORGE))"
                    x="10"
-                   y="186"/>
+                   y="274"/>
         <mx:Button label="财务"
                    width="130"
                    height="80"
@@ -42,7 +42,7 @@
                    icon="@Embed(source='../../../../../assets/finance.png')"
                    click="dispatchEvent(new LeftMenuUIEvent(LeftMenuUIEvent.SHOW_FINANCE))"
                    x="10"
-                   y="274"/>
+                   y="186"/>
         <mx:Button label="账户"
                    width="130"
                    height="80"

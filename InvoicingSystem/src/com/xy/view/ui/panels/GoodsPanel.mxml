@@ -42,13 +42,13 @@
                 } else {
                     _initData = initData.clone();
                 }
-				
-				_datas = new ArrayCollection(typs);
+
+                _datas = new ArrayCollection(typs);
                 if (isCreate) {
                     title = "添加商品";
                     nameTf.text = "";
                     infoTf.text = "";
-                    weightTf.value = 0;
+                    weightTf.text = "0";
                     sbnIdTf.text = "";
                     typeTf.text = "";
                     addBtn.label = "添加";
@@ -56,9 +56,9 @@
                     title = "修改商品";
                     nameTf.text = initData.name;
                     infoTf.text = initData.info;
-                    weightTf.value = initData.weight;
+                    weightTf.text = initData.weight + "";
                     sbnIdTf.text = initData.sbn;
-					typeTf.selectedItem = initData.type;
+                    typeTf.selectedItem = initData.type;
                     addBtn.label = "修改";
                 }
             }
@@ -69,7 +69,7 @@
                 vo.name = STool.makeSafeRequest(StringUtil.trim(nameTf.text));
                 vo.sbn = STool.makeSafeRequest(StringUtil.trim(sbnIdTf.text));
                 vo.type = STool.makeSafeRequest(StringUtil.trim(typeTf.text));
-                vo.weight = weightTf.value;
+                vo.weight = Number(weightTf.text);
 
                 if (vo.sbn == "") {
                     sbnError.visible = true;
@@ -158,18 +158,17 @@
                   y="56"
                   width="242"
                   id="nameTf"/>
-    <mx:NumericStepper x="103"
-                       y="88"
-                       stepSize="0.1"
-                       value="0"
-                       width="108"
-                       maximum="999999"
-                       id="weightTf"/>
+    <mx:TextInput x="103"
+                  y="88"
+                  width="108"
+                  restrict="0-9."
+                  id="weightTf"/>
     <mx:ComboBox x="103"
                  dataProvider="{_datas}"
                  y="120"
                  editable="true"
-                 id="typeTf" width="160">
+                 id="typeTf"
+                 width="160">
     </mx:ComboBox>
     <mx:TextArea x="103"
                  y="152"

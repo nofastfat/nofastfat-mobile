@@ -2,50 +2,195 @@
 <ui:ContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
               xmlns:ui="com.xy.view.ui.*"
               layout="absolute"
-              width="552"
+              width="474"
               title="进货 »"
               titleIcon="@Embed(source='../../../../../assets/inGoods24.png')"
-              height="412"
+              height="294"
               fontSize="12">
 
     <mx:Style>
     </mx:Style>
 
-    <mx:Canvas width="100%" height="100%" x="0" y="0" textAlign="left">
+    <mx:Script>
+        <![CDATA[
+            import com.xy.util.EnterFrameCall;
+            import com.xy.model.vo.StoreVo;
+            import com.xy.view.events.InGoodsUIEvent;
+            import com.xy.model.vo.ResultVo;
+            import mx.collections.ArrayCollection;
+            import mx.managers.PopUpManager;
+            import flash.net.sendToURL;
+            import com.xy.view.events.GoodsPanelEvent;
+            import com.xy.view.ui.panels.GoodsPanel;
+
+            [Bindable]
+            private var _goodsList : ArrayCollection = new ArrayCollection();
+
+            private var _panel : GoodsPanel;
+
+            private var _goods : Array;
+            private var _types : Array;
+
+            public function initShow(goods : Array, types : Array, goodsId : int = -1) : void {
+                _goods = goods;
+                _types = types;
+                _goodsList = new ArrayCollection(_goods);
+
+                if (goodsId != -1) {
+                    var index : int;
+                    for (var i : int = 0; i < _goods.length; i++) {
+                        if (_goods[i].id == goodsId) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    goodsChoose.selectedIndex = index;
+                }
+
+                tipTf.htmlText = "小贴士: 对于新商品，进货前，要先<u><font color='#0000FF'><a href='event:ShowAddGoods'>添加商品</a></font></u>哦";
+
+                if (!tipTf.hasEventListener(TextEvent.LINK)) {
+                    tipTf.addEventListener(TextEvent.LINK, __linkHandler);
+                }
+                warnTf.text = "";
+                submitBtn.enabled = true;
+            }
+
+            private function __linkHandler(e : TextEvent) : void {
+                if (_panel == null) {
+                    _panel = new GoodsPanel();
+                    _panel.addEventListener(GoodsPanelEvent.ADD_SUBMIT, __addGoodsHandler);
+                }
+                PopUpManager.addPopUp(_panel, parent, true);
+                PopUpManager.centerPopUp(_panel);
+                _panel.setShowType(true, _types);
+
+            }
+
+            public function addGoodsResult(vo : ResultVo) : void {
+                if (vo.status) {
+                    PopUpManager.removePopUp(_panel);
+                } else {
+                    _panel.setShowType(_panel.isCreate, _types, _panel.initData);
+                    _panel.msgTf.text = vo.data;
+                }
+            }
+
+            public function addStoreResult(vo : ResultVo) : void {
+                if (vo.status) {
+                    warnTf.text = "";
+                    submitBtn.enabled = true;
+                } else {
+                    warnTf.text = vo.data as String;
+                    submitBtn.enabled = true;
+                }
+            }
+
+            private function __addGoodsHandler(e : GoodsPanelEvent) : void {
+                dispatchEvent(new InGoodsUIEvent(InGoodsUIEvent.ADD_GOODS, null, e.vo));
+            }
+
+            private function submit() : void {
+                var vo : StoreVo = new StoreVo();
+
+                if (goodsChoose.selectedItem == null) {
+                    warnTf.text = "请选择入库的商品名";
+                    EnterFrameCall.getStage().focus = goodsChoose;
+                    return;
+                }
+                vo.name = goodsChoose.selectedItem.name;
+                vo.SBN = goodsChoose.selectedItem.sbn;
+                vo.num = numTf.value;
+                vo.retailPrice = Number(priceTf.text);
+                if (vo.retailPrice <= 0) {
+                    warnTf.text = "请填写正确的进货价";
+                    EnterFrameCall.getStage().focus = priceTf;
+                    return;
+                }
+
+                if (madeTimeTf.selectedDate != null) {
+                    vo.madeTime = madeTimeTf.selectedDate.getTime();
+                }
+
+                dispatchEvent(new InGoodsUIEvent(InGoodsUIEvent.ADD_STORE, vo));
+                warnTf.text = "数据提交中...";
+                submitBtn.enabled = false;
+            }
+        ]]>
+    </mx:Script>
+    <mx:Canvas width="100%"
+               height="100%"
+               x="0"
+               y="0"
+               textAlign="left">
 
         <mx:Text x="17"
-                 y="21"
+                 y="24"
                  text="商品名:"
                  textAlign="right"
-                 width="68"/>
+                 width="86"/>
         <mx:Text x="17"
-                 y="54"
+                 y="56"
                  text="进货数量:"
                  textAlign="right"
-                 width="68"/>
-        <mx:ComboBox x="93"
-                     y="19">
+                 width="86"/>
+        <mx:ComboBox x="111"
+                     dataProvider="{_goodsList}"
+                     labelField="name"
+                     y="21"
+                     width="160"
+                     id="goodsChoose">
         </mx:ComboBox>
-        <mx:NumericStepper x="93"
-                           y="52"
-                           width="78"/>
-        <mx:Text x="17"
-                 y="87"
-                 text="进货价(元):"
-                 width="68"
+        <mx:NumericStepper x="111"
+                           y="54"
+                           width="98"
+                           minimum="1"
+                           maximum="999999"
+                           stepSize="1"
+                           id="numTf"/>
+        <mx:Text x="10"
+                 y="89"
+                 text="进货单价(元):"
+                 width="93"
                  textAlign="right"/>
-        <mx:TextInput x="93"
-                      y="85"/>
-        <mx:Button x="55"
+        <mx:TextInput x="111"
+                      restrict="0-9."
+                      y="87"
+                      id="priceTf"/>
+        <mx:Button x="105"
                    label="入库"
-                   width="161"
+                   icon="@Embed(source='../../../../../assets/addGoods.png')"
+                   width="127"
                    height="37"
-                   y="139"/>
-        <mx:Text x="277"
-                 y="21"
-                 text="小贴士: 对于新商品，进货前，要先添加商品哦" width="157"/>
-        <mx:Image x="261"
-                  y="23"
+                   y="175"
+                   click="submit()"
+                   id="submitBtn"/>
+        <mx:Text x="295"
+                 y="23"
+                 id="tipTf"
+                 width="157"
+                 height="38"/>
+        <mx:Image x="279"
+                  y="25"
                   source="@Embed(source='../../../../../assets/tip.png')"/>
+        <mx:Label x="32"
+                  y="121"
+                  text="生产日期:"
+                  textAlign="right"
+                  width="71"/>
+        <mx:DateField x="111"
+                      dayNames="[日,一,二,三,四,五,六]"
+                      monthNames="[一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月]"
+                      formatString="YYYY-MM-DD"
+                      y="119"
+                      showToday="true"
+                      width="121"
+                      id="madeTimeTf"/>
+        <mx:Text x="32"
+                 y="149"
+                 width="263"
+                 textAlign="center"
+                 color="#FF0000"
+                 id="warnTf"/>
     </mx:Canvas>
 </ui:ContentUI>
