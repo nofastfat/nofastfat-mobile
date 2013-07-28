@@ -3,9 +3,10 @@
 	
 	$self = getParam("self");
 	$selfPwd = getParam("selfPwd");
+	$id = getParam("id");
 	$name = getParam("name");
 	
-	if(empty($self) ||empty($selfPwd) || empty($name)){
+	if(empty($self) ||empty($selfPwd) || empty($name)|| empty($id)){
 		echo makeJsonRs(false, "添加快递失败，参数不正确");
 		closeConn($db);
 		exit;
@@ -26,17 +27,12 @@
 		}
 	}
 
-	$sql = "insert into SendCompany(name) values('$name')";
+	$sql = "update SendCompany set name='$name' where id=$id";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		$sql = "select * from SendCompany where id=(select max(id) from SendCompany)";
-		$rs = query($db, $sql);
-		$rs = json_encode($rs);
-		$rs = gzcompress($rs, 9);
-		$rs = base64_encode($rs);
-		echo makeJsonRs(true, $rs);
+		echo makeJsonRs(true, "修改快递成功");
 	}else{
-		echo makeJsonRs(false, "添加快递失败");
+		echo makeJsonRs(false, "修改快递失败");
 	}
 
 	closeConn($db);
