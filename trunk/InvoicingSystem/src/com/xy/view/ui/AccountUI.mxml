@@ -4,8 +4,39 @@
               layout="absolute"
               title="账户 »"
               titleIcon="@Embed(source='../../../../../assets/account24.png')"
-              width="400"
-              height="300"
+              width="444"
+              height="338"
               fontSize="12">
+	<mx:Script>
+		<![CDATA[
+			import com.xy.view.events.AccountUIEvent;
+		]]>
+	</mx:Script>
+	<mx:Button x="111"
+	           y="10"
+	           labelPlacement="bottom"
+	           click="dispatchEvent(new AccountUIEvent(AccountUIEvent.SHOW_ADD_USER, this))"
+	           icon="@Embed(source='../../../../../assets/accountAdd.png')"
+	           label="添加用户"
+	           width="80"
+	           height="80"
+	/>
+	<mx:Button x="210"
+	           y="10"
+	           labelPlacement="bottom"
+	           click="dispatchEvent(new AccountUIEvent(AccountUIEvent.SHOW_MODIDY_PWD, this))"
+	           icon="@Embed(source='../../../../../assets/accountAdd.png')"
+	           label="修改密码"
+	           width="80"
+	           height="80"/>
+	<mx:Button x="10"
+	           y="10"
+	           labelPlacement="bottom"
+	           click="dispatchEvent(new AccountUIEvent(AccountUIEvent.SHOW_QUERY_USER, this))"
+	           icon="@Embed(source='../../../../../assets/accountQuery.png')"
+	           label="账户查询"
+	           width="80"
+	           height="80"
+	id="goodsIcon"/>
 
 </ui:ContentUI>
