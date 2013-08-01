@@ -40,7 +40,7 @@
 	$sql = "insert into UsersTb (id, pwd, type, creator) values ('".$newId."', '".$newPwd."', ".$newType.", '".$self."');";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "");
+		echo makeJsonRs(true, "添加新用户成功");
 	}else{
 		echo makeJsonRs(false, "添加新用户失败");
 	}

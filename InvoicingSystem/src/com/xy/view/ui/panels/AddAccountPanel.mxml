@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="absolute"
+                width="400"
+                height="228"
+                fontSize="12"
+                titleIcon="@Embed(source='../../../../../../assets/accountAdd24.png')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this);"
+                title="添加账户">
+    <mx:Script>
+        <![CDATA[
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.AccountTypeVo;
+            import com.xy.model.vo.AccountVo;
+            import com.xy.model.vo.ResultVo;
+            import com.xy.util.EnterFrameCall;
+            import com.xy.util.STool;
+            import com.xy.view.events.AddAccountPanelEvent;
+
+            import mx.collections.ArrayCollection;
+            import mx.managers.PopUpManager;
+
+            [Bindable]
+            private var _datas : ArrayCollection = new ArrayCollection();
+
+            private function submit() : void {
+                var vo : AccountVo = new AccountVo();
+                vo.id = STool.makeSafeRequest(StringUtil.trim(nameTf.text));
+                vo.type = (type.selectedItem as AccountTypeVo).type;
+
+                if (vo.id == "") {
+                    nameError.visible = true;
+                    msgTf.text = "请输出帐号";
+                    EnterFrameCall.getStage().focus = nameTf;
+                    return;
+                }
+
+                showCloseButton = false;
+                nameError.visible = false;
+                msgTf.text = "数据提交中...";
+                addBtn.enabled = false;
+                closeBtn.enabled = false;
+
+                dispatchEvent(new AddAccountPanelEvent(AddAccountPanelEvent.ADD_USER, vo));
+            }
+
+            public function initShow(types : Array) : void {
+                showCloseButton = true;
+                nameTf.text = "";
+                nameError.visible = false;
+                msgTf.text = "";
+                addBtn.enabled = true;
+                closeBtn.enabled = true;
+                _datas = new ArrayCollection(types);
+                type.selectedIndex = 0;
+
+            }
+
+            public function addResult(vo : ResultVo) : void {
+                showCloseButton = true;
+                nameError.visible = false;
+                addBtn.enabled = true;
+                closeBtn.enabled = true;
+                msgTf.text = vo.data as String;
+            }
+        ]]>
+    </mx:Script>
+    <mx:Label x="20"
+              y="22"
+              text="帐户名:"
+              width="82"
+              textAlign="right"/>
+    <mx:Label x="20"
+              y="58"
+              text="账户类型:"
+              width="82"
+              textAlign="right"/>
+    <mx:TextInput x="110"
+                  y="20"
+                  restrict="a-zA-Z0-9_@."
+                  id="nameTf"/>
+    <mx:ComboBox x="110"
+                 y="52"
+                 fontSize="11"
+                 dataProvider="{_datas}"
+                 labelField="name"
+                 width="136"
+                 id="type"
+                 height="30"
+                 minHeight="30"
+                 maxHeight="30">
+    </mx:ComboBox>
+    <mx:Label x="40"
+              y="91"
+              text="密码:"
+              width="62"
+              textAlign="right"/>
+    <mx:Text x="110"
+             y="91"
+             text="初始密码为888888"
+             width="127"/>
+    <mx:Button x="88"
+               y="139"
+               label="添加"
+               id="addBtn"
+               click="submit()"
+               width="77"/>
+    <mx:Button x="197"
+               y="139"
+               id="closeBtn"
+               click="PopUpManager.removePopUp(this);"
+               label="取消"
+               width="74"/>
+    <mx:Image x="278"
+              y="20"
+              id="nameError"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Text x="10"
+             y="111"
+             text="请求处理中..."
+             width="360"
+             textAlign="center"
+             color="#FF1D0C"
+             id="msgTf"/>
+
+</mx:TitleWindow>

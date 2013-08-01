@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="absolute"
+				width="400"
+				height="220"
+				fontSize="12"
+				titleIcon="@Embed(source='../../../../../../assets/accountModifyPwd24.png')"
+				showCloseButton="true"
+				close="PopUpManager.removePopUp(this);"
+				title="修改密码">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+		]]>
+	</mx:Script>
+	<mx:Label x="20" y="22" text="旧密码:" width="82" textAlign="right"/>
+	<mx:Label x="20" y="55" text="新密码:" width="82" textAlign="right"/>
+	<mx:TextInput x="110" y="20"/>
+	<mx:Label x="20" y="87" text="确认新密码:" width="82" textAlign="right"/>
+	<mx:Button x="88"
+			   y="141"
+			   label="修改"
+			   id="addBtn"
+			   click="submit()"
+			   width="77"/>
+	<mx:Button x="197"
+			   y="141"
+			   id="closeBtn"
+			   click="PopUpManager.removePopUp(this);"
+			   label="取消"
+			   width="74"/>
+	<mx:Image x="278"
+			  y="20"
+			  id="nameError"
+			  source="@Embed(source='../../../../../../assets/error.png')"/>
+	<mx:Text x="10"
+			 y="115"
+			 text="请求处理中..."
+			 width="360"
+			 textAlign="center"
+			 color="#FF1D0C"
+			 id="msgTf"/>
+	<mx:TextInput x="110" y="53" displayAsPassword="true"/>
+	<mx:TextInput x="110" y="85" displayAsPassword="true"/>
+	<mx:Image x="278"
+			  y="52"
+			  id="nameError0"
+			  source="@Embed(source='../../../../../../assets/error.png')"/>
+	<mx:Image x="278"
+			  y="84"
+			  id="nameError1"
+			  source="@Embed(source='../../../../../../assets/error.png')"/>
+	
+</mx:TitleWindow>

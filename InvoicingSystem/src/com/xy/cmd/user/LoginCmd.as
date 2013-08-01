@@ -39,7 +39,7 @@ public class LoginCmd extends AbsCommand {
 
         /* 记录数据 */
         if (vo.status) {
-            dataProxy.loginComplete(_uid, _pwd);
+            dataProxy.loginComplete(_uid, _pwd, int(vo.data));
         }
 
         /* UI显示 */

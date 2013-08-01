@@ -1,6 +1,9 @@
 package com.xy.model {
 import com.adobe.serialization.json.JSON;
+import com.xy.model.enum.AccountType;
 import com.xy.model.enum.InvoicingDataNotice;
+import com.xy.model.vo.AccountTypeVo;
+import com.xy.model.vo.AccountVo;
 import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
 import com.xy.model.vo.StoreVo;
@@ -17,11 +20,15 @@ public class InvoicingDataProxy extends Proxy {
 
     private var _pwd : String;
 
+    private var _type : int;
+
     private var _goods : Array;
 
     private var _couriers : Array;
 
     private var _stores : Array;
+
+    private var _users : Array;
 
     public function InvoicingDataProxy() {
         super(NAME);
@@ -32,9 +39,10 @@ public class InvoicingDataProxy extends Proxy {
      * @param uid
      * @param pwd
      */
-    public function loginComplete(uid : String, pwd : String) : void {
+    public function loginComplete(uid : String, pwd : String, type : int) : void {
         _uid = uid;
         _pwd = pwd;
+        _type = type;
     }
 
     /**
@@ -115,9 +123,9 @@ public class InvoicingDataProxy extends Proxy {
 
         sendNotification(InvoicingDataNotice.GOODS_LIST_UPDATE);
     }
-    
-    public function clearCourier():void{
-    	_couriers = null;
+
+    public function clearCourier() : void {
+        _couriers = null;
     }
 
     public function addCourier(vo : CourierVo) : void {
@@ -189,6 +197,41 @@ public class InvoicingDataProxy extends Proxy {
         sendNotification(InvoicingDataNotice.STORE_LIST_UPDATE, vo.id);
     }
 
+    public function getAccountTypes() : Array {
+        var rs : Array = [];
+        for (var i : int = 1; i <= 3; i++) {
+            if (i > _type) {
+                rs.push(new AccountTypeVo(i));
+            }
+        }
+        return rs;
+    }
+
+    public function addUser(vo : AccountVo) : void {
+        if (_users == null) {
+            return;
+        }
+
+        _users.push(vo);
+        sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
+    }
+
+    public function initUsers(data : String) : void {
+        _users = [];
+        var ba : ByteArray = Base64.decode(data);
+        ba.uncompress();
+        ba.position = 0;
+        var json : String = ba.readUTFBytes(ba.bytesAvailable);
+        var arr : Array = JSON.decode(json);
+
+        for each (var ar : Array in arr) {
+            var vo : AccountVo = AccountVo.fromArr(ar);
+            _users.push(vo);
+        }
+
+        sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
+    }
+
     /**
      * 帐号
      */
@@ -209,6 +252,14 @@ public class InvoicingDataProxy extends Proxy {
 
     public function get couriers() : Array {
         return _couriers;
+    }
+
+    public function get users() : Array {
+        return _users;
+    }
+
+    public function get type() : int {
+        return _type;
     }
 
 
