@@ -1,4 +1,5 @@
 package com.xy.model {
+import com.xy.model.vo.AccountVo;
 import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
 import com.xy.model.vo.StoreVo;
@@ -125,6 +126,28 @@ public class Config {
         rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.SBN, vo.name, vo.num, vo.retailPrice, vo.madeTime);
         return rs;
     }
+	
+	/**
+	 * 添加用户
+	 * @param vo
+	 * @return
+	 */
+	public static function makeAddUserUrl(vo : AccountVo) : String {
+		var rs : String = HTTP_URL + "?method=addNewUser&self={0}&selfPwd={1}&newId={2}&newPwd={3}&newType={4}" + "&r=" + Math.random();
+		rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id, 888888, vo.type);
+		return rs;
+	}
+	
+	/**
+	 * 获取用户列表
+	 * @param vo
+	 * @return
+	 */
+	public static function makeQueryUserUrl() : String {
+		var rs : String = HTTP_URL + "?method=queryUsers&self={0}&selfPwd={1}" + "&r=" + Math.random();
+		rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
+		return rs;
+	}
 
     public static function get dataProxy() : InvoicingDataProxy {
         return Facade.getInstance().retrieveProxy(InvoicingDataProxy.NAME) as InvoicingDataProxy;

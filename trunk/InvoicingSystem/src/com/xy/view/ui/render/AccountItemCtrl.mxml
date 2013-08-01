@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+		   xmlns:listClasses="mx.controls.listClasses.*"
+		   width="158"
+		   height="28"
+		   fontSize="12">
+	<mx:Script>
+		<![CDATA[
+			import com.xy.model.vo.CourierVo;
+			import com.xy.view.ui.panels.CourierUI;
+			import com.xy.model.vo.GoodsVo;
+			import com.xy.view.events.GoodsManageUIEvent;
+			import com.xy.view.ui.panels.GoodsManageUI;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			
+			[Embed(source = '../../../../../../assets/warn.png')]
+			private static const Icon : Class;
+			
+			override public function set data(value : Object) : void {
+				super.data = value;
+			}
+			
+			protected function button1_clickHandler(event : MouseEvent) : void {
+				
+				Alert.show("确定删除商品【" + data.name + "】？一旦删除，将无法恢复。", "警告", Alert.YES | Alert.NO, null, function(e : CloseEvent) : void {
+					if (e.detail == Alert.YES) {
+						if (parentDocument is GoodsManageUI) {
+							//(parentDocument as GoodsManageUI).deleteGoods(data as GoodsVo);
+						} else if (parentDocument is CourierUI) {
+							//(parentDocument as CourierUI).deleteCourier(data as CourierVo);
+						}
+					}
+				}, Icon);
+			}
+			
+			protected function button2_clickHandler(event : MouseEvent) : void {
+				if (parentDocument is GoodsManageUI) {
+					//(parentDocument as GoodsManageUI).showModify(data as GoodsVo);
+				} else if (parentDocument is CourierUI) {
+					//(parentDocument as CourierUI).showModify(data as CourierVo);
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Button label="删除"
+			   x="95"
+			   click="button1_clickHandler(event)"
+			   y="2"
+			   fontSize="12">
+		
+	</mx:Button>
+	<mx:Button x="9"
+			   click="button2_clickHandler(event)"
+			   y="2"
+			   label="重置密码"
+			   fontSize="12"/>
+</mx:Canvas>

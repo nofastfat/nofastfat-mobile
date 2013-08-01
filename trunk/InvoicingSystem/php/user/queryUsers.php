@@ -27,7 +27,7 @@
 		}
 	}
 
-	$sql = "select id,type,creator from UsersTb where id!='".$self."'";
+	$sql = "select id,type,creator from UsersTb where id!='".$self."' and type>".$rs[0][0];
 	$rs = query($db, $sql);
 	$rs = json_encode($rs);
 	$rs = gzcompress($rs, 9);
