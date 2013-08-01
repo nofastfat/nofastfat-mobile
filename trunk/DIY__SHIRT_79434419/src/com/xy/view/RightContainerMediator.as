@@ -64,6 +64,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.net.FileReference;
 import flash.net.URLLoaderDataFormat;
+import flash.net.URLRequest;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.net.navigateToURL;
@@ -1106,7 +1107,7 @@ public class RightContainerMediator extends AbsMediator {
             } else {
                 Alert.show(new SAlertTextUI("上传成功，是否查看购物车？"), function(type : int, data : *) : void {
                     if (type == AlertType.OK) {
-                        navigateToURL(rs.data, "_blank");
+                        navigateToURL(new URLRequest(rs.data), "_blank");
                     }
                 });
             }
