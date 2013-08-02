@@ -1,6 +1,7 @@
 package com.xy.model.vo {
 	import com.adobe.serialization.json.JSON;
 	import com.xy.util.Base64;
+	import com.xy.util.STool;
 	
 	import flash.utils.ByteArray;
 	
@@ -14,6 +15,9 @@ public class StoreVo {
     public var operator : String;
     public var storeTime : Number = 0;
     public var retailPrice : Number = 0;
+	
+	private var _madeTimeStr : String;
+	private var _storeTimeStr : String;
 
     public function copyFrom(source : StoreVo) : void {
         id = source.id;
@@ -25,7 +29,33 @@ public class StoreVo {
         storeTime = source.storeTime;
         retailPrice = source.retailPrice;
     }
-
+	
+	public function get madeTimeStr():String{
+		
+		if(_madeTimeStr != null){
+			return _madeTimeStr;
+		}
+		
+		var date : Date = new Date();
+		date.setTime(madeTime);
+		var str : String = "{0}年{1}月{2}日";
+		_madeTimeStr = STool.format(str, date.fullYear, (date.month+1), date.date);
+		return _madeTimeStr;
+	}
+	
+	public function get storeTimeStr():String{
+		
+		if(_storeTimeStr != null){
+			return _storeTimeStr;
+		}
+		
+		var date : Date = new Date();
+		date.setTime(storeTime);
+		var str : String = "{0}年{1}月{2}日";
+		_storeTimeStr = STool.format(str, date.fullYear, (date.month+1), date.date);
+		return _storeTimeStr;
+	}
+	
     public function clone() : StoreVo {
         var vo : StoreVo = new StoreVo();
         vo.copyFrom(this);
@@ -60,5 +90,22 @@ public class StoreVo {
         }
         return vo;
     }
+	
+	public static function fromArr(arr : Array) : StoreVo {
+		var vo : StoreVo = new StoreVo();
+		vo.id = arr[0];
+		vo.SBN = arr[1];
+		vo.name = arr[2];
+		vo.num = arr[3];
+		vo.madeTime = arr[4];
+		vo.operator = arr[5];
+		vo.storeTime = arr[6];
+		
+		if (arr.length == 8) {
+			vo.retailPrice = arr[7];
+		}
+		
+		return vo;
+	}
 }
 }

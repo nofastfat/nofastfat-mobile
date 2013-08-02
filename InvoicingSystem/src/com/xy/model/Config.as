@@ -183,6 +183,17 @@ public class Config {
         return rs;
     }
 
+	/**
+	 * 获取库存数据
+	 * @param vo
+	 * @return
+	 */
+	public static function makeQueryStoreUrl() : String {
+		var rs : String = HTTP_URL + "?method=queryStore&self={0}&selfPwd={1}" + "&r=" + Math.random();
+		rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
+		return rs;
+	}
+	
     public static function get dataProxy() : InvoicingDataProxy {
         return Facade.getInstance().retrieveProxy(InvoicingDataProxy.NAME) as InvoicingDataProxy;
     }

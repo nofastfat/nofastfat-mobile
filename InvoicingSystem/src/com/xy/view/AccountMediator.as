@@ -6,6 +6,7 @@ import com.xy.cmd.user.QueryUsersCmd;
 import com.xy.cmd.user.ResetPwdCmd;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
+import com.xy.model.Purview;
 import com.xy.model.enum.AccountType;
 import com.xy.model.enum.InvoicingDataNotice;
 import com.xy.model.vo.ResultVo;
@@ -58,7 +59,7 @@ public class AccountMediator extends AbsMediator {
             _panel.addEventListener(AccountUIEvent.DELETE_USER, __deleteHandler);
             _panel.addEventListener(AccountUIEvent.RESET_PWD, __resetPwdHandler);
         }
-        var canShowMore : Boolean = dataProxy.type <= AccountType.SECOND_ADMIN;
+        var canShowMore : Boolean = Purview.canAddUser(dataProxy.type);
 
         ui.setContent(_panel);
 

@@ -5,6 +5,7 @@ import com.xy.cmd.commodity.ModifyCommodityCmd;
 import com.xy.cmd.commodity.QueryCommodityCmd;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
+import com.xy.model.Purview;
 import com.xy.model.enum.InvoicingDataNotice;
 import com.xy.model.vo.ResultVo;
 import com.xy.view.events.GoodsManageUIEvent;
@@ -48,7 +49,7 @@ public class GoodManageMediator extends AbsMediator {
             _panel.addEventListener(GoodsManageUIEvent.MODIFY_GOODS, __modifyHandler);
         }
         parent.setContent(_panel);
-        _panel.setDatas(dataProxy.goods, dataProxy.getGoodsTypes());
+        _panel.setDatas(dataProxy.goods, dataProxy.getGoodsTypes(), Purview.canAddCommodity(dataProxy.type));
 
         if (dataProxy.goods == null) {
             ProgressUI.show();
@@ -82,7 +83,7 @@ public class GoodManageMediator extends AbsMediator {
 
     private function goodsListUpdate(keyGoodsId : int = -1) : void {
         if (_panel != null && _panel.stage != null) {
-            _panel.setDatas(dataProxy.goods, dataProxy.getGoodsTypes(), keyGoodsId);
+            _panel.setDatas(dataProxy.goods, dataProxy.getGoodsTypes(), Purview.canAddCommodity(dataProxy.type), keyGoodsId);
         }
     }
 

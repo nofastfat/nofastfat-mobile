@@ -45,10 +45,10 @@ public class InvoicingDataProxy extends Proxy {
         _type = type;
     }
 
-	public function changePwd(pwd:String):void{
-		_pwd = pwd;
-	}
-	
+    public function changePwd(pwd : String) : void {
+        _pwd = pwd;
+    }
+
     /**
      * 初始化商品列表
      * [[id, name, description, weight, SBNId, type], [id, name, description, weight, SBNId, type], ...]
@@ -236,17 +236,38 @@ public class InvoicingDataProxy extends Proxy {
         sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
     }
 
-	public function deleteUser(id : String):void{
-		for (var i : int = 0; i < _users.length; i++) {
-			if (_users[i].id == id) {
-				_users.splice(i, 1);
-				break;
-			}
+    public function deleteUser(id : String) : void {
+        for (var i : int = 0; i < _users.length; i++) {
+            if (_users[i].id == id) {
+                _users.splice(i, 1);
+                break;
+            }
+        }
+
+        sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
+    }
+	
+	/**
+	 * 初始化商品列表
+	 * [[id,SBN,name,num,madeTime,operator,storeTime, retailPrice], [id,SBN,name,num,madeTime,operator,storeTime, retailPrice], ...]
+	 * @param arr
+	 */
+	public function initStore(data : String) : void {
+		_stores = [];
+		var ba : ByteArray = Base64.decode(data);
+		ba.uncompress();
+		ba.position = 0;
+		var json : String = ba.readUTFBytes(ba.bytesAvailable);
+		var arr : Array = JSON.decode(json);
+		
+		for each (var ar : Array in arr) {
+			var vo : StoreVo = StoreVo.fromArr(ar);
+			_stores.push(vo);
 		}
 		
-		sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
+		sendNotification(InvoicingDataNotice.STORE_LIST_UPDATE);
 	}
-	
+
     /**
      * 帐号
      */
@@ -275,6 +296,10 @@ public class InvoicingDataProxy extends Proxy {
 
     public function get type() : int {
         return _type;
+    }
+
+    public function get stores() : Array {
+        return _stores;
     }
 
 

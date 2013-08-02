@@ -30,7 +30,8 @@ public class StorgeMediator extends AbsMediator {
     private function show() : void {
         if (_panel == null) {
             _panel = new StorgeUI();
-            _panel.addEventListener(StorgeUIEvent.SHOW_COURIER_MANAGE, __showCourierHandler);
+			_panel.addEventListener(StorgeUIEvent.SHOW_STORE_SEARCH, __showStoreSearchHandler);
+			_panel.addEventListener(StorgeUIEvent.SHOW_COURIER_MANAGE, __showCourierHandler);
             _panel.addEventListener(StorgeUIEvent.SHOW_GOODS_MANAGE, __showGoodsManageHandler);
             _panel.addEventListener(StorgeUIEvent.SHOW_IN_GOODS_LOG, __showInGoodsHandler);
             _panel.addEventListener(StorgeUIEvent.SHOW_OUT_GOODS_LOG, __showOutGoodsHandler);
@@ -39,6 +40,11 @@ public class StorgeMediator extends AbsMediator {
 
     }
 
+	private function __showStoreSearchHandler(e : Event):void{
+		
+		sendNotification(StoreListMediator.SHOW, _panel);
+	}
+	
     private function __showCourierHandler(e : Event) : void {
         sendNotification(CourierMediator.SHOW, _panel);
     }
