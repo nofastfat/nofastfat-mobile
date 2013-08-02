@@ -35,7 +35,7 @@
                click="showAddPanel()"
                icon="@Embed(source='../../../../../../assets/add.png')"
                width="122.8"
-               height="33"/>
+               height="33" id="addBtn"/>
     <mx:DataGrid x="0"
                  y="75"
                  width="100%"
@@ -55,7 +55,7 @@
                                showDataTips="true"
                                dataTipField="info"
                                dataField="info"/>
-            <mx:DataGridColumn headerText="操作"
+            <mx:DataGridColumn headerText="操作" id="ctrlCol"
                                width="148"
                                itemRenderer="com.xy.view.ui.render.GoodsItemCtrl"/>
         </mx:columns>
@@ -69,18 +69,19 @@
 
     <mx:Script>
         <![CDATA[
-            import com.adobe.utils.StringUtil;
-            import com.xy.model.vo.GoodsVo;
-            import com.xy.model.vo.ResultVo;
-            import com.xy.view.events.GoodsManageUIEvent;
-            import com.xy.view.events.GoodsPanelEvent;
-            import com.xy.view.ui.ProgressUI;
-
-            import flash.net.sendToURL;
-
-            import mx.collections.ArrayCollection;
-            import mx.events.ResizeEvent;
-            import mx.managers.PopUpManager;
+			import com.adobe.utils.StringUtil;
+			import com.xy.model.Purview;
+			import com.xy.model.vo.GoodsVo;
+			import com.xy.model.vo.ResultVo;
+			import com.xy.view.events.GoodsManageUIEvent;
+			import com.xy.view.events.GoodsPanelEvent;
+			import com.xy.view.ui.ProgressUI;
+			
+			import flash.net.sendToURL;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
 
             [Bindable]
             public var tableData : ArrayCollection = new ArrayCollection();
@@ -110,12 +111,14 @@
                 }
             }
 
-            public function setDatas(arr : Array, types : Array, chooseId : int = -1) : void {
+            public function setDatas(arr : Array, types : Array, hasPurview:Boolean, chooseId : int = -1) : void {
                 if (arr == null) {
                     _isInit = false;
                     return;
                 }
 
+				addBtn.visible = ctrlCol.visible = hasPurview;
+				
                 _datas = arr;
                 _isInit = true;
                 _types = types;

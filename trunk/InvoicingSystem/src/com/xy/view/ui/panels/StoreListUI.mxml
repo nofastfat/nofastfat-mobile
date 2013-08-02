@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:SecondContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
+                    width="438"
+                    xmlns:ui="com.xy.view.ui.*"
+                    height="246"
+                    resize="secondcontentui1_resizeHandler(event)"
+                    fontSize="12">
+    <mx:Script>
+        <![CDATA[
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.StoreVo;
+            
+            import mx.collections.ArrayCollection;
+            import mx.events.ResizeEvent;
+
+            [Bindable]
+            private var _datas : ArrayCollection = new ArrayCollection();
+
+            private var _sotre : Array = [];
+
+            public function setData(store : Array, showPrice : Boolean) : void {
+                _sotre = store;
+                search();
+				
+				
+				priceCol.visible = showPrice;
+				
+            }
+
+            protected function secondcontentui1_resizeHandler(event : ResizeEvent) : void {
+                tb.height = this.height - tb.y;
+            }
+
+            private function search() : void {
+                var txt : String = StringUtil.trim(searchTf.text);
+                var arr : Array = [];
+
+                if (txt == "") {
+                    arr = _sotre;
+                } else {
+                    for each (var vo : StoreVo in _sotre) {
+                        if (vo.name.indexOf(txt) != -1) {
+							arr.push(vo);
+                        }
+                    }
+                }
+
+                _datas = new ArrayCollection(arr);
+            }
+        ]]>
+    </mx:Script>
+	
+	<mx:Style>
+		.inputTf{
+			padding-top:5px;
+		}
+	</mx:Style>
+    <mx:Label x="32"
+              y="3"
+              text="库存查询 »"/>
+    <mx:Image x="0"
+              y="0"
+              source="@Embed(source='../../../../../../assets/storgeSearch24.png')"/>
+    <mx:HRule x="0"
+              y="25"
+              width="100%"
+              height="1"/>
+    <mx:TextInput x="0"
+                  y="34"
+                  styleName="inputTf"
+                  width="210"
+                  id="searchTf"
+                  height="33"/>
+    <mx:Button x="223"
+               y="34"
+               icon="@Embed(source='../../../../../../assets/search.png')"
+               click="search()"
+               label="查找"
+               height="33"/>
+    <mx:DataGrid x="0"
+                 dataProvider="{_datas}"
+                 y="75"
+                 id="tb"
+                 width="100%"
+                 height="171">
+        <mx:columns>
+            <mx:DataGridColumn headerText="SBN号"
+                               dataField="SBN"/>
+            <mx:DataGridColumn headerText="商品名"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="库存数量"
+                               dataField="num"/>
+            <mx:DataGridColumn headerText="生产日期"
+                               dataField="madeTimeStr"/>
+            <mx:DataGridColumn headerText="入库人"
+                               dataField="operator"/>
+            <mx:DataGridColumn headerText="入库时间"
+                               dataField="storeTimeStr"/>
+            <mx:DataGridColumn headerText="进货价" id="priceCol"
+                               dataField="retailPrice"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+</ui:SecondContentUI>

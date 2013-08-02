@@ -5,6 +5,7 @@ import com.xy.cmd.courier.ModifyCourierCmd;
 import com.xy.cmd.courier.QueryCourierCmd;
 import com.xy.interfaces.AbsMediator;
 import com.xy.interfaces.Map;
+import com.xy.model.Purview;
 import com.xy.model.enum.InvoicingDataNotice;
 import com.xy.model.vo.ResultVo;
 import com.xy.view.events.CourierUIEvent;
@@ -77,7 +78,7 @@ public class CourierMediator extends AbsMediator {
     }
 
     private function courierListUpdate(keyGoodsId : int = -1) : void {
-        _panel.setDatas(dataProxy.couriers, keyGoodsId);
+        _panel.setDatas(dataProxy.couriers, Purview.canAddCourier(dataProxy.type), keyGoodsId);
     }
 
 }
