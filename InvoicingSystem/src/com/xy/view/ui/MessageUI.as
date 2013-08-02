@@ -47,7 +47,8 @@ public class MessageUI extends Sprite {
 
     public function showMessage(msg : String) : void {
         _tf.text = msg;
-
+		
+		_tf.width = _tf.textWidth + 10;
         var w : int = _tf.x + _tf.textWidth + 10;
 
         _bg.graphics.clear();

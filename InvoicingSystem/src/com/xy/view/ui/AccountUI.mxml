@@ -62,8 +62,21 @@
                     tb.height = h;
                 }
             }
+
+            public function deleteUser(vo : AccountVo) : void {
+				dispatchEvent(new AccountUIEvent(AccountUIEvent.DELETE_USER, this, vo));
+            }
+
+            public function resetPwd(vo : AccountVo) : void {
+				dispatchEvent(new AccountUIEvent(AccountUIEvent.RESET_PWD, this, vo));
+            }
         ]]>
     </mx:Script>
+	<mx:Style>
+		.inputTf{
+			padding-top:5px;
+		}
+	</mx:Style>
     <mx:Button x="110"
                y="10"
                labelPlacement="bottom"

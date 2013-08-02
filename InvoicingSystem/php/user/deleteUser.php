@@ -37,7 +37,7 @@
 	$sql = "delete from UsersTb where id='".$delId."'";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "true");
+		echo makeJsonRs(true, "删除用户成功");
 	}else{
 		echo makeJsonRs(false, "删除用户失败");
 	}

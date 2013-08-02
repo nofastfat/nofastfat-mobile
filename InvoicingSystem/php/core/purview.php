@@ -60,5 +60,10 @@
 		static public function canQuerySoldLog($type){
 			return $type <= 2;
 		}
+		
+		//是否可以重置密码
+		static public function canModifyPwd($type){
+			return $type <= 2;
+		}
 	}
 ?>

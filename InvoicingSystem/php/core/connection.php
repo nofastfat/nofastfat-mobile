@@ -11,8 +11,8 @@
 			'type' int, 
 			creator VARCHAR(200)
 			);",
-		//"insert into UsersTb (id, pwd, type, creator) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, '');"
-		"insert into UsersTb (id, pwd, type, creator) values ('admin', 'admin', 1, '');",
+		"insert into UsersTb (id, pwd, type, creator) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, '');",
+		//"insert into UsersTb (id, pwd, type, creator) values ('admin', 'admin', 1, '');",
 		"CREATE TABLE [Commodity] (
 			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 			[name] VARCHAR(200)  NOT NULL,

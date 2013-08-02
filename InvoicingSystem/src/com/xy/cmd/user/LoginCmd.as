@@ -1,4 +1,5 @@
 package com.xy.cmd.user {
+import com.adobe.crypto.MD5;
 import com.xy.interfaces.AbsCommand;
 import com.xy.model.Config;
 import com.xy.model.vo.ResultVo;
@@ -29,6 +30,7 @@ public class LoginCmd extends AbsCommand {
     override public function execute(notification : INotification) : void {
         _uid = notification.getBody()[0];
         _pwd = notification.getBody()[1];
+		_pwd = MD5.hash(_pwd);
 
         var url : String = Config.makeLoginUrl(_uid, _pwd);
         new Http(url, loginRs);
