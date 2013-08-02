@@ -45,6 +45,10 @@ public class InvoicingDataProxy extends Proxy {
         _type = type;
     }
 
+	public function changePwd(pwd:String):void{
+		_pwd = pwd;
+	}
+	
     /**
      * 初始化商品列表
      * [[id, name, description, weight, SBNId, type], [id, name, description, weight, SBNId, type], ...]
@@ -232,6 +236,17 @@ public class InvoicingDataProxy extends Proxy {
         sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
     }
 
+	public function deleteUser(id : String):void{
+		for (var i : int = 0; i < _users.length; i++) {
+			if (_users[i].id == id) {
+				_users.splice(i, 1);
+				break;
+			}
+		}
+		
+		sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
+	}
+	
     /**
      * 帐号
      */

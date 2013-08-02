@@ -1,54 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-				layout="absolute"
-				width="400"
-				height="220"
-				fontSize="12"
-				titleIcon="@Embed(source='../../../../../../assets/accountModifyPwd24.png')"
-				showCloseButton="true"
-				close="PopUpManager.removePopUp(this);"
-				title="修改密码">
-	<mx:Script>
-		<![CDATA[
-			import mx.managers.PopUpManager;
-		]]>
-	</mx:Script>
-	<mx:Label x="20" y="22" text="旧密码:" width="82" textAlign="right"/>
-	<mx:Label x="20" y="55" text="新密码:" width="82" textAlign="right"/>
-	<mx:TextInput x="110" y="20"/>
-	<mx:Label x="20" y="87" text="确认新密码:" width="82" textAlign="right"/>
-	<mx:Button x="88"
-			   y="141"
-			   label="修改"
-			   id="addBtn"
-			   click="submit()"
-			   width="77"/>
-	<mx:Button x="197"
-			   y="141"
-			   id="closeBtn"
-			   click="PopUpManager.removePopUp(this);"
-			   label="取消"
-			   width="74"/>
-	<mx:Image x="278"
-			  y="20"
-			  id="nameError"
-			  source="@Embed(source='../../../../../../assets/error.png')"/>
-	<mx:Text x="10"
-			 y="115"
-			 text="请求处理中..."
-			 width="360"
-			 textAlign="center"
-			 color="#FF1D0C"
-			 id="msgTf"/>
-	<mx:TextInput x="110" y="53" displayAsPassword="true"/>
-	<mx:TextInput x="110" y="85" displayAsPassword="true"/>
-	<mx:Image x="278"
-			  y="52"
-			  id="nameError0"
-			  source="@Embed(source='../../../../../../assets/error.png')"/>
-	<mx:Image x="278"
-			  y="84"
-			  id="nameError1"
-			  source="@Embed(source='../../../../../../assets/error.png')"/>
-	
+                layout="absolute"
+                width="400"
+                height="220"
+                fontSize="12"
+                titleIcon="@Embed(source='../../../../../../assets/accountModifyPwd24.png')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this);"
+                title="修改密码">
+    <mx:Script>
+        <![CDATA[
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.ResultVo;
+            import com.xy.util.EnterFrameCall;
+            import com.xy.view.events.ModifyPwdPanelEvent;
+
+            import mx.managers.PopUpManager;
+
+            private function submit() : void {
+                var oldPwd : String = StringUtil.trim(oldPwdTf.text);
+                if (oldPwd == "") {
+                    oldError.visible = true;
+                    msgTf.text = "请输出旧密码";
+                    EnterFrameCall.getStage().focus = oldPwdTf;
+                    return;
+                } else {
+                    oldError.visible = false;
+                }
+
+                var newPwd1 : String = StringUtil.trim(newPwd1Tf.text);
+                if (newPwd1 == "") {
+                    newError1.visible = true;
+                    msgTf.text = "请输出新密码";
+                    EnterFrameCall.getStage().focus = newPwd1Tf;
+                    return;
+                } else {
+					newError1.visible = false;
+                }
+
+                var newPwd2 : String = StringUtil.trim(newPwd2Tf.text);
+                if (newPwd2 == "") {
+                    newError2.visible = true;
+                    msgTf.text = "请输出确认密码";
+                    EnterFrameCall.getStage().focus = newPwd2Tf;
+                    return;
+                } else {
+					newError2.visible = false;
+                }
+
+                if (newPwd1 != newPwd2) {
+                    newError2.visible = true;
+                    msgTf.text = "2次密码不一致";
+                    EnterFrameCall.getStage().focus = newPwd2Tf;
+                    return;
+                } else {
+					newError2.visible = false;
+                }
+
+                showCloseButton = false;
+                msgTf.text = "数据提交中...";
+                addBtn.enabled = false;
+                closeBtn.enabled = false;
+                oldError.visible = false;
+                newError1.visible = false;
+                newError2.visible = false;
+
+                dispatchEvent(new ModifyPwdPanelEvent(ModifyPwdPanelEvent.MODIFY_PWD, oldPwd, newPwd1));
+            }
+
+            public function initShow() : void {
+                showCloseButton = true;
+                addBtn.enabled = true;
+                closeBtn.enabled = true;
+
+                oldPwdTf.text = "";
+                newPwd1Tf.text = "";
+                newPwd2Tf.text = "";
+                oldError.visible = false;
+                newError1.visible = false;
+                newError2.visible = false;
+                msgTf.text = "";
+
+            }
+
+            public function addResult(vo : ResultVo) : void {
+                showCloseButton = true;
+                addBtn.enabled = true;
+                closeBtn.enabled = true;
+
+                oldError.visible = false;
+                newError1.visible = false;
+                newError2.visible = false;
+                msgTf.text = vo.data as String;
+            }
+        ]]>
+    </mx:Script>
+    <mx:Label x="20"
+              y="22"
+              text="旧密码:"
+              width="82"
+              textAlign="right"/>
+    <mx:Label x="20"
+              y="55"
+              text="新密码:"
+              width="82"
+              textAlign="right"/>
+    <mx:TextInput x="110"
+                  restrict="a-zA-Z0-9_@."
+                  y="20"
+                  id="oldPwdTf"
+                  displayAsPassword="true"/>
+    <mx:Label x="20"
+              y="87"
+              text="确认新密码:"
+              width="82"
+              textAlign="right"/>
+    <mx:Image x="278"
+              y="20"
+              id="oldError"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Text x="10"
+             y="115"
+             text="请求处理中..."
+             width="360"
+             textAlign="center"
+             color="#FF1D0C"
+             id="msgTf"/>
+    <mx:TextInput x="110"
+                  y="53"
+                  restrict="a-zA-Z0-9_@."
+                  displayAsPassword="true"
+                  id="newPwd1Tf"/>
+    <mx:TextInput x="110"
+                  restrict="a-zA-Z0-9_@."
+                  y="85"
+                  displayAsPassword="true"
+                  id="newPwd2Tf"/>
+    <mx:Image x="278"
+              y="52"
+              id="newError1"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Image x="278"
+              y="84"
+              id="newError2"
+              source="@Embed(source='../../../../../../assets/error.png')"/>
+    <mx:Button x="88"
+               y="141"
+               label="修改"
+               id="addBtn"
+               click="submit()"
+               width="77"/>
+    <mx:Button x="197"
+               y="141"
+               id="closeBtn"
+               click="PopUpManager.removePopUp(this);"
+               label="取消"
+               width="74"/>
 </mx:TitleWindow>

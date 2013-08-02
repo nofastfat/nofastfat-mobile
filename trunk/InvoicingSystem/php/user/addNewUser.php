@@ -1,11 +1,11 @@
 <?php
-	//addNewUser.php?self=admin&selfPwd=admin&newId=test3&newPwd=test3&newType=3
+	//addNewUser.php?self=admin&selfPwd=admin&newId=test3&newType=3
 	header("Content-Type: text/html; charset=UTF-8");
 	
 	$self = getParam("self");
 	$selfPwd = getParam("selfPwd");
 	$newId = getParam("newId");
-	$newPwd = getParam("newPwd");
+	$newPwd = "21218cca77804d2ba1922c33e0151105";
 	$newType = getParam("newType");
 	
 	

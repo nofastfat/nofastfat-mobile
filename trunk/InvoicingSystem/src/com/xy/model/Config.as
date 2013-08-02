@@ -126,28 +126,62 @@ public class Config {
         rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.SBN, vo.name, vo.num, vo.retailPrice, vo.madeTime);
         return rs;
     }
-	
-	/**
-	 * 添加用户
-	 * @param vo
-	 * @return
-	 */
-	public static function makeAddUserUrl(vo : AccountVo) : String {
-		var rs : String = HTTP_URL + "?method=addNewUser&self={0}&selfPwd={1}&newId={2}&newPwd={3}&newType={4}" + "&r=" + Math.random();
-		rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id, 888888, vo.type);
-		return rs;
-	}
-	
-	/**
-	 * 获取用户列表
-	 * @param vo
-	 * @return
-	 */
-	public static function makeQueryUserUrl() : String {
-		var rs : String = HTTP_URL + "?method=queryUsers&self={0}&selfPwd={1}" + "&r=" + Math.random();
-		rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
-		return rs;
-	}
+
+    /**
+     * 添加用户
+     * @param vo
+     * @return
+     */
+    public static function makeAddUserUrl(vo : AccountVo) : String {
+        var rs : String = HTTP_URL + "?method=addNewUser&self={0}&selfPwd={1}&newId={2}&newType={3}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id, vo.type);
+        return rs;
+    }
+
+    /**
+     * 获取用户列表
+     * @param vo
+     * @return
+     */
+    public static function makeQueryUserUrl() : String {
+        var rs : String = HTTP_URL + "?method=queryUsers&self={0}&selfPwd={1}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
+        return rs;
+    }
+
+    /**
+     * 修改密码
+     * @param oldPwd
+     * @param newPwd
+     * @return
+     */
+    public static function makeModifyPwdUrl(oldPwd : String, newPwd : String) : String {
+        var rs : String = HTTP_URL + "?method=changePwd&uid={0}&oldPwd={1}&newPwd={2}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, oldPwd, newPwd);
+        return rs;
+    }
+
+    /**
+     * 删除用户
+     * @param vo
+     * @return
+     */
+    public static function makeDeleteUserUrl(vo : AccountVo) : String {
+        var rs : String = HTTP_URL + "?method=deleteUser&self={0}&selfPwd={1}&delId={2}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id);
+        return rs;
+    }
+
+    /**
+     * 重置密码
+     * @param vo
+     * @return
+     */
+    public static function makeResetPwdUrl(vo : AccountVo) : String {
+        var rs : String = HTTP_URL + "?method=resetPwd&self={0}&selfPwd={1}&uid={2}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.id);
+        return rs;
+    }
 
     public static function get dataProxy() : InvoicingDataProxy {
         return Facade.getInstance().retrieveProxy(InvoicingDataProxy.NAME) as InvoicingDataProxy;

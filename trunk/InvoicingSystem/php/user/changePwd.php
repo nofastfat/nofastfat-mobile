@@ -15,9 +15,9 @@
 	$sql = "update UsersTb set pwd='".$newPwd."' where id='".$uid."' and pwd='".$oldPwd."'";
 	$rs = execute($db, $sql);
 	if($rs == 1){
-		echo makeJsonRs(true, "true");
+		echo makeJsonRs(true, "修改密码成功");
 	}else{
-		echo makeJsonRs(false, "修改密码失败");
+		echo makeJsonRs(false, "修改密码失败,可能是旧密码不正确");
 	}
 	closeConn($db);
 

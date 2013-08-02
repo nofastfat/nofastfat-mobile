@@ -8,7 +8,7 @@
 	$method = $_GET["method"];
 	$map = array(
 		//添加新用户
-		//?method=addNewUser&self=admin&selfPwd=admin&newId=test3&newPwd=test3&newType=3
+		//?method=addNewUser&self=admin&selfPwd=admin&newId=test3&newType=3
 		"addNewUser" => "user/addNewUser.php",
 		
 		//修改密码
@@ -22,6 +22,10 @@
 		//登录
 		//?method=login&uid=admin&pwd=admin
 		"login"		 => "user/login.php",
+		
+		//重置密码
+		//?method=resetPwd&self=admin&selfPwd=admin&uid=admin
+		"resetPwd"		 => "user/resetPwd.php",
 
 		//账户查询
 		//?method=queryUsers&self=admin&selfPwd=admin
