@@ -54,7 +54,7 @@
 		$rs = base64_encode($rs);
 		echo makeJsonRs(true, $rs);
 	}else{
-		echo makeJsonRs(false, "添加新商品失败");
+		echo makeJsonRs(false, "添加新商品失败, $sql");
 	}
 
 	closeConn($db);

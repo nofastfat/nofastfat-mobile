@@ -14,7 +14,7 @@
 		"insert into UsersTb (id, pwd, type, creator) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, '');",
 		//"insert into UsersTb (id, pwd, type, creator) values ('admin', 'admin', 1, '');",
 		"CREATE TABLE [Commodity] (
-			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+			[id] INTEGER  PRIMARY KEY,
 			[name] VARCHAR(200)  NOT NULL,
 			[description] VARCHAR(200)  NULL,
 			[weight] FLOAT DEFAULT '''''''0''''''' NULL,
@@ -22,7 +22,7 @@
 			[type] VARCHAR(200)  NOT NULL
 			)",
 		"CREATE TABLE [PurchaseLog] (
-			[id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+			[id] INTEGER  PRIMARY KEY,
 			[logTime] NUMERIC  NULL,
 			[commonditySBN] VARCHAR(200)  NULL,
 			[commondityName] VARCHAR(200)  NULL,
@@ -32,7 +32,7 @@
 			[operator] VARCHAR(200)  NULL
 			)",
 		"CREATE TABLE [Store] (
-			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+			[id] INTEGER  PRIMARY KEY,
 			[SBN] VARCHAR(200)  NULL,
 			[name] VARCHAR(200)  NULL,
 			[num] INTEGER  NULL,
@@ -42,7 +42,7 @@
 			[retailPrice] FLOAT  NULL
 			)",
 		"CREATE TABLE [SoldLog] (
-			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+			[id] INTEGER  PRIMARY KEY,
 			[soldTime] NUMERIC  NULL,
 			[clientName] VARCHAR(200)  NULL,
 			[SBN] VARCHAR(400)  NULL,
@@ -57,7 +57,7 @@
 			[profit] FLOAT  NULL
 			)",
 		"CREATE TABLE [SendCompany] (
-			[id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+			[id] INTEGER  PRIMARY KEY,
 			[name] VARCHAR(200)  NULL
 			)"
 	);
@@ -106,12 +106,13 @@
 			}
 
 		}else{
-			$rs =sqlite_query($db,$sql);
+			$rs =sqlite_query($db,$sql, SQLITE_NUM);
 			//echo "<font color='red'>".$error."</font>";
 			while ($row = sqlite_fetch_array($rs)) {
-				for($i = 0; $i < count($row); $i++){
-					$row[$i] = iconv("gb2312", "UTF-8", $row[$i]);
-				}
+				//$tmp = array();
+				//for($i = 0; $i < count($row); $i++){
+				//	$tmp[$i] = $row[$i];
+				//}
 				array_push($arr, $row);
 			}
 		}
@@ -129,9 +130,10 @@
 
 		}else{
 			if(sqlite_query($db,$sql, 0666, $error)){
-				//echo "<font color='red'>".$error."</font>";
+				//echo "<font color='red'>1.".$error."</font>";
 				return sqlite_changes($db);
 			}else{
+				//echo "<font color='red'>2.".$error."</font>";
 				return false;
 			}
 		}
