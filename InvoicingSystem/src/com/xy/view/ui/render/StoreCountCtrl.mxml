@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="114"
+           height="26">
+           <mx:Script>
+           	<![CDATA[
+           		import com.xy.model.vo.StoreVo;
+           		
+           		override public function set data(value:Object):void{
+           			super.data = value;
+           			
+           			numberUI.maximum = (value as StoreVo).num;
+           			(value as StoreVo).soldCount = 1;
+           			numberUI.value = 1;
+           		}
+           		
+           		private function changeHandler():void{
+           			(data as StoreVo).soldCount = numberUI.value;
+           		}
+           	]]>
+           </mx:Script>
+    <mx:NumericStepper x="10" id="numberUI" change="changeHandler()"
+                       y="2"
+                       width="93"
+                       minimum="1"/>
+
+</mx:Canvas>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="34"
+           height="24">
+    <mx:Script>
+    	<![CDATA[
+    		import com.xy.view.ui.panels.AddFromStorePanel;
+    		import com.xy.model.vo.StoreVo;
+    		override public function set data(value:Object):void{
+    			super.data = value;
+    			selectedUI.selected = (value as StoreVo).selected;
+    		}
+    		
+    		private function clickHandler():void{
+    			(data as StoreVo).selected = selectedUI.selected;
+            }
+    	]]>
+    </mx:Script>
+    <mx:CheckBox x="10" id="selectedUI" click="clickHandler()"
+                 y="3"/>
+	
+</mx:Canvas>

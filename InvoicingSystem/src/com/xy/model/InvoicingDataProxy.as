@@ -1,11 +1,12 @@
 package com.xy.model {
 import com.adobe.serialization.json.JSON;
-import com.xy.model.enum.AccountType;
 import com.xy.model.enum.InvoicingDataNotice;
 import com.xy.model.vo.AccountTypeVo;
 import com.xy.model.vo.AccountVo;
 import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
+import com.xy.model.vo.PurchaseLogVo;
+import com.xy.model.vo.SoldLogVo;
 import com.xy.model.vo.StoreVo;
 import com.xy.util.Base64;
 
@@ -27,6 +28,10 @@ public class InvoicingDataProxy extends Proxy {
     private var _couriers : Array;
 
     private var _stores : Array;
+
+    private var _soldLogs : Array;
+
+    private var _purchaseLogs : Array;
 
     private var _users : Array;
 
@@ -246,26 +251,68 @@ public class InvoicingDataProxy extends Proxy {
 
         sendNotification(InvoicingDataNotice.USER_LIST_UPDATE);
     }
+
+    /**
+     * 初始化商品列表
+     * [[id,SBN,name,num,madeTime,operator,storeTime, retailPrice], [id,SBN,name,num,madeTime,operator,storeTime, retailPrice], ...]
+     * @param arr
+     */
+    public function initStore(data : String) : void {
+        _stores = [];
+        var ba : ByteArray = Base64.decode(data);
+        ba.uncompress();
+        ba.position = 0;
+        var json : String = ba.readUTFBytes(ba.bytesAvailable);
+        var arr : Array = JSON.decode(json);
+
+        for each (var ar : Array in arr) {
+            var vo : StoreVo = StoreVo.fromArr(ar);
+            _stores.push(vo);
+        }
+
+        sendNotification(InvoicingDataNotice.STORE_LIST_UPDATE);
+    }
+
+    public function initSoldLog(data : String) : void {
+        _soldLogs = [];
+
+        var ba : ByteArray = Base64.decode(data);
+        ba.uncompress();
+        ba.position = 0;
+        var json : String = ba.readUTFBytes(ba.bytesAvailable);
+        var arr : Array = JSON.decode(json);
+
+        for each (var ar : Array in arr) {
+            var vo : SoldLogVo = SoldLogVo.fromArr(ar);
+            _soldLogs.push(vo);
+        }
+
+        sendNotification(InvoicingDataNotice.SOLD_LOG_UPDATE);
+    }
+
+    public function initPurchaseLog(data : String) : void {
+        _purchaseLogs = [];
+
+        var ba : ByteArray = Base64.decode(data);
+        ba.uncompress();
+        ba.position = 0;
+        var json : String = ba.readUTFBytes(ba.bytesAvailable);
+        var arr : Array = JSON.decode(json);
+
+        for each (var ar : Array in arr) {
+            var vo : PurchaseLogVo = PurchaseLogVo.fromArr(ar);
+            _purchaseLogs.push(vo);
+        }
+
+        sendNotification(InvoicingDataNotice.PURCHASE_LOG_UPDATE);
+    }
+
+	public function clearSoldLog():void{
+		_soldLogs = null;
+	}
 	
-	/**
-	 * 初始化商品列表
-	 * [[id,SBN,name,num,madeTime,operator,storeTime, retailPrice], [id,SBN,name,num,madeTime,operator,storeTime, retailPrice], ...]
-	 * @param arr
-	 */
-	public function initStore(data : String) : void {
-		_stores = [];
-		var ba : ByteArray = Base64.decode(data);
-		ba.uncompress();
-		ba.position = 0;
-		var json : String = ba.readUTFBytes(ba.bytesAvailable);
-		var arr : Array = JSON.decode(json);
-		
-		for each (var ar : Array in arr) {
-			var vo : StoreVo = StoreVo.fromArr(ar);
-			_stores.push(vo);
-		}
-		
-		sendNotification(InvoicingDataNotice.STORE_LIST_UPDATE);
+	public function clearPurchaseLog():void{
+		_purchaseLogs = null;
 	}
 
     /**
@@ -302,6 +349,13 @@ public class InvoicingDataProxy extends Proxy {
         return _stores;
     }
 
+    public function get soldLogs() : Array {
+        return _soldLogs;
+    }
+
+    public function get purchaseLogs() : Array {
+        return _purchaseLogs;
+    }
 
 }
 }

@@ -16,6 +16,9 @@ public class StoreVo {
     public var storeTime : Number = 0;
     public var retailPrice : Number = 0;
 	
+	
+	public var soldCount : int = 0;
+	public var selected : Boolean = false;
 	private var _madeTimeStr : String;
 	private var _storeTimeStr : String;
 

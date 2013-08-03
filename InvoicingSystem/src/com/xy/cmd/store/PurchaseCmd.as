@@ -44,11 +44,11 @@ public class PurchaseCmd extends AbsCommand {
                 dataProxy.clearStore();
                 
 				ProgressUI.show();
-                //TODO 重新请求
             } else {
                 dataProxy.addStore(newVo);
             }
             Alert.show("入库成功");
+            dataProxy.clearPurchaseLog();
         }
 
         /* UI显示 */

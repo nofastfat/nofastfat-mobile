@@ -54,9 +54,11 @@ public class StorgeMediator extends AbsMediator {
     }
 
     private function __showInGoodsHandler(e : Event) : void {
+    	sendNotification(PurchaseLogMediator.SHOW, _panel);
     }
 
     private function __showOutGoodsHandler(e : Event) : void {
+    	sendNotification(SoldLogMediator.SHOW, _panel);
     }
 
     public function get ui() : InvoicingSystem {

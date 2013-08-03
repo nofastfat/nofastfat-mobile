@@ -18,7 +18,12 @@
 		exit;
 	}
 
-	$sql = "select * from SoldLog";
+	if(Tools::canSeeRetailPrice($rs[0][0])){
+		$sql = "select * from SoldLog";
+	}else{
+		$sql = "select id,soldTime,clientName,SBN,name,num,totalWeight,soldAddress,senderCompany,sendId,sendPrice,clientPay from SoldLog";
+	}
+	
 	$rs = query($db, $sql);
 	$rs = json_encode($rs);
 	$rs = gzcompress($rs, 9);
