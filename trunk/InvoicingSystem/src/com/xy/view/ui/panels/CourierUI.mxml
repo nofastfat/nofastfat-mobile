@@ -88,6 +88,10 @@
             }
 
             public function addResult(vo : ResultVo) : void {
+            	if(_courierPanel == null){
+            		return;
+            	}
+            	
                 if (vo.status) {
                     PopUpManager.removePopUp(_courierPanel);
                 } else {

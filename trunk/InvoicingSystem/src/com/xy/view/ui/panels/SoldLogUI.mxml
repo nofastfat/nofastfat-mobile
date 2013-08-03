@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:SecondContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
+                    width="526"
+                    xmlns:ui="com.xy.view.ui.*"
+                    height="322"
+                    fontSize="12">
+    <mx:Script>
+        <![CDATA[
+            import com.xy.model.vo.SoldLogVo;
+            import com.adobe.utils.StringUtil;
+            import mx.collections.ArrayCollection;
+
+            [Bindable]
+            private var _datas : ArrayCollection = new ArrayCollection();
+
+            private var _arr : Array = [];
+
+            public function setData(arr : Array, canSeePrice : Boolean) : void {
+                _arr = arr;
+
+                profitUI.visible = canSeePrice;
+                
+                search();
+            }
+
+            private function search() : void {
+                var txt : String = StringUtil.trim(searchTf.text);
+
+                var rs : Array = [];
+                if (txt == "") {
+                    rs = _arr;
+                } else {
+                    for each (var vo : SoldLogVo in _arr) {
+                        if (vo.clientName.indexOf(txt) != -1 ||
+                            vo.name.indexOf(txt) != -1 ||
+                            vo.senderCompany.indexOf(txt) != -1 ||
+                            vo.soldAddress.indexOf(txt) != -1) {
+                            rs.push(vo);
+                        }
+                    }
+                }
+
+                _datas = new ArrayCollection(rs);
+
+            }
+        ]]>
+    </mx:Script>
+    <mx:Style>
+		.inputTf{
+			padding-top:5px;
+		}
+    </mx:Style>
+    <mx:Label x="32"
+              y="3"
+              text="出库日志 »"/>
+    <mx:Image x="0"
+              y="0"
+              source="@Embed(source='../../../../../../assets/logs_out24.png')"/>
+    <mx:HRule x="0"
+              y="25"
+              width="100%"
+              height="1"/>
+    <mx:TextInput x="0"
+                  y="34"
+                  styleName="inputTf"
+                  width="210"
+                  id="searchTf"
+                  height="33"/>
+    <mx:Button x="223"
+               y="34"
+               icon="@Embed(source='../../../../../../assets/search.png')"
+               click="search()"
+               label="查找"
+               height="33"/>
+    <mx:DataGrid x="0"
+                 y="75"
+                 dataProvider="{_datas}"
+                 width="100%"
+                 height="247">
+        <mx:columns>
+            <mx:DataGridColumn headerText="出货时间"
+                               dataField="soldTimeStr"/>
+            <mx:DataGridColumn headerText="客户姓名"
+                               dataField="clientName"/>
+            <mx:DataGridColumn headerText="SBN"
+                               dataField="SBN"/>
+            <mx:DataGridColumn headerText="货物"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="数量"
+                               dataField="num"/>
+            <mx:DataGridColumn headerText="总重量"
+                               dataField="totalWeight"/>
+            <mx:DataGridColumn headerText="收货地址"
+                               dataField="soldAddress"/>
+            <mx:DataGridColumn headerText="快递"
+                               dataField="senderCompany"/>
+            <mx:DataGridColumn headerText="快递号"
+                               dataField="sendId"/>
+            <mx:DataGridColumn headerText="快递费（元）"
+                               dataField="sendPrice"/>
+            <mx:DataGridColumn headerText="用户付款（元）"
+                               dataField="clientPay"/>
+            <mx:DataGridColumn headerText="利润（元）"
+                               id="profitUI"
+                               dataField="profit"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+</ui:SecondContentUI>

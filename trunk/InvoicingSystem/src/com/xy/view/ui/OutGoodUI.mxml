@@ -2,33 +2,330 @@
 <ui:ContentUI xmlns:mx="http://www.adobe.com/2006/mxml"
               xmlns:ui="com.xy.view.ui.*"
               layout="absolute"
-			  title="出货 »"
-			  titleIcon="@Embed(source='../../../../../assets/outGoods24.png')"
-              width="522"
-              height="460">
-	<mx:Label x="10" y="10" text="客户名:" width="79" textAlign="right"/>
-	<mx:Label x="218" y="10" text="总重量(kg):" width="76" textAlign="right"/>
-	<mx:Label x="10" y="102" text="地址:" width="79" textAlign="right"/>
-	<mx:Label x="10" y="42" text="快递公司:" width="79" textAlign="right"/>
-	<mx:Label x="232" y="41" text="快递单号:" width="62" textAlign="right"/>
-	<mx:Label x="232" y="72" text="运费(元):" width="62" textAlign="right"/>
-	<mx:Label x="10" y="72" text="付款(元):" width="79" textAlign="right"/>
-	<mx:Label x="10" y="134" text="货物清单:" width="79" textAlign="right"/>
-	<mx:DataGrid x="31" y="162" width="461" height="201">
-		<mx:columns>
-			<mx:DataGridColumn headerText="货物" dataField="col1"/>
-			<mx:DataGridColumn headerText="数量" dataField="col2"/>
-			<mx:DataGridColumn headerText="操作" dataField="col3"/>
-		</mx:columns>
-	</mx:DataGrid>
-	<mx:Button x="193" y="371" label="出货" width="101" height="37"/>
-	<mx:Button x="97" y="132" label="添加货物"/>
-	<mx:TextInput x="97" y="8" width="113"/>
-	<mx:TextInput x="302" y="8" width="122"/>
-	<mx:ComboBox x="97" y="39" width="113"></mx:ComboBox>
-	<mx:TextInput x="302" y="39" width="190"/>
-	<mx:TextInput x="302" y="70" width="122"/>
-	<mx:TextInput x="97" y="70" width="113"/>
-	<mx:TextInput x="97" y="100" width="395"/>
+              title="出货 »"
+              titleIcon="@Embed(source='../../../../../assets/outGoods24.png')"
+              width="576"
+              resize="resizeHandler()"
+              height="486">
+
+    <mx:Script>
+        <![CDATA[
+            import com.xy.util.STool;
+            import com.xy.util.EnterFrameCall;
+            import com.adobe.utils.StringUtil;
+            import com.xy.model.vo.SoldVo;
+            import com.xy.model.vo.StoreVo;
+            import com.xy.view.events.OutGoodUIEvent;
+            import mx.collections.ArrayCollection;
+
+            [Bindable]
+            private var _datas : ArrayCollection = new ArrayCollection();
+
+            [Bindable]
+            private var _selecedStores : ArrayCollection = new ArrayCollection();
+
+            override public function getMinWidth() : int {
+                return 522;
+            }
+
+            override public function getMinHeight() : int {
+                return 460;
+            }
+
+            public function initShow(couriers : Array) : void {
+                _datas = new ArrayCollection(couriers);
+                _selecedStores = new ArrayCollection();
+                clientNameTf.text = "";
+                totalWeightTf.text = "";
+                sendIdTf.text = "";
+                userPayTf.text = "";
+                sendPayTf.text = "";
+                addressTf.text = "";
+
+                clientNameWarn.visible = false;
+                totalWeightWarn.visible = false;
+                sendIdWarn.visible = false;
+                userPayWarn.visible = false;
+                sendPayWarn.visible = false;
+                addressWarn.visible = false;
+                addStoreWarn.visible = false;
+                courierWarn.visible = false;
+                warnTf.text = "";
+
+                submitBtn.enabled = true;
+                
+            }
+
+            public function setSelectedStores(stores : Array) : void {
+                _selecedStores = new ArrayCollection(stores);
+            }
+
+            public function deleteStore(vo : StoreVo) : void {
+                vo.selected = false;
+
+                _selecedStores.removeItemAt(_selecedStores.getItemIndex(vo));
+
+                _selecedStores.refresh();
+            }
+
+            private function resizeHandler() : void {
+                if (tb != null) {
+                    tb.width = width - tb.x - 40;
+                }
+
+                if (submitBtn != null) {
+                    submitBtn.x = (width - submitBtn.width - 20) / 2;
+                }
+
+                if (warnTf != null) {
+                    warnTf.width = tb.width;
+                }
+            }
+
+            private function submit() : void {
+                var vo : SoldVo = new SoldVo();
+                vo.clientName = STool.makeSafeRequest(StringUtil.trim(clientNameTf.text));
+                if (vo.clientName == "") {
+                    warnTf.text = "客户名不能为空";
+                    clientNameWarn.visible = true;
+                    EnterFrameCall.getStage().focus = clientNameTf;
+                    return;
+                } else {
+                    clientNameWarn.visible = false;
+                }
+
+                vo.totalWeight = Number(totalWeightTf.text);
+                if (vo.totalWeight <= 0) {
+                    warnTf.text = "总重量不能为空";
+                    totalWeightWarn.visible = true;
+                    EnterFrameCall.getStage().focus = totalWeightTf;
+                    return;
+                } else {
+                    totalWeightWarn.visible = false;
+                }
+
+                vo.courier = courierTf.text;
+                if (vo.courier == "") {
+                    courierWarn.visible = true;
+                    warnTf.htmlText = "<font color='#000000'>快递列表为空，请先</font><u><font color='#0000FF'><a href='event:ShowAddGoods'>添加快递</a></font></u>";
+                    if (!warnTf.hasEventListener(TextEvent.LINK)) {
+                        warnTf.addEventListener(TextEvent.LINK, __linkHandler);
+                    }
+                    return;
+                } else {
+                    courierWarn.visible = false;
+                }
+
+                vo.sendId = sendIdTf.text.toUpperCase();
+                if (vo.sendId == "") {
+                    warnTf.text = "快递单号不能为空";
+                    sendIdWarn.visible = true;
+                    EnterFrameCall.getStage().focus = sendIdTf;
+                    return;
+                } else {
+                    sendIdWarn.visible = false;
+                }
+
+                vo.userPay = Number(userPayTf.text);
+                if (vo.userPay <= 0) {
+                    warnTf.text = "付款不能为空";
+                    userPayWarn.visible = true;
+                    EnterFrameCall.getStage().focus = userPayTf;
+                    return;
+                } else {
+                    userPayWarn.visible = false;
+                }
+
+                vo.courierPay = Number(sendPayTf.text);
+                if (vo.courierPay <= 0) {
+                    warnTf.text = "运费不能为空";
+                    sendPayWarn.visible = true;
+                    EnterFrameCall.getStage().focus = sendPayTf;
+                    return;
+                } else {
+                    sendPayWarn.visible = false;
+                }
+
+                vo.address = STool.makeSafeRequest(StringUtil.trim(addressTf.text));
+                if (vo.address == "") {
+                    warnTf.text = "地址不能为空";
+                    addressWarn.visible = true;
+                    EnterFrameCall.getStage().focus = addressTf;
+                    return;
+                } else {
+                    addressWarn.visible = false;
+                }
+
+                if (_selecedStores.length == 0) {
+                    warnTf.text = "请先添加货物";
+                    addStoreWarn.visible = true;
+                    return;
+                } else {
+                    addStoreWarn.visible = false;
+                }
+
+                var ids : Array = [];
+                var nums : Array = [];
+                for each (var store : StoreVo in _selecedStores.source) {
+                    ids.push(store.id);
+                    nums.push(store.soldCount);
+                }
+                vo.goodsIds = ids.join(",");
+                vo.nums = nums.join(",");
+                
+                warnTf.text = "数据提交中......";
+
+				dispatchEvent(new OutGoodUIEvent(OutGoodUIEvent.SUBMIT, vo));
+				
+				ProgressUI.show();
+            }
+
+            private function __linkHandler(e : Event) : void {
+				dispatchEvent(new OutGoodUIEvent(OutGoodUIEvent.SHOW_ADD_COURIER_PANEL));
+            }
+        ]]>
+    </mx:Script>
+    <mx:Label x="10"
+              y="10"
+              text="客户名:"
+              width="79"
+              textAlign="right"/>
+    <mx:Label x="250"
+              y="10"
+              text="总重量(kg):"
+              width="76"
+              textAlign="right"/>
+    <mx:Label x="10"
+              y="102"
+              text="地址:"
+              width="79"
+              textAlign="right"/>
+    <mx:Label x="10"
+              y="42"
+              text="快递公司:"
+              width="79"
+              textAlign="right"/>
+    <mx:Label x="264"
+              y="41"
+              text="快递单号:"
+              width="62"
+              textAlign="right"/>
+    <mx:Label x="264"
+              y="72"
+              text="运费(元):"
+              width="62"
+              textAlign="right"/>
+    <mx:Label x="10"
+              y="72"
+              text="付款(元):"
+              width="79"
+              textAlign="right"/>
+    <mx:Label x="10"
+              y="134"
+              text="货物清单:"
+              width="79"
+              textAlign="right"/>
+    <mx:DataGrid x="27"
+                 y="162"
+                 id="tb"
+                 width="502"
+                 dataProvider="{_selecedStores}"
+                 height="201">
+        <mx:columns>
+            <mx:DataGridColumn headerText="货物"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="生产日期"
+                               dataField="madeTimeStr"/>
+            <mx:DataGridColumn headerText="数量"
+                               itemRenderer="com.xy.view.ui.render.StoreCountCtrl"/>
+            <mx:DataGridColumn headerText="操作"
+                               itemRenderer="com.xy.view.ui.render.DeleteStoreCtrl"/>
+        </mx:columns>
+    </mx:DataGrid>
+    <mx:Button x="225"
+               y="397"
+               label="出货"
+               id="submitBtn"
+               click="submit()"
+               width="101"
+               height="37"/>
+    <mx:Button x="97"
+               y="132"
+               click="dispatchEvent(new OutGoodUIEvent(OutGoodUIEvent.SHOW_CHOOSE_STROE_PANEL))"
+               label="添加货物"/>
+    <mx:TextInput x="97"
+                  y="8"
+                  width="113"
+                  id="clientNameTf"/>
+    <mx:TextInput x="334"
+                  y="8"
+                  width="122"
+                  restrict="0-9."
+                  id="totalWeightTf"/>
+    <mx:ComboBox x="97"
+                 y="39"
+                 dataProvider="{_datas}"
+                 labelField="name"
+                 width="113"
+                 id="courierTf">
+    </mx:ComboBox>
+    <mx:TextInput x="334"
+                  y="39"
+                  restrict="0-9a-zA-Z"
+                  width="180"
+                  id="sendIdTf"/>
+    <mx:TextInput x="97"
+                  y="70"
+                  width="113"
+                  restrict="0-9."
+                  id="userPayTf"/>
+    <mx:TextInput x="334"
+                  y="70"
+                  width="122"
+                  restrict="0-9."
+                  id="sendPayTf"/>
+    <mx:TextInput x="97"
+                  y="100"
+                  width="395"
+                  id="addressTf"/>
+    <mx:Image x="218"
+              y="70"
+              id="userPayWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="218"
+              y="6"
+              id="clientNameWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="500"
+              y="100"
+              id="addressWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="464"
+              y="68"
+              id="sendPayWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="218"
+              y="38"
+              id="courierWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="464"
+              y="7"
+              id="totalWeightWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="522"
+              y="39"
+              id="sendIdWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Image x="186"
+              y="132"
+              id="addStoreWarn"
+              source="@Embed(source='../../../../../assets/error.png')"/>
+    <mx:Text x="31"
+              y="371"
+              text="Label"
+              width="502"
+              textAlign="center"
+              color="#FF1200"
+              id="warnTf"/>
 
 </ui:ContentUI>

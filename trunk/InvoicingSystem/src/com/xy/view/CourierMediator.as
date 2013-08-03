@@ -54,6 +54,8 @@ public class CourierMediator extends AbsMediator {
         if (dataProxy.couriers == null) {
             ProgressUI.show();
             __queryHandler(null);
+        } else {
+            _panel.setDatas(dataProxy.couriers, Purview.canAddCourier(dataProxy.type));
         }
     }
 
@@ -74,11 +76,15 @@ public class CourierMediator extends AbsMediator {
     }
 
     private function addResult(vo : ResultVo) : void {
-        _panel.addResult(vo);
+        if (_panel != null) {
+            _panel.addResult(vo);
+        }
     }
 
     private function courierListUpdate(keyGoodsId : int = -1) : void {
-        _panel.setDatas(dataProxy.couriers, Purview.canAddCourier(dataProxy.type), keyGoodsId);
+        if (_panel != null) {
+            _panel.setDatas(dataProxy.couriers, Purview.canAddCourier(dataProxy.type), keyGoodsId);
+        }
     }
 
 }

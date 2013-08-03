@@ -2,6 +2,7 @@ package com.xy.model {
 import com.xy.model.vo.AccountVo;
 import com.xy.model.vo.CourierVo;
 import com.xy.model.vo.GoodsVo;
+import com.xy.model.vo.SoldVo;
 import com.xy.model.vo.StoreVo;
 import com.xy.util.STool;
 
@@ -183,17 +184,48 @@ public class Config {
         return rs;
     }
 
-	/**
-	 * 获取库存数据
-	 * @param vo
-	 * @return
-	 */
-	public static function makeQueryStoreUrl() : String {
-		var rs : String = HTTP_URL + "?method=queryStore&self={0}&selfPwd={1}" + "&r=" + Math.random();
-		rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
-		return rs;
-	}
-	
+    /**
+     * 获取库存数据
+     * @param vo
+     * @return
+     */
+    public static function makeQueryStoreUrl() : String {
+        var rs : String = HTTP_URL + "?method=queryStore&self={0}&selfPwd={1}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
+        return rs;
+    }
+
+    /**
+     * 出库
+     * @param vo
+     * @return
+     */
+    public static function makeSoldUrl(vo : SoldVo) : String {
+        var rs : String = HTTP_URL + "?method=sold&self={0}&selfPwd={1}&storeId={2}&clientName={3}&num={4}&totalWeight={5}&soldAddress={6}&senderCompany={7}&sendId={8}&clientPay={9}&sendPrice={10}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd, vo.goodsIds, vo.clientName, vo.nums, vo.totalWeight, vo.address, vo.courier, vo.sendId, vo.userPay, vo.courierPay);
+        return rs;
+    }
+
+    /**
+     * 获取入库记录
+     * @return
+     */
+    public static function makeQueryPurchaseLogUrl() : String {
+        var rs : String = HTTP_URL + "?method=queryPurchaseLog&self={0}&selfPwd={1}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
+        return rs;
+    }
+
+    /**
+     * 获取出库记录
+     * @return
+     */
+    public static function makeQuerySoldLogUrl() : String {
+        var rs : String = HTTP_URL + "?method=querySoldLog&self={0}&selfPwd={1}" + "&r=" + Math.random();
+        rs = STool.format(rs, dataProxy.uid, dataProxy.pwd);
+        return rs;
+    }
+
     public static function get dataProxy() : InvoicingDataProxy {
         return Facade.getInstance().retrieveProxy(InvoicingDataProxy.NAME) as InvoicingDataProxy;
     }

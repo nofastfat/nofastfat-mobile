@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="absolute"
+                width="630"
+                showCloseButton="true"
+                close="closeHandler();"
+                height="346"
+                title="选取货物"
+                fontSize="12">
+    <mx:Script>
+        <![CDATA[
+            import com.xy.view.events.AddFromStorePanelEvent;
+            import com.xy.model.vo.StoreVo;
+            import mx.collections.ArrayCollection;
+            import mx.managers.PopUpManager;
+
+            [Bindable]
+            private var _datas : ArrayCollection = new ArrayCollection();
+
+            private var _initStatus : Array = [];
+
+            public function initShow(stores : Array) : void {
+                _datas = new ArrayCollection(stores);
+
+				_initStatus = [];
+                for each (var vo : StoreVo in stores) {
+                    _initStatus[vo.id] = vo.selected;
+                }
+            }
+
+            private function submit() : void {
+                var rs : Array = [];
+
+                for each (var vo : StoreVo in _datas.source) {
+                    if (vo.selected) {
+                        rs.push(vo);
+                    }
+                }
+
+                dispatchEvent(new AddFromStorePanelEvent(AddFromStorePanelEvent.SUBMIT, rs));
+
+                PopUpManager.removePopUp(this);
+            }
+
+            private function closeHandler() : void {
+            	for each(var vo : StoreVo in _datas.source){
+            		vo.selected = _initStatus[vo.id];
+            	}
+            	
+                PopUpManager.removePopUp(this);
+            }
+        ]]>
+    </mx:Script>
+    <mx:DataGrid x="10"
+                 y="10"
+                 width="590"
+                 dataProvider="{_datas}"
+                 height="252">
+        <mx:columns>
+            <mx:DataGridColumn headerText="选择"
+                               width="34"
+                               itemRenderer="com.xy.view.ui.render.AddStoreCtrl"/>
+            <mx:DataGridColumn headerText="SBN号"
+                               dataField="SBN"/>
+            <mx:DataGridColumn headerText="商品名"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="库存数量"
+                               width="65"
+                               dataField="num"/>
+            <mx:DataGridColumn headerText="生产日期"
+                               dataField="madeTimeStr"/>
+        </mx:columns>
+    </mx:DataGrid>
+    <mx:Button x="127.5"
+               y="270"
+               click="submit()"
+               label="确认"
+               width="86"/>
+    <mx:Button x="264.5"
+               y="270"
+               click="closeHandler()"
+               label="取消"
+               width="86"/>
+</mx:TitleWindow>

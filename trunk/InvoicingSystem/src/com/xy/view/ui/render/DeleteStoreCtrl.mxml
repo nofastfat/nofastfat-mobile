@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="80"
+           height="26"
+           fontSize="12">
+           <mx:Script>
+           	<![CDATA[
+           		import com.xy.model.vo.StoreVo;
+           		import com.xy.view.ui.OutGoodUI;
+           		
+           		private function clickHandler() : void {
+           			if(parentDocument is OutGoodUI){
+           				(parentDocument as OutGoodUI).deleteStore(data as StoreVo);
+           			}
+           		}
+           	]]>
+           </mx:Script>
+    <mx:Button x="14"
+               y="1" click="clickHandler()"
+               label="删除"/>
+
+</mx:Canvas>

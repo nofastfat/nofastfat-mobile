@@ -62,8 +62,8 @@
 			exit;
 		}
 
-		$SBNArr[$i] = $param[1];
-		$nameArr[$i] = $param[2];
+		$SBNArr[$i]= iconv("UTF-8","gb2312",  $param[1]);
+		$nameArr[$i] = iconv("UTF-8","gb2312",  $param[2]);
 		$retailPriceArr[$i] = $param[3];
 		
 		if((int)$numArr[$i] > (int)$param[4]){
