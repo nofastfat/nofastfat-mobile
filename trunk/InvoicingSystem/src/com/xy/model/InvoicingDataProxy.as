@@ -60,6 +60,7 @@ public class InvoicingDataProxy extends Proxy {
      * @param arr
      */
     public function initGoods(data : String) : void {
+    	data="eNqLrlYyULJSMlTSUcpMgTIMgXRMqVmyiWVMqWmSqTlQKC8xNxVT1AgiZJqYFlNqYWJhBCSNEpOB0sYphjGllmbGadhkIeKWBqbGQJWWRklAg1JSi5OLMgtKMvPzqGWkMdAgAz1TIKs8NTM9owTONYH6MtjJzxPmY1OstgIlSioLUrHL1cYCAA7vV+g=";
         _goods = [];
         var ba : ByteArray = Base64.decode(data);
         ba.uncompress();
