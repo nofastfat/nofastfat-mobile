@@ -109,11 +109,11 @@
 			$rs =sqlite_query($db,$sql, SQLITE_NUM);
 			//echo "<font color='red'>".$error."</font>";
 			while ($row = sqlite_fetch_array($rs)) {
-				//$tmp = array();
-				//for($i = 0; $i < count($row); $i++){
-				//	$tmp[$i] = $row[$i];
-				//}
-				array_push($arr, $row);
+				$tmp = array();
+				for($i = 0; $i < count($row); $i++){
+					$tmp[$i] = iconv("gb2312", "UTF-8", $row[$i]);;
+				}
+				array_push($arr, $tmp);
 			}
 		}
 		return $arr;
