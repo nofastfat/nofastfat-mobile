@@ -4,30 +4,62 @@ package com.xy.util {
  * @author sliz	http://game-develop.net/
  */
 import flash.geom.Point;
+
 public class SilzAstar {
+	private static var _instance : SilzAstar;
+
+	public static function getInstance() : SilzAstar {
+		if (_instance == null) {
+			_instance = new SilzAstar();
+		}
+
+		return _instance;
+	}
+
 	/**
 	 * 寻路方式，8方向和4方向，有效值为8和4
 	 */
-	private static var WorkMode : uint = 4;
+	private static var WorkMode : uint = 8;
 
 	private var _grid : Grid;
 	private var _index : int;
 	private var _path : Array;
 	private var astar : AStar;
+	private var _mapData : Array;
 
 	/**
 	 * @param	mapdata		地图数据
 	 * @param	container	显示容器，若为null则不显示地图
 	 */
-	public function SilzAstar(mapdata : Array) {
-		makeGrid(mapdata);
+	public function SilzAstar(mapData : Array = null) {
+		setMapData(mapData);
+	}
+
+	public function setMapData(mapData : Array) : void {
+		if (mapData == null) {
+			return;
+		}
+		clear();
+		_mapData = mapData;
+		makeGrid(mapData);
 	}
 
 	public function set WORKMODE(v : uint) : void {
 		if (v != 8 && v != 4)
 			throw new Error('仅支持8方向或4方向寻路');
-		
+
 		WorkMode = v;
+	}
+
+	public function clear() : void {
+		_grid = null;
+		_index = 0;
+		_path = null;
+		if (astar != null) {
+			astar.destroy();
+		}
+		astar = null;
+		_mapData = null;
 	}
 
 	/**
@@ -53,14 +85,14 @@ public class SilzAstar {
 
 			astar.floyd();
 			_path = astar.floydPath;
-			
+
 			var tmpPath : Array = [];
-			for(var i : int = 0; i < _path.length; i++){
+			for (var i : int = 0; i < _path.length; i++) {
 				var node : Node = _path[i];
 				tmpPath[i] = new Point(node.x, node.y);
 			}
-			
-			if(WorkMode == 4){
+
+			if (WorkMode == 4) {
 				tmpPath = walk4(tmpPath);
 			}
 			return tmpPath;
@@ -68,34 +100,34 @@ public class SilzAstar {
 
 		return null;
 	}
-	
+
 	private function walk4(path : Array) : Array {
 		var i : int = 0;
-		while(i < path.length-1){
+		while (i < path.length - 1) {
 			var node1 : Point = path[i];
-			var node2 : Point = path[i+1];
-			
+			var node2 : Point = path[i + 1];
+
 			i++;
-			if(node1.x != node2.x && node1.y != node2.y){
+			if (node1.x != node2.x && node1.y != node2.y) {
 				var xSign : int = node2.x > node1.x ? 1 : -1;
 				var node : Node = _grid.getNode(node1.x + xSign, node1.y);
-				if(node.walkable){
+				if (node.walkable) {
 					var xNode : Point = new Point(node.x, node.y);
 					path.splice(i, 0, xNode);
 					i--;
-				}else{
+				} else {
 					var ySign : int = node2.y > node1.y ? 1 : -1;
 					node = _grid.getNode(node1.x, node1.y + ySign);
-					if(node.walkable){
+					if (node.walkable) {
 						var yNode : Point = new Point(node.x, node.y);
 						path.splice(i, 0, yNode);
 						i--;
 					}
 				}
-				
+
 			}
 		}
-		
+
 		return path;
 	}
 
@@ -113,17 +145,22 @@ public class SilzAstar {
 			}
 		}
 
-		if (WorkMode == 4){
+		if (WorkMode == 4) {
 			_grid.calculateLinks();
-		}else if(WorkMode == 2){
+		} else if (WorkMode == 2) {
 			_grid.calculateLinks(2);
-		}else{
+		} else {
 			_grid.calculateLinks(1);
 		}
 
 		astar = new AStar(_grid);
 
 	}
+
+	public function get mapData() : Array {
+		return _mapData;
+	}
+
 }
 }
 
@@ -146,6 +183,16 @@ class AStar {
 		this._grid = grid;
 		heuristic = euclidian2;
 
+	}
+
+	public function destroy() : void {
+		_open = null;
+		_grid = null;
+		_endNode = null;
+		_startNode = null;
+		_path = null;
+		_floydPath = null;
+		heuristic = null;
 	}
 
 	private function justMin(x : Object, y : Object) : Boolean {
