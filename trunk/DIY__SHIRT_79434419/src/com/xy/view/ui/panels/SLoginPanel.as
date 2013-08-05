@@ -62,7 +62,7 @@ public class SLoginPanel extends AbsPanel {
     	}
     	
     	pwd = StringUtil.trim(pwd);
-    	pwd = MD5.hash(pwd);
+    	//pwd = MD5.hash(pwd);
     	
     	close();
     	

@@ -180,10 +180,10 @@ public class DiyDataProxy extends Proxy {
 
 	public function initLoginData():void{
 		if(URLConfig.LOGIN_DATA != null && URLConfig.LOGIN_DATA != ""){
-			var ba : ByteArray = Base64.decode(URLConfig.LOGIN_DATA);
-			ba.position = 0;
-			var json : String = ba.readUTF();
-			var obj : * = JSON.decode(json);
+			//var ba : ByteArray = Base64.decode(URLConfig.LOGIN_DATA);
+			//ba.position = 0;
+			//var json : String = ba.readUTF();
+			var obj : * = JSON.decode(URLConfig.LOGIN_DATA);
 			uName = obj.id;
 			uPwd = obj.pwd;
 		}
