@@ -1021,7 +1021,7 @@ public class RightContainerMediator extends AbsMediator {
 
 
         var debug : String = STool.getUrlParam("debug");
-        if (debug == "true1") {
+        if (debug == "true") {
             var f : FileReference = new FileReference();
             if (dataProxy.currentSelectModel.page == 1) {
                 var ba : ByteArray = PNGEncoder.encode(_exportVo.exportBmd);
