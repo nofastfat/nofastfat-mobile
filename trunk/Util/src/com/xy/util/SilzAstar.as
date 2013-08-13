@@ -35,6 +35,11 @@ public class SilzAstar {
 		setMapData(mapData);
 	}
 
+	/**
+	 * 设置地图数据 
+	 * @param mapData
+	 * @param walkAbleFun
+	 */	
 	public function setMapData(mapData : Array) : void {
 		if (mapData == null) {
 			return;
