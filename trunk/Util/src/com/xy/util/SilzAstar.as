@@ -36,10 +36,10 @@ public class SilzAstar {
 	}
 
 	/**
-	 * 设置地图数据 
+	 * 设置地图数据
 	 * @param mapData
 	 * @param walkAbleFun
-	 */	
+	 */
 	public function setMapData(mapData : Array) : void {
 		if (mapData == null) {
 			return;
@@ -66,6 +66,7 @@ public class SilzAstar {
 		astar = null;
 		_mapData = null;
 	}
+
 
 	/**
 	 * @param		xnow	当前坐标X(世界坐标)
@@ -162,9 +163,16 @@ public class SilzAstar {
 
 	}
 
+	public function updateGridWalkAble(ix : int, iy : int, walkAble : Boolean) : void {
+		if (_grid != null && _grid.getNode(ix, iy) != null) {
+			_grid.setWalkable(ix, iy, walkAble);
+		}
+	}
+
 	public function get mapData() : Array {
 		return _mapData;
 	}
+
 
 }
 }
