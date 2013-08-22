@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+						layout="absolute"
+						fontSize="12"
+						width="385"
+						showStatusBar="false"
+						title="swf自动发布器"
+						titleTextStyleName="title"
+						addedToStage="__addedHandler(event)"
+						height="162">
+	<mx:Style>
+		.title {
+			font-size:12px;
+		}
+	</mx:Style>
+
+	<mx:Script>
+		<![CDATA[
+			import com.xy.ExecutorMain;
+			import com.xy.util.EnterFrameCall;
+			import com.xy.view.MessageUI;
+
+			import mx.controls.Alert;
+
+			private var _executor : ExecutorMain = new ExecutorMain();
+
+
+			/**
+			 * 选择<工作空间目录>
+			 */
+			protected function __click1Handler(event : MouseEvent) : void {
+				var f : File = new File();
+				f.browseForDirectory("选择<工作空间目录>");
+
+				f.addEventListener(Event.SELECT, function(e : Event) : void {
+					workspaceUrl.text = f.nativePath;
+				});
+			}
+
+			/**
+			 * 选择<release目录>
+			 */
+			protected function __click2Handler(event : MouseEvent) : void {
+				var f : File = new File();
+				f.browseForDirectory("选择<release目录>");
+
+				f.addEventListener(Event.SELECT, function(e : Event) : void {
+					releaseUrl.text = f.nativePath;
+				});
+			}
+
+			/**
+			 * 开始处理
+			 */
+			protected function __startHandler(event : MouseEvent) : void {
+				var workspace : String = workspaceUrl.text;
+
+				try {
+					var f : File = new File(workspace);
+					if (!f.isDirectory || !f.exists) {
+						throw new Error();
+					}
+				} catch (e : Error) {
+
+					stage.focus = workspaceUrl;
+					MessageUI.getInstance().showMessage("工作空间目录异常");
+					return;
+				}
+
+				var release : String = releaseUrl.text;
+
+				try {
+					f = new File(release);
+					if (!f.isDirectory || !f.exists) {
+						throw new Error();
+					}
+				} catch (e : Error) {
+
+					stage.focus = releaseUrl;
+					MessageUI.getInstance().showMessage("release目录异常");
+					return;
+				}
+
+				_executor.startUp(workspace, release);
+			}
+
+			protected function __addedHandler(event : Event) : void {
+				EnterFrameCall.initState(stage);
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Label x="10"
+			  y="24"
+			  text="工作空间目录:"/>
+	<mx:TextInput x="100"
+				  y="22"
+				  width="202"
+				  id="workspaceUrl"
+				  text="G:\SecProject"/>
+	<mx:Button x="310"
+			   y="22"
+			   click="__click1Handler(event)"
+			   label="选择.."/>
+	<mx:Label x="10"
+			  y="52"
+			  text="swf导出目录:"
+			  width="82"
+			  textAlign="right"/>
+	<mx:TextInput x="100"
+				  y="50"
+				  width="202"
+				  id="releaseUrl"
+				  text="C:\Users\long\Desktop\release"/>
+	<mx:Button x="310"
+			   y="50"
+			   click="__click2Handler(event)"
+			   label="选择.."/>
+	<mx:Button x="135.5"
+			   y="88"
+			   label="开始发布"
+			   click="__startHandler(event)"
+			   width="112"
+			   height="34"/>
+
+</mx:WindowedApplication>
