@@ -161,7 +161,7 @@ public class CompileSwfCmd {
 	private function __outHandler(e : ProgressEvent) : void {
 		var out : IDataInput = _native.standardOutput;
 		var info : String = out.readMultiByte(out.bytesAvailable, "GBK");
-//		trace("info->" + info);
+		trace("info->" + info);
 
 		var keys : Array = [
 			_asFiles[index] + "（",
