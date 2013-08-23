@@ -32,5 +32,15 @@ public class Config {
 	 * 共享编译命令 
 	 */	
 	public static const RSL : String = "-external-library-path";
+	
+	/**
+	 * 静态库命令 
+	 */	
+	public static const STATIC_RSLS : String = "-static-link-runtime-shared-libraries";
+	
+	/**
+	 * 包含其他目录编译 
+	 */	
+	public static const SOURCE_PATH : String = "-source-path";
 }
 }

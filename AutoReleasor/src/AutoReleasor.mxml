@@ -54,9 +54,9 @@
 			 */
 			protected function __startHandler(event : MouseEvent) : void {
 				var workspace : String = workspaceUrl.text;
-
+				var f : File
 				try {
-					var f : File = new File(workspace);
+					f = new File(workspace);
 					if (!f.isDirectory || !f.exists) {
 						throw new Error();
 					}
@@ -71,8 +71,12 @@
 
 				try {
 					f = new File(release);
-					if (!f.isDirectory || !f.exists) {
-						throw new Error();
+					if (!f.exists) {
+						f.createDirectory();
+					}else{
+						if(!f.isDirectory){
+							throw new Error();
+						}
 					}
 				} catch (e : Error) {
 
@@ -111,7 +115,7 @@
 				  y="50"
 				  width="202"
 				  id="releaseUrl"
-				  text="C:\Users\long\Desktop\release"/>
+				  text="D:\release"/>
 	<mx:Button x="310"
 			   y="50"
 			   click="__click2Handler(event)"
