@@ -17,5 +17,20 @@ public class Config {
 	 * 库项目的标识 
 	 */	
 	public static const FLEX_LIB_PROPERTIES : String = ".flexLibProperties";
+	
+	/**
+	 * 包含SWC的命令 
+	 */	
+	public static const INCLUDE_LIBRARIES : String = "-include-libraries";
+	
+	/**
+	 * 输出命令 
+	 */	
+	public static const OUT_PUT : String = "-output";
+	
+	/**
+	 * 共享编译命令 
+	 */	
+	public static const RSL : String = "-external-library-path";
 }
 }

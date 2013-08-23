@@ -1,4 +1,5 @@
 package com.xy {
+import com.xy.cmd.CompileSwfCmd;
 import com.xy.cmd.ScanWorkspaceCmd;
 import com.xy.model.ExecuteDataProxy;
 
@@ -31,7 +32,9 @@ public class ExecutorMain extends EventDispatcher {
 		var scan : ScanWorkspaceCmd = new ScanWorkspaceCmd();
 		scan.execute();
 		
-		trace(dataProxy.programNames);
+		/* 开始打包swf文件*/
+		var compile : CompileSwfCmd = new CompileSwfCmd();
+		compile.execute();
 	}
 	
 	public function get dataProxy():ExecuteDataProxy{

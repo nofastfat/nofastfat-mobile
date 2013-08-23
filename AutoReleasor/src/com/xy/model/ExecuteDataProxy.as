@@ -21,6 +21,11 @@ public class ExecuteDataProxy {
 	public var release : String;
 	
 	/**
+	 * 打包的文件目录 
+	 */	
+	public var mxmlcFile : String = '"D:\\Adobe Flash Builder4\\Adobe Flash Builder 4\\sdks\\4.0.0\\bin\\mxmlc.exe"';
+	
+	/**
 	 * AS3项目名 
 	 */	
 	public var programNames : Array = [];
