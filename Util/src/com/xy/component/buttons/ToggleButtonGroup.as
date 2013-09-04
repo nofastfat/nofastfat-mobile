@@ -9,7 +9,7 @@ import flash.events.IEventDispatcher;
  * 状态按钮组，控制组件 ，该组件只做控制，不做显示
  * @author xy
  */
-[Event(name = "state_change", type = "ToggleButtonGroupEvent")]
+[Event(name = "STATE_CHANGE", type = "com.xy.component.buttons.event.ToggleButtonGroupEvent")]
 public class ToggleButtonGroup extends EventDispatcher {
 	private var _btns : Array = [];
 
@@ -44,12 +44,12 @@ public class ToggleButtonGroup extends EventDispatcher {
 	}
 
 	public function setSelected(index : int, dispatch : Boolean = false) : void {
-		if (index < 0 || index >= _btns.length) {
-			return;
-		}
-
 		if (_lastSelectedButton != null) {
 			_lastSelectedButton.selected = false;
+		}
+		
+		if (index < 0 || index >= _btns.length) {
+			return;
 		}
 
 		_lastSelectedButton = _btns[index];
