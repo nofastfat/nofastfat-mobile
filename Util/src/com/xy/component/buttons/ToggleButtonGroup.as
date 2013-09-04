@@ -46,6 +46,7 @@ public class ToggleButtonGroup extends EventDispatcher {
 	public function setSelected(index : int, dispatch : Boolean = false) : void {
 		if (_lastSelectedButton != null) {
 			_lastSelectedButton.selected = false;
+			_lastSelectedButton = null;
 		}
 		
 		if (index < 0 || index >= _btns.length) {
