@@ -21,22 +21,25 @@ public class STool {
      * @param container
      * @param exceptChildNames
      */
-    public static function clear(container : DisplayObjectContainer, exceptChilds : Array = null) : void {
+    public static function clear(container : DisplayObjectContainer, exceptChilds : Array = null) : Array {
+		var rs : Array = [];
         if (container == null) {
-            return;
+            return rs;
         }
         if (exceptChilds == null) {
             while (container.numChildren > 0) {
-                container.removeChildAt(0);
+				rs.push(container.removeChildAt(0));
             }
         } else {
             for (var i : int = 0; i < container.numChildren; i++) {
                 if (exceptChilds.indexOf(container.getChildAt(i)) == -1) {
-                    container.removeChildAt(i);
+					rs.push(container.removeChildAt(i));
                     i--;
                 }
             }
         }
+		
+		return rs;
     }
 
     /**
