@@ -15,7 +15,10 @@ public class ToggleButtonGroup extends EventDispatcher {
 
 	private var _lastSelectedButton : ToggleButton;
 
-	public function ToggleButtonGroup() {
+	private var _allowNullSelect : Boolean;
+
+	public function ToggleButtonGroup(allowNullSelect : Boolean = false) {
+		_allowNullSelect = allowNullSelect;
 	}
 
 	/**
@@ -30,6 +33,7 @@ public class ToggleButtonGroup extends EventDispatcher {
 		for (var i : int = 0; i < _btns.length; i++) {
 			var btn : ToggleButton = _btns[i];
 			btn.removeEventListener(ToggleButtonEvent.STATE_CHANGE, __stageChangeHandler);
+			btn.dispose();
 		}
 
 		_btns = toggleButtons;
@@ -48,15 +52,15 @@ public class ToggleButtonGroup extends EventDispatcher {
 			_lastSelectedButton.selected = false;
 			_lastSelectedButton = null;
 		}
-		
+
 		if (index < 0 || index >= _btns.length) {
 			return;
 		}
 
 		_lastSelectedButton = _btns[index];
 		_lastSelectedButton.selected = true;
-		
-		if(dispatch){
+
+		if (dispatch) {
 			dispatchEvent(new ToggleButtonGroupEvent(ToggleButtonGroupEvent.STATE_CHANGE, index));
 		}
 	}
@@ -82,8 +86,12 @@ public class ToggleButtonGroup extends EventDispatcher {
 		var isSame : Boolean = togButton == _lastSelectedButton;
 
 		var index : int = _btns.indexOf(togButton);
+
+		if (isSame && _allowNullSelect) {
+			index = -1;
+		}
 		setSelected(index);
-		if (!isSame) {
+		if (!isSame || _allowNullSelect) {
 			dispatchEvent(new ToggleButtonGroupEvent(ToggleButtonGroupEvent.STATE_CHANGE, index));
 		}
 	}
