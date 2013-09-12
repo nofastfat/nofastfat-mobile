@@ -1,5 +1,6 @@
 package com.xy.component.buttons {
 import com.xy.component.buttons.event.ToggleButtonEvent;
+import com.xy.component.click.TouchClick;
 
 import flash.display.MovieClip;
 import flash.events.EventDispatcher;
@@ -33,7 +34,7 @@ public class ToggleButton extends EventDispatcher {
 		}
 
 		if (_target != null) {
-			_target.removeEventListener(MouseEvent.CLICK, __clickHandler);
+			TouchClick.unBind(_target);
 		}
 
 		_selected = false;
@@ -44,17 +45,17 @@ public class ToggleButton extends EventDispatcher {
 			_target.buttonMode = true;
 		}
 
-		_target.addEventListener(MouseEvent.CLICK, __clickHandler);
+		TouchClick.bindTouch(_target, __clickHandler);
 	}
 
 	public function dispose() : void {
 		if (_target != null) {
-			_target.removeEventListener(MouseEvent.CLICK, __clickHandler);
+			TouchClick.unBind(_target);
 		}
 		_target = null;
 	}
 
-	private function __clickHandler(e : MouseEvent) : void {
+	private function __clickHandler() : void {
 		selected = !selected;
 		dispatchEvent(new ToggleButtonEvent(ToggleButtonEvent.STATE_CHANGE, selected));
 	}
