@@ -34,7 +34,7 @@ public class ToggleButton extends EventDispatcher {
 		}
 
 		if (_target != null) {
-			TouchClick.unBind(_target);
+			TouchClick.unBind(_target, __clickHandler);
 		}
 
 		_selected = false;
@@ -50,12 +50,12 @@ public class ToggleButton extends EventDispatcher {
 
 	public function dispose() : void {
 		if (_target != null) {
-			TouchClick.unBind(_target);
+			TouchClick.unBind(_target, __clickHandler);
 		}
 		_target = null;
 	}
 
-	private function __clickHandler() : void {
+	private function __clickHandler(source:* = null) : void {
 		selected = !selected;
 		dispatchEvent(new ToggleButtonEvent(ToggleButtonEvent.STATE_CHANGE, selected));
 	}

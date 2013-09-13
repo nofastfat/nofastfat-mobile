@@ -20,15 +20,24 @@ public class TouchClick {
 
 	private static var _currentObj : *;
 
+	/**
+	 * 绑定一个点击事件 
+	 * @param source 事件源
+	 * @param call function(source : InteractiveObject):void{}
+	 */	
 	public static function bindTouch(source : InteractiveObject, call : Function) : void {
-		if (isInMap(source)) {
-			return;
+		var obj : * = getInMap(source);
+		if (obj != null) {
+			if (obj.calls.indexOf(call) == -1) {
+				obj.calls.push(call);
+			}
+		} else {
+			_maps.push({source: source, calls: [call]});
+			source.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
 		}
-		_maps.push({source: source, call: call});
-		source.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
 
 
-		if (!_isInit) { 
+		if (!_isInit) {
 			_isInit = true;
 			EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler, false, -1);
 		}
@@ -46,7 +55,9 @@ public class TouchClick {
 		var len : int = pt.subtract(_currentObj.pt).length;
 		if (len <= 2) {
 			var obj : * = getInMap(_currentObj.source);
-			obj.call();
+			for each (var callFun : Function in obj.calls) {
+				callFun(_currentObj.source);
+			}
 		}
 
 		_currentObj = null;
@@ -72,7 +83,12 @@ public class TouchClick {
 		return false;
 	}
 
-	public static function unBind(source : InteractiveObject) : void {
+	/**
+	 * 解除绑定 
+	 * @param source
+	 * @param call
+	 */	
+	public static function unBind(source : InteractiveObject, call : Function) : void {
 		if (_currentObj != null && _currentObj.source == source) {
 			_currentObj = null;
 		}
@@ -80,9 +96,22 @@ public class TouchClick {
 		for (var i : int = 0; i < _maps.length; i++) {
 			var obj : * = _maps[i];
 			if (obj.source == source) {
-				source.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
-				_maps.splice(i, 1);
-				return;
+
+				if (call == null) {
+					source.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+					_maps.splice(i, 1);
+					return;
+				}else{
+					var index : int = obj.calls.indexOf(call);
+					if(index != -1){
+						obj.calls.splice(index, 1);
+					}
+					
+					if(obj.calls.length == 0){
+						source.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+						_maps.splice(i, 1);
+					}
+				}
 			}
 		}
 	}
