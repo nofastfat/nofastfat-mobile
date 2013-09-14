@@ -2,9 +2,11 @@ package com.xy.component.click {
 import com.xy.util.EnterFrameCall;
 
 import flash.display.InteractiveObject;
+import flash.display.Stage;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.system.Capabilities;
 
 /**
  * 移动版的点击事件
@@ -14,6 +16,9 @@ import flash.geom.Point;
  * 创建时间：2013-9-12 下午12:15:41
  **/
 public class TouchClick {
+	private static const PC_DPI : int = 72;
+	private static const CLICK_JUGDE : int = 15;
+	
 	private static var _maps : Array = [];
 
 	private static var _isInit : Boolean = false;
@@ -44,16 +49,25 @@ public class TouchClick {
 	}
 
 	private static function __downHandler(e : MouseEvent) : void {
-		_currentObj = {source: e.currentTarget, pt: new Point(e.stageX, e.stageY)};
+		var stage : Stage = EnterFrameCall.getStage();
+		_currentObj = {source: e.currentTarget, pt: new Point(stage.mouseX, stage.mouseY)};
 	}
 
 	private static function __upHandler(e : MouseEvent) : void {
 		if (_currentObj == null) {
 			return;
 		}
-		var pt : Point = new Point(e.stageX, e.stageY);
+		var stage : Stage = EnterFrameCall.getStage();
+		var pt : Point = new Point(stage.mouseX, stage.mouseY);
 		var len : int = pt.subtract(_currentObj.pt).length;
-		if (len <= 2) {
+		trace("len: " + len);
+		if(Capabilities.screenDPI > PC_DPI){
+			len = len/(Capabilities.screenDPI/PC_DPI);
+		}
+		trace("len offset: " + len);
+		
+		trace("CLICK_JUGDE: " + CLICK_JUGDE)
+		if (len <= CLICK_JUGDE) {
 			var obj : * = getInMap(_currentObj.source);
 			for each (var callFun : Function in obj.calls) {
 				callFun(_currentObj.source);
