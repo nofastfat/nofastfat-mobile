@@ -60,13 +60,9 @@ public class TouchClick {
 		var stage : Stage = EnterFrameCall.getStage();
 		var pt : Point = new Point(stage.mouseX, stage.mouseY);
 		var len : int = pt.subtract(_currentObj.pt).length;
-		trace("len: " + len);
 		if(Capabilities.screenDPI > PC_DPI){
 			len = len/(Capabilities.screenDPI/PC_DPI);
 		}
-		trace("len offset: " + len);
-		
-		trace("CLICK_JUGDE: " + CLICK_JUGDE)
 		if (len <= CLICK_JUGDE) {
 			var obj : * = getInMap(_currentObj.source);
 			for each (var callFun : Function in obj.calls) {
