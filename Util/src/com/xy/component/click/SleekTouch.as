@@ -1,129 +1,135 @@
 package com.xy.component.click {
-	import com.xy.util.EnterFrameCall;
-	
-	import flash.display.InteractiveObject;
-	import flash.display.Stage;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.geom.Point;
-	import flash.system.Capabilities;
-	
+import com.xy.util.EnterFrameCall;
+
+import flash.display.InteractiveObject;
+import flash.display.Stage;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.system.Capabilities;
+
+/**
+ * 移动版的滑动事件
+ * @author nofastfat
+ * @E-mail: xiey147@163.com
+ * @version 1.0.0
+ * 创建时间：2013-9-12 下午12:15:41
+ **/
+public class SleekTouch {
+	private static const PC_DPI : int = 72;
+	private static const SLEEK_JUGDE : int = 100;
+
+	private static var _maps : Array = [];
+
+	private static var _isInit : Boolean = false;
+
+	private static var _currentObj : *;
+
 	/**
-	 * 移动版的滑动事件
-	 * @author nofastfat
-	 * @E-mail: xiey147@163.com
-	 * @version 1.0.0
-	 * 创建时间：2013-9-12 下午12:15:41
-	 **/
-	public class SleekTouch {
-		private static const PC_DPI : int = 72;
-		private static const SLEEK_JUGDE : int = 100;
-		
-		private static var _maps : Array = [];
-		
-		private static var _isInit : Boolean = false;
-		
-		private static var _currentObj : *;
-		
-		/**
-		 * 绑定一个点击事件 
-		 * @param source 事件源
-		 * @param call function(source : InteractiveObject):void{}
-		 */	
-		public static function bindTouch(source : InteractiveObject, call : Function) : void {
-			var obj : * = getInMap(source);
-			if (obj != null) {
-				if (obj.calls.indexOf(call) == -1) {
-					obj.calls.push(call);
-				}
-			} else {
-				_maps.push({source: source, calls: [call]});
-				source.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+	 * 绑定一个点击事件
+	 * @param source 事件源
+	 * @param call function(source : InteractiveObject):void{}
+	 */
+	public static function bindTouch(source : InteractiveObject, call : Function, leftToRight : Boolean = true) : void {
+		var obj : * = getInMap(source);
+		if (obj != null) {
+			if (obj.calls.indexOf(call) == -1) {
+				obj.calls.push(call);
 			}
-			
-			
-			if (!_isInit) {
-				_isInit = true;
-				EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler, false, -1);
+		} else {
+			_maps.push({source: source, calls: [call], leftToRight: leftToRight});
+			source.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+		}
+
+
+		if (!_isInit) {
+			_isInit = true;
+			EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, __upHandler, false, -1);
+		}
+	}
+
+	private static function __downHandler(e : MouseEvent) : void {
+		var stage : Stage = EnterFrameCall.getStage();
+		var obj : * = getInMap(e.currentTarget as InteractiveObject);
+		_currentObj = {source: e.currentTarget, pt: new Point(stage.mouseX, stage.mouseY), leftToRight: obj.leftToRight};
+	}
+
+	private static function __upHandler(e : MouseEvent) : void {
+		if (_currentObj == null) {
+			return;
+		}
+		var stage : Stage = EnterFrameCall.getStage();
+		var pt : Point = new Point(stage.mouseX, stage.mouseY);
+		var len : int;
+		if (_currentObj.leftToRight) {
+			len = pt.x - _currentObj.pt.x;
+		} else {
+			len = _currentObj.pt.x - pt.x;
+		}
+		if (Capabilities.screenDPI > PC_DPI) {
+			len = len / (Capabilities.screenDPI / PC_DPI);
+		}
+		if (len >= SLEEK_JUGDE) {
+			var obj : * = getInMap(_currentObj.source);
+			for each (var callFun : Function in obj.calls) {
+				callFun(_currentObj.source);
 			}
 		}
-		
-		private static function __downHandler(e : MouseEvent) : void {
-			var stage : Stage = EnterFrameCall.getStage();
-			_currentObj = {source: e.currentTarget, pt: new Point(stage.mouseX, stage.mouseY)};
+
+		_currentObj = null;
+	}
+
+	private static function getInMap(source : InteractiveObject) : * {
+		for each (var obj : * in _maps) {
+			if (obj.source == source) {
+				return obj;
+			}
 		}
-		
-		private static function __upHandler(e : MouseEvent) : void {
-			if (_currentObj == null) {
-				return;
+
+		return null;
+	}
+
+	private static function isInMap(source : InteractiveObject) : Boolean {
+		for each (var obj : * in _maps) {
+			if (obj.source == source) {
+				return true;
 			}
-			var stage : Stage = EnterFrameCall.getStage();
-			var pt : Point = new Point(stage.mouseX, stage.mouseY);
-			var len : int = Math.abs(pt.x - _currentObj.pt.x);
-			if(Capabilities.screenDPI > PC_DPI){
-				len = len/(Capabilities.screenDPI/PC_DPI);
-			}
-			if (len >= SLEEK_JUGDE) {
-				var obj : * = getInMap(_currentObj.source);
-				for each (var callFun : Function in obj.calls) {
-					callFun(_currentObj.source);
-				}
-			}
-			
+		}
+
+		return false;
+	}
+
+	/**
+	 * 解除绑定
+	 * @param source
+	 * @param call
+	 */
+	public static function unBind(source : InteractiveObject, call : Function) : void {
+		if (_currentObj != null && _currentObj.source == source) {
 			_currentObj = null;
 		}
-		
-		private static function getInMap(source : InteractiveObject) : * {
-			for each (var obj : * in _maps) {
-				if (obj.source == source) {
-					return obj;
-				}
-			}
-			
-			return null;
-		}
-		
-		private static function isInMap(source : InteractiveObject) : Boolean {
-			for each (var obj : * in _maps) {
-				if (obj.source == source) {
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		/**
-		 * 解除绑定 
-		 * @param source
-		 * @param call
-		 */	
-		public static function unBind(source : InteractiveObject, call : Function) : void {
-			if (_currentObj != null && _currentObj.source == source) {
-				_currentObj = null;
-			}
-			
-			for (var i : int = 0; i < _maps.length; i++) {
-				var obj : * = _maps[i];
-				if (obj.source == source) {
-					
-					if (call == null) {
+
+		for (var i : int = 0; i < _maps.length; i++) {
+			var obj : * = _maps[i];
+			if (obj.source == source) {
+
+				if (call == null) {
+					source.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
+					_maps.splice(i, 1);
+					return;
+				} else {
+					var index : int = obj.calls.indexOf(call);
+					if (index != -1) {
+						obj.calls.splice(index, 1);
+					}
+
+					if (obj.calls.length == 0) {
 						source.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
 						_maps.splice(i, 1);
-						return;
-					}else{
-						var index : int = obj.calls.indexOf(call);
-						if(index != -1){
-							obj.calls.splice(index, 1);
-						}
-						
-						if(obj.calls.length == 0){
-							source.removeEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
-							_maps.splice(i, 1);
-						}
 					}
 				}
 			}
 		}
 	}
+}
 }
