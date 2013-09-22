@@ -66,9 +66,9 @@ public class SleekTouch {
 		} else {
 			len = _currentObj.pt.x - pt.x;
 		}
-		if (Capabilities.screenDPI > PC_DPI) {
-			len = len / (Capabilities.screenDPI / PC_DPI);
-		}
+//		if (Capabilities.screenDPI > PC_DPI) {
+//			len = len / (Capabilities.screenDPI / PC_DPI);
+//		}
 		if (len >= SLEEK_JUGDE) {
 			var obj : * = getInMap(_currentObj.source);
 			for each (var callFun : Function in obj.calls) {
