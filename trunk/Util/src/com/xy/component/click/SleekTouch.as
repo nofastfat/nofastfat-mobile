@@ -33,11 +33,17 @@ public class SleekTouch {
 	public static function bindTouch(source : InteractiveObject, call : Function, leftToRight : Boolean = true) : void {
 		var obj : * = getInMap(source);
 		if (obj != null) {
-			if (obj.calls.indexOf(call) == -1) {
+			var index:int =obj.calls.indexOf(call); 
+			if (index == -1) {
 				obj.calls.push(call);
+				obj.leftToRight.push(leftToRight);
+			}else{
+				
+				obj.calls[index] = call;
+				obj.leftToRight[index] = leftToRight;
 			}
 		} else {
-			_maps.push({source: source, calls: [call], leftToRight: leftToRight});
+			_maps.push({source: source, calls: [call], leftToRight: [leftToRight]});
 			source.addEventListener(MouseEvent.MOUSE_DOWN, __downHandler);
 		}
 
@@ -61,18 +67,16 @@ public class SleekTouch {
 		var stage : Stage = EnterFrameCall.getStage();
 		var pt : Point = new Point(stage.mouseX, stage.mouseY);
 		var len : int;
-		if (_currentObj.leftToRight) {
-			len = pt.x - _currentObj.pt.x;
-		} else {
-			len = _currentObj.pt.x - pt.x;
-		}
-//		if (Capabilities.screenDPI > PC_DPI) {
-//			len = len / (Capabilities.screenDPI / PC_DPI);
-//		}
-		if (len >= SLEEK_JUGDE) {
+		var leftToRightMatch : Boolean = (pt.x - _currentObj.pt.x) >= SLEEK_JUGDE;
+		var rightToLeftMatch : Boolean = (_currentObj.pt.x - pt.x) >= SLEEK_JUGDE;
+		if (leftToRightMatch || rightToLeftMatch) {
 			var obj : * = getInMap(_currentObj.source);
-			for each (var callFun : Function in obj.calls) {
-				callFun(_currentObj.source);
+			for(var i : int = 0; i < obj.calls.length; i++){
+				var callFun : Function = obj.calls[i];
+				var leftToRight :Boolean= obj.leftToRight[i];
+				if((leftToRight && leftToRightMatch) || (!leftToRight && rightToLeftMatch)){
+					callFun(_currentObj.source);
+				}
 			}
 		}
 

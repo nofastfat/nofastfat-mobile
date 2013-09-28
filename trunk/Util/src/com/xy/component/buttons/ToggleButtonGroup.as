@@ -14,11 +14,13 @@ public class ToggleButtonGroup extends EventDispatcher {
 	private var _btns : Array = [];
 
 	private var _lastSelectedButton : ToggleButton;
-
+	
 	private var _allowNullSelect : Boolean;
+	private var _allowSameEvent : Boolean;
 
-	public function ToggleButtonGroup(allowNullSelect : Boolean = false) {
+	public function ToggleButtonGroup(allowNullSelect : Boolean = false, allowSameEvent:Boolean = false) {
 		_allowNullSelect = allowNullSelect;
+		_allowSameEvent = allowSameEvent;
 	}
 
 	/**
@@ -91,13 +93,17 @@ public class ToggleButtonGroup extends EventDispatcher {
 			index = -1;
 		}
 		setSelected(index);
-		if (!isSame || _allowNullSelect) {
+		if (!isSame || _allowNullSelect || _allowSameEvent) {
 			dispatchEvent(new ToggleButtonGroupEvent(ToggleButtonGroupEvent.STATE_CHANGE, index));
 		}
 	}
-
+	
 	public function get selectIndex() : int {
 		return _btns.indexOf(_lastSelectedButton);
+	}
+	
+	public function get selectLine() : ToggleButton {
+		return _lastSelectedButton;
 	}
 }
 }
