@@ -1,4 +1,6 @@
 package com.xy.component.datePicker {
+import com.xy.component.click.SleekTouch;
+
 import flash.display.DisplayObject;
 import flash.display.GradientType;
 import flash.display.SpreadMethod;
@@ -84,6 +86,9 @@ public class DatePicker extends Sprite {
 		} else {
 			init();
 		}
+		
+		SleekTouch.bindTouch(this, onPrevClick, true);
+		SleekTouch.bindTouch(this, onNextClick, false);
 	}
 
 	private function defaultTxtFormat(str : String) : TextFormat {
@@ -163,7 +168,7 @@ public class DatePicker extends Sprite {
 		_inited = true;
 	}
 
-	private function onNextClick(e : MouseEvent) : void {
+	private function onNextClick(e : *) : void {
 		//**只有当上个月有可选内容时才能滚动
 		if (_disallowNext) {
 			return;
@@ -181,7 +186,7 @@ public class DatePicker extends Sprite {
 		dispatchEvent(new Event(Event.SCROLL));
 	}
 
-	private function onPrevClick(e : MouseEvent) : void {
+	private function onPrevClick(e : *) : void {
 		//**只有当上个月有可选内容时才能滚动
 		if (_disallowPrev) {
 			return;

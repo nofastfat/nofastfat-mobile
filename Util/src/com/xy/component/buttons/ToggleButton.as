@@ -17,7 +17,7 @@ public class ToggleButton extends EventDispatcher {
 	private var _selected : Boolean;
 
 	public function ToggleButton(mc : MovieClip = null, banChildEvent : Boolean = true) {
-		if(mc == null){
+		if (mc == null) {
 			return;
 		}
 		setCtrlUI(mc, banChildEvent);
@@ -40,7 +40,7 @@ public class ToggleButton extends EventDispatcher {
 		_selected = false;
 		_target = mc;
 		_target.gotoAndStop(1);
-		if(banChildEvent){
+		if (banChildEvent) {
 			_target.mouseChildren = false;
 			_target.buttonMode = true;
 		}
@@ -53,9 +53,10 @@ public class ToggleButton extends EventDispatcher {
 			TouchClick.unBind(_target, __clickHandler);
 		}
 		_target = null;
+		_selected = false;
 	}
 
-	private function __clickHandler(source:* = null) : void {
+	private function __clickHandler(source : * = null) : void {
 		selected = !selected;
 		dispatchEvent(new ToggleButtonEvent(ToggleButtonEvent.STATE_CHANGE, selected));
 	}
@@ -76,6 +77,11 @@ public class ToggleButton extends EventDispatcher {
 			_target.gotoAndStop(1);
 		}
 	}
+
+	public function get target() : MovieClip {
+		return _target;
+	}
+
 
 }
 }
