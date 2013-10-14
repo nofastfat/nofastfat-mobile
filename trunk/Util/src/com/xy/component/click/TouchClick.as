@@ -16,8 +16,8 @@ import flash.system.Capabilities;
  * 创建时间：2013-9-12 下午12:15:41
  **/
 public class TouchClick {
-	private static const PC_DPI : int = 72;
-	private static const CLICK_JUGDE : int = 15;
+	private static const PC_DPI : int = 72; 
+	private static const CLICK_JUGDE : int = 1;
 	
 	private static var _maps : Array = [];
 
@@ -50,20 +50,16 @@ public class TouchClick {
 
 	private static function __downHandler(e : MouseEvent) : void {
 		var stage : Stage = EnterFrameCall.getStage();
-		_currentObj = {source: e.currentTarget, pt: new Point(stage.mouseX, stage.mouseY)};
+		_currentObj = {source: e.currentTarget, pt: new Point(stage.mouseX, stage.mouseY), clickEnable:true};
+		EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_MOVE, __moveHandler);
 	}
 
 	private static function __upHandler(e : MouseEvent) : void {
+		EnterFrameCall.getStage().removeEventListener(MouseEvent.MOUSE_MOVE, __moveHandler);
 		if (_currentObj == null) {
 			return;
 		}
-		var stage : Stage = EnterFrameCall.getStage();
-		var pt : Point = new Point(stage.mouseX, stage.mouseY);
-		var len : int = pt.subtract(_currentObj.pt).length;
-		if(Capabilities.screenDPI > PC_DPI){
-			len = len/(Capabilities.screenDPI/PC_DPI);
-		}
-		if (len <= CLICK_JUGDE) {
+		if (_currentObj.clickEnable) {
 			var obj : * = getInMap(_currentObj.source);
 			for each (var callFun : Function in obj.calls) {
 				callFun(_currentObj.source);
@@ -71,6 +67,21 @@ public class TouchClick {
 		}
 
 		_currentObj = null;
+	}
+	
+	private static var _tmpPt : Point = new Point();
+	
+	private static function __moveHandler(e : Event):void{
+		if (_currentObj == null) {
+			return;
+		}
+		
+		var stage : Stage = EnterFrameCall.getStage();
+		_tmpPt.setTo(stage.mouseX, stage.mouseY);
+		var len : int = _tmpPt.subtract(_currentObj.pt).length;
+		if (len > CLICK_JUGDE) {
+			_currentObj.clickEnable = false;
+		}
 	}
 
 	private static function getInMap(source : InteractiveObject) : * {
