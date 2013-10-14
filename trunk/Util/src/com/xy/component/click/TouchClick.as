@@ -17,7 +17,7 @@ import flash.system.Capabilities;
  **/
 public class TouchClick {
 	private static const PC_DPI : int = 72; 
-	private static const CLICK_JUGDE : int = 1;
+	private static const CLICK_JUGDE : int = 2;
 	
 	private static var _maps : Array = [];
 
