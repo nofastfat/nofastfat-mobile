@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
-  <includeClasses/>
+  <includeClasses>
+    <classEntry path="com.xy.animation.AnimateObj"/>
+    <classEntry path="com.xy.animation.DelayedCall"/>
+    <classEntry path="com.xy.animation.IAnimatable"/>
+    <classEntry path="com.xy.animation.Juggler"/>
+    <classEntry path="com.xy.animation.Transitions"/>
+    <classEntry path="com.xy.animation.Tween"/>
+    <classEntry path="com.xy.component.SButton"/>
+    <classEntry path="com.xy.component.SHpBar"/>
+    <classEntry path="com.xy.component.Slider.Slider"/>
+    <classEntry path="com.xy.component.Slider.SliderMode"/>
+    <classEntry path="com.xy.component.Slider.event.SliderEvent"/>
+    <classEntry path="com.xy.component.alert.Alert"/>
+    <classEntry path="com.xy.component.alert.enum.AlertType"/>
+    <classEntry path="com.xy.component.alert.interfaces.IAlertContent"/>
+    <classEntry path="com.xy.component.buttons.ToggleButton"/>
+    <classEntry path="com.xy.component.buttons.ToggleButtonGroup"/>
+    <classEntry path="com.xy.component.buttons.event.ToggleButtonEvent"/>
+    <classEntry path="com.xy.component.buttons.event.ToggleButtonGroupEvent"/>
+    <classEntry path="com.xy.component.click.LongTouch"/>
+    <classEntry path="com.xy.component.click.SleekTouch"/>
+    <classEntry path="com.xy.component.click.TouchClick"/>
+    <classEntry path="com.xy.component.colorPicker.ColorPicker"/>
+    <classEntry path="com.xy.component.colorPicker.ColorPikerEvent"/>
+    <classEntry path="com.xy.component.colorPicker.enum.PreSwatches"/>
+    <classEntry path="com.xy.component.datePicker.DatePicker"/>
+    <classEntry path="com.xy.component.menu.Menu"/>
+    <classEntry path="com.xy.component.numericStepper.NumericStepper"/>
+    <classEntry path="com.xy.component.numericStepper.event.NumericStepperEvent"/>
+    <classEntry path="com.xy.component.page.SPage"/>
+    <classEntry path="com.xy.component.page.event.SPageEvent"/>
+    <classEntry path="com.xy.component.page.vo.PageVo"/>
+    <classEntry path="com.xy.component.toolTip.SimpleTipContent"/>
+    <classEntry path="com.xy.component.toolTip.SimpleTipContentYellow"/>
+    <classEntry path="com.xy.component.toolTip.ToolTip"/>
+    <classEntry path="com.xy.component.toolTip.enum.ToolTipMode"/>
+    <classEntry path="com.xy.component.toolTip.interfaces.ITipViewContent"/>
+    <classEntry path="com.xy.graphics.CubicBezier"/>
+    <classEntry path="com.xy.util.Base64"/>
+    <classEntry path="com.xy.util.Chinese"/>
+    <classEntry path="com.xy.util.Direction4"/>
+    <classEntry path="com.xy.util.Direction8"/>
+    <classEntry path="com.xy.util.EnterFrameCall"/>
+    <classEntry path="com.xy.util.GrayColor"/>
+    <classEntry path="com.xy.util.Http"/>
+    <classEntry path="com.xy.util.ImageAndTxt"/>
+    <classEntry path="com.xy.util.RandomName"/>
+    <classEntry path="com.xy.util.Rotator"/>
+    <classEntry path="com.xy.util.STool"/>
+    <classEntry path="com.xy.util.SilzAstar"/>
+    <classEntry path="com.xy.util.SingleLogicThread"/>
+    <classEntry path="com.xy.util.TextCounter"/>
+    <classEntry path="com.xy.util.ThreadFactory"/>
+    <classEntry path="com.xy.util.TimeTraslate"/>
+    <classEntry path="deng.fzip.FZip"/>
+    <classEntry path="deng.fzip.FZipErrorEvent"/>
+    <classEntry path="deng.fzip.FZipEvent"/>
+    <classEntry path="deng.fzip.FZipFile"/>
+    <classEntry path="deng.fzip.FZipLibrary"/>
+    <classEntry path="deng.utils.ChecksumUtil"/>
+    <classEntry path="net.hires.debug.Stats"/>
+    <classEntry path="org.as3wavsound.WavSound"/>
+    <classEntry path="org.as3wavsound.WavSoundChannel"/>
+    <classEntry path="org.as3wavsound.WavSoundPlayer"/>
+    <classEntry path="org.as3wavsound.sazameki.core.AudioSamples"/>
+    <classEntry path="org.as3wavsound.sazameki.core.AudioSetting"/>
+    <classEntry path="org.as3wavsound.sazameki.format.riff.Chunk"/>
+    <classEntry path="org.as3wavsound.sazameki.format.riff.LIST"/>
+    <classEntry path="org.as3wavsound.sazameki.format.riff.RIFF"/>
+    <classEntry path="org.as3wavsound.sazameki.format.wav.Wav"/>
+    <classEntry path="org.as3wavsound.sazameki.format.wav.chunk.WavdataChunk"/>
+    <classEntry path="org.as3wavsound.sazameki.format.wav.chunk.WavfmtChunk"/>
+    <classEntry path="org.bytearray.micrecorder.IEncoder"/>
+    <classEntry path="org.bytearray.micrecorder.MicRecorder"/>
+    <classEntry path="org.bytearray.micrecorder.encoder.WaveEncoder"/>
+    <classEntry path="org.bytearray.micrecorder.events.RecordingEvent"/>
+  </includeClasses>
   <includeResources/>
   <namespaceManifests/>
 </flexLibProperties>
