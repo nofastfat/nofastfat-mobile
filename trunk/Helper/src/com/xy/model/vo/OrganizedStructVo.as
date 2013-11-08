@@ -93,7 +93,7 @@ public class OrganizedStructVo {
     public var cardStatus : SInfoCardStatus = new SInfoCardStatus();
 
     public static function fromJsonStr(jsonStr : String) : OrganizedStructVo {
-        return fromJson(JSON.decode(jsonStr));
+        return fromJson(com.adobe.serialization.json.JSON.decode(jsonStr));
     }
 
     public static function fromJson(obj : *) : OrganizedStructVo {

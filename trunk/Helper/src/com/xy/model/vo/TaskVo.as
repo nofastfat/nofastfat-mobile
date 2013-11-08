@@ -73,6 +73,11 @@ public class TaskVo {
 
 
     public var parent : TaskVo;
+	
+	/**
+	 * 目标详情 
+	 */	
+	public var titleInfo : String = "";
 
     /**
      * ui显示的状态
@@ -129,7 +134,7 @@ public class TaskVo {
     }
 
     public static function fromJsonStr(jsonStr : String) : TaskVo {
-        return fromJson(JSON.decode(jsonStr));
+        return fromJson(com.adobe.serialization.json.JSON.decode(jsonStr));
     }
 
     public static function fromJson(obj : *) : TaskVo {

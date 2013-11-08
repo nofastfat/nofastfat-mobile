@@ -73,7 +73,7 @@ public class GetOrganizedStructCmd extends AbsCommand {
                 }
                 rs.push(tmp);
             }
-            setTimeout(callback, 500, JSON.encode(rs));
+            setTimeout(callback, 500, com.adobe.serialization.json.JSON.encode(rs));
         } else {
             new Http(Config.ACTION0_URL + "?parentId=" + vo.id, callback);
         }
@@ -88,7 +88,7 @@ public class GetOrganizedStructCmd extends AbsCommand {
             return;
         }
 
-        var arr : Array = JSON.decode(data);
+        var arr : Array = com.adobe.serialization.json.JSON.decode(data);
         _requestVo.subStuctList = [];
         for each (var obj : * in arr) {
             var child : OrganizedStructVo = OrganizedStructVo.fromJson(obj)
