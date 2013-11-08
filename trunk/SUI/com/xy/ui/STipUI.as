@@ -47,7 +47,7 @@ public class STipUI extends MovieClip{
 		this.x = _pt.x;
 		this.y = _pt.y;
 		_timeout = setTimeout(_hide, 3000);
-		SUIRoot.getStage().addChild(this);
+		SUIRoot.stage.addChild(this);
 		this.alpha = 1;
 		TweenLite.from(this, 0.4, {alpha: 0.1});
 	}
@@ -64,8 +64,8 @@ public class STipUI extends MovieClip{
 	}
 	
 	private function remove():void{
-		if(SUIRoot.getStage().contains(this)){
-			SUIRoot.getStage().removeChild(this);
+		if(SUIRoot.stage.contains(this)){
+			SUIRoot.stage.removeChild(this);
 		}
 	}
 }
