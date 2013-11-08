@@ -8,13 +8,31 @@
  **/
 public class SUIRoot {
 	private static var _stage : Stage;
+	private static var _stageWidth : int = -1;
+	private static var _stageHeight : int = -1;
 	
 	public static function initStage(stage : Stage):void{
 		_stage = stage;
 	}
 	
-	public static function getStage():Stage{
+	public static function get stage():Stage{
 		return _stage;
+	}
+	
+	public static function get stageWidth():int{
+		if(_stageWidth == -1){
+			_stageWidth = _stage.stageWidth;
+		}
+		
+		return _stageWidth;
+	}
+	
+	public static function get stageHeight():int{
+		if(_stageHeight == -1){
+			_stageHeight = _stage.stageHeight;
+		}
+		
+		return _stageHeight;
 	}
 	
 }
