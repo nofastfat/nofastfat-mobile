@@ -63,11 +63,12 @@ public class GetTaskCmd2 extends AbsCommand {
                 child.taskName = STool.randomFromArray(taskNames);
                 child.taskValue = STool.randomFromArray(taskValues1);
                 child.subLen = STool.random(0, 10);
+				child.titleInfo = "asd";
 
                 rs.push(child);
             }
 
-            setTimeout(callback, 500, JSON.encode(rs));
+            setTimeout(callback, 500, com.adobe.serialization.json.JSON.encode(rs));
         } else {
             new Http(Config.ACTION3_URL + "?currentId=" + _vo.id, callback);
         }
@@ -86,7 +87,7 @@ public class GetTaskCmd2 extends AbsCommand {
             return;
         }
 
-        var json : Array = JSON.decode(data);
+        var json : Array = com.adobe.serialization.json.JSON.decode(data);
         _vo.subTaskList = [];
 
         var siblings : Array = [];

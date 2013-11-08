@@ -14,7 +14,10 @@ import com.xy.view.ui.SPowerMatrix;
 import com.xy.view.ui.SSimpleInfoCard;
 
 import flash.display.DisplayObject;
+import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 
 public class DetailContainerMediator extends AbsMediator {
     public static const NAME : String = "DetailContainerMediator";
@@ -96,6 +99,12 @@ public class DetailContainerMediator extends AbsMediator {
             _personCard = new SSimpleInfoCard();
             _personCard.addEventListener(SSimpleInfoCardEvent.CLOSE, __closePersonCardHandler);
             _personCard.addEventListener(SSimpleInfoCardEvent.SHOW_TASK_CHILD, __showTaskChildHandle);
+			_personCard.addEventListener(MouseEvent.MOUSE_DOWN, function(e : Event):void{
+				_personCard.startDrag(false, new Rectangle(_personCard.x, -_personCard.height, 0, _personCard.height*2));
+			});
+			EnterFrameCall.getStage().addEventListener(MouseEvent.MOUSE_UP, function(e : Event):void{
+				_personCard.stopDrag();
+			});
         }
 
         _personCard.setData(vo);
@@ -113,6 +122,10 @@ public class DetailContainerMediator extends AbsMediator {
         if (targetLocation.x + _personCard.width > ui.sWidth) {
             targetLocation.x = ui.sWidth - _personCard.width - 10;
         }
+		
+		if(targetLocation.y < 0){
+			targetLocation.y = 10;
+		}
         var stageLocation : Point = ui.localToGlobal(targetLocation);
 
         _personCard.x = stageLocation.x;

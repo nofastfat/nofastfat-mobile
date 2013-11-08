@@ -1,5 +1,7 @@
 package com.xy.view.ui {
 import com.greensock.TweenLite;
+import com.xy.component.toolTip.ToolTip;
+import com.xy.component.toolTip.enum.ToolTipMode;
 import com.xy.model.vo.TaskVo;
 import com.xy.ui.TaskCard;
 import com.xy.util.EnterFrameCall;
@@ -80,6 +82,10 @@ public class STaskCard extends TaskCard {
         stateMc.gotoAndStop(_vo.statusValue + 1);
         bg.gotoAndStop(_vo.statusValue + 1);
         ctrlBtn.gotoAndStop(_vo.statusValue + 1);
+		
+		if(_vo.titleInfo != "" && _vo.titleInfo != null){
+			ToolTip.setSimpleTip(targetTf, _vo.titleInfo, ToolTipMode.RIGHT_TOP);
+		}
         
         ctrlBtn.visible = _vo.subLen != 0;
 

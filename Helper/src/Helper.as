@@ -73,7 +73,7 @@ public class Helper extends Sprite {
         }
         vo.status = 0;
 
-        trace(JSON.encode(vo));
+        trace(com.adobe.serialization.json.JSON.encode(vo));
     }
 
     private function __addToStageHandler(e : Event) : void {

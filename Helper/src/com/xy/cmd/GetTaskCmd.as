@@ -66,6 +66,7 @@ public class GetTaskCmd extends AbsCommand {
             currentTask.taskName = _currentVo.taskName;
             currentTask.taskValue = _currentVo.taskValue;
             currentTask.subTaskList = [];
+			currentTask.titleInfo = "2333";
             var len : int = STool.random(0, 10);
             currentTask.subLen = len;
             for (var i : int = 0; i < len; i++) {
@@ -82,6 +83,7 @@ public class GetTaskCmd extends AbsCommand {
                 child.taskName = STool.randomFromArray(taskNames);
                 child.taskValue = STool.randomFromArray(taskValues1);
                 child.subLen = STool.random(0, 10);
+				child.titleInfo = "ddd";
                 currentTask.subTaskList.push(child);
             }
 
@@ -100,6 +102,7 @@ public class GetTaskCmd extends AbsCommand {
                 sib.taskName = svo.taskName;
                 sib.taskValue = svo.taskValue;
                 sib.subLen = STool.random(0, 10);
+				sib.titleInfo = "cccc";
 
                 sibs.push(sib);
             }
@@ -108,7 +111,7 @@ public class GetTaskCmd extends AbsCommand {
             rs.current = currentTask;
             rs.siblings = sibs;
 
-            setTimeout(callback, 500, JSON.encode(rs));
+            setTimeout(callback, 500, com.adobe.serialization.json.JSON.encode(rs));
         } else {
 
 
@@ -137,7 +140,7 @@ public class GetTaskCmd extends AbsCommand {
         var vitrulParent : TaskVo = new TaskVo();
         vitrulParent.subTaskList = [];
 
-        var json : * = JSON.decode(data);
+        var json : * = com.adobe.serialization.json.JSON.decode(data);
         var vo : TaskVo = TaskVo.fromJson(json.current);
         vitrulParent.subTaskList.push(vo);
         vo.parent = vitrulParent;

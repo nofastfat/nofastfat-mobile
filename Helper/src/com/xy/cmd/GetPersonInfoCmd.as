@@ -57,7 +57,7 @@ public class GetPersonInfoCmd extends AbsCommand {
             vo.phone = "110119";
 
             vo.taskList = [];
-            var len : int = STool.random(2, 10);
+            var len : int = STool.random(2, 20);
             var taskNames : Array = ["2013年多兰之剑销售目标", "野怪清理", "GANK次数"];
             var taskValues : Array = ["2000万", "1000万", "200"];
             for (var i : int = 0; i < len; i++) {
@@ -68,7 +68,7 @@ public class GetPersonInfoCmd extends AbsCommand {
                 vo.taskList.push(svo);
             }
 
-            setTimeout(callback, 500, JSON.encode(vo));
+            setTimeout(callback, 500, com.adobe.serialization.json.JSON.encode(vo));
         } else {
             new Http(Config.ACTION1_URL + "?personId=" + _id, callback);
         }

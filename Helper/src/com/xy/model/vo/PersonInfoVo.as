@@ -47,7 +47,7 @@ public class PersonInfoVo {
     public var taskList : Array;
 
     public static function fromJsonStr(jsonStr : String) : PersonInfoVo {
-        return fromJson(JSON.decode(jsonStr));
+        return fromJson(com.adobe.serialization.json.JSON.decode(jsonStr));
     }
 
     public static function fromJson(obj : *) : PersonInfoVo {
