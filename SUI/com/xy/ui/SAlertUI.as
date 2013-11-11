@@ -1,7 +1,7 @@
 ﻿package com.xy.ui {
 import com.greensock.TweenLite;
-import flash.display.MovieClip;
 
+import flash.display.MovieClip;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
@@ -28,10 +28,8 @@ public class SAlertUI extends MovieClip {
 	public function SAlertUI() {
 		super();
 
-		width = SUIRoot.stageWidth;
-		height = SUIRoot.stageHeight;
-		this.x = width/2;
-		this.y = height/2;
+		scaleX = SUIRoot.scaleXBy(480);
+		scaleY = SUIRoot.scaleYBy(960);
 		okBtn.addEventListener(MouseEvent.CLICK, __clickHandler);
 	}
 
@@ -53,9 +51,11 @@ public class SAlertUI extends MovieClip {
 		if(this.stage != null){
 			return;
 		}
-		
+		Mask.getInstance().show(hide);
 		SUIRoot.stage.addChild(this);
-		TweenLite.from(this, 0.4, {scaleX:0.1, scaleY:0.1});
+		this.x = SUIRoot.stageWidth;
+		this.y = (SUIRoot.stageHeight - height)/2;
+		TweenLite.to(this, 0.3,{x:(SUIRoot.stageWidth - width)/2, overwrite:true});
 		_call = call;
 	}
 
@@ -63,7 +63,9 @@ public class SAlertUI extends MovieClip {
 	 * 隐藏 
 	 */	
 	public function hide() : void {
-		remove();
+		TweenLite.killTweensOf(this);
+		remove(); 
+		Mask.getInstance().hide();
 	}
 	
 	private function remove():void{
