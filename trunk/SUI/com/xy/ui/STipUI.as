@@ -49,7 +49,7 @@ public class STipUI extends MovieClip{
 		_timeout = setTimeout(_hide, 3000);
 		SUIRoot.stage.addChild(this);
 		this.alpha = 1;
-		TweenLite.from(this, 0.4, {alpha: 0.1});
+		TweenLite.from(this, 0.4, {alpha: 0.1}); 
 	}
 
 	public function hide() : void {
