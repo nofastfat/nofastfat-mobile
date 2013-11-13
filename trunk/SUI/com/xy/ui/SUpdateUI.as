@@ -1,7 +1,8 @@
 ﻿package com.xy.ui {
+import flash.display.MovieClip;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.display.MovieClip;
 
 
 /**
@@ -10,7 +11,7 @@ import flash.display.MovieClip;
  * @version 1.0.0
  * 创建时间：2013-9-24 下午12:01:44
  **/
-public class SUpdateUI extends MovieClip {
+public class SUpdateUI extends Sprite {
 	private var _call : Function;
 	
 	public function SUpdateUI() {

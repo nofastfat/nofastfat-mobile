@@ -3,6 +3,7 @@ import com.greensock.TweenLite;
 
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
+import flash.display.Sprite;
 import flash.geom.Point;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
@@ -14,7 +15,7 @@ import flash.utils.setTimeout;
  * @version 1.0.0
  * 创建时间：2013-9-27 下午2:47:53
  **/
-public class STipUI extends MovieClip{
+public class STipUI extends Sprite{
 	protected static var _instance : STipUI;
 	protected var _pt : Point = new Point();
 	protected var _timeout : uint;
