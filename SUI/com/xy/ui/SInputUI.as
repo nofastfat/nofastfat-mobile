@@ -1,6 +1,7 @@
 package com.xy.ui {
 
 import flash.display.MovieClip;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
@@ -12,7 +13,7 @@ import flash.text.TextField;
  * @version 1.0.0
  * 创建时间：2013-9-11 下午12:32:45
  **/
-public class SInputUI extends MovieClip {
+public class SInputUI extends Sprite {
 	private var _call : Function;
 
 	private var _name : String = "";

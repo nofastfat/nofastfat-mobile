@@ -2,6 +2,7 @@
 import com.greensock.TweenLite;
 
 import flash.display.MovieClip;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
@@ -13,7 +14,7 @@ import flash.events.MouseEvent;
  * @version 1.0.0
  * 创建时间：2013-9-9 上午11:54:23
  **/
-public class SAlertUI extends MovieClip {
+public class SAlertUI extends Sprite {
 	private static var _instance : SAlertUI;
 	private static var _call : Function;
 
