@@ -44,26 +44,27 @@ public class Http {
 				req.data = params;
 			}
 		} else {
-//			var builder : HttpRequestBuilder = new HttpRequestBuilder(url);
-//			for (var key : String in params) {
-//				if (params[key] is String) {
-//					builder.writeVariable(key, params[key]);
-//				} else {
-//					builder.writeByteArray(key, params[key]);
-//				}
-//			}
-//			req = builder.request;
-			req = new URLRequest(url);
-			var pp : URLVariables = new URLVariables();
+			var builder : HttpRequestBuilder = new HttpRequestBuilder(url);
 			for (var key : String in params) {
-				if (params[key] is String) {
-					pp[key] = params[key];
+				if (params[key] is String || params[key] is int) {
+					builder.writeVariable(key, params[key]);
 				} else {
-					pp[key] = Base64.encode(params[key]);
+					builder.writeByteArray(key, params[key]);
 				}
 			}
-			req.data = pp;
-			req.method = URLRequestMethod.POST;
+			req = builder.request;
+			
+//			req = new URLRequest(url);
+//			var pp : URLVariables = new URLVariables();
+//			for (var key : String in params) {
+//				if (params[key] is String) {
+//					pp[key] = params[key];
+//				} else {
+//					pp[key] = Base64.encode(params[key]);
+//				}
+//			}
+//			req.data = pp;
+//			req.method = URLRequestMethod.POST;
 		}
 
 		_loader.load(req);
