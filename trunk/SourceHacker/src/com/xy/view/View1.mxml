@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:view="com.xy.view.*"
+		 width="614" height="581" fontFamily="宋体" fontSize="14">
+	<fx:Declarations>
+		<s:RadioButtonGroup id="radiogroup1"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		.workfine{
+			color:#009900;
+		}
+		
+		.workwarn{
+			color:#FF0000;
+		}
+	</fx:Style>
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenLite;
+			import com.xy.util.Http;
+			
+			import mx.charts.renderers.DiamondItemRenderer;
+
+			private var _urls : Array;
+			private var _preUri : String;
+			private var _savePath : String;
+			private var _filterUrls : Array = [];
+			
+			private var _len : int;
+			private var _index : int;
+
+			private function importHAR() : void {
+				var f : File = new File();
+				f.browseForOpen("选择浏览器记录文件HAR", [new FileFilter("*.txt", "*.txt")]);
+				f.addEventListener(Event.SELECT, function(e : Event) : void {
+					f.load();
+				});
+				f.addEventListener(Event.COMPLETE, function(e : Event) : void {
+					parseHAR(f.data.readUTFBytes(f.data.length));
+				});
+			}
+
+			private function parseHAR(str : String) : void {
+				_urls = [];
+				var arr : Array = str.split("\n");
+
+				var tmpArr : Dictionary = new Dictionary();
+				for each (var line : String in arr) {
+					var httpIndex : int = line.indexOf("http://");
+					if (httpIndex == -1) {
+						httpIndex = line.indexOf("https://");
+					}
+					if (httpIndex != -1) {
+						var url : String = line.substr(httpIndex);
+						var endIndex : int = url.indexOf("?");
+						if (endIndex == -1) {
+							endIndex = url.indexOf("\"");
+						}
+						url = url.substr(0, endIndex);
+
+						if (_urls.indexOf(url) == -1) {
+							_urls.push(url);
+							var pre : String = url.substr(0, url.indexOf("/", "https://".length));
+							if (tmpArr[pre] == null) {
+								tmpArr[pre] = 1;
+							} else {
+								tmpArr[pre]++;
+							}
+						}
+					}
+				}
+				var maxKey : String;
+				var maxValue : int = 0;
+				for (var key : String in tmpArr) {
+					if (tmpArr[key] > maxValue) {
+						maxKey = key;
+						maxValue = tmpArr[key];
+					}
+				}
+				_preUri = maxKey;
+				
+				_urls = _urls.filter(function(obj : String, ...rest):Boolean{
+					return obj.indexOf(maxKey) != -1;
+				});
+
+				updateUrl();
+			}
+
+			private function selectSavePath() : void {
+				var f : File = new File();
+				f.addEventListener(Event.SELECT, function(e : Event):void{
+					_savePath = f.nativePath;
+					pathTf.text = _savePath;
+					pathTf.styleName = "workfine";
+				});
+				f.browseForDirectory("选择资源的保证目录");
+			}
+			
+			private function typeChange():void{
+				var needFilter : Boolean = selectFilter.selected;
+				for(var i : int = 0; i < 4; i++){
+					this["f" + i].enabled = needFilter;
+				}
+				updateUrl();
+			}
+			
+			private function filterChange():void{
+				var needFilter : Boolean = selectFilter.selected;
+				for(var i : int = 0; i < 4; i++){
+					this["f" + i].enabled = needFilter;
+				}
+				
+				updateUrl();
+			}
+			
+			private function updateUrl():void{
+				if(_urls == null){
+					return;
+				}
+				
+				if(!selectFilter.selected){
+					_filterUrls = _urls;
+				}else{
+					var prixs : Array = [];
+					if(f0.selected){
+						prixs.push(".png", ".gif", ".bmp", ".jpg", ".jpeg");
+					}
+					if(f1.selected){
+						prixs.push(".swf");	
+					}
+					if(f2.selected){
+						prixs.push(".css", ".js", ".html", ".shtml", ".htm");	
+					}
+					if(f3.selected){
+						prixs.push(".txt", ".zip", ".xml");	
+					}
+					
+					_filterUrls = _urls.filter(function(obj : String, ...rest):Boolean{
+						for each(var prix : String in prixs){
+							if(obj.indexOf(prix) != -1){
+								return true;
+							}
+						}
+						return false;
+					});
+				}
+				
+				_len = _filterUrls.length;
+				_index = -1;
+				
+				harTf.text = "共解析出 " + _len + " 个资源文件";
+				harTf.styleName = "workfine";
+			}
+
+			private function startDown() : void {
+				if(_urls == null){
+					harTf.text = "还未导入HAR文件！";
+					harTf.styleName = "workwarn";
+					harTf.x = 194;
+					TweenLite.from(harTf, 0.3, {x:harTf.x + harTf.width});
+					return;
+				}
+				
+				if(_savePath == null){
+					pathTf.text = "还未选择保存目录！";
+					pathTf.styleName = "workwarn";
+					pathTf.x = 194;
+					TweenLite.from(pathTf, 0.3, {x:pathTf.x + pathTf.width});
+					return;
+				}
+				
+				_index = skipNum.value - 1;
+				_needStop = false;
+				ViewProgress.getInstance().show(null, stop);
+				
+				tjNext();
+			}
+			
+			private var _needStop : Boolean = false;
+			
+			private function stop():void{
+				_needStop = true;
+			}
+			
+			private function tjNext() : void {
+				_index++;
+				if (_index >= _len) {
+					ViewProgress.getInstance().addLog("Complete len: " + _len);
+					return;
+				}
+				
+				if(_needStop){
+					ViewProgress.getInstance().addLog("Stoped by user!");
+					return;
+				}
+				
+				ViewProgress.getInstance().setProgress(_index + 1, _len);
+				ViewProgress.getInstance().addLog("start:" + _index + "/" + _len);
+				var url : String = _filterUrls[_index];
+				new Http(url, tjOk, URLLoaderDataFormat.BINARY);
+			}
+			
+			private function tjOk(data : ByteArray) : void {
+				var url : String = _filterUrls[_index];
+				if(data == null){
+					ViewProgress.getInstance().addLog("not found resource:" + url);
+					tjNext();
+					return;
+				}
+				var path : String = url.substr(_preUri.length);
+				path = _savePath  + path;
+				path = path.replace(new RegExp("/", "g"), File.separator);
+				var f : File = new File(path);
+				var fr : FileStream = new FileStream();
+				fr.open(f, FileMode.WRITE);
+				fr.writeBytes(data);
+				fr.close();
+				tjNext();
+			}
+
+		]]>
+	</fx:Script>
+	<s:Label x="10"
+			 y="10"
+			 width="91"
+			 fontSize="25"
+			 text="方式一"/>
+	<s:Label x="36"
+			 y="43"
+			 width="387"
+			 text="1.使用chrome浏览器+F12"/>
+	<s:Label x="36"
+			 y="71"
+			 width="387"
+			 text="2.在chrome中打开想“偷资源”的游戏"/>
+	<s:Label x="37"
+			 y="97"
+			 width="387"
+			 text="3.尽情游戏，玩得越多，“偷”的资源越多"/>
+	<s:Label x="37"
+			 y="124"
+			 width="387"
+			 text="4.在chrome的下端的调试窗口中，打开&quot;network&quot;,右键任意项，选择“Copy all as HAR”，将浏览记录另存为txt"/>
+	<s:Button x="87"
+			  y="185"
+			  label="导入HAR文件"
+			  click="importHAR()"/>
+	<s:Label id="harTf" x="194" y="189" width="375"/>
+	<s:CheckBox id="saveType"
+				x="92"
+				y="441"
+				label="按照原目录结构存储到本地"
+				selected="true"/>
+	<s:Label id="pathTf" x="194" y="226" width="387"/>
+	<s:Button x="87" y="223" width="97" label="保存目录" click="selectSavePath()"/>
+	<s:CheckBox id="f0" x="126" y="316" label="图片(png,jpg,gif,bmp,jpeg)" click="filterChange()"
+				selected="true"/>
+	<s:CheckBox id="f1" x="126" y="344" label="flash文件(swf)" click="filterChange()" selected="true"/>
+	<s:CheckBox id="f2" x="126" y="372" label="网页元素(css, js, html, htm, shtml)"
+				click="filterChange()"/>
+	<s:CheckBox id="f3" x="126" y="400" label="配置文件(txt, zip, xml)" click="filterChange()"
+				selected="true"/>
+	<s:Button id="startBtn"
+			  x="47"
+			  y="515"
+			  width="522"
+			  height="43"
+			  label="开始“偷”资源"
+			  click="startDown()"/>
+	<s:VGroup id="downType"
+			  x="86"
+			  y="262"
+			  width="237">
+		<s:RadioButton id="selectAll" label="&quot;偷取&quot;所有文件" groupName="radiogroup1" click="typeChange()"/>
+		<s:RadioButton id="selectFilter" label="文件过滤" groupName="radiogroup1" selected="true" click="typeChange()"/>
+	</s:VGroup>
+	<mx:HRule x="37"
+			  y="172"
+			  width="544"
+			  height="5"/>
+	<s:Label x="37"
+			 y="192"
+			 width="55"
+			 text="Step1."/>
+	<s:Label x="38"
+			 y="226"
+			 width="54"
+			 text="Step2."/>
+	<s:Label x="38"
+			 y="263"
+			 width="54"
+			 text="Step3."/>
+	<s:Label x="39"
+			 y="444"
+			 width="54"
+			 text="Step4."/>
+	<s:Label x="39"
+			 y="476"
+			 width="54"
+			 text="Step5."/>
+	<s:Label x="92"
+			 y="476"
+			 width="60"
+			 text="跳过前面"/>
+	<s:NumericStepper id="skipNum" x="151" y="470"/>
+	<s:Label x="214"
+			 y="476"
+			 width="28"
+			 text="个"/>
+</s:Group>
