@@ -63,7 +63,11 @@ public class GetTaskCmd2 extends AbsCommand {
                 child.taskName = STool.randomFromArray(taskNames);
                 child.taskValue = STool.randomFromArray(taskValues1);
                 child.subLen = STool.random(0, 10);
-				child.titleInfo = "asd";
+				child.decideTime = "2000-2-14";
+				child.titleInfo =  STool.copyChar("标题详情", STool.random(2, 10));
+				child.auditMan = RandomName.makeName();
+				child.auditSuggest = STool.copyChar("审核意见", STool.random(2, 10));
+				child.auditTime = "2013-3-14";
 
                 rs.push(child);
             }

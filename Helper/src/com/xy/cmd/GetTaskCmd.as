@@ -66,7 +66,11 @@ public class GetTaskCmd extends AbsCommand {
             currentTask.taskName = _currentVo.taskName;
             currentTask.taskValue = _currentVo.taskValue;
             currentTask.subTaskList = [];
-			currentTask.titleInfo = "2333";
+			currentTask.decideTime = "2000-2-14";
+			currentTask.titleInfo =  STool.copyChar("标题详情", STool.random(2, 10));
+			currentTask.auditMan = RandomName.makeName();
+			currentTask.auditSuggest = STool.copyChar("审核意见", STool.random(2, 10));
+			currentTask.auditTime = "2013-3-14";
             var len : int = STool.random(0, 10);
             currentTask.subLen = len;
             for (var i : int = 0; i < len; i++) {
@@ -83,7 +87,11 @@ public class GetTaskCmd extends AbsCommand {
                 child.taskName = STool.randomFromArray(taskNames);
                 child.taskValue = STool.randomFromArray(taskValues1);
                 child.subLen = STool.random(0, 10);
-				child.titleInfo = "ddd";
+				child.decideTime = "2000-2-14";
+				child.titleInfo =  STool.copyChar("标题详情", STool.random(2, 10));
+				child.auditMan = RandomName.makeName();
+				child.auditSuggest = STool.copyChar("审核意见", STool.random(2, 10));
+				child.auditTime = "2013-3-14";
                 currentTask.subTaskList.push(child);
             }
 
@@ -102,7 +110,11 @@ public class GetTaskCmd extends AbsCommand {
                 sib.taskName = svo.taskName;
                 sib.taskValue = svo.taskValue;
                 sib.subLen = STool.random(0, 10);
-				sib.titleInfo = "cccc";
+				sib.decideTime = "2000-2-14";
+				sib.titleInfo =  STool.copyChar("标题详情", STool.random(2, 10));
+				sib.auditMan = RandomName.makeName();
+				sib.auditSuggest = STool.copyChar("审核意见", STool.random(2, 10));
+				sib.auditTime = "2013-3-14";
 
                 sibs.push(sib);
             }
