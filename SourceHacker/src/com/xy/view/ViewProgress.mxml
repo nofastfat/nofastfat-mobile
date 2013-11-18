@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="400"
+			   height="392"
+			   fontSize="14"
+			   textAlign="center"
+			   close="titlewindow1_closeHandler(event)"
+			   title="“偷取”进度">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.xy.component.alert.Alert;
+
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+
+			private static var _ins : ViewProgress;
+			private var _pasue : Function;
+			private var _stop : Function;
+
+			public static function getInstance() : ViewProgress {
+				if (_ins == null) {
+					_ins = new ViewProgress();
+				}
+
+				return _ins;
+			}
+
+			public function show(pasue : Function, stop : Function) : void {
+				_pasue = pasue;
+				_stop = stop;
+				PopUpManager.addPopUp(this, SourceHacker.instance, true);
+				PopUpManager.centerPopUp(this);
+			}
+
+			public function setProgress(value : int, max : int) : void {
+				pg.setProgress(value, max);
+				pg.label = value + "/" + max;
+			}
+
+			public function addLog(info : String) : void {
+				logTf.appendText("\n" + info);
+			}
+
+			protected function titlewindow1_closeHandler(event : CloseEvent) : void {
+				mx.controls.Alert.show("确认停止？", "确认", mx.controls.Alert.YES | mx.controls.Alert.NO, SourceHacker.instance, function(e : CloseEvent) : void {
+					if (e.detail == mx.controls.Alert.YES) {
+						PopUpManager.removePopUp(this);
+						_stop();
+						_stop = null;
+					}
+				});
+			}
+		]]>
+	</fx:Script>
+	<mx:ProgressBar x="10"
+					y="15"
+					id="pg"
+					mode="manual"
+					width="271"
+					indeterminate="false"
+					labelPlacement="center"/>
+	<s:Button x="290"
+			  y="14"
+			  width="45"
+			  label="暂停"
+			  enabled="false"
+			  fontSize="12"/>
+	<s:Button x="343"
+			  enabled="false"
+			  y="14"
+			  width="45"
+			  label="取消"
+			  fontSize="12"/>
+	<s:TextArea id="logTf"
+				x="10"
+				y="52"
+				width="378"
+				height="297"
+				color="#FFFFFF"
+				contentBackgroundColor="#3B3B3B"
+				textAlign="left"/>
+</s:TitleWindow>
