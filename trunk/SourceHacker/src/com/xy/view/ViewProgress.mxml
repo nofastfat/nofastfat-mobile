@@ -22,6 +22,7 @@
 			private static var _ins : ViewProgress;
 			private var _pasue : Function;
 			private var _stop : Function;
+			private var _index : int;
 
 			public static function getInstance() : ViewProgress {
 				if (_ins == null) {
@@ -36,9 +37,11 @@
 				_stop = stop;
 				PopUpManager.addPopUp(this, SourceHacker.instance, true);
 				PopUpManager.centerPopUp(this);
+				logTf.text = "";
 			}
 
 			public function setProgress(value : int, max : int) : void {
+				_index = value;
 				pg.setProgress(value, max);
 				pg.label = value + "/" + max;
 			}
@@ -48,9 +51,9 @@
 			}
 
 			protected function titlewindow1_closeHandler(event : CloseEvent) : void {
-				mx.controls.Alert.show("确认停止？", "确认", mx.controls.Alert.YES | mx.controls.Alert.NO, SourceHacker.instance, function(e : CloseEvent) : void {
+				mx.controls.Alert.show("正在下载第" + _index + "个，确认停止？", "确认", mx.controls.Alert.YES | mx.controls.Alert.NO, SourceHacker.instance, function(e : CloseEvent) : void {
 					if (e.detail == mx.controls.Alert.YES) {
-						PopUpManager.removePopUp(this);
+						PopUpManager.removePopUp(ViewProgress._ins);
 						_stop();
 						_stop = null;
 					}
