@@ -32,5 +32,9 @@
 						y="0">
 			</view:View1>
 		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="方式二">
+			<view:View2 x="0" y="0">
+			</view:View2>
+		</s:NavigatorContent>
 	</mx:TabNavigator>
 </s:WindowedApplication>

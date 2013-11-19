@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="614"
+		 height="581"
+		 fontFamily="宋体"
+		 fontSize="14">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Style>
+						  @namespace s "library://ns.adobe.com/flex/spark";
+						  @namespace mx "library://ns.adobe.com/flex/mx";
+						  
+						  .workfine{
+							  color:#009900;
+						  }
+						  
+						  .workwarn{
+							  color:#FF0000;
+						  }
+					  </fx:Style>
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenLite;
+			import com.xy.ExcuteCmd;
+
+			private var _savePath : String;
+			private var _urls : Array;
+			private var _preUri : String;
+
+			private function selectSavePath() : void {
+				var f : File = new File();
+				f.addEventListener(Event.SELECT, function(e : Event) : void {
+					_savePath = f.nativePath;
+					pathTf.text = _savePath;
+					pathTf.styleName = "workfine";
+				});
+				f.browseForDirectory("选择资源的保证目录");
+			}
+
+			private function startDown() : void {
+				if(_preUri == null || _urls == null || _urls.length == 0){
+					nums.text = "请填写有效的URL";
+					nums.styleName = "workwarn";
+					nums.x = 39;
+					TweenLite.from(nums, 0.3, {x: nums.x + nums.width});
+					return;
+				}
+				
+				if (_savePath == null) {
+					pathTf.text = "还未选择保存目录！";
+					pathTf.styleName = "workwarn";
+					pathTf.x = 194;
+					TweenLite.from(pathTf, 0.3, {x: pathTf.x + pathTf.width});
+					return;
+				}
+				
+
+				var cmd : ExcuteCmd = new ExcuteCmd();
+				cmd.excute(_urls, 0, _savePath, _preUri, skipable.selected, saveType.selected);
+			}
+
+			protected function changed() : void {
+				var reg : RegExp = new RegExp(" ", "g");
+				var pre : String = uri0.text.replace(reg, "");
+				var center : String = uri1.text.replace(reg, "");
+				var end : String = uri2.text.replace(reg, "");
+				if (pre == "" || center == "" || end == "") {
+					_urls = null;
+					return;
+				}
+				_urls = [];
+				var centers : Array = center.split(",");
+				var rs : Array = [];
+				for each (var c : String in centers) {
+					if (c != null) {
+						if (c.indexOf("-") != -1 && c.charAt(0) != "-" && c.charAt(c.length - 1) != "-") {
+							var range : Array = c.split("-");
+							if (range.length == 2) {
+								if (("a" <= range[0] && range[0] <= "z") || ("A" <= range[0] && range[0] <= "Z")) {
+									for (var start : int = range[0].charCodeAt(0); start <= range[1].charCodeAt(0); start++) {
+										addToUrl(pre + String.fromCharCode(start) + end);
+									}
+								} else {
+									for (start = int(range[0]); start <= int(range[1]); start++) {
+										addToUrl(pre + start + end);
+									}
+								}
+							} else {
+								addToUrl(pre + c + end);
+							}
+						} else {
+							addToUrl(pre + c + end);
+						}
+					}
+				}
+				
+				if(_urls.length > 0){
+					_preUri = _urls[0];
+					var httpIndex : int = _preUri.indexOf("http://");
+					if (httpIndex == -1) {
+						httpIndex = _preUri.indexOf("https://");
+						
+					}
+					
+					if (httpIndex != -1) {
+						_preUri = _preUri.substr(0, _preUri.indexOf("/", "https://".length));
+					}else{
+						_preUri = null;
+					}
+				}else{
+					_preUri = null;
+				}
+				
+				nums.text = "共" + _urls.length +"个URL";
+				nums.styleName = "workfine";
+			}
+
+			private function addToUrl(url : String) : void {
+				_urls.push(url);
+			}
+		]]>
+	</fx:Script>
+	<s:Label x="10"
+			 y="10"
+			 width="91"
+			 fontSize="25"
+			 text="方式二"/>
+	<s:Label x="36"
+			 y="43"
+			 width="387"
+			 text="1.手动指定范围下载"/>
+	<s:Label x="36"
+			 y="71"
+			 width="387"
+			 text="2.一个完整的URL由前、中、后三部分构成"/>
+	<mx:HRule x="38"
+			  y="143"
+			  width="544"
+			  height="5"/>
+	<s:Label x="86"
+			 y="171"
+			 text="URL前部分："/>
+	<s:TextInput id="uri0"
+				 x="171"
+				 y="166"
+				 focusOut="changed()"
+				 width="411"/>
+	<s:Label x="86"
+			 y="208"
+			 text="URL中部分："/>
+	<s:TextInput id="uri1"
+				 x="171"
+				 focusOut="changed()"
+				 y="205"
+				 width="411"/>
+	<s:Label x="86"
+			 y="248"
+			 text="URL后部分："/>
+	<s:TextInput id="uri2"
+				 x="171"
+				 focusOut="changed()"
+				 y="243"
+				 width="411"/>
+	<s:Label x="38"
+			 y="99"
+			 width="544"
+			 text="3.只有中间的URL支持范围写法，如&quot;1-100,b,c,d&quot;表示数字1-100和字母bcd的组合"/>
+	<s:CheckBox id="saveType"
+				x="92"
+				y="332"
+				label="按照原目录结构存储到本地"
+				selected="true"/>
+	<s:Button id="startBtn"
+			  x="48"
+			  y="466"
+			  width="522"
+			  height="43"
+			  label="开始“偷”资源"
+			  click="startDown()"/>
+	<s:Label x="38"
+			 y="171"
+			 width="55"
+			 text="Step1."/>
+	<s:Label x="39"
+			 y="208"
+			 width="54"
+			 text="Step2."/>
+	<s:Label x="39"
+			 y="248"
+			 width="54"
+			 text="Step3."/>
+	<s:Label x="39"
+			 y="335"
+			 width="54"
+			 text="Step5."/>
+	<s:CheckBox id="skipable"
+				x="305"
+				y="333"
+				label="跳过本地存在的资源"/>
+	<s:Label id="pathTf"
+			 x="195"
+			 y="290"
+			 width="387"/>
+	<s:Button x="88"
+			  y="287"
+			  width="97"
+			  label="保存目录"
+			  click="selectSavePath()"/>
+	<s:Label x="39"
+			 y="290"
+			 width="54"
+			 text="Step4."/>
+	<s:Label id="nums" x="39" y="374" width="543"/>
+</s:Group>

@@ -23,10 +23,11 @@
 	<fx:Script>
 		<![CDATA[
 			import com.greensock.TweenLite;
+			import com.xy.ExcuteCmd;
 			import com.xy.util.Http;
 			
-			import mx.charts.renderers.DiamondItemRenderer;
-
+			import flash.utils.setTimeout;
+			
 			private var _urls : Array;
 			private var _preUri : String;
 			private var _savePath : String;
@@ -176,52 +177,9 @@
 				}
 				
 				_index = skipNum.value - 1;
-				_needStop = false;
-				ViewProgress.getInstance().show(null, stop);
 				
-				tjNext();
-			}
-			
-			private var _needStop : Boolean = false;
-			
-			private function stop():void{
-				_needStop = true;
-			}
-			
-			private function tjNext() : void {
-				_index++;
-				if (_index >= _len) {
-					ViewProgress.getInstance().addLog("Complete len: " + _len);
-					return;
-				}
-				
-				if(_needStop){
-					ViewProgress.getInstance().addLog("Stoped by user!");
-					return;
-				}
-				
-				ViewProgress.getInstance().setProgress(_index + 1, _len);
-				ViewProgress.getInstance().addLog("start:" + _index + "/" + _len);
-				var url : String = _filterUrls[_index];
-				new Http(url, tjOk, URLLoaderDataFormat.BINARY);
-			}
-			
-			private function tjOk(data : ByteArray) : void {
-				var url : String = _filterUrls[_index];
-				if(data == null){
-					ViewProgress.getInstance().addLog("not found resource:" + url);
-					tjNext();
-					return;
-				}
-				var path : String = url.substr(_preUri.length);
-				path = _savePath  + path;
-				path = path.replace(new RegExp("/", "g"), File.separator);
-				var f : File = new File(path);
-				var fr : FileStream = new FileStream();
-				fr.open(f, FileMode.WRITE);
-				fr.writeBytes(data);
-				fr.close();
-				tjNext();
+				var cmd : ExcuteCmd = new ExcuteCmd();
+				cmd.excute(_filterUrls, _index, _savePath, _preUri, skipable.selected, saveType.selected);
 			}
 
 		]]>
@@ -308,9 +266,10 @@
 			 y="476"
 			 width="60"
 			 text="跳过前面"/>
-	<s:NumericStepper id="skipNum" x="151" y="470"/>
-	<s:Label x="214"
-			 y="476"
+	<s:NumericStepper id="skipNum" x="151" y="470" width="91" maximum="999999" minimum="0"/>
+	<s:Label x="246"
+			 y="477"
 			 width="28"
 			 text="个"/>
+	<s:CheckBox id="skipable" x="305" y="443" label="跳过本地存在的资源"/>
 </s:Group>
