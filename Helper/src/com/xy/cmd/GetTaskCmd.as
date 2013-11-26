@@ -57,7 +57,7 @@ public class GetTaskCmd extends AbsCommand {
 
             currentTask.company = "诺克萨斯公司";
             currentTask.id = _currentVo.id;
-            currentTask.imgUrl = "http://127.0.0.1/heads/per_0" + STool.random(1, 3) + ".png";
+            currentTask.imgUrl = "http://127.0.0.1/heads/" + STool.random(1, 3) + ".png";
             currentTask.job = STool.randomFromArray(jobTypes);
             currentTask.name = RandomName.makeName();
             currentTask.statusPercent = STool.random(0, 100);
@@ -78,7 +78,7 @@ public class GetTaskCmd extends AbsCommand {
 
                 child.company = "诺克萨斯公司";
                 child.id = Tools.makeId();
-                child.imgUrl = "http://127.0.0.1/heads/per_0" + STool.random(1, 3) + ".png";
+                child.imgUrl = "http://127.0.0.1/heads/" + STool.random(1, 3) + ".png";
                 child.job = STool.randomFromArray(jobTypes);
                 child.name = RandomName.makeName();
                 child.statusPercent = STool.random(0, 100);
@@ -101,7 +101,7 @@ public class GetTaskCmd extends AbsCommand {
 
                 sib.company = "诺克萨斯公司";
                 sib.id = svo.id
-                sib.imgUrl = "http://127.0.0.1/heads/per_0" + STool.random(1, 3) + ".png";
+                sib.imgUrl = "http://127.0.0.1/heads/" + STool.random(1, 3) + ".png";
                 sib.job = STool.randomFromArray(jobTypes);
                 sib.name = RandomName.makeName();
                 sib.statusPercent = STool.random(0, 100);

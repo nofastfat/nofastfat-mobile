@@ -52,7 +52,7 @@ public class GetPersonInfoCmd extends AbsCommand {
             vo.company = "诺克萨斯公司";
             vo.department = STool.randomFromArray(departs);
             vo.email = "xxxx@mail.com";
-            vo.imgUrl = "http://127.0.0.1/heads/per_0" + STool.random(1, 3) + ".png";
+            vo.imgUrl = "http://127.0.0.1/heads/" + STool.random(1, 3) + ".png";
             vo.name = name;
             vo.phone = "110119";
 
