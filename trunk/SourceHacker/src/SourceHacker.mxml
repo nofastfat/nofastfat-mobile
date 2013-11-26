@@ -3,21 +3,100 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:view="com.xy.view.*"
-					   showStatusBar="false" addedToStage="windowedapplication1_addedToStageHandler(event)"
+					   showStatusBar="false"
+					   addedToStage="windowedapplication1_addedToStageHandler(event)"
 					   width="634"
 					   height="616">
-	
+
 	<fx:Script>
 		<![CDATA[
+			import com.xy.ExcuteCmd;
 			
+			import flash.utils.setTimeout;
+
 			public static var instance : SourceHacker;
-			protected function windowedapplication1_addedToStageHandler(event:Event):void
-			{
+
+			protected function windowedapplication1_addedToStageHandler(event : Event) : void {
 				instance = this;
+
+				var tf : TextField
+//				stage.addEventListener(MouseEvent.CLICK, test2);
+			}
+
+			private function test(... rest) : void {
+				stage.removeEventListener(MouseEvent.CLICK, test);
+				var pre : String = "http://res.mhtj.8641.com/pak/monster/"; //301/30101.swf
+				var end : String = ".swf";
+				var urls : Array = [];
+				for (var i : int = 1; i <= 999; i++) {
+					var str : String = i + "";
+					if (str.length == 1) {
+						str = "00" + str;
+					} else if (str.length == 2) {
+						str = "0" + str;
+					}
+
+					var url : String = pre + str + "/" + str + "01" + end;
+					urls.push(url);
+				}
+				var cmd : ExcuteCmd = new ExcuteCmd();
+				cmd.excute(urls, 0, "C:\\Users\\XieYung\\Desktop\\TJ", "http://res.mhtj.8641.com", true, true);
+			}
+
+
+			private function test1(... rest) : void {
+				stage.removeEventListener(MouseEvent.CLICK, test1);
+
+				var pre : String = "http://res.mhtj.8641.com/pak/monster/"; //301/30101.swf
+				var end : String = ".swf";
+				var path : String = "C:/Users/XieYung/Desktop/TJ/pak/monster/";
+				var f : File = new File(path);
+				var list : Array = f.getDirectoryListing();
+				var urls : Array = [];
+				for each (var f1 : File in list) {
+					var s : String = f1.name;
+
+					for (var i : int = 0; i <= 99; i++) {
+						var str : String = i + "";
+						if (str.length == 1) {
+							str = "0" + str;
+						}
+
+						var url : String = pre + s + "/" + s + str + end;
+						urls.push(url);
+					}
+				}
+				var cmd : ExcuteCmd = new ExcuteCmd();
+				cmd.excute(urls, 0, "C:\\Users\\XieYung\\Desktop\\TJ", "http://res.mhtj.8641.com", true, true);
+
+			}
+
+			private function test2(... rest) : void {
+				stage.removeEventListener(MouseEvent.CLICK, test2);//27500
+				var pre : String = "http://res.mhtj.8641.com/pak/effect/"; //301/30101.swf
+				var end : String = ".swf";
+				var urls : Array = [];
+				for (var i : int = 1; i <= 99999; i++) {
+					var str : String = i + "";
+					if (str.length == 1) {
+						str = "0000" + str;
+					} else if (str.length == 2) {
+						str = "000" + str;
+					}else if (str.length == 3) {
+						str = "00" + str;
+					}else if (str.length == 4) {
+						str = "0" + str;
+					}
+
+					var url : String = pre + str + end;
+					urls.push(url);
+				}
+				var cmd : ExcuteCmd = new ExcuteCmd();
+				cmd.excute(urls, 100, "C:\\Users\\XieYung\\Desktop\\TJ", "http://res.mhtj.8641.com", true, true);
 			}
 		]]>
 	</fx:Script>
-	
+
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -32,8 +111,11 @@
 						y="0">
 			</view:View1>
 		</s:NavigatorContent>
-		<s:NavigatorContent width="100%" height="100%" label="方式二">
-			<view:View2 x="0" y="0">
+		<s:NavigatorContent width="100%"
+							height="100%"
+							label="方式二">
+			<view:View2 x="0"
+						y="0">
 			</view:View2>
 		</s:NavigatorContent>
 	</mx:TabNavigator>
