@@ -49,7 +49,7 @@ public class Helper extends Sprite {
 		return;
         var vo : OrganizedStructVo = new OrganizedStructVo();
         vo.company = "诺克萨斯公司";
-        vo.imgUrl = "http://192.168.1.175/heads/per_01.png";
+        vo.imgUrl = "http://127.0.0.1/heads/1.png";
         vo.jobScore = 500;
         vo.jobType = "营销类";
         vo.joinTime = "2001-03-10";
@@ -65,7 +65,7 @@ public class Helper extends Sprite {
         for (var i : int = 0; i < 12; i++) {
             var svo : SimpleSubordinateVo = new SimpleSubordinateVo();
             svo.department = STool.randomFromArray(departs);
-            svo.id = Tools.makeId();
+            svo.id = Tools.makeId(); 
             svo.name = RandomName.makeName();
             svo.status = STool.random(0, 2);
             ;

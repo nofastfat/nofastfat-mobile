@@ -50,7 +50,7 @@ public class GetOrganizedStructCmd extends AbsCommand {
                 var tmp : OrganizedStructVo = new OrganizedStructVo();
                 tmp.id = svo.id;
                 tmp.company = "诺克萨斯公司";
-                tmp.imgUrl = "http://127.0.0.1/heads/per_0" + STool.random(1, 3) + ".png";
+                tmp.imgUrl = "http://127.0.0.1/heads/" + STool.random(1, 3) + ".png";
                 tmp.jobScore = STool.random(100, 3000);
                 tmp.jobType = STool.randomFromArray(jobTypes) as String;
                 tmp.joinTime = "2001-03-10";

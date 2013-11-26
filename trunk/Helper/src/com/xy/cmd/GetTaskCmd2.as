@@ -54,7 +54,7 @@ public class GetTaskCmd2 extends AbsCommand {
 
                 child.company = "诺克萨斯公司";
                 child.id = Tools.makeId();
-                child.imgUrl = "http://127.0.0.1/heads/per_0" + STool.random(1, 3) + ".png";
+                child.imgUrl = "http://127.0.0.1/heads/" + STool.random(1, 3) + ".png";
                 child.job = STool.randomFromArray(jobTypes);
                 child.name = RandomName.makeName();
                 child.statusPercent = STool.random(0, 100);

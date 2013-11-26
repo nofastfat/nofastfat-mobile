@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
+    <!-- 
+    Smart developers always View Source. 
+    
+    This application was built using Adobe Flex, an open source framework
+    for building rich Internet applications that get delivered via the
+    Flash Player or to desktops via Adobe AIR. 
+    
+    Learn more about Flex at http://flex.org 
+    // -->
+    <head>
+        <title></title>         
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
+		     the body element to 100%, because Firefox, or any Gecko based browser, interprets percentage as 
+			 the percentage of the height of its parent container, which has to be set explicitly.  Initially, 
+			 don't display flashContent div so it won't show if JavaScript disabled.
+		-->
+        <style type="text/css" media="screen"> 
+			html, body	{ height:100%; }
+			body { margin:0; padding:0; overflow:auto; text-align:center; 
+			       background-color: #ffffff; }   
+			#flashContent { display:none; }
+        </style>
+		
+		<!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
+        <!-- BEGIN Browser History required section -->
+        <link rel="stylesheet" type="text/css" href="history/history.css" />
+        <script type="text/javascript" src="history/history.js"></script>
+        <!-- END Browser History required section -->  
+		    
+        <script type="text/javascript" src="swfobject.js"></script>
+        <script type="text/javascript">
+            <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
+            var swfVersionStr = "10.2.0";
+            <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+            var xiSwfUrlStr = "playerProductInstall.swf";
+            var flashvars = {};
+            var params = {};
+            params.quality = "high";
+            params.bgcolor = "#ffffff";
+            params.allowscriptaccess = "sameDomain";
+            params.allowfullscreen = "true";
+            
+            var action0 = "http://192.168.1.175/action0.php";//请求“组织机构”的地址
+			var action1 = "http://192.168.1.175/action1.php";//请求“人员信息”的地址
+			var action2 = "http://192.168.1.175/action2.php";//请求“目标卡片1”的地址
+			var action3 = "http://192.168.1.175/action3.php";//请求“目标卡片2”的地址
+			var initData = '{"imgUrl":"http://192.168.1.175/heads/per_01.png","jobScore":500,"powerMatrix":8,"id":"1896515228费慕晴","jobType":"营销类","simpleSubordinateList":[{"name":"楼半芹","status":2,"department":"生产部","id":"1395741862包南霜"},{"name":"程海蓝","status":1,"department":"销售部","id":"1464097910轩辕琦"},{"name":"呼延翠绿","status":0,"department":"公关部","id":"807260640苻飞凤"},{"name":"干傲南","status":1,"department":"销售部","id":"959768378邱代云"},{"name":"柳依凝","status":0,"department":"公关部","id":"153808856司空若蕊"},{"name":"沙幻波","status":0,"department":"销售部","id":"748797524禹又蓝"},{"name":"乐正莞","status":1,"department":"公关部","id":"965658271荀洙"},{"name":"汤宛秋","status":1,"department":"销售部","id":"1963641171鹿不愁"},{"name":"於苞络","status":2,"department":"销售部","id":"564077736穆紫丝"},{"name":"霍鸣凤","status":2,"department":"销售部","id":"1654805963房南露"},{"name":"沈盼山","status":0,"department":"销售部","id":"468732448於白薇"},{"name":"荣芳","status":2,"department":"生产部","id":"774923657巫梦凡"}],"levelUpLastScore":100,"company":"诺克萨斯公司","joinTime":"2001-03-10","name":"刀妹","status":0,"cardStatus":{"showCount":3,"parentCard":null,"locationX":0,"hideById":"-1","locationY":0,"visible":false},"parent":null,"subStuctList":null,"sex":1,"powerMatrixValue":0}';
+			flashvars.action0=encodeURIComponent(action0);
+			flashvars.action1=encodeURIComponent(action1);
+			flashvars.action2=encodeURIComponent(action2);
+			flashvars.action3=encodeURIComponent(action3);
+			flashvars.initData= encodeURIComponent(initData);
+			flashvars.debug= "true";
+            
+            var attributes = {};
+            attributes.id = "Helper";
+            attributes.name = "Helper";
+            attributes.align = "middle";
+            swfobject.embedSWF(
+                "Helper.swf", "flashContent", 
+                "100%", "100%", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
+			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+        </script>
+    </head>
+    <body>
+        <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
+			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
+			 when JavaScript is disabled.
+		-->
+        <div id="flashContent">
+        	<p>
+	        	To view this page ensure that Adobe Flash Player version 
+				10.0.0 or greater is installed. 
+			</p>
+			<script type="text/javascript"> 
+				var pageHost = ((document.location.protocol == "https:") ? "https://" :	"http://"); 
+				document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+								+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+			</script> 
+        </div>
+	   	
+       	<noscript>
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="Helper">
+                <param name="movie" value="Helper.swf" />
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#ffffff" />
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="allowFullScreen" value="true" />
+                <!--[if !IE]>-->
+                <object type="application/x-shockwave-flash" data="Helper.swf" width="100%" height="100%">
+                    <param name="quality" value="high" />
+                    <param name="bgcolor" value="#ffffff" />
+                    <param name="allowScriptAccess" value="sameDomain" />
+                    <param name="allowFullScreen" value="true" />
+                <!--<![endif]-->
+                <!--[if gte IE 6]>-->
+                	<p> 
+                		Either scripts and active content are not permitted to run or Adobe Flash Player version
+                		10.0.0 or greater is not installed.
+                	</p>
+                <!--<![endif]-->
+                    <a href="http://www.adobe.com/go/getflashplayer">
+                        <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
+                    </a>
+                <!--[if !IE]>-->
+                </object>
+                <!--<![endif]-->
+            </object>
+	    </noscript>		
+   </body>
+</html>
