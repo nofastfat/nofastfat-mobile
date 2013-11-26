@@ -26,8 +26,9 @@ public class ExcuteCmd {
 	private var _skip : Boolean;
 	private var _saveAsWebPath : Boolean;
 	private var _notFound : int = 0;
+	private var _ok : int;
 	
-	public function excute(urls : Array, startIndex : int, savePath : String, preUrl : String, skip : Boolean, saveAsWebPath : Boolean) : void {
+	public function excute(urls : Array, startIndex : int, savePath : String, preUrl : String, skip : Boolean, saveAsWebPath : Boolean, threads : int = 1) : void {
 		_needStop = false;
 		_filterUrls = urls;
 		_len = _filterUrls.length;
@@ -37,10 +38,13 @@ public class ExcuteCmd {
 		_skip = skip;
 		_saveAsWebPath = saveAsWebPath;
 		_notFound = 0;
+		_ok = 0;
 		
 		ViewProgress.getInstance().show(null, stop);
 
-		tjNext();
+		for(var i : int = 0 ; i<threads;i++){
+			tjNext();
+		}
 	}
 
 	private function stop() : void {
@@ -50,7 +54,7 @@ public class ExcuteCmd {
 	private function tjNext() : void {
 		_index++;
 		if (_index >= _len) {
-			ViewProgress.getInstance().addLog("Complete len: " + (_len - _notFound) + ", not found len: " + _notFound + ", total:" + _len);
+			ViewProgress.getInstance().addLog("Complete len: " + _ok + ", not found len: " + _notFound + ", total:" + _len);
 			return;
 		}
 
@@ -89,9 +93,12 @@ public class ExcuteCmd {
 		if (data == null) {
 			ViewProgress.getInstance().addLog("not found resource:" + url);
 			_notFound++;
+			ViewProgress.getInstance().setStatus(_ok, _notFound);
 			tjNext();
 			return;
 		}
+		_ok++;
+		ViewProgress.getInstance().setStatus(_ok, _notFound);
 		var path : String = url.substr(_preUri.length);
 		path = _savePath + path;
 		path = path.replace(new RegExp("/", "g"), File.separator);

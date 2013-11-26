@@ -3,7 +3,7 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   width="400"
-			   height="392"
+			   height="416"
 			   fontSize="14"
 			   textAlign="center"
 			   close="titlewindow1_closeHandler(event)"
@@ -23,7 +23,8 @@
 			private var _pasue : Function;
 			private var _stop : Function;
 			private var _index : int;
-
+			private var _logLen : int = 0;
+			
 			public static function getInstance() : ViewProgress {
 				if (_ins == null) {
 					_ins = new ViewProgress();
@@ -38,6 +39,11 @@
 				PopUpManager.addPopUp(this, SourceHacker.instance, true);
 				PopUpManager.centerPopUp(this);
 				logTf.text = "";
+				_logLen = 0;
+			}
+
+			public function setStatus(ok : int, failed : int) : void {
+				statusTf.text = "成功" + ok + "个，失败" + failed + "个";
 			}
 
 			public function setProgress(value : int, max : int) : void {
@@ -47,7 +53,13 @@
 			}
 
 			public function addLog(info : String) : void {
+				if(_logLen > 300){
+					logTf.text = "";
+					_logLen = 0;
+				}
+				
 				logTf.appendText("\n" + info);
+				_logLen++;
 			}
 
 			protected function titlewindow1_closeHandler(event : CloseEvent) : void {
@@ -82,10 +94,18 @@
 			  fontSize="12"/>
 	<s:TextArea id="logTf"
 				x="10"
-				y="52"
+				y="64"
 				width="378"
-				height="297"
+				height="309"
 				color="#FFFFFF"
 				contentBackgroundColor="#3B3B3B"
 				textAlign="left"/>
+	<s:Label id="statusTf"
+			 x="10"
+			 y="42"
+			 width="378"
+			 color="#3E982C"
+			 fontFamily="宋体"
+			 text="阿斯蒂芬"
+			 textAlign="left"/>
 </s:TitleWindow>
