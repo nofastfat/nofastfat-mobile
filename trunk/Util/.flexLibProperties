@@ -76,6 +76,7 @@
     <classEntry path="org.bytearray.micrecorder.MicRecorder"/>
     <classEntry path="org.bytearray.micrecorder.encoder.WaveEncoder"/>
     <classEntry path="org.bytearray.micrecorder.events.RecordingEvent"/>
+    <classEntry path="com.xy.util.AmfHttp"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

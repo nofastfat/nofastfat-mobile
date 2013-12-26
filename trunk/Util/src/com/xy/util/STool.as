@@ -399,26 +399,49 @@ public class STool {
         return str;
     }
 
-    /**
-     * 停止容器中的所有动画
-     * @param parent
-     */
-    public static function stopAll(parent : DisplayObjectContainer) : void {
-        if (parent is MovieClip) {
-            (parent as MovieClip).stop();
-        }
-
-        for (var i : int = 0; i < parent.numChildren; i++) {
-            var child : DisplayObject = parent.getChildAt(i);
-            if (child is DisplayObjectContainer) {
-                stopAll(child as DisplayObjectContainer);
-            } else {
-                if (child is MovieClip) {
-                    (child as MovieClip).stop();
-                }
-            }
-        }
-    }
+	/**
+	 * 停止容器中的所有动画
+	 * @param parent
+	 */
+	public static function stopAll(parent : DisplayObjectContainer) : void {
+		if (parent is MovieClip) {
+			(parent as MovieClip).stop();
+		}
+		
+		var num : int = parent.numChildren;
+		for (var i : int = 0; i < num; i++) {
+			var child : DisplayObject = parent.getChildAt(i);
+			if (child is DisplayObjectContainer) {
+				stopAll(child as DisplayObjectContainer);
+			} else {
+				if (child is MovieClip) {
+					(child as MovieClip).stop();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 停止容器中的所有动画
+	 * @param parent
+	 */
+	public static function playAll(parent : DisplayObjectContainer) : void {
+		if (parent is MovieClip) {
+			(parent as MovieClip).play();
+		}
+		
+		var num : int = parent.numChildren;
+		for (var i : int = 0; i < num; i++) {
+			var child : DisplayObject = parent.getChildAt(i);
+			if (child is DisplayObjectContainer) {
+				playAll(child as DisplayObjectContainer);
+			} else {
+				if (child is MovieClip) {
+					(child as MovieClip).play();
+				}
+			}
+		}
+	}
 
     /**
      * 获取当前浏览器的参数
