@@ -137,7 +137,7 @@ public class Stats extends Sprite {
             xml.fps = "FPS: " + fps + " / " + stage.frameRate;
             xml.mem = "MEM: " + mem;
             xml.memMax = "MAX: " + mem_max;
-
+			
             fps = 0;
 
         }

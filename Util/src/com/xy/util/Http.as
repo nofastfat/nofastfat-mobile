@@ -5,6 +5,7 @@ import flash.events.SecurityErrorEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
+import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.ByteArray;
@@ -27,7 +28,7 @@ public class Http {
 	 * @param params 允许带的参数
 	 * @param method GET | POST
 	 */
-	public function Http(url : String, call : Function, dataFormat : String = "text", params : URLVariables = null, method : String = "GET") {
+	public function Http(url : String, call : Function, dataFormat : String = "text", params : URLVariables = null, method : String = "GET", useByteArrayForPost:Boolean = false) {
 		_loader = new URLLoader();
 		_loader.dataFormat = dataFormat;
 		_call = call;
@@ -37,9 +38,12 @@ public class Http {
 		_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, __errorHandler);
 
 		var req : URLRequest;
-		if (method == "GET") {
+		if (method == "GET" || !useByteArrayForPost) {
 			req = new URLRequest(url);
 			req.method = method;
+			if(req.hasOwnProperty("userAgent")){
+				req.requestHeaders = [new URLRequestHeader("Accept-Encoding","gzip,deflate,sdch")];
+			}
 			if (params != null) {
 				req.data = params;
 			}
@@ -72,6 +76,7 @@ public class Http {
 
 	private function __httpOkHandler(e : Event) : void {
 		var data : * = _loader.data;
+		trace(_loader.bytesLoaded);
 		_call(data);
 		dispose();
 	}
