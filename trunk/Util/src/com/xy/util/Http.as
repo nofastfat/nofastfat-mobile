@@ -41,9 +41,6 @@ public class Http {
 		if (method == "GET" || !useByteArrayForPost) {
 			req = new URLRequest(url);
 			req.method = method;
-			if(req.hasOwnProperty("userAgent")){
-				req.requestHeaders = [new URLRequestHeader("Accept-Encoding","gzip,deflate,sdch")];
-			}
 			if (params != null) {
 				req.data = params;
 			}
@@ -69,6 +66,9 @@ public class Http {
 //			}
 //			req.data = pp;
 //			req.method = URLRequestMethod.POST;
+		}
+		if(req.hasOwnProperty("userAgent")){
+			req.requestHeaders = [new URLRequestHeader("Accept-Encoding","gzip,deflate,sdch")];
 		}
 
 		_loader.load(req);
