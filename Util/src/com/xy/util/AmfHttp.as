@@ -18,7 +18,7 @@ package com.xy.util {
  * @version 1.0.0
  * 创建时间：2013-11-8 上午11:39:26
  **/
-public class AmfHttp {
+public class AmfHttp { 
 	private var _loader : URLLoader;
 	
 	private var _call : Function
