@@ -34,7 +34,7 @@
 							Alert.show("网络异常，编辑用户失败", "-_-#");
 						}else{
 							Alert.show(name +"已经成功修改！", "嘎嘎");
-							(Facade.getInstance().retrieveMediator(ManageUserMediator.NAME) as ManageUserMediator).refreshUserList();
+							Global.refreshUserList();
 						}
 					}, [name, tel, sex]);
 				}, _dto);
@@ -49,7 +49,7 @@
 								Alert.show("网络异常，删除用户失败", "-_-#");
 							}else{
 								Alert.show(name +"已经被删除！", "嘎嘎");
-								(Facade.getInstance().retrieveMediator(ManageUserMediator.NAME) as ManageUserMediator).refreshUserList();
+								Global.refreshUserList();
 							}
 						}, [_dto.id]);
 					}

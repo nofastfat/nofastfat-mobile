@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					xmlns:s="library://ns.adobe.com/flex/spark" 
-					xmlns:mx="library://ns.adobe.com/flex/mx" width="166" height="32">
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					width="166"
+					height="32">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:Button x="9" y="4" height="25" label="修改"/>
-	<s:Button x="91" y="4" height="25" label="删除"/>
+	<s:Button x="9"
+			  y="4"
+			  height="25"
+			  label="修改"
+			  click="button1_clickHandler(event)"/>
+	<s:Button x="91"
+			  y="4"
+			  height="25"
+			  label="删除"
+			  click="button2_clickHandler(event)"/>
+
+	<fx:Script>
+		<![CDATA[
+			import com.xy.comunication.Protocal;
+			import com.xy.comunication.SAMFHttp;
+			import com.xy.model.DishDTO;
+			import com.xy.model.Global;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+
+			private var _dto : DishDTO;
+
+			override public function set data(value : Object) : void {
+				_dto = value as DishDTO;
+			}
+
+			protected function button1_clickHandler(event : MouseEvent) : void {
+
+				AddGoods.getInstance().show(function(name : String, price : int, id : int) : void {
+					new SAMFHttp(Protocal.ADMIN_DISH_EDIT, function(rs : int) : void {
+						if (rs == 0) {
+							Alert.show("网络异常，修改菜品失败", "-_-#");
+						} else {
+							Alert.show("网络异常，修改菜品成功", "嘎嘎");
+							Global.refreshShop();
+						}
+					}, [_dto.id, name, price, id, ""]);
+				}, _dto);
+			}
+
+			protected function button2_clickHandler(event : MouseEvent) : void {
+				Alert.show("确认删除菜品【" + _dto.name + "】?", "确认", Alert.YES | Alert.NO, Global.root, function(e : CloseEvent) : void {
+					if (e.detail == Alert.YES) {
+						new SAMFHttp(Protocal.ADMIN_DISH_REMOVE, function(rs : int):void{
+							if (rs == 0) {
+								Alert.show("网络异常，删除菜品失败", "-_-#");
+							} else {
+								Alert.show("网络异常，删除菜品成功", "嘎嘎");
+								Global.refreshShop();
+							}
+						}, [_dto.id]);
+					}
+				});
+			}
+		]]>
+	</fx:Script>
 </s:GridItemRenderer>

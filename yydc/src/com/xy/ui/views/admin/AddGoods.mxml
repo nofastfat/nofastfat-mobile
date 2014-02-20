@@ -20,13 +20,13 @@
 	<s:Label x="93"
 			 y="18"
 			 text="菜名"/>
-	<s:Label x="94"
+	<s:Label x="69"
 			 y="50"
-			 text="单价"/>
+			 text="单价(元)"/>
 	<s:Label x="65"
 			 y="83"
 			 text="所属饭馆"/>
-	<s:Label x="91"
+	<s:Label x="92"
 			 y="115"
 			 text="图片"/>
 	<s:TextInput id="nameTf"
@@ -47,11 +47,7 @@
 			 y="114"
 			 width="74"
 			 height="74"/>
-	<s:Button x="65"
-			  y="208"
-			  width="110"
-			  height="31"
-			  label="添加菜品"
+	<s:Button id="addBtn" x="65" y="208" width="110" height="31" label="添加菜品"
 			  click="button1_clickHandler()"/>
 	<s:Button x="205"
 			  y="208"
@@ -61,10 +57,11 @@
 			  click="titlewindow1_closeHandler()"/>
 	<fx:Script>
 		<![CDATA[
+			import com.xy.model.DishDTO;
 			import com.xy.model.Global;
 			import com.xy.model.RestaurantDTO;
 			import com.xy.ui.views.PopUpManagerProxy;
-
+			
 			import mx.collections.ArrayCollection;
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
@@ -86,10 +83,24 @@
 				return _instance;
 			}
 
-			public function show(call : Function) : void {
+			public function show(call : Function ,dto:DishDTO = null) : void {
 				PopUpManagerProxy.addPopUp(this, Global.root);
 				PopUpManager.centerPopUp(this);
 				_call = call;
+				
+				if(dto == null){
+					title = "添加菜品";
+					addBtn.label = "添加菜品";
+					nameTf.text = "";
+					price.value = 1;
+					fgTf.selectedIndex= 0;
+				}else{
+					title = "修改菜品";
+					addBtn.label = "修改菜品";
+					nameTf.text = dto.name;
+					price.value = dto.price/10.0;
+					fgTf.selectedIndex= 0;
+				}
 			}
 
 			protected function titlewindow1_closeHandler() : void {

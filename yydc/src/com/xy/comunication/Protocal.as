@@ -7,7 +7,7 @@ package com.xy.comunication {
  * 创建时间：2014-2-20 下午3:57:31
  **/
 public class Protocal {
-	public static const PRE : String = "http://192.168.1.250:8080/";
+	public static const PRE : String = "http://192.168.1.250:8080/YummyServer/";
 	
 	/**
 	 * ======================注册======================
