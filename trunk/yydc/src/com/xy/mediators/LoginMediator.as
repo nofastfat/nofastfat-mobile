@@ -8,6 +8,7 @@ import com.xy.model.UserDTO;
 import com.xy.ui.views.LoginUI;
 import com.xy.ui.views.PopUpManagerProxy;
 import com.xy.ui.views.TopUI;
+import com.xy.ui.views.admin.AddGoods;
 import com.xy.ui.views.admin.AdminLoginUI;
 import com.xy.util.AmfHttp;
 import com.xy.util.Base64;
@@ -50,7 +51,8 @@ public class LoginMediator extends Mediator {
 	override public function handleNotification(notification : INotification) : void {
 		switch (notification.getName()) {
 			case SHOW:
-				show();
+//				show();
+				AddGoods.getInstance().show(null);
 				break;
 		}
 	}
@@ -126,6 +128,9 @@ public class LoginMediator extends Mediator {
 		}
 		
 		new SAMFHttp(Protocal.LOGIN, function(obj:UserDTO):void{
+//			obj = new UserDTO();
+//			obj.name="123";
+			
 			if(obj != null){
 				Global.me = obj;
 				Global.isAdmin = false;

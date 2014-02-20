@@ -6,23 +6,47 @@
 		 fontFamily="微软雅黑" fontSize="14">
 	<fx:Script>
 		<![CDATA[
+			import com.xy.comunication.Protocal;
+			import com.xy.comunication.SAMFHttp;
+			import com.xy.model.DishDTO;
+			import com.xy.model.Global;
+			import com.xy.model.ReservationDetailDTO;
+			
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
+			public var dto : DishDTO;
 			protected function group1_creationCompleteHandler(event:FlexEvent):void
 			{
 				graphics.lineStyle(1, 0x999999);
 				graphics.drawRect(0, 0, width, height);
 			}
 			
-			public function setData(vo : *):void{
-				img.source="http://192.168.1.102/default.jpg";
+			public function setData(vo : DishDTO):void{
+				dto = vo;
+				img.source = vo.picture;
+				goodsName.text = vo.name;
+				price.text = vo.priceStr;
 			}
 			
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				EatUI.getInstance().show("鱼香肉丝", "15", function(rs:String):void{
-					trace("rs:" + rs);
-				});			
+				var info : String = "";
+				if(Global.myGoods!=null){
+					info = "<br/>会把之前点的【"+Global.myGoods.dishDTO.name+"】取消掉";
+				}
+				var str : String = "你现在点的是【<span color='#00FF00'>"+dto.name+"</span>】，<span color='#FF0000'>"+dto.priceStr+"</span>"+info+"<br/>有没有什么需要补充的？";
+				EatUI.getInstance().show(str, function(rs:String, userId : int):void{
+					new SAMFHttp(Protocal.DETAIL_ORDER, function(rs : ReservationDetailDTO):void{
+						if(rs != null){
+							Alert.show("点餐成功,坐等送餐", "Oh-Yes");
+						}else{
+							Alert.show("RP不好？点餐失败", "-_-#");
+						}
+						Global.refreshMyGoods();
+					//TODO 这里预约点餐id 服务器还冒给
+					}, [dto.id, userId, -1, rs]);
+				});
 			}
 			
 		]]>
@@ -33,9 +57,9 @@
 	</fx:Declarations>
 	
 	<s:Image x="5" y="5" width="180" height="125" id="img" />
-	<s:Label x="19" y="137" width="150" height="18" color="#06D610" fontSize="16" text="青椒肉丝超级辣"
+	<s:Label x="19" y="137" width="150" height="18" color="#06D610" id="goodsName" fontSize="16" text="青椒肉丝超级辣"
 			 textAlign="left"/>
-	<s:Label x="19" y="159" width="150" color="#FD8686" fontSize="16" fontWeight="bold" text="10元"
+	<s:Label x="19" y="159" width="150" color="#FD8686" fontSize="16" fontWeight="bold" id="price" text="10元"
 			 textAlign="left"/>
 	<s:Button x="39" y="185" width="102" height="29" label="今天吃TA"
 			  click="button1_clickHandler(event)"/>

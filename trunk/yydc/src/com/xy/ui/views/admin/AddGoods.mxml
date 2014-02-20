@@ -43,7 +43,7 @@
 					x="131"
 					dataProvider="{_shops}"
 					y="79"/>
-	<s:Image x="131"
+	<mx:UIComponent x="131" id="imgC"
 			 y="114"
 			 width="74"
 			 height="74"/>

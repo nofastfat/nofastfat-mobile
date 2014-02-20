@@ -16,6 +16,7 @@ package com.xy.model {
 public class Global {
 	public static const EVENT_SHOP_UPDATE : String="EVENT_SHOP_UPDATE";
 	public static const EVENT_USER_UPDATE : String="EVENT_USER_UPDATE";
+	public static const EVENT_MY_GOODS_UPDATE : String="EVENT_MY_GOODS_UPDATE";
 	
 	public static var root : yydc;
 	
@@ -28,6 +29,7 @@ public class Global {
 	
 	public static var shops : Array = [];
 	public static var users : Array = [];
+	public static var myGoods : ReservationDetailDTO;
 	
 	public static function get userName():String{
 		if(me != null){
@@ -38,7 +40,13 @@ public class Global {
 	}
 	
 	public static function refreshShop():void{
-		new SAMFHttp(Protocal.ADMIN_RESTAURANT_LIST, function(list : Array):void{
+		var pt : String;
+		if(isAdmin){
+			pt = Protocal.ADMIN_RESTAURANT_LIST;
+		}else{
+			pt = Protocal.RESTAURANT_LIST;
+		}
+		new SAMFHttp(pt, function(list : Array):void{
 			shops = list;
 			if(shops == null){
 				shops = [];
@@ -56,6 +64,13 @@ public class Global {
 			}
 			
 			Facade.getInstance().sendNotification(EVENT_USER_UPDATE);
+		});
+	}
+	
+	public static function refreshMyGoods():void{
+		new SAMFHttp(Protocal.DETAIL_MY, function(rs : ReservationDetailDTO):void{
+			myGoods = rs;
+			Facade.getInstance().sendNotification(EVENT_MY_GOODS_UPDATE);
 		});
 	}
 	

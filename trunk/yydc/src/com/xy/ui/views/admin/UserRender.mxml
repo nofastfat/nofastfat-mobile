@@ -36,7 +36,7 @@
 							Alert.show(name +"已经成功修改！", "嘎嘎");
 							Global.refreshUserList();
 						}
-					}, [_dto.id, name, tel, sex]);
+					}, [_dto.id, Global.base64(name), tel, sex]);
 				}, _dto);
 			}
 			

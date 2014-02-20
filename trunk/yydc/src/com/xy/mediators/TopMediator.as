@@ -26,7 +26,10 @@ public class TopMediator extends Mediator {
 	}
 
 	override public function listNotificationInterests():Array{
-		return [INIT];
+		return [
+			INIT,
+			Global.EVENT_MY_GOODS_UPDATE
+		];
 	}
 	
 	override public function handleNotification(notification:INotification):void{
@@ -34,11 +37,19 @@ public class TopMediator extends Mediator {
 			case INIT:
 				init();
 				break;
+			
+			case Global.EVENT_MY_GOODS_UPDATE:
+				ui.setName(Global.userName);
+				break;
 		}
 	}
 	
 	private function init():void{
 		ui.setName(Global.userName);
+		
+		if(Global.isAdmin){
+			Global.refreshMyGoods();
+		}
 	}
 	
 	private function __logoutHandler(e : MouseEvent):void{

@@ -76,7 +76,7 @@ public class ManageUserMediator extends Mediator {
 					Alert.show(name +"已经成功添加！", "嘎嘎");
 					Global.refreshUserList();
 				}
-			}, [name, tel, sex]);
+			}, [Global.base64(name), tel, sex]);
 		});
 	}
 	

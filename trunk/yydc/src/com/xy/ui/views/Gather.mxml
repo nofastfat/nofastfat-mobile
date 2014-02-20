@@ -6,10 +6,27 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.xy.model.DishDTO;
+			import com.xy.model.ReservationDetailDTO;
+			import com.xy.model.RestaurantDTO;
+			
 			import spark.utils.TextFlowUtil;
 			
 			public function setData(vo:*):void{
-				contentTf.textFlow = TextFlowUtil.importFromString("青椒肉丝：10份（<span color='#0000FF'>张三<br/> 李四 <br/>王五</span>）");
+				var goodsLen : int = 0;
+				var pays : int = 0;
+				var str : String = "";
+				for(var key : String in vo.goods){
+					var goodsVo : DishDTO = vo.goods[key].users.goods;
+					var users : Array = vo.goods[key].users;
+					goodsLen += users.length;
+					pays = users.length * goodsVo.price;
+					str += goodsVo.name + ":"+users.length+"份（<span color='#0000FF'>" + users.join(" ") +"</span>）<br>";
+				}
+				var shop : RestaurantDTO = vo.shop as RestaurantDTO;
+				title = shop.name + " " + shop.telephone + "(共"+goodsLen+"份,总计"+(pays/10.0)+"元)";
+				contentTf.textFlow = TextFlowUtil.importFromString(str);
+				//TODO 少了备注
 				infoTf.text = "备注";
 				
 				callLater(function():void{

@@ -52,8 +52,27 @@
 			public function setName(name : String) : void {
 				if (!Global.isAdmin) {
 					nameTf.text = name;
-					goods.text = "中午已经订 青椒肉丝(10元)";
-					redng.visible = true;
+					
+					if(Global.myGoods != null){
+						goods.text = "中午已经订 青椒肉丝(10元)";
+						var str :String = "";
+						switch(Global.myGoods.reservationDTO.type){
+							case 1:str+="早餐";break;
+							case 2:str+="中午餐";break;
+							case 3:str+="晚餐";break;
+						}
+						str += "已经订 " + Global.myGoods.dishDTO.name + "("+Global.myGoods.dishDTO.priceStr+")";
+						if(Global.myGoods.reservationDTO.state == 9){
+							str += " 订餐单已发出，等待送饭上门...";
+							redng.visible = false;
+						}else{
+							redng.visible = true;
+						}
+							
+					}else{
+						goods.text = "";
+						redng.visible = false;
+					}
 				} else {
 					nameTf.text = "管理员："+name;
 					goods.text = "";
