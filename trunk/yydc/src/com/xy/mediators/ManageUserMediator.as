@@ -72,19 +72,20 @@ public class ManageUserMediator extends Mediator {
 		});
 	}
 	
-	private function refreshUserList():void{
-//		var list : Array = [];
-//		for(var i : int = 0; i < 50; i++){
-//			var d : UserDTO = new UserDTO();
-//			d.id = i;
-//			d.name = "name" + i;
-//			d.timeCreated = i;
-//			list.push(d);
-//		}
-//		_ui.setData(list);
-		new SAMFHttp(Protocal.ADMIN_USER_LIST, function(list : Array):void{
-			_ui.setData(list);
-		});
+	public function refreshUserList():void{
+		var list : Array = [];
+		for(var i : int = 0; i < 50; i++){
+			var d : UserDTO = new UserDTO();
+			d.id = i;
+			d.name = "name" + i;
+			d.timeCreated = i;
+			d.telephone = "tel" + i;
+			list.push(d);
+		}
+		_ui.setData(list);
+//		new SAMFHttp(Protocal.ADMIN_USER_LIST, function(list : Array):void{
+//			_ui.setData(list);
+//		});
 	}
 	
 	public function get container() : Group {

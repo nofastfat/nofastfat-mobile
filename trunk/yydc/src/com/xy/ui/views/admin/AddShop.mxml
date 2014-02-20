@@ -5,6 +5,16 @@
 			   width="400" height="300" fontFamily="微软雅黑" fontSize="14" title="添加饭馆">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:StringValidator id="nameVl"
+							source="{nameTf}"
+							required="true"
+							requiredFieldError="饭馆名不能空"
+							property="text"/>
+		<mx:StringValidator id="telVl"
+							source="{telTf}"
+							required="true"
+							requiredFieldError="订餐电话不能空"
+							property="text"/>
 	</fx:Declarations>
 	<s:controlBarContent/>
 	<s:Label x="59" y="26" text="饭馆名"/>
@@ -23,6 +33,7 @@
 			
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
+			import mx.validators.Validator;
 
 			private static var _instance:AddShop;
 			
@@ -51,6 +62,10 @@
 			
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
+				if(Validator.validateAll([nameVl, telVl]).length != 0){
+					return;
+				}
+				
 				if(_call != null){
 					_call(nameTf.text, telTf.text, addressTf.text);
 				}

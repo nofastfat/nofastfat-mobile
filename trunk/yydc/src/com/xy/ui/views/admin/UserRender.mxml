@@ -6,10 +6,19 @@
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<s:Button x="9" y="4" height="25" label="修改" click="button1_clickHandler(event)"/>
-	<s:Button x="91" y="4" height="25" label="删除"/>
+	<s:Button x="91" y="4" height="25" label="删除" click="button2_clickHandler(event)"/>
 	<fx:Script>
 		<![CDATA[
+			import com.xy.comunication.Protocal;
+			import com.xy.comunication.SAMFHttp;
+			import com.xy.mediators.ManageUserMediator;
+			import com.xy.model.Global;
 			import com.xy.model.UserDTO;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			
+			import org.puremvc.as3.patterns.facade.Facade;
 			
 			private var _dto : UserDTO;
 			
@@ -19,7 +28,33 @@
 			
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				trace(_dto.name);				
+				AddUser.getInstance().show(function(name : String, tel : String, sex:int):void{
+					new SAMFHttp(Protocal.ADMIN_USER_EDIT, function(rs:int):void{
+						if(rs == 0){
+							Alert.show("网络异常，编辑用户失败", "-_-#");
+						}else{
+							Alert.show(name +"已经成功修改！", "嘎嘎");
+							(Facade.getInstance().retrieveMediator(ManageUserMediator.NAME) as ManageUserMediator).refreshUserList();
+						}
+					}, [name, tel, sex]);
+				}, _dto);
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				Alert.show("确认删除【"+_dto.name+"】", "删除确认", Alert.YES|Alert.NO, Global.root, function(e : CloseEvent):void{
+					if(e.detail == Alert.YES){
+						new SAMFHttp(Protocal.ADMIN_USER_REMOVE, function(rs:int):void{
+							if(rs == 0){
+								Alert.show("网络异常，删除用户失败", "-_-#");
+							}else{
+								Alert.show(name +"已经被删除！", "嘎嘎");
+								(Facade.getInstance().retrieveMediator(ManageUserMediator.NAME) as ManageUserMediator).refreshUserList();
+							}
+						}, [_dto.id]);
+					}
+				});
+				
 			}
 			
 		]]>

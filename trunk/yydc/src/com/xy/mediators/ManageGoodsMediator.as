@@ -1,9 +1,14 @@
 package com.xy.mediators {
+import com.xy.comunication.Protocal;
+import com.xy.comunication.SAMFHttp;
+import com.xy.model.Global;
 import com.xy.ui.views.admin.AddShop;
 import com.xy.ui.views.admin.AdminGoods;
 import com.xy.ui.views.admin.AdminUsers;
 
 import flash.events.MouseEvent;
+
+import mx.controls.Alert;
 
 import org.puremvc.as3.interfaces.INotification;
 import org.puremvc.as3.patterns.mediator.Mediator;
@@ -30,7 +35,8 @@ public class ManageGoodsMediator extends Mediator {
 
 	override public function listNotificationInterests() : Array {
 		return [
-			SHOW
+			SHOW,
+			Global.EVENT_SHOP_UPDATE
 			];
 	}
 
@@ -38,6 +44,10 @@ public class ManageGoodsMediator extends Mediator {
 		switch (notification.getName()) {
 			case SHOW:
 				show();
+				break;
+			
+			case Global.EVENT_SHOP_UPDATE:
+				_ui.setDatas(Global.shops);
 				break;
 		}
 	}
@@ -48,14 +58,21 @@ public class ManageGoodsMediator extends Mediator {
 			_ui.initialize();
 			_ui.addShopBtn.addEventListener(MouseEvent.CLICK, __addShopHandler);
 		}
-		_ui.setDatas([]);
+		Global.refreshShop();
 		container.removeAllElements();
 		container.addElement(_ui);
 	}
 	
 	private function __addShopHandler(e : MouseEvent):void{
 		AddShop.getInstance().show(function(name : String, tel : String, address:String):void{
-			
+			new SAMFHttp(Protocal.ADMIN_RESTAURANT_ADD, function(rs:int):void{
+				  if(rs == 0){
+					  Alert.show("网络异常，添加饭馆失败", "-_-#");
+				  }else{
+					  Alert.show("网络异常，添加饭馆成功", "嘎嘎");
+					  Global.refreshShop();
+				  }
+			}, [name, tel, address]);
 		});
 	}
 

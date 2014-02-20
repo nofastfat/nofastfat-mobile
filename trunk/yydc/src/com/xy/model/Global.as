@@ -1,4 +1,8 @@
 package com.xy.model {
+	import com.xy.comunication.Protocal;
+	import com.xy.comunication.SAMFHttp;
+	
+	import org.puremvc.as3.patterns.facade.Facade;
 
 /**
  * @author nofastfat
@@ -7,6 +11,8 @@ package com.xy.model {
  * 创建时间：2014-2-18 下午3:36:12
  **/
 public class Global {
+	public static const EVENT_SHOP_UPDATE : String="EVENT_SHOP_UPDATE";
+	
 	public static var root : yydc;
 	
 	public static var me : UserDTO;
@@ -16,12 +22,25 @@ public class Global {
 	 */	
 	public static var isAdmin:Boolean = false;
 	
+	public static var shops : Array = [];
+	
 	public static function get userName():String{
 		if(me != null){
 			return me.name
 		}
 		
 		return "";
+	}
+	
+	public static function refreshShop():void{
+		new SAMFHttp(Protocal.ADMIN_RESTAURANT_LIST, function(list : Array):void{
+			shops = list;
+			if(shops == null){
+				shops = [];
+			}
+			
+			Facade.getInstance().sendNotification(EVENT_SHOP_UPDATE);
+		});
 	}
 }
 }

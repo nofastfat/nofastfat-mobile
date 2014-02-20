@@ -32,7 +32,7 @@
 				Global.root = this;
 				TweenLite.defaultEase = Linear.easeNone;
 				_facade = new YYDCFacade();
-				_facade.startUp(this);
+				_facade.startUp(this); 
 
 				initDto();
 			}

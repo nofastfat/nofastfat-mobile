@@ -30,6 +30,8 @@
 
 	<fx:Script>
 		<![CDATA[
+			import com.xy.comunication.Protocal;
+			import com.xy.comunication.SAMFHttp;
 			import com.xy.model.Global;
 			import com.xy.util.STool;
 			
@@ -40,7 +42,7 @@
 			private var _shopRenders : Array = [];
 
 			public function setDatas(arr : Array) : void {
-				var len : int = STool.random(2, 5);
+				var len : int = arr.length + 1;
 				container.removeAllElements();
 				for (var i : int = 0; i < len; i++) {
 					var shop : ShopRender;
@@ -48,7 +50,6 @@
 						shop = _shopRenders[i];
 					} else {
 						shop = new ShopRender();
-//						shop.initialize();
 						shop.addEventListener(FlexEvent.CREATION_COMPLETE, function(e : Event):void{
 							shop.addGoodsBtn.addEventListener(MouseEvent.CLICK, __addGoodsHandler);
 							shop.delGoodsBtn.addEventListener(MouseEvent.CLICK, __delShopHandler);
@@ -79,12 +80,31 @@
 			}
 
 			private function __addGoodsHandler(e : MouseEvent) : void {
-				AddGoods.getInstance().show(null);
+				AddGoods.getInstance().show(function(name : String, price : int, id : int):void{
+					new SAMFHttp(Protocal.ADMIN_DISH_ADD, function(rs:int):void{
+						if(rs == 0){
+							Alert.show("网络异常，添加菜品失败", "-_-#");
+						}else{
+							Alert.show("网络异常，添加菜品成功", "嘎嘎");
+							Global.refreshShop();
+						}
+					},[name, price, id, ""]);
+				});
 			}
 
-			private function __delShopHandler(e : MouseEvent) : void {
-				Alert.show("确认删除菜馆?这将删除该饭馆下所有的菜品", "删除确认", Alert.YES|Alert.NO, Global.root, function(e : CloseEvent):void{
-					
+			private function __delShopHandler(e1 : MouseEvent) : void {
+				Alert.show("确认删除饭馆?这将删除该饭馆下所有的菜品", "删除确认", Alert.YES|Alert.NO, Global.root, function(e : CloseEvent):void{
+					if(e.detail== Alert.YES){
+						var restid : int = (e1.target.parent.parent.parent.parent as ShopRender).dto.id;
+						new SAMFHttp(Protocal.ADMIN_RESTAURANT_REMOVE, function(rs : int):void{
+							if(rs == 0){
+								Alert.show("网络异常，删除饭馆失败", "-_-#");
+							}else{
+								Alert.show("网络异常，删除饭馆成功", "嘎嘎");
+								Global.refreshShop();
+							}
+						}, [restid]);
+					}
 				});
 			}
 		]]>
