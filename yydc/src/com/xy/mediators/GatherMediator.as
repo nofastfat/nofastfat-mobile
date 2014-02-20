@@ -1,7 +1,14 @@
 package com.xy.mediators {
+import com.xy.comunication.Protocal;
+import com.xy.comunication.SAMFHttp;
+import com.xy.model.DishDTO;
 import com.xy.model.Global;
+import com.xy.model.ReservationDetailDTO;
+import com.xy.model.RestaurantDTO;
 import com.xy.ui.views.Gather;
 import com.xy.util.STool;
+
+import flash.utils.Dictionary;
 
 import org.puremvc.as3.interfaces.INotification;
 import org.puremvc.as3.patterns.mediator.Mediator;
@@ -22,6 +29,8 @@ public class GatherMediator extends Mediator {
 	
 	private var _gatherUIs : Array = [];
 	
+	private var _orders : Dictionary = new Dictionary();
+	
 	public function GatherMediator(viewComponent : Object = null) {
 		super(NAME, viewComponent);
 	}
@@ -40,11 +49,54 @@ public class GatherMediator extends Mediator {
 		}
 	}
 	
+	
+	
 	private function show():void{
-		var len : int = STool.random(1,4);
+		new SAMFHttp(Protocal.ADMIN_RESERVATION_REPORT, function(rs : Array):void{
+			_orders = new Dictionary();
+			
+			//TODO ReservationDetailDTO少了备注
+			for each(var dto : ReservationDetailDTO in rs[1]){
+				var shop : RestaurantDTO = getShopByDish(dto.dishDTO);
+				if(shop != null){
+					if(!_orders.hasOwnProperty(shop.id)){
+						_orders[shop.id] = {
+							shop:shop,
+							goods:new Dictionary()
+						};
+					}
+					
+					if(!_orders[shop.id].goods.hasOwnProperty(dto.dishDTO.id)){
+						_orders[shop.id].goods[dto.dishDTO.id] = {
+							goods:dto.dishDTO,
+							users:[]
+						};
+					}
+					_orders[shop.id].goods[dto.dishDTO.id].users.push(dto.userDTO.name);
+					
+				}
+			}
+			updateShow();
+		});
+	}
+	
+	private function getShopByDish(dishDto : DishDTO) : RestaurantDTO{
+		for each(var dto : RestaurantDTO in Global.shops){
+			for each(var dd : DishDTO in dto.dishDTOs){
+				if(dd.id == dishDto.id){
+					return dto;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	private function updateShow():void{
 		container.removeAllElements();
 		
-		for(var i : int = 0 ;i < len; i++){
+		var i : int = 0;
+		for(var key :String in _orders){
 			var ga : Gather;
 			
 			if(i < _gatherUIs.length){
@@ -54,17 +106,18 @@ public class GatherMediator extends Mediator {
 				ga.initialize();
 				_gatherUIs.push(ga);
 			}
-			ga.setData(null);
+			ga.setData(_orders[key]);
 			container.addElement(ga);
+			i++;
 		}
 		
 		if(ga != null){
 			ga.callLater(function():void{
 				var offsetY : int = 10;
-				for(var i : int = 0 ;i < len; i++){
+				for(var j : int = 0 ;j < i; j++){
 					var ga : Gather;
 					
-					ga = _gatherUIs[i];
+					ga = _gatherUIs[j];
 					ga.y = offsetY;
 					ga.x = 10;
 					offsetY += ga.height + 10;

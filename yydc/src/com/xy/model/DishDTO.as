@@ -41,5 +41,9 @@ public class DishDTO {
 	 * 创建时间
 	 */
 	public var timeCreated : Number;
+	
+	public function get priceStr():String{
+		return price/10.0 + "元";
+	}
 }
 }

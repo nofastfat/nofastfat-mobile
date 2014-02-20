@@ -44,7 +44,7 @@
 							Alert.show("网络异常，修改菜品成功", "嘎嘎");
 							Global.refreshShop();
 						}
-					}, [_dto.id, name, price, id, ""]);
+					}, [_dto.id, Global.base64(name), price, id, ""]);
 				}, _dto);
 			}
 

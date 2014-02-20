@@ -16,6 +16,7 @@ public class ReservationDetailDTO {
 	 * 下单人的用户
 	 */
 	public var userDTO : UserDTO;
+	
 	/**
 	 * 操作人 外键。如果是代点，操作人和下单人是不一样的
 	 */

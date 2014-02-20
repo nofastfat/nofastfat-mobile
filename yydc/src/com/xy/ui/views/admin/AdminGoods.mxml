@@ -89,7 +89,7 @@
 							Alert.show("添加菜品成功", "嘎嘎");
 							Global.refreshShop();
 						}
-					},[name, price, id, ""]);
+					},[Global.base64(name), price, id, ""]);
 				});
 			}
 

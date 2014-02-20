@@ -15,18 +15,22 @@
 	<s:Button x="218" y="227" width="117" height="33" label="我再想想" click="close()"
 			  icon="@Embed('../assets/i3.png')"/>
 	<s:CheckBox x="10" y="189" label="帮兄弟/妹子代点" id="helpCk"  change="checkbox1_changeHandler(event)"/>
-	<s:ComboBox x="150" y="189" width="135" id="helpName" visible="false"/>
+	<s:ComboBox x="150" y="189" width="135" id="helpName" visible="false" labelField="name" dataProvider="{_userList}"/>
 	<s:Image x="5" y="-28" source="@Embed('../assets/i1.png')"/>
 	<fx:Script>
 		<![CDATA[
 			import com.xy.model.Global;
 			
+			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
 			import mx.managers.PopUpManagerChildList;
 			
 			import spark.utils.TextFlowUtil;
 			private static var _instance : EatUI;
 			private var _call : Function;
+			
+			[Bindable]
+			private var _userList : ArrayCollection = new ArrayCollection();
 			
 			public static function getInstance():EatUI{
 				if(_instance == null){
@@ -37,21 +41,27 @@
 				return _instance;
 			}
 			
-			public function show(name : String, price:String, call:Function):void{
+			public function show(str : String, call:Function):void{
 				_call = call;
 				PopUpManagerProxy.addPopUp(this, Global.root);
 				PopUpManager.centerPopUp(this);
 				Global.root.stage.quality = StageQuality.BEST;
 				
-				infoTf.textFlow = TextFlowUtil.importFromString("你点的是【<span color='#00FF00'>鱼香肉丝</span>】，<span color='#FF0000'>10元</span><br/>有没有什么需要补充的？");
+				infoTf.textFlow = TextFlowUtil.importFromString(str);
 				moreTf.text = "";
 				
 				helpCk.selected = false;
 				helpName.visible = false;
+				_userList.source = Global.users;
 			}
 			
 			private function submit():void{
-				_call(moreTf.text);
+				var uid : int = Global.me.id;
+				if(helpCk.selected && helpName.selectedItem != null){
+					uid = helpName.selectedItem.id;
+				}
+				
+				_call(moreTf.text, uid);
 				close();
 			}
 			

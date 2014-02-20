@@ -1,4 +1,6 @@
 package com.xy.mediators {
+import com.xy.model.Global;
+import com.xy.model.RestaurantDTO;
 import com.xy.ui.views.GoodsListUI;
 
 import flash.utils.setTimeout;
@@ -29,7 +31,8 @@ public class GoodsMediator extends Mediator {
 	
 	override public function listNotificationInterests():Array{
 		return [
-			SHOW
+			SHOW,
+			Global.EVENT_SHOP_UPDATE
 		];
 	}
 	
@@ -37,6 +40,17 @@ public class GoodsMediator extends Mediator {
 		switch(notification.getName()){
 			case SHOW:
 				show();
+				break;
+			
+			case Global.EVENT_SHOP_UPDATE:
+				if(_ui != null && _ui.stage != null){
+					
+					var oldSelect : int = _ui.shops.selectedIndex;
+					_ui.setShop(Global.shops);
+					if(oldSelect == -1){
+						_ui.callLater(__changeShopHandler, null);
+					}
+				}
 				break;
 		}
 	}
@@ -47,18 +61,19 @@ public class GoodsMediator extends Mediator {
 			_ui.shops.addEventListener(IndexChangeEvent.CHANGE, __changeShopHandler);
 		}
 		
-		var oldSelect : int = _ui.shops.selectedIndex;
-		_ui.setShop(["小五", "老五"]);
 		container.removeAllElements();
 		container.addElement(_ui);
 		
-		if(oldSelect == -1){
-			_ui.callLater(__changeShopHandler, null);
-		}
+		Global.refreshShop();
 	}
 	
 	private function __changeShopHandler(e : IndexChangeEvent = null):void{
-		_ui.setGoods([]);
+		var dto : RestaurantDTO = _ui.shops.selectedItem;
+		if(dto != null){
+			_ui.setGoods(dto.dishDTOs);
+		}else{
+			_ui.setGoods([]);
+		}
 	}
 	
 	public function get container():Group{
