@@ -27,8 +27,12 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.xy.model.RestaurantDTO;
 			
-			public function setData(vo : *):void{
+			public var dto : RestaurantDTO;
+			
+			public function setData(vo : RestaurantDTO):void{
+				dto = vo;
 				callLater(function():void{
 					height = tb.rowHeight * 4 + 60;
 				});

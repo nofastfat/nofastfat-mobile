@@ -30,9 +30,14 @@
 			[Bindable]
 			private var _list : ArrayCollection = new ArrayCollection();
 			
+			private var _source : Array = [];
+			
 			public function setData(list :Array):void{
-				list.sortOn("timeCreated", Array.NUMERIC|Array.DESCENDING);
+				if(list != null){
+					list.sortOn("timeCreated", Array.NUMERIC|Array.DESCENDING);
+				}
 				_list.source = list;
+				_source = list;
 			} 
 		]]>
 	</fx:Script>

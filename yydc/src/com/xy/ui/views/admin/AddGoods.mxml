@@ -10,6 +10,11 @@
 			   title="添加菜品">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:StringValidator id="nameVl"
+							source="{nameTf}"
+							required="true"
+							requiredFieldError="饭馆名不能空"
+							property="text"/>
 	</fx:Declarations>
 	<s:controlBarContent/>
 	<s:Label x="93"
@@ -31,10 +36,13 @@
 					  x="131"
 					  y="43"
 					  width="113"
-					  maximum="100"/>
-	<s:ComboBox id="fgTf"
-				x="131"
-				y="79"/>
+					  maximum="100"
+					  minimum="1"/>
+	<s:DropDownList id="fgTf"
+					labelField="name"
+					x="131"
+					dataProvider="{_shops}"
+					y="79"/>
 	<s:Image x="131"
 			 y="114"
 			 width="74"
@@ -54,14 +62,20 @@
 	<fx:Script>
 		<![CDATA[
 			import com.xy.model.Global;
+			import com.xy.model.RestaurantDTO;
 			import com.xy.ui.views.PopUpManagerProxy;
-			
+
+			import mx.collections.ArrayCollection;
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
+			import mx.validators.Validator;
 
 			private static var _instance : AddGoods;
 
 			private var _call : Function;
+
+			[Bindable]
+			private var _shops : ArrayCollection = new ArrayCollection();
 
 			public static function getInstance() : AddGoods {
 				if (_instance == null) {
@@ -84,8 +98,16 @@
 			}
 
 			protected function button1_clickHandler() : void {
+				if (Validator.validateAll([nameVl]).length != 0) {
+					return;
+				}
+
 				if (_call != null) {
-					_call(nameTf.text, int(price.value * 10), fgTf.selectedItem.id);
+					var id : int = -1;
+					if(fgTf.selectedItem != null){
+						id = (fgTf.selectedItem as RestaurantDTO).id;
+					}
+					_call(nameTf.text, int(price.value * 10), id);
 				}
 				titlewindow1_closeHandler();
 			}

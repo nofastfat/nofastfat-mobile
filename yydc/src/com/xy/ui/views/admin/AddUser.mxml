@@ -42,7 +42,7 @@
 	<s:Button x="43"
 			  y="150"
 			  width="106"
-			  height="31"
+			  height="31" id="addBtn"
 			  click="button1_clickHandler(event)"
 			  label="添加"/>
 	<s:Button x="180"
@@ -64,6 +64,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.xy.model.Global;
+			import com.xy.model.UserDTO;
 			import com.xy.ui.views.PopUpManagerProxy;
 			
 			import mx.collections.ArrayCollection;
@@ -86,10 +87,25 @@
 				return _instance;
 			}
 
-			public function show(call : Function) : void {
+			public function show(call : Function, dto : UserDTO = null) : void {
 				PopUpManagerProxy.addPopUp(this, Global.root);
 				PopUpManager.centerPopUp(this);
 				_call = call;
+				if(dto != null){
+					title = "修改员工";
+					addBtn.label = "修改";
+					
+					nameTf.text = dto.name;
+					telTf.text = dto.telephone;
+					sexTf.selectedIndex = dto.gender;
+					
+				}else{
+					title = "添加员工";
+					addBtn.label = "添加";
+					nameTf.text = "";
+					telTf.text = "";
+					sexTf.selectedIndex = 1;
+				}
 			}
 
 			protected function titlewindow1_closeHandler() : void {
