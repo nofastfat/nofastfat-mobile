@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   close="titlewindow1_closeHandler()"
+			   width="400"
+			   height="310"
+			   fontFamily="微软雅黑"
+			   fontSize="14"
+			   title="添加菜品">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:controlBarContent/>
+	<s:Label x="93"
+			 y="18"
+			 text="菜名"/>
+	<s:Label x="94"
+			 y="50"
+			 text="单价"/>
+	<s:Label x="65"
+			 y="83"
+			 text="所属饭馆"/>
+	<s:Label x="91"
+			 y="115"
+			 text="图片"/>
+	<s:TextInput id="nameTf"
+				 x="131"
+				 y="10"/>
+	<s:NumericStepper id="price"
+					  x="131"
+					  y="43"
+					  width="113"
+					  maximum="100"/>
+	<s:ComboBox id="fgTf"
+				x="131"
+				y="79"/>
+	<s:Image x="131"
+			 y="114"
+			 width="74"
+			 height="74"/>
+	<s:Button x="65"
+			  y="208"
+			  width="110"
+			  height="31"
+			  label="添加菜品"
+			  click="button1_clickHandler()"/>
+	<s:Button x="205"
+			  y="208"
+			  width="113"
+			  height="31"
+			  label="取  消"
+			  click="titlewindow1_closeHandler()"/>
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.Global;
+			import com.xy.ui.views.PopUpManagerProxy;
+			
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+
+			private static var _instance : AddGoods;
+
+			private var _call : Function;
+
+			public static function getInstance() : AddGoods {
+				if (_instance == null) {
+					_instance = new AddGoods();
+//					_instance.initialize();
+				}
+
+				return _instance;
+			}
+
+			public function show(call : Function) : void {
+				PopUpManagerProxy.addPopUp(this, Global.root);
+				PopUpManager.centerPopUp(this);
+				_call = call;
+			}
+
+			protected function titlewindow1_closeHandler() : void {
+				_call = null;
+				PopUpManagerProxy.removePopUp(this);
+			}
+
+			protected function button1_clickHandler() : void {
+				if (_call != null) {
+					_call(nameTf.text, int(price.value * 10), fgTf.selectedItem.id);
+				}
+				titlewindow1_closeHandler();
+			}
+		]]>
+	</fx:Script>
+</s:TitleWindow>

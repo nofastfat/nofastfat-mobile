@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="400" height="220" borderVisible="true"
+			   creationComplete="init()" dropShadowVisible="true" enabled="true" fontFamily="微软雅黑"
+			   fontSize="14" title="      翼游 点餐" >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		.title{
+			icon:_clazz;
+		}
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var _dataList : ArrayCollection = new ArrayCollection();
+			
+			public function init():void
+			{
+				closeButton.visible = false;
+			}
+			
+			public function setOldList(list : Array):void{
+				_dataList.source = list;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+			
+	</fx:Declarations>
+	<s:controlBarContent>
+		<s:Label text="没账号的找前台妹子要一个咧"/>
+	</s:controlBarContent>
+	<s:Label x="94" y="33" text="姓名"/>
+	<s:ComboBox id="nameTf" x="145" y="27" dataProvider="{_dataList}"/>
+	<s:Button id="loginBtn" x="92" y="77" width="200" height="40" label="开始点餐" fontSize="14"
+			  icon="@Embed('../assets/i2.png')"/>
+	<mx:LinkButton x="308" y="121" label="管理员入口" color="#0432F9" fontSize="12" id="toAdminLogin" />
+	<s:Image x="5" y="-28" source="@Embed('../assets/i1.png')"/>
+</s:TitleWindow>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="348"
+			   height="252"
+			   close="titlewindow1_closeHandler()"
+			   fontFamily="微软雅黑"
+			   fontSize="14"
+			   title="添加员工">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:StringValidator id="nameVl"
+							source="{nameTf}"
+							required="true"
+							requiredFieldError="姓名不能空"
+							property="text"/>
+		<mx:StringValidator id="telVl"
+							source="{telTf}"
+							required="true"
+							requiredFieldError="电话不能空"
+							property="text"/>
+		<mx:StringValidator id="sexVl"
+							source="{sexTf}"
+							required="true"
+							requiredFieldError="性别冒选哟"
+							property="selectedIndex"/>
+	</fx:Declarations>
+	<s:controlBarContent/>
+	<s:Label x="43"
+			 y="31"
+			 text="员工姓名"/>
+	<s:Label x="57"
+			 y="72"
+			 text="手机号"/>
+	<s:TextInput id="nameTf"
+				 x="112" maxChars="18"
+				 y="25"/>
+	<s:TextInput id="telTf" maxChars="11"
+				 x="112"
+				 y="66"/>
+	<s:Button x="43"
+			  y="150"
+			  width="106"
+			  height="31"
+			  click="button1_clickHandler(event)"
+			  label="添加"/>
+	<s:Button x="180"
+			  y="150"
+			  width="106"
+			  click="titlewindow1_closeHandler()"
+			  height="31"
+			  label="取消"/>
+	<s:Label x="70"
+			 y="113"
+			 text="性别"/>
+	<s:DropDownList id="sexTf"
+					x="112"
+					y="107"
+					height="24"
+					dataProvider="{_list}"
+					selectedIndex="1">
+	</s:DropDownList>
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.Global;
+			import com.xy.ui.views.PopUpManagerProxy;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.validators.Validator;
+
+			[Bindable]
+			private var _list : ArrayCollection = new ArrayCollection(["其他", "汉子", "妹子"]);
+			private static var _instance : AddUser;
+
+			private var _call : Function;
+
+			public static function getInstance() : AddUser {
+				if (_instance == null) {
+					_instance = new AddUser();
+//					_instance.initialize();
+				}
+
+				return _instance;
+			}
+
+			public function show(call : Function) : void {
+				PopUpManagerProxy.addPopUp(this, Global.root);
+				PopUpManager.centerPopUp(this);
+				_call = call;
+			}
+
+			protected function titlewindow1_closeHandler() : void {
+				_call = null;
+				PopUpManagerProxy.removePopUp(this);
+			}
+
+			protected function button1_clickHandler(event : MouseEvent) : void {
+				if(Validator.validateAll([nameVl, telVl, sexVl]).length != 0){
+					return;
+				}
+				if (_call != null) {
+					_call(nameTf.text, telTf.text, sexTf.selectedIndex);
+				}
+				titlewindow1_closeHandler();
+			}
+		]]>
+	</fx:Script>
+</s:TitleWindow>
