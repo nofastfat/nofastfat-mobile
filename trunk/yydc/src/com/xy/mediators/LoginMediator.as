@@ -10,12 +10,14 @@ import com.xy.ui.views.PopUpManagerProxy;
 import com.xy.ui.views.TopUI;
 import com.xy.ui.views.admin.AdminLoginUI;
 import com.xy.util.AmfHttp;
+import com.xy.util.Base64;
 
 import flash.events.MouseEvent;
 import flash.net.SharedObject;
 
 import mx.controls.Alert;
 import mx.managers.PopUpManager;
+import mx.utils.Base64Encoder;
 import mx.validators.Validator;
 
 import org.puremvc.as3.interfaces.INotification;
@@ -137,7 +139,7 @@ public class LoginMediator extends Mediator {
 			}else{
 				Alert.show("登陆失败!\n1.检查哈子用户名有冒空格\n2.再检查哈子网络OK否", "Error");
 			}
-		}, [_ui.nameTf.textInput.text]);
+		}, [Global.base64(_ui.nameTf.textInput.text)]);
 		
 		//<mx:StringValidator id="nameVl" source="{nameTf}" required="true" requiredFieldError="姓名不能空" property="text" />
 	}

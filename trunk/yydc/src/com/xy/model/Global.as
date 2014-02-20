@@ -1,6 +1,9 @@
 package com.xy.model {
 	import com.xy.comunication.Protocal;
 	import com.xy.comunication.SAMFHttp;
+	import com.xy.util.Base64;
+	
+	import flash.utils.ByteArray;
 	
 	import org.puremvc.as3.patterns.facade.Facade;
 
@@ -54,6 +57,12 @@ public class Global {
 			
 			Facade.getInstance().sendNotification(EVENT_USER_UPDATE);
 		});
+	}
+	
+	public static function base64(str : String):String{
+		var ba : ByteArray = new ByteArray();
+		ba.writeUTF(str);
+		return Base64.encode(ba);
 	}
 }
 }

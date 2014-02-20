@@ -43,7 +43,7 @@
 			private var _shopRenders : Array = [];
 
 			public function setDatas(arr : Array) : void {
-				var len : int = arr.length + 1;
+				var len : int = arr.length;
 				container.removeAllElements();
 				for (var i : int = 0; i < len; i++) {
 					var shop : ShopRender;
@@ -86,7 +86,7 @@
 						if(rs == 0){
 							Alert.show("网络异常，添加菜品失败", "-_-#");
 						}else{
-							Alert.show("网络异常，添加菜品成功", "嘎嘎");
+							Alert.show("添加菜品成功", "嘎嘎");
 							Global.refreshShop();
 						}
 					},[name, price, id, ""]);
