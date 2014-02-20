@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%" fontFamily="微软雅黑" fontSize="14">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Label x="10" y="10" width="103" height="17" text="员工管理"/>
+	<s:TextInput x="142" y="38" width="158"/>
+	<s:Button x="11" y="39" width="81" height="26" label="添加员工" id="addUsers"/>
+	<s:Button x="303" y="38" width="76" height="25" label="search"/>
+	<s:DataGrid left="10" right="10" top="71" bottom="10" requestedRowCount="4" dataProvider="{_list}">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="id" headerText="序号"></s:GridColumn>
+				<s:GridColumn dataField="name" headerText="姓名"></s:GridColumn>
+				<s:GridColumn dataField="telephone" headerText="手机"></s:GridColumn>
+				<s:GridColumn dataField="dataField3" headerText="操作" itemRenderer="com.xy.ui.views.admin.UserRender"></s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.UserDTO;
+			
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var _list : ArrayCollection = new ArrayCollection();
+			
+			public function setData(list :Array):void{
+				list.sortOn("timeCreated", Array.NUMERIC|Array.DESCENDING);
+				_list.source = list;
+			} 
+		]]>
+	</fx:Script>
+</s:Group>

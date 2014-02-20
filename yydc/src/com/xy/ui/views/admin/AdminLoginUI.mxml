@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="400" height="222" fontFamily="微软雅黑" fontSize="14" title="管理员登陆" creationComplete="closeButton.visible=false;">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:StringValidator id="nameVl" source="{idTf}" required="true" requiredFieldError="姓名不能空" property="text" />
+		<mx:StringValidator id="pwdVl" source="{pwdTf}" required="true" requiredFieldError="密码不能空" property="text" />
+	</fx:Declarations>
+	<s:controlBarContent/>
+	<s:Label x="51" y="39" text="管理员账号"/>
+	<s:Label x="91" y="76" text="密码"/>
+	<s:TextInput id="idTf" x="135" y="33" maxChars="18"/>
+	<s:TextInput id="pwdTf" x="135" y="68" maxChars="18" displayAsPassword="true"/>
+	<s:Button x="135" y="117" width="122" height="35" label="登陆" id="loginBtn"/>
+	<mx:LinkButton x="277" y="122" label="普通入口" color="#0432F9" fontSize="12" id="cancelBtn" />
+</s:TitleWindow>

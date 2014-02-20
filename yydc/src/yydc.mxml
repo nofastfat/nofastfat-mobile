@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   fontFamily="微软雅黑"
+			   fontSize="14"
+			   addedToStage="application1_addedToStageHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:views="com.xy.ui.views.*">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenLite;
+			import com.greensock.easing.Linear;
+			import com.xy.YYDCFacade;
+			import com.xy.model.DishDTO;
+			import com.xy.model.Global;
+			import com.xy.model.RestaurantDTO;
+			import com.xy.model.UserDTO;
+			
+			import flash.net.registerClassAlias;
+			
+			import spark.effects.easing.EaseInOutBase;
+
+			private var _facade : YYDCFacade;
+
+			private var _contentHeight : Number = 0;
+
+			protected function application1_addedToStageHandler(event : Event) : void {
+				Global.root = this;
+				TweenLite.defaultEase = Linear.easeNone;
+				_facade = new YYDCFacade();
+				_facade.startUp(this);
+
+				initDto();
+			}
+
+			public function callLayer(offsetY : Number) : void {
+				_contentHeight = offsetY;
+				var rsHeight : int = topUI.height + Math.max(400, _contentHeight) + 100;
+				if (rsHeight > stage.stageHeight) {
+					ExternalInterface.call("function(){document.getElementById('yydc').height='" + rsHeight + "px';}");
+					stage.removeEventListener(Event.RESIZE, __resizeHandler);
+				} else {
+					ExternalInterface.call("function(){document.getElementById('yydc').height='100%';}");
+					stage.addEventListener(Event.RESIZE, __resizeHandler);
+				}
+			}
+
+			private function __resizeHandler(e : Event) : void {
+				var rsHeight : int = topUI.height + Math.max(400, _contentHeight) + 100;
+				if (rsHeight > stage.stageHeight) {
+					ExternalInterface.call("function(){document.getElementById('yydc').height='" + rsHeight + "px';}");
+					stage.removeEventListener(Event.RESIZE, __resizeHandler);
+				}
+			}
+
+			public function initDto() : void {
+				registerClassAlias("dto.UserDTO", UserDTO);
+				registerClassAlias("dto.DishDTO", DishDTO);
+				registerClassAlias("dto.RestaurantDTO", RestaurantDTO);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:BorderContainer width="100%"
+					   height="100%"
+					   borderVisible="false">
+		<s:backgroundFill>
+			<s:BitmapFill source="@Embed('../assets/bg.png')"
+						  fillMode="repeat"
+						  alpha="0.1"/>
+		</s:backgroundFill>
+	</s:BorderContainer>
+	<views:TopUI width="100%"
+				 height="90"
+				 id="topUI"/>
+	<views:LeftUI left="0"
+				  top="90"
+				  bottom="0"
+				  borderVisible="true"
+				  dropShadowVisible="false"
+				  paddingTop="15"
+				  id="leftUI"/>
+	<s:Group left="162"
+			 right="0"
+			 top="90"
+			 bottom="0"
+			 id="container">
+	</s:Group>
+	<mx:UIComponent id="alertC"
+					width="100%"
+					height="100%">
+
+	</mx:UIComponent>
+</s:Application>

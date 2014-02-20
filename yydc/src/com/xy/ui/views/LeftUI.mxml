@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ApplicationControlBar xmlns:fx="http://ns.adobe.com/mxml/2009"
+						  xmlns:s="library://ns.adobe.com/flex/spark"
+						  xmlns:mx="library://ns.adobe.com/flex/mx"
+						  width="162"
+						  fontFamily="微软雅黑"
+						  fontSize="14">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:VGroup  id="con"
+			  width="100%"
+			  height="100%"
+			  gap="15"
+			  textAlign="center">
+		<s:Button id="cpBtn"
+				  width="100%"
+				  height="60"
+				  label="菜品"
+				  icon="@Embed('../assets/p1.png')"/>
+		<s:Button width="100%"
+				  height="60"
+				  label="汇总"
+				  id="hzBtn"
+				  icon="@Embed('../assets/p2.png')"/>
+		<s:Button width="100%"
+				  height="60"
+				  label="历史"
+				  id="lsBtn"
+				  icon="@Embed('../assets/p3.png')"/>
+		
+		<s:Button id="manageUser" visible="false"
+				  width="100%"
+				  height="60"
+				  label="员工管理"
+				  icon="@Embed('../assets/p5.png')"/>
+		<s:Button width="100%" visible="false"
+				  height="60"
+				  label="菜品管理"
+				  id="manageGoods"
+				  icon="@Embed('../assets/p4.png')"/>
+	</s:VGroup>
+
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.Global;
+
+			public function init() : void {
+				
+				con.removeAllElements();
+				if(!Global.isAdmin){
+					con.addElement(cpBtn);
+					con.addElement(hzBtn);
+					con.addElement(lsBtn);
+				}else{
+					con.addElement(manageUser);
+					con.addElement(manageGoods);
+					manageUser.visible = true;
+					manageGoods.visible = true;
+				}
+			}
+		]]>
+	</fx:Script>
+</mx:ApplicationControlBar>

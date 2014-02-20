@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:admin="com.xy.ui.views.admin.*"
+		 width="100%"
+		 height="468"
+		 fontFamily="微软雅黑"
+		 fontSize="14">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Label x="10"
+			 y="10"
+			 width="103"
+			 height="17"
+			 text="菜品管理"/>
+	<s:Button x="10"
+			  y="31"
+			  width="81"
+			  height="26"
+			  label="添加饭馆"
+			  id="addShopBtn"/>
+	<s:Group left="10"
+			 right="10"
+			 top="65"
+			 bottom="10"
+			 id="container">
+	</s:Group>
+
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.Global;
+			import com.xy.util.STool;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+
+			private var _shopRenders : Array = [];
+
+			public function setDatas(arr : Array) : void {
+				var len : int = STool.random(2, 5);
+				container.removeAllElements();
+				for (var i : int = 0; i < len; i++) {
+					var shop : ShopRender;
+					if (i < _shopRenders.length) {
+						shop = _shopRenders[i];
+					} else {
+						shop = new ShopRender();
+//						shop.initialize();
+						shop.addEventListener(FlexEvent.CREATION_COMPLETE, function(e : Event):void{
+							shop.addGoodsBtn.addEventListener(MouseEvent.CLICK, __addGoodsHandler);
+							shop.delGoodsBtn.addEventListener(MouseEvent.CLICK, __delShopHandler);
+						});
+						_shopRenders.push(shop);
+					}
+
+					shop.setData(null);
+
+					container.addElement(shop);
+				}
+
+				if (shop != null) {
+					shop.callLater(function() : void {
+						var offsetY : int = 0;
+						for (var i : int = 0; i < len; i++) {
+							var shop : ShopRender;
+							shop = _shopRenders[i];
+
+							shop.y = offsetY;
+
+							offsetY += shop.height + 10;
+
+							Global.root.callLayer(offsetY);
+						}
+					});
+				}
+			}
+
+			private function __addGoodsHandler(e : MouseEvent) : void {
+				AddGoods.getInstance().show(null);
+			}
+
+			private function __delShopHandler(e : MouseEvent) : void {
+				Alert.show("确认删除菜馆?这将删除该饭馆下所有的菜品", "删除确认", Alert.YES|Alert.NO, Global.root, function(e : CloseEvent):void{
+					
+				});
+			}
+		]]>
+	</fx:Script>
+</s:Group>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="384" fontFamily="微软雅黑" fontSize="14" title="老五烧烤  13545197547 (共10份,总计110元)" >
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.utils.TextFlowUtil;
+			
+			public function setData(vo:*):void{
+				contentTf.textFlow = TextFlowUtil.importFromString("青椒肉丝：10份（<span color='#0000FF'>张三<br/> 李四 <br/>王五</span>）");
+				infoTf.text = "备注";
+				
+				callLater(function():void{
+					contentTf.height = contentTf.scroller.viewport.contentHeight + 2;
+					infoTf.height = infoTf.scroller.viewport.contentHeight + 2;
+					infoTf.y = contentTf.y + contentTf.height + 10;
+					height = infoTf.y + infoTf.height + 40;
+				});
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:TextArea id="contentTf" y="10" left="10" right="10" height="235" editable="false" borderAlpha="0.3"/>
+	<s:TextArea id="infoTf" y="253" left="10" right="10" height="89" editable="false" text="备注" borderAlpha="0.3"/>
+</s:Panel>

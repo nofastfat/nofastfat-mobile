@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" close="titlewindow1_closeHandler()"
+			   width="400" height="300" fontFamily="微软雅黑" fontSize="14" title="添加饭馆">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:controlBarContent/>
+	<s:Label x="59" y="26" text="饭馆名"/>
+	<s:Label x="46" y="62" text="订餐电话"/>
+	<s:Label x="74" y="94" text="地址"/>
+	<s:TextInput id="nameTf" x="118" y="21"/>
+	<s:TextInput id="telTf" x="118" y="55"/>
+	<s:TextArea id="addressTf" x="118" y="89" width="218" height="93"/>
+	<s:Button x="58" y="200" width="110" height="41" label="添加饭馆" click="button1_clickHandler(event)"/>
+	<s:Button x="207" y="201" width="112" height="40" label="取   消" click="titlewindow1_closeHandler()"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.xy.model.Global;
+			import com.xy.ui.views.PopUpManagerProxy;
+			
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+
+			private static var _instance:AddShop;
+			
+			private var _call : Function;
+			
+			public static function getInstance():AddShop{
+				if(_instance == null){
+					_instance = new AddShop();
+//					_instance.initialize();
+				}
+				
+				return _instance;
+			}
+			
+			public function show(call:Function):void{
+				PopUpManagerProxy.addPopUp(this, Global.root);
+				PopUpManager.centerPopUp(this);
+				_call = call;
+			}
+			
+			protected function titlewindow1_closeHandler():void
+			{
+				_call = null;
+				PopUpManagerProxy.removePopUp(this);
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				if(_call != null){
+					_call(nameTf.text, telTf.text, addressTf.text);
+				}
+				titlewindow1_closeHandler();
+			}
+			
+		]]>
+	</fx:Script>
+</s:TitleWindow>

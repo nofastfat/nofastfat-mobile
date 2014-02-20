@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="190" height="226" creationComplete="group1_creationCompleteHandler(event)"
+		 fontFamily="微软雅黑" fontSize="14">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				graphics.lineStyle(1, 0x999999);
+				graphics.drawRect(0, 0, width, height);
+			}
+			
+			public function setData(vo : *):void{
+				img.source="http://192.168.1.102/default.jpg";
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				EatUI.getInstance().show("鱼香肉丝", "15", function(rs:String):void{
+					trace("rs:" + rs);
+				});			
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		
+	</fx:Declarations>
+	
+	<s:Image x="5" y="5" width="180" height="125" id="img" />
+	<s:Label x="19" y="137" width="150" height="18" color="#06D610" fontSize="16" text="青椒肉丝超级辣"
+			 textAlign="left"/>
+	<s:Label x="19" y="159" width="150" color="#FD8686" fontSize="16" fontWeight="bold" text="10元"
+			 textAlign="left"/>
+	<s:Button x="39" y="185" width="102" height="29" label="今天吃TA"
+			  click="button1_clickHandler(event)"/>
+</s:Group>
