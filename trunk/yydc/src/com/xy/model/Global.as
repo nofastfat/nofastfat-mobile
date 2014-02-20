@@ -12,6 +12,7 @@ package com.xy.model {
  **/
 public class Global {
 	public static const EVENT_SHOP_UPDATE : String="EVENT_SHOP_UPDATE";
+	public static const EVENT_USER_UPDATE : String="EVENT_USER_UPDATE";
 	
 	public static var root : yydc;
 	
@@ -23,6 +24,7 @@ public class Global {
 	public static var isAdmin:Boolean = false;
 	
 	public static var shops : Array = [];
+	public static var users : Array = [];
 	
 	public static function get userName():String{
 		if(me != null){
@@ -40,6 +42,17 @@ public class Global {
 			}
 			
 			Facade.getInstance().sendNotification(EVENT_SHOP_UPDATE);
+		});
+	}
+	
+	public static function refreshUserList():void{
+		new SAMFHttp(Protocal.ADMIN_USER_LIST, function(list : Array):void{
+			users = list;
+			if(users == null){
+				users = [];
+			}
+			
+			Facade.getInstance().sendNotification(EVENT_USER_UPDATE);
 		});
 	}
 }

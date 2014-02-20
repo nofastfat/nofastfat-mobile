@@ -31,7 +31,7 @@
 			protected function application1_addedToStageHandler(event : Event) : void {
 				Global.root = this;
 				TweenLite.defaultEase = Linear.easeNone;
-				_facade = new YYDCFacade();
+				_facade = new YYDCFacade(); 
 				_facade.startUp(this); 
 
 				initDto();

@@ -33,6 +33,7 @@
 			import com.xy.comunication.Protocal;
 			import com.xy.comunication.SAMFHttp;
 			import com.xy.model.Global;
+			import com.xy.model.YyEvent;
 			import com.xy.util.STool;
 			
 			import mx.controls.Alert;
@@ -52,7 +53,7 @@
 						shop = new ShopRender();
 						shop.addEventListener(FlexEvent.CREATION_COMPLETE, function(e : Event):void{
 							shop.addGoodsBtn.addEventListener(MouseEvent.CLICK, __addGoodsHandler);
-							shop.delGoodsBtn.addEventListener(MouseEvent.CLICK, __delShopHandler);
+							shop.addEventListener("DEL_SHOP", __delShopHandler);
 						});
 						_shopRenders.push(shop);
 					}
@@ -92,10 +93,10 @@
 				});
 			}
 
-			private function __delShopHandler(e1 : MouseEvent) : void {
+			private function __delShopHandler(e1 : YyEvent) : void {
 				Alert.show("确认删除饭馆?这将删除该饭馆下所有的菜品", "删除确认", Alert.YES|Alert.NO, Global.root, function(e : CloseEvent):void{
 					if(e.detail== Alert.YES){
-						var restid : int = (e1.target.parent.parent.parent.parent as ShopRender).dto.id;
+						var restid : int = e1.data;
 						new SAMFHttp(Protocal.ADMIN_RESTAURANT_REMOVE, function(rs : int):void{
 							if(rs == 0){
 								Alert.show("网络异常，删除饭馆失败", "-_-#");

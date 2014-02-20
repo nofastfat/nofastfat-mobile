@@ -1,6 +1,7 @@
 package com.xy.mediators {
 import com.xy.comunication.Protocal;
 import com.xy.comunication.SAMFHttp;
+import com.xy.model.Global;
 import com.xy.model.UserDTO;
 import com.xy.ui.views.admin.AddUser;
 import com.xy.ui.views.admin.AdminGoods;
@@ -35,7 +36,8 @@ public class ManageUserMediator extends Mediator {
 
 	override public function listNotificationInterests() : Array {
 		return [
-			SHOW
+			SHOW,
+			Global.EVENT_USER_UPDATE
 			];
 	}
 
@@ -43,6 +45,12 @@ public class ManageUserMediator extends Mediator {
 		switch (notification.getName()) {
 			case SHOW:
 				show();
+				break;
+			
+			case Global.EVENT_USER_UPDATE:
+				if(_ui != null && _ui.stage != null){
+					_ui.setData(Global.users);
+				}
 				break;
 		}
 	}
@@ -56,7 +64,7 @@ public class ManageUserMediator extends Mediator {
 		
 		container.removeAllElements();
 		container.addElement(_ui);
-		refreshUserList();
+		Global.refreshUserList();
 	}
 
 	private function __addUserHandler(e : MouseEvent):void{
@@ -66,26 +74,10 @@ public class ManageUserMediator extends Mediator {
 					Alert.show("网络异常，添加用户失败", "-_-#");
 				}else{
 					Alert.show(name +"已经成功添加！", "嘎嘎");
-					refreshUserList();
+					Global.refreshUserList();
 				}
 			}, [name, tel, sex]);
 		});
-	}
-	
-	public function refreshUserList():void{
-		var list : Array = [];
-		for(var i : int = 0; i < 50; i++){
-			var d : UserDTO = new UserDTO();
-			d.id = i;
-			d.name = "name" + i;
-			d.timeCreated = i;
-			d.telephone = "tel" + i;
-			list.push(d);
-		}
-		_ui.setData(list);
-//		new SAMFHttp(Protocal.ADMIN_USER_LIST, function(list : Array):void{
-//			_ui.setData(list);
-//		});
 	}
 	
 	public function get container() : Group {

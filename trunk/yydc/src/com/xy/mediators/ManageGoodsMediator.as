@@ -47,7 +47,9 @@ public class ManageGoodsMediator extends Mediator {
 				break;
 			
 			case Global.EVENT_SHOP_UPDATE:
-				_ui.setDatas(Global.shops);
+				if(_ui != null && _ui.stage != null){
+					_ui.setDatas(Global.shops);
+				}
 				break;
 		}
 	}
