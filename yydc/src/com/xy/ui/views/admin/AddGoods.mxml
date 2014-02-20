@@ -47,6 +47,9 @@
 			 y="114"
 			 width="74"
 			 height="74"/>
+	<s:Button label="上传图片" x="210" y="114" click="button2_clickHandler(event)">
+		
+	</s:Button>
 	<s:Button id="addBtn" x="65" y="208" width="110" height="31" label="添加菜品"
 			  click="button1_clickHandler()"/>
 	<s:Button x="205"
@@ -61,6 +64,7 @@
 			import com.xy.model.Global;
 			import com.xy.model.RestaurantDTO;
 			import com.xy.ui.views.PopUpManagerProxy;
+			import com.xy.util.STool;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.CloseEvent;
@@ -122,6 +126,25 @@
 				}
 				titlewindow1_closeHandler();
 			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				var f : FileReference = new FileReference();
+				f.browse([new FileFilter("*.png", "*.png"),new FileFilter("*.jpg", "*.jpg")]);
+				f.addEventListener(Event.SELECT, function(e : Event):void{
+					f.load();
+					f.addEventListener(Event.COMPLETE, function(e:Event):void{
+						var loader : Loader = new Loader();
+						loader.loadBytes(f.data);
+						STool.clear(imgC);
+						imgC.addChild(loader);
+						loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e : Event):void{
+							loader.width = loader.height = 74;
+						});
+					});
+				});
+			}
+			
 		]]>
 	</fx:Script>
 </s:TitleWindow>
