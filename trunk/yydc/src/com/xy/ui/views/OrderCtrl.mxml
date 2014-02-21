@@ -7,5 +7,5 @@
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<s:Button id="lockBtn" x="10" y="10" width="98" height="29" label="锁定订单"/>
-	<s:Label x="118" y="19" text="锁了订单，他们就没法退订啦"/>
+	<s:Label x="118" y="19" text="锁了订单，小伙伴们就没法退订啦"/>
 </s:Group>
