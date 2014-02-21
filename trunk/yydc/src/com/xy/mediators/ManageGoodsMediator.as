@@ -74,7 +74,7 @@ public class ManageGoodsMediator extends Mediator {
 					  Alert.show("网络异常，添加饭馆成功", "嘎嘎");
 					  Global.refreshShop();
 				  }
-			}, [name, tel, address]);
+			}, [Global.base64(name), tel, Global.base64(address)]);
 		});
 	}
 
