@@ -39,9 +39,9 @@
 					}
 					var info : String = "";
 					if (Global.myGoods != null) {
-						info = "<br/>会把之前点的【" + Global.myGoods.dishDTO.name + "】取消掉";
+						info = "<br/><span color='#FF0000'>注意!!!会把之前点的【" + Global.myGoods.dishDTO.name + "】取消掉</span>";
 					}
-					var str : String = "【" +Global.now.typeStr + "】　你现在点的是【<span color='#00FF00'>" + _dto.name + "</span>】，<span color='#FF0000'>" + _dto.priceStr + "</span>" + info + "<br/>有没有什么需要补充的？";
+					var str : String = "【" +Global.now.typeStr + "】　你现在点的是【<span color='#12bd56'>" + _dto.name + "</span>】，<span color='#FF0000'>" + _dto.priceStr + "</span>" + info + "<br/>有没有什么需要补充的？";
 					EatUI.getInstance().show(str, function(rs : String, userId : int) : void {
 						new SAMFHttp(Protocal.DETAIL_ORDER, function(rs : ReservationDetailDTO) : void {
 							if (rs != null) {
@@ -51,7 +51,7 @@
 							}
 							Global.refreshMyGoods();
 						}, [_dto.id, userId, Global.now.id, rs]);
-					});
+					}, Global.myGoods != null);
 				});
 			}
 		]]>

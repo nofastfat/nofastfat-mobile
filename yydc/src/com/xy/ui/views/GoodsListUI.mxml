@@ -171,7 +171,7 @@
 					}
 					var info : String = "";
 					if (Global.myGoods != null) {
-						info = "<br/>不过会把之前点的【" + Global.myGoods.dishDTO.name + "】取消掉";
+						info = "<br/><span color='#FF0000'>注意!!!会把之前点的【" + Global.myGoods.dishDTO.name + "】取消掉</span>";
 					}
 					var words : Array = [
 						"老夫夜观天象，客官今日宜进食",
@@ -180,17 +180,17 @@
 						"习大大建议你今天吃",
 						"杰总说，今天老夫请客，吃这个免单："
 						];
-					var str : String = "【" +Global.now.typeStr + "】　"+ STool.randomFromArray(words) + "【<span color='#00FF00'>" + dto.name + "</span>】，<span color='#FF0000'>" + dto.priceStr + "</span>" + info + "<br/>有没有什么需要补充的？";
+					var str : String = "【" +Global.now.typeStr + "】　"+ STool.randomFromArray(words) + "【<span color='#12bd56'>" + dto.name + "</span>】，<span color='#FF0000'>" + dto.priceStr + "</span>" + info + "<br/>有没有什么需要补充的？";
 					EatUI.getInstance().show(str, function(rs : String, userId : int) : void {
 						new SAMFHttp(Protocal.DETAIL_ORDER, function(rs : ReservationDetailDTO) : void {
 							if (rs != null) {
 								Alert.show("点餐成功,坐等送餐", "Oh-Yes");
 							} else {
-								Alert.show("RP不好？点餐失败", "-_-#"); 
+								Alert.show("RP不好？点餐失败", "-_-#");  
 							}
 							Global.refreshMyGoods();
 						}, [dto.id, userId, Global.now.id, rs]);
-					});
+					}, Global.myGoods != null);
 				});
 			}
 		]]>

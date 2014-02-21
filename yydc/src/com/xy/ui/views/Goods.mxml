@@ -44,9 +44,9 @@
 					
 					var info : String = "";
 					if(Global.myGoods!=null){
-						info = "<br/>会把之前点的【"+Global.myGoods.dishDTO.name+"】取消掉";
+						info = "<br/><span color='#FF0000'>注意!!!会把之前点的【" + Global.myGoods.dishDTO.name + "】取消掉</span>";
 					}
-					var str : String = "【" +Global.now.typeStr + "】　你现在点的是【<span color='#00FF00'>"+dto.name+"</span>】，<span color='#FF0000'>"+dto.priceStr+"</span>"+info+"<br/>有没有什么需要补充的？";
+					var str : String = "【" +Global.now.typeStr + "】　你现在点的是【<span color='#12bd56'>"+dto.name+"</span>】，<span color='#FF0000'>"+dto.priceStr+"</span>"+info+"<br/>有没有什么需要补充的？";
 					EatUI.getInstance().show(str, function(rs:String, userId : int):void{
 						new SAMFHttp(Protocal.DETAIL_ORDER, function(rs : ReservationDetailDTO):void{
 							if(rs != null){
@@ -56,7 +56,7 @@
 							}
 							Global.refreshMyGoods();
 						}, [dto.id, userId, Global.now.id, rs]);
-					});
+					}, Global.myGoods != null);
 				});
 			}
 			
@@ -68,8 +68,8 @@
 	</fx:Declarations>
 	
 	<s:Image x="5" y="5" width="180" height="125" id="img" />
-	<s:Label x="19" y="137" width="150" height="18" color="#06D610" id="goodsName" fontSize="16" text="青椒肉丝超级辣"
-			 textAlign="left"/>
+	<s:Label id="goodsName" x="19" y="137" width="150" height="18" color="#12bd56" fontSize="16"
+			 fontWeight="bold" text="青椒肉丝超级辣" textAlign="left"/>
 	<s:Label x="19" y="159" width="150" color="#FD8686" fontSize="16" fontWeight="bold" id="price" text="10元"
 			 textAlign="left"/>
 	<s:Button x="39" y="185" width="102" height="29" label="今天吃TA"

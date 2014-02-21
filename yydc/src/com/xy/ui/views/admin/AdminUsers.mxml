@@ -6,7 +6,7 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:Label x="10" y="10" width="103" height="17" text="员工管理"/>
+	<s:Label x="10" y="16" width="103" height="17" text="员工管理"/>
 	<s:TextInput x="142" y="38" width="158"/>
 	<s:Button x="11" y="39" width="81" height="26" label="添加员工" id="addUsers"/>
 	<s:Button x="303" y="38" width="76" height="25" label="search"/>
