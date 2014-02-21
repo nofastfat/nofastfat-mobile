@@ -3,6 +3,8 @@ import com.xy.ui.views.LeftUI;
 
 import flash.events.MouseEvent;
 
+import mx.controls.Alert;
+
 import org.puremvc.as3.interfaces.INotification;
 import org.puremvc.as3.patterns.mediator.Mediator;
 
@@ -51,6 +53,7 @@ public class LeftMediator extends Mediator {
 	}
 
 	private function __lsHandler(e : MouseEvent) : void {
+		Alert.show("我任何功能都冒，纯占位", "点我干啥子");
 	}
 
 	private function __userHandler(e : MouseEvent) : void {

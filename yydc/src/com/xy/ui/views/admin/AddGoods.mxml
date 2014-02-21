@@ -98,7 +98,7 @@
 					price.value = dto.price/10.0;
 				}
 				
-				if(dto != null && dto.picture != ""){
+				if(dto != null && dto.picture != "" && dto.picture != null){
 					var loader : Loader = new Loader();
 					loader.load(new URLRequest(dto.picture));
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e : Event):void{

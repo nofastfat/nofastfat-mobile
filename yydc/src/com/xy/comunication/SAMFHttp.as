@@ -71,6 +71,12 @@ public class SAMFHttp {
 			useBa = true;
 		}
 
+		if(vars == null){
+			uri += "?r=" + Math.random();
+		}else{
+			vars.r = Math.random();
+		}
+		
 		new Http(uri, function(rsBa : ByteArray) : void {
 			if (rsBa != null && rsBa.bytesAvailable != 0) {
 				_call(rsBa.readObject());

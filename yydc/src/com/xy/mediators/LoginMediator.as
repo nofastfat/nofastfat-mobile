@@ -168,6 +168,8 @@ public class LoginMediator extends Mediator {
 		Global.me.name = _adminUI.idTf.text;
 		Global.isAdmin = true;
 		recordAdmin(Global.userName);
+		
+		Global.refreshShop();
 
 		PopUpManagerProxy.removePopUp(_adminUI);
 		sendNotification(TopMediator.INIT);

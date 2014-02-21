@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="88">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Image x="10" y="10" source="assets/haha.png"/>
+	<s:Label x="84" y="32" width="282" fontFamily="微软雅黑" fontSize="18" text="小伙伴都冒点餐，可以呼喊哈子"/>
+</s:Group>

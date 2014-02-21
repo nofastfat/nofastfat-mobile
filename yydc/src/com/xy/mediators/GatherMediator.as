@@ -7,6 +7,7 @@ import com.xy.model.ReservationDTO;
 import com.xy.model.ReservationDetailDTO;
 import com.xy.model.RestaurantDTO;
 import com.xy.ui.views.Gather;
+import com.xy.ui.views.NoneOrder;
 import com.xy.ui.views.OrderCtrl;
 import com.xy.util.STool;
 
@@ -35,6 +36,7 @@ public class GatherMediator extends Mediator {
 	private var _gatherUIs : Array = [];
 
 	private var _orderUI : OrderCtrl;
+	private var _noneDian : NoneOrder;
 
 	private var _orders : Dictionary = new Dictionary();
 	
@@ -64,6 +66,10 @@ public class GatherMediator extends Mediator {
 		if (_orderUI == null) {
 			_orderUI = new OrderCtrl();
 			_orderUI.lockBtn.addEventListener(MouseEvent.CLICK, __lockHandler);
+		}
+		
+		if(_noneDian == null){
+			_noneDian = new NoneOrder();
 		}
 
 		new SAMFHttp(Protocal.ADMIN_RESERVATION_REPORT, function(rs : Array) : void {
@@ -144,6 +150,12 @@ public class GatherMediator extends Mediator {
 			ga.setData(_orders[key]);
 			container.addElement(ga);
 			i++;
+		}
+		
+		if(i == 0){
+			container.addElement(_noneDian);
+			
+			_noneDian.y = _orderUI.height;
 		}
 
 		if (ga != null) {
