@@ -46,5 +46,9 @@ public class UserDTO {
 	 * 创建日期
 	 */
 	public var timeCreated : int;
+	
+	public function toString():String{
+		return name;
+	}
 }
 }

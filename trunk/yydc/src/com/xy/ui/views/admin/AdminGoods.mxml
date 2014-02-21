@@ -11,19 +11,19 @@
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<s:Label x="10"
-			 y="10"
+			 y="17"
 			 width="103"
 			 height="17"
 			 text="菜品管理"/>
 	<s:Button x="10"
-			  y="31"
+			  y="38"
 			  width="81"
 			  height="26"
 			  label="添加饭馆"
 			  id="addShopBtn"/>
 	<s:Group left="10"
 			 right="10"
-			 top="65"
+			 top="74"
 			 bottom="10"
 			 id="container">
 	</s:Group>

@@ -41,6 +41,7 @@ public class GatherMediator extends Mediator {
 	private var _orders : Dictionary = new Dictionary();
 	
 	private var _now : ReservationDTO;
+	private var _dianList : Array = [];
 
 	public function GatherMediator(viewComponent : Object = null) {
 		super(NAME, viewComponent);
@@ -78,6 +79,7 @@ public class GatherMediator extends Mediator {
 			}
 			_orders = new Dictionary();
 			_now = rs[0];
+			_dianList = rs[1];
 
 			for each (var dto : ReservationDetailDTO in rs[1]) {
 				var shop : RestaurantDTO = getShopByDish(dto.dishDTO);
@@ -134,6 +136,7 @@ public class GatherMediator extends Mediator {
 
 		if (Global.isAdmin) {
 			container.addElement(_orderUI);
+			_orderUI.updateLeft(_dianList);
 		}
 
 		var i : int = 0;
@@ -155,7 +158,11 @@ public class GatherMediator extends Mediator {
 		if(i == 0){
 			container.addElement(_noneDian);
 			
-			_noneDian.y = _orderUI.height;
+			if(_orderUI.stage != null && _orderUI.visible == true){
+				_noneDian.y = _orderUI.height;
+			}else{
+				_noneDian.y = 0;
+			}
 		}
 
 		if (ga != null) {
@@ -163,7 +170,7 @@ public class GatherMediator extends Mediator {
 
 				var offsetY : int = 10;
 				if (Global.isAdmin) {
-					offsetY += _orderUI.height
+					offsetY += _orderUI.height;
 				}
 				for (var j : int = 0; j < i; j++) {
 					var ga : Gather;

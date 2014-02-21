@@ -170,6 +170,7 @@ public class LoginMediator extends Mediator {
 		recordAdmin(Global.userName);
 		
 		Global.refreshShop();
+		Global.refreshUserList();
 
 		PopUpManagerProxy.removePopUp(_adminUI);
 		sendNotification(TopMediator.INIT);
