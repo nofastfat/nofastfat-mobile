@@ -2,20 +2,20 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   width="400" height="326" fontFamily="微软雅黑" fontSize="14" title="      点餐确认" close="close()">
+			   width="506" height="354" fontFamily="微软雅黑" fontSize="14" title="      点餐确认" close="close()">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<s:controlBarContent/>
-	<s:TextArea x="10" y="10" width="378" height="50" text="你点的是【鱼香肉丝】，10元&#xd;有没有什么需要补充的？" id="infoTf" editable="false"/>
-	<s:Label x="10" y="68" width="378" height="17" text="补充（加辣呼？....）"/>
-	<s:TextArea x="10" y="83" width="378" height="90" id="moreTf" />
-	<s:Button x="65" y="228" width="112" height="33" label="确认点餐" click="submit()"
+	<s:TextArea x="10" y="10" width="484" height="72" text="你点的是【鱼香肉丝】，10元&#xd;有没有什么需要补充的？" id="infoTf" editable="false"/>
+	<s:Label x="10" y="90" width="378" height="17" text="补充（加辣呼？....）"/>
+	<s:TextArea x="10" y="105" width="484" height="90" id="moreTf" />
+	<s:Button x="113" y="250" width="112" height="33" label="确认点餐" click="submit()"
 			  icon="@Embed('../assets/i2.png')"/>
-	<s:Button x="218" y="227" width="117" height="33" label="我再想想" click="close()"
+	<s:Button x="266" y="249" width="117" height="33" label="我再想想" click="close()"
 			  icon="@Embed('../assets/i3.png')"/>
-	<s:CheckBox x="10" y="189" label="帮兄弟/妹子代点" id="helpCk"  change="checkbox1_changeHandler(event)"/>
-	<s:ComboBox x="150" y="189" width="135" id="helpName" visible="false" labelField="name" dataProvider="{_userList}"/>
+	<s:CheckBox x="10" y="211" label="帮兄弟/妹子代点" id="helpCk"  change="checkbox1_changeHandler(event)"/>
+	<s:ComboBox x="150" y="211" width="135" id="helpName" visible="false" labelField="name" dataProvider="{_userList}"/>
 	<s:Image x="5" y="-28" source="@Embed('../assets/i1.png')"/>
 	<fx:Script>
 		<![CDATA[

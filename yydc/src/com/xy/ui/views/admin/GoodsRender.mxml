@@ -36,26 +36,39 @@
 
 			protected function button1_clickHandler(event : MouseEvent) : void {
 
-				AddGoods.getInstance().show(function(name : String, price : int, id : int) : void {
+				AddGoods.getInstance().show(function(name : String, price : int, id : int, ba : ByteArray) : void {
 					new SAMFHttp(Protocal.ADMIN_DISH_EDIT, function(rs : int) : void {
 						if (rs == 0) {
 							Alert.show("网络异常，修改菜品失败", "-_-#");
 						} else {
-							Alert.show("网络异常，修改菜品成功", "嘎嘎");
+							Alert.show("修改菜品成功", "嘎嘎");
 							Global.refreshShop();
 						}
-					}, [_dto.id, Global.base64(name), price, id, ""]);
-				}, _dto);
+					}, [_dto.id, Global.base64(name), price, id, ba], true);
+				}, getrestId(), _dto);
+			}
+
+			private function getrestId() : int {
+				var arr : Array = Global.shops;
+				for (var i : int = 0; i < Global.shops.length; i++) {
+					for each (var dd : DishDTO in Global.shops[i].dishDTOs) {
+						if (dd.id == _dto.id) {
+							return Global.shops[i].id;
+						}
+					}
+				}
+
+				return -1;
 			}
 
 			protected function button2_clickHandler(event : MouseEvent) : void {
 				Alert.show("确认删除菜品【" + _dto.name + "】?", "确认", Alert.YES | Alert.NO, Global.root, function(e : CloseEvent) : void {
 					if (e.detail == Alert.YES) {
-						new SAMFHttp(Protocal.ADMIN_DISH_REMOVE, function(rs : int):void{
+						new SAMFHttp(Protocal.ADMIN_DISH_REMOVE, function(rs : int) : void {
 							if (rs == 0) {
 								Alert.show("网络异常，删除菜品失败", "-_-#");
 							} else {
-								Alert.show("网络异常，删除菜品成功", "嘎嘎");
+								Alert.show("删除菜品成功", "嘎嘎");
 								Global.refreshShop();
 							}
 						}, [_dto.id]);

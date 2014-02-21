@@ -42,5 +42,16 @@ public class ReservationDTO {
 	 * 预约订单结束时间
 	 */
 	public var timeFinished : int;
+	
+	public function get typeStr():String{
+		var str :String = "";
+		switch(type){
+			case 1:str+="早餐";break;
+			case 2:str+="中午餐";break;
+			case 3:str+="晚餐";break;
+		}
+		
+		return str;
+	}
 }
 }

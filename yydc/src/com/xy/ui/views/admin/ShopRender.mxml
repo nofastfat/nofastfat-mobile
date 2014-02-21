@@ -10,28 +10,28 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:Button x="115"
+	<s:Button x="188"
 			  y="-28"
 			  width="92"
 			  height="25"
-			  label="添加菜品"
+			  label="添加菜品" click="__addGoodsHandler()"
 			  id="addGoodsBtn"/>
 	<s:DataGrid x="0"
 				y="0"
 				width="100%"
 				height="100%"
-				requestedRowCount="4"
+				requestedRowCount="4" dataProvider="{_datas}"
 				id="tb"
 				borderVisible="false">
 		<s:columns>
 			<s:ArrayList>
-				<s:GridColumn dataField="dataField1"
+				<s:GridColumn dataField="id"
 							  headerText="序号">
 				</s:GridColumn>
-				<s:GridColumn dataField="dataField2"
+				<s:GridColumn dataField="name"
 							  headerText="菜名">
 				</s:GridColumn>
-				<s:GridColumn dataField="dataField3"
+				<s:GridColumn dataField="priceStr"
 							  headerText="价格">
 				</s:GridColumn>
 				<s:GridColumn dataField="dataField3"
@@ -40,53 +40,68 @@
 				</s:GridColumn>
 			</s:ArrayList>
 		</s:columns>
-		<s:ArrayList>
-			<fx:Object dataField1="数据1"
-					   dataField2="数据1"
-					   dataField3="数据1">
-			</fx:Object>
-			<fx:Object dataField1="数据2"
-					   dataField2="数据2"
-					   dataField3="数据2">
-			</fx:Object>
-			<fx:Object dataField1="数据3"
-					   dataField2="数据3"
-					   dataField3="数据3">
-			</fx:Object>
-			<fx:Object dataField1="数据4"
-					   dataField2="数据4"
-					   dataField3="数据4">
-			</fx:Object>
-		</s:ArrayList>
 	</s:DataGrid>
-	<s:Button x="221"
+	<s:Button x="294"
 			  y="-28"
 			  width="95"
 			  height="25"
 			  label="删除饭馆"
 			  id="delGoodsBtn"
-			  click="delGoodsBtn_clickHandler(event)"/>
+			  click="__delShopHandler()"/>
 
 	<fx:Script>
 		<![CDATA[
+			import com.xy.comunication.Protocal;
+			import com.xy.comunication.SAMFHttp;
+			import com.xy.model.Global;
 			import com.xy.model.RestaurantDTO;
 			import com.xy.model.YyEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 
 			public var dto : RestaurantDTO;
+			
+			[Bindable]
+			private var _datas : ArrayCollection = new ArrayCollection();
 
 			public function setData(vo : RestaurantDTO) : void {
 				dto = vo;
+				title = dto.name;
+				_datas.source = dto.dishDTOs;
 				callLater(function() : void {
-					height = tb.rowHeight * 4 + 60;
+					height = tb.rowHeight * dto.dishDTOs.length + 60;
 				});
 			}
 
-			protected function delGoodsBtn_clickHandler(event : MouseEvent) : void {
-				var id : int = -1;
-				if (dto != null) {
-					id = dto.id;
-				}
-				dispatchEvent(new YyEvent("DEL_SHOP", id));
+			private function __addGoodsHandler() : void {
+				AddGoods.getInstance().show(function(name : String, price : int, id : int, ba : ByteArray):void{
+					new SAMFHttp(Protocal.ADMIN_DISH_ADD, function(rs:int):void{
+						if(rs == 0){
+							Alert.show("网络异常，添加菜品失败", "-_-#");
+						}else{
+							Alert.show("添加菜品成功", "嘎嘎");
+							Global.refreshShop();
+						}
+					},[Global.base64(name), price, id, ba], true);
+				},dto.id);
+			}
+			
+			private function __delShopHandler() : void {
+				Alert.show("确认删除饭馆?这将删除该饭馆下所有的菜品", "删除确认", Alert.YES|Alert.NO, Global.root, function(e : CloseEvent):void{
+					if(e.detail== Alert.YES){
+						var restid : int = dto.id;
+						new SAMFHttp(Protocal.ADMIN_RESTAURANT_REMOVE, function(rs : int):void{
+							if(rs == 0){
+								Alert.show("网络异常，删除饭馆失败", "-_-#");
+							}else{
+								Alert.show("删除饭馆成功", "嘎嘎");
+								Global.refreshShop();
+							}
+						}, [restid]);
+					}
+				});
 			}
 		]]>
 	</fx:Script>

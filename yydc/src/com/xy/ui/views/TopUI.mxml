@@ -54,7 +54,6 @@
 					nameTf.text = name;
 					
 					if(Global.myGoods != null){
-						goods.text = "中午已经订 青椒肉丝(10元)";
 						var str :String = "";
 						switch(Global.myGoods.reservationDTO.type){
 							case 1:str+="早餐";break;
@@ -68,6 +67,7 @@
 						}else{
 							redng.visible = true;
 						}
+						goods.text = str;
 							
 					}else{
 						goods.text = "";

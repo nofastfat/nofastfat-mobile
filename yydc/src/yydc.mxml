@@ -17,6 +17,8 @@
 			import com.xy.YYDCFacade;
 			import com.xy.model.DishDTO;
 			import com.xy.model.Global;
+			import com.xy.model.ReservationDTO;
+			import com.xy.model.ReservationDetailDTO;
 			import com.xy.model.RestaurantDTO;
 			import com.xy.model.UserDTO;
 			
@@ -32,7 +34,7 @@
 				Global.root = this;
 				TweenLite.defaultEase = Linear.easeNone;
 				_facade = new YYDCFacade(); 
-				_facade.startUp(this); 
+				_facade.startUp(this);  
 
 				initDto();
 			}
@@ -61,6 +63,8 @@
 				registerClassAlias("dto.UserDTO", UserDTO);
 				registerClassAlias("dto.DishDTO", DishDTO);
 				registerClassAlias("dto.RestaurantDTO", RestaurantDTO);
+				registerClassAlias("dto.ReservationDetailDTO", ReservationDetailDTO);
+				registerClassAlias("dto.ReservationDTO", ReservationDTO);
 			}
 		]]>
 	</fx:Script>

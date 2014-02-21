@@ -37,6 +37,7 @@ public class LeftMediator extends Mediator {
 		switch (notification.getName()) {
 			case INIT:
 				ui.init();
+				
 				break;
 		}
 	}

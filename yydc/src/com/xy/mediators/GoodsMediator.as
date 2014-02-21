@@ -47,9 +47,7 @@ public class GoodsMediator extends Mediator {
 					
 					var oldSelect : int = _ui.shops.selectedIndex;
 					_ui.setShop(Global.shops);
-					if(oldSelect == -1){
-						_ui.callLater(__changeShopHandler, null);
-					}
+					__changeShopHandler();
 				}
 				break;
 		}

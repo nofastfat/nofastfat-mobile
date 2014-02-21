@@ -10,6 +10,7 @@
 			import com.xy.comunication.SAMFHttp;
 			import com.xy.model.DishDTO;
 			import com.xy.model.Global;
+			import com.xy.model.ReservationDTO;
 			import com.xy.model.ReservationDetailDTO;
 			
 			import mx.controls.Alert;
@@ -24,28 +25,38 @@
 			
 			public function setData(vo : DishDTO):void{
 				dto = vo;
-				img.source = vo.picture;
+				if(vo.picture == "" || vo.picture == "null" || vo.picture == null){
+					img.source = "default.png";
+				}else{
+					img.source = vo.picture;
+				}
 				goodsName.text = vo.name;
 				price.text = vo.priceStr;
 			}
 			
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				var info : String = "";
-				if(Global.myGoods!=null){
-					info = "<br/>会把之前点的【"+Global.myGoods.dishDTO.name+"】取消掉";
-				}
-				var str : String = "你现在点的是【<span color='#00FF00'>"+dto.name+"</span>】，<span color='#FF0000'>"+dto.priceStr+"</span>"+info+"<br/>有没有什么需要补充的？";
-				EatUI.getInstance().show(str, function(rs:String, userId : int):void{
-					new SAMFHttp(Protocal.DETAIL_ORDER, function(rs : ReservationDetailDTO):void{
-						if(rs != null){
-							Alert.show("点餐成功,坐等送餐", "Oh-Yes");
-						}else{
-							Alert.show("RP不好？点餐失败", "-_-#");
-						}
-						Global.refreshMyGoods();
-					//TODO 这里预约点餐id 服务器还冒给
-					}, [dto.id, userId, -1, rs]);
+				new SAMFHttp(Protocal.RESERVATION_STATE, function(dt : ReservationDTO):void{
+					Global.now = dt;
+					if(Global.myGoods != null && Global.myGoods.reservationDTO.id != Global.now.id){
+						Global.myGoods = null;
+					}
+					
+					var info : String = "";
+					if(Global.myGoods!=null){
+						info = "<br/>会把之前点的【"+Global.myGoods.dishDTO.name+"】取消掉";
+					}
+					var str : String = "【" +Global.now.typeStr + "】　你现在点的是【<span color='#00FF00'>"+dto.name+"</span>】，<span color='#FF0000'>"+dto.priceStr+"</span>"+info+"<br/>有没有什么需要补充的？";
+					EatUI.getInstance().show(str, function(rs:String, userId : int):void{
+						new SAMFHttp(Protocal.DETAIL_ORDER, function(rs : ReservationDetailDTO):void{
+							if(rs != null){
+								Alert.show("点餐成功,坐等送餐", "Oh-Yes");
+							}else{
+								Alert.show("RP不好？点餐失败", "-_-#");
+							}
+							Global.refreshMyGoods();
+						}, [dto.id, userId, Global.now.id, rs]);
+					});
 				});
 			}
 			

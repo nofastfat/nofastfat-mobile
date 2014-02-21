@@ -4,7 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   close="titlewindow1_closeHandler()"
 			   width="400"
-			   height="310"
+			   height="372"
 			   fontFamily="微软雅黑"
 			   fontSize="14"
 			   title="添加菜品">
@@ -29,37 +29,27 @@
 	<s:Label x="92"
 			 y="115"
 			 text="图片"/>
-	<s:TextInput id="nameTf"
-				 x="131"
-				 y="10"/>
-	<s:NumericStepper id="price"
-					  x="131"
-					  y="43"
-					  width="113"
-					  maximum="100"
-					  minimum="1"/>
-	<s:DropDownList id="fgTf"
-					labelField="name"
-					x="131"
-					dataProvider="{_shops}"
-					y="79"/>
+	<s:TextInput id="nameTf" x="131" y="10" width="197"/>
+	<s:NumericStepper id="price" x="131" y="43" width="113" maximum="100" minimum="1" stepSize="0.1"/>
+	<s:DropDownList id="fgTf" x="131" y="79" width="197" dataProvider="{_shops}" labelField="name"/>
 	<mx:UIComponent x="131" id="imgC"
-			 y="114"
-			 width="74"
-			 height="74"/>
-	<s:Button label="上传图片" x="210" y="114" click="button2_clickHandler(event)">
+			 y="138"
+			 width="180"
+			 height="125"/>
+	<s:Button label="上传图片" x="131" y="110" click="button2_clickHandler(event)">
 		
 	</s:Button>
-	<s:Button id="addBtn" x="65" y="208" width="110" height="31" label="添加菜品"
+	<s:Button id="addBtn" x="74" y="276" width="110" height="31" label="添加菜品"
 			  click="button1_clickHandler()"/>
-	<s:Button x="205"
-			  y="208"
+	<s:Button x="214"
+			  y="276"
 			  width="113"
 			  height="31"
 			  label="取  消"
 			  click="titlewindow1_closeHandler()"/>
 	<fx:Script>
 		<![CDATA[
+			import com.adobe.images.PNGEncoder;
 			import com.xy.model.DishDTO;
 			import com.xy.model.Global;
 			import com.xy.model.RestaurantDTO;
@@ -87,24 +77,51 @@
 				return _instance;
 			}
 
-			public function show(call : Function ,dto:DishDTO = null) : void {
+			public function show(call : Function, restid : int = -1,dto:DishDTO = null) : void {
+				_hasEditImg = false;
 				PopUpManagerProxy.addPopUp(this, Global.root);
 				PopUpManager.centerPopUp(this);
 				_call = call;
+				_shops.source = Global.shops;
+				fgTf.selectedIndex = getIndexOf(restid);
+				STool.clear(imgC);
 				
 				if(dto == null){
 					title = "添加菜品";
 					addBtn.label = "添加菜品";
 					nameTf.text = "";
 					price.value = 1;
-					fgTf.selectedIndex= 0;
 				}else{
 					title = "修改菜品";
 					addBtn.label = "修改菜品";
 					nameTf.text = dto.name;
 					price.value = dto.price/10.0;
-					fgTf.selectedIndex= 0;
 				}
+				
+				if(dto != null && dto.picture != ""){
+					var loader : Loader = new Loader();
+					loader.load(new URLRequest(dto.picture));
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e : Event):void{
+						var bmp : Bitmap = loader.content as Bitmap;
+						bmp.width = 180; 
+						bmp.height = 125;
+						imgC.addChild(bmp);
+						var minScale : Number = Math.min(bmp.scaleX, bmp.scaleY);
+						bmp.scaleX  = bmp.scaleY = minScale;
+						
+						STool.center(bmp);
+					});
+				}
+			}
+			
+			private function getIndexOf(restid : int) : int {
+				for(var i : int = 0;i < Global.shops.length;i++){
+					if(Global.shops[i].id == restid){
+						return i;
+					}
+				}
+				
+				return -1;
 			}
 
 			protected function titlewindow1_closeHandler() : void {
@@ -122,24 +139,39 @@
 					if(fgTf.selectedItem != null){
 						id = (fgTf.selectedItem as RestaurantDTO).id;
 					}
-					_call(nameTf.text, int(price.value * 10), id);
+					
+					var ba : ByteArray;
+					if(_hasEditImg){
+						ba = PNGEncoder.encode((imgC.getChildAt(0) as Bitmap).bitmapData);
+					}
+					_call(nameTf.text, int(price.value * 10), id, ba);
 				}
 				titlewindow1_closeHandler();
 			}
 			
+			private var _hasEditImg : Boolean = false;
+			
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				var f : FileReference = new FileReference();
-				f.browse([new FileFilter("*.png", "*.png"),new FileFilter("*.jpg", "*.jpg")]);
+				f.browse([new FileFilter("*.png;*.jpg", "*.png;*.jpg")]);
 				f.addEventListener(Event.SELECT, function(e : Event):void{
 					f.load();
 					f.addEventListener(Event.COMPLETE, function(e:Event):void{
+						_hasEditImg = true;
 						var loader : Loader = new Loader();
 						loader.loadBytes(f.data);
 						STool.clear(imgC);
-						imgC.addChild(loader);
+//						imgC.addChild(loader);
 						loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e : Event):void{
-							loader.width = loader.height = 74;
+							var bmp : Bitmap = loader.content as Bitmap;
+							bmp.width = 180; 
+							bmp.height = 125;
+							imgC.addChild(bmp);
+							var minScale : Number = Math.min(bmp.scaleX, bmp.scaleY);
+							bmp.scaleX  = bmp.scaleY = minScale;
+							
+							STool.center(bmp);
 						});
 					});
 				});
