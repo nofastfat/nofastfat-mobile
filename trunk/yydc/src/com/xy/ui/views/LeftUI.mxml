@@ -55,6 +55,7 @@
 				}else{
 					con.addElement(manageUser);
 					con.addElement(manageGoods);
+					con.addElement(hzBtn);
 					manageUser.visible = true;
 					manageGoods.visible = true;
 				}

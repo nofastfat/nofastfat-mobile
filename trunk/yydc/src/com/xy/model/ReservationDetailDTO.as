@@ -41,5 +41,10 @@ public class ReservationDetailDTO {
 	 * 更新时间
 	 */
 	public var timeUpdated : Number;
+	
+	/**
+	 * 备注
+	 */
+	public var comment : String;
 }
 }

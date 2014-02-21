@@ -1,8 +1,12 @@
 package com.xy.mediators {
+import com.xy.comunication.Protocal;
+import com.xy.comunication.SAMFHttp;
 import com.xy.model.Global;
 import com.xy.ui.views.TopUI;
 
 import flash.events.MouseEvent;
+
+import mx.controls.Alert;
 
 import org.puremvc.as3.interfaces.INotification;
 import org.puremvc.as3.patterns.mediator.Mediator;
@@ -23,6 +27,7 @@ public class TopMediator extends Mediator {
 		super(NAME, viewComponent);
 		
 		ui.logoutTf.addEventListener(MouseEvent.CLICK, __logoutHandler);
+		ui.redng.addEventListener(MouseEvent.CLICK, __regHandler);
 	}
 
 	override public function listNotificationInterests():Array{
@@ -46,14 +51,21 @@ public class TopMediator extends Mediator {
 	
 	private function init():void{
 		ui.setName(Global.userName);
-		
-		if(Global.isAdmin){
-			Global.refreshMyGoods();
-		}
 	}
 	
 	private function __logoutHandler(e : MouseEvent):void{
 		sendNotification(LoginMediator.SHOW);
+	}
+	
+	private function __regHandler(e : MouseEvent):void{
+		new SAMFHttp(Protocal.DETAIL_CANCEL, function(rs : int):void{
+			if(rs == 0){
+				Alert.show("不知道为虾米，退订失败鸟", "退订失败");
+			}else{
+				Alert.show("退订成功", "嘎嘎");
+			}
+			Global.refreshMyGoods();
+		}, [Global.myGoods.reservationDTO.id]);
 	}
 	
 	public function get ui() : TopUI {

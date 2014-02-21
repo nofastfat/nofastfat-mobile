@@ -30,6 +30,7 @@ public class Global {
 	public static var shops : Array = [];
 	public static var users : Array = [];
 	public static var myGoods : ReservationDetailDTO;
+	public static var now : ReservationDTO;
 	
 	public static function get userName():String{
 		if(me != null){
@@ -75,8 +76,10 @@ public class Global {
 	}
 	
 	public static function base64(str : String):String{
+		return str;
 		var ba : ByteArray = new ByteArray();
-		ba.writeUTF(str);
+//		ba.writeUTF(str);
+		ba.writeUTFBytes(str);
 		return Base64.encode(ba);
 	}
 }

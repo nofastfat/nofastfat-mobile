@@ -88,7 +88,7 @@
 			}
 
 			public function show(call : Function, dto : UserDTO = null) : void {
-				PopUpManagerProxy.addPopUp(this, Global.root);
+				PopUpManagerProxy.addPopUp(this, (Global.root as DisplayObject));
 				PopUpManager.centerPopUp(this);
 				_call = call;
 				if(dto != null){

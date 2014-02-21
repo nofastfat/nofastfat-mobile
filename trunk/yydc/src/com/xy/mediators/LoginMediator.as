@@ -51,8 +51,7 @@ public class LoginMediator extends Mediator {
 	override public function handleNotification(notification : INotification) : void {
 		switch (notification.getName()) {
 			case SHOW:
-//				show();
-				AddGoods.getInstance().show(null);
+				show();
 				break;
 		}
 	}
@@ -141,6 +140,12 @@ public class LoginMediator extends Mediator {
 				sendNotification(TopMediator.INIT);
 				sendNotification(LeftMediator.INIT);
 				Global.root.container.removeAllElements();
+				Global.refreshUserList();
+				sendNotification(GoodsMediator.SHOW);
+				
+				if(!Global.isAdmin){
+					Global.refreshMyGoods();
+				}
 			}else{
 				Alert.show("登陆失败!\n1.检查哈子用户名有冒空格\n2.再检查哈子网络OK否", "Error");
 			}
