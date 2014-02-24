@@ -3,7 +3,10 @@ import com.xy.model.Global;
 import com.xy.model.RestaurantDTO;
 import com.xy.ui.views.GoodsListUI;
 
+import flash.events.Event;
 import flash.utils.setTimeout;
+
+import mx.containers.Canvas;
 
 import org.puremvc.as3.interfaces.INotification;
 import org.puremvc.as3.patterns.mediator.Mediator;
@@ -26,6 +29,7 @@ public class GoodsMediator extends Mediator {
 	
 	public function GoodsMediator( viewComponent : Object = null) {
 		super(NAME, viewComponent);
+		container.stage.addEventListener(Event.RESIZE, __resizeHandler);
 	}
 	
 	
@@ -53,6 +57,12 @@ public class GoodsMediator extends Mediator {
 		}
 	}
 	
+	private function __resizeHandler(e : Event):void{
+		if(_ui != null && _ui.stage != null){
+			_ui.resized();
+		}
+	}
+	
 	private function show():void{
 		if(_ui == null){
 			_ui = new GoodsListUI();
@@ -74,8 +84,8 @@ public class GoodsMediator extends Mediator {
 		}
 	}
 	
-	public function get container():Group{
-		return viewComponent as Group;
+	public function get container():Canvas{
+		return viewComponent as Canvas;
 	}
 }
 }
