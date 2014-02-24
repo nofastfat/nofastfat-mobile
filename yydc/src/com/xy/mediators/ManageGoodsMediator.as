@@ -8,6 +8,7 @@ import com.xy.ui.views.admin.AdminUsers;
 
 import flash.events.MouseEvent;
 
+import mx.containers.Canvas;
 import mx.controls.Alert;
 
 import org.puremvc.as3.interfaces.INotification;
@@ -78,8 +79,8 @@ public class ManageGoodsMediator extends Mediator {
 		});
 	}
 
-	public function get container() : Group {
-		return viewComponent as Group;
+	public function get container() : Canvas {
+		return viewComponent as Canvas;
 	}
 }
 }

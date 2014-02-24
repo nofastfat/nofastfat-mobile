@@ -40,23 +40,8 @@
 			}
 
 			public function callLayer(offsetY : Number) : void {
-				_contentHeight = offsetY;
-				var rsHeight : int = topUI.height + Math.max(400, _contentHeight) + 100;
-				if (rsHeight > stage.stageHeight) {
-					ExternalInterface.call("function(){document.getElementById('yydc').height='" + rsHeight + "px';}");
-					stage.removeEventListener(Event.RESIZE, __resizeHandler);
-				} else {
-					ExternalInterface.call("function(){document.getElementById('yydc').height='100%';}");
-					stage.addEventListener(Event.RESIZE, __resizeHandler);
-				}
-			}
-
-			private function __resizeHandler(e : Event) : void {
-				var rsHeight : int = topUI.height + Math.max(400, _contentHeight) + 100;
-				if (rsHeight > stage.stageHeight) {
-					ExternalInterface.call("function(){document.getElementById('yydc').height='" + rsHeight + "px';}");
-					stage.removeEventListener(Event.RESIZE, __resizeHandler);
-				}
+				
+				return;
 			}
 
 			public function initDto() : void {
@@ -72,34 +57,34 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:BorderContainer width="100%"
-					   height="100%"
-					   borderVisible="false">
-		<s:backgroundFill>
-			<s:BitmapFill source="@Embed('../assets/bg.png')"
-						  fillMode="repeat"
-						  alpha="0.1"/>
-		</s:backgroundFill>
-	</s:BorderContainer>
-	<views:TopUI width="100%"
-				 height="90"
-				 id="topUI"/>
-	<views:LeftUI left="0"
-				  top="90"
-				  bottom="0"
-				  borderVisible="true"
-				  dropShadowVisible="false"
-				  paddingTop="15"
-				  id="leftUI"/>
-	<s:Group left="162"
-			 right="0"
-			 top="90"
-			 bottom="0"
-			 id="container">
-	</s:Group>
-	<mx:UIComponent id="alertC"
-					width="100%"
-					height="100%">
-
-	</mx:UIComponent>
+		<s:BorderContainer width="100%"
+						   height="100%"
+						   borderVisible="false">
+			<s:backgroundFill>
+				<s:BitmapFill source="@Embed('../assets/bg.png')"
+							  fillMode="repeat"
+							  alpha="0.1"/>
+			</s:backgroundFill>
+		</s:BorderContainer>
+		<views:TopUI width="100%"
+					 height="90"
+					 id="topUI"/>
+		<views:LeftUI left="0"
+					  top="90"
+					  bottom="0"
+					  borderVisible="true"
+					  dropShadowVisible="false"
+					  paddingTop="15"
+					  id="leftUI"/>
+		<mx:Canvas left="162"
+				 right="0"
+				 top="100" horizontalScrollPolicy="off" backgroundColor="#000000" backgroundAlpha="0"
+				 bottom="0"
+				 id="container">
+		</mx:Canvas>
+		<mx:UIComponent id="alertC"
+						width="100%"
+						height="100%">
+	
+		</mx:UIComponent>
 </s:Application>

@@ -111,6 +111,10 @@
 				showAsTable_clickHandler();
 			}
 
+			public function resized():void{
+				showAsTable_clickHandler();
+			}
+			
 			protected function group1_resizeHandler() : void {
 				var first : Goods = _goodsUI[0];
 				if (first == null) {
